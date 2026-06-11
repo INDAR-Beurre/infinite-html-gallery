@@ -323,9 +323,6 @@ export class Gallery {
     this.sites = this.sites.concat(newSites);
     const targetRows = this._rowsFor(this.sites.length);
     const targetSlots = COLS * targetRows;
-    if (this.meshes.length < targetSlots && this.meshes.length < this._rowsFor(this.sites.length - newSites.length) * COLS) {
-      // Cheap path: existing slot count already covers everything
-    }
     if (this.sites.length > this.meshes.length) {
       // Not every site has a card -> rebuild with enough rows.
       this._rebuildMeshes();

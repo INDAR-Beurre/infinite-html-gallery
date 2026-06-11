@@ -2,13 +2,16 @@
 
 An inside-out spherical Three.js gallery for a personal collection of HTML pages. Cards float on a sphere around the camera, the rotation is free on Y (so it never "ends"), and clicking a card smoothly opens the actual site in a fullscreen iframe. New pages can be uploaded at runtime and they appear in the gallery immediately.
 
+**🌐 Live: [https://darling-basbousa-eb945c.netlify.app](https://darling-basbousa-eb945c.netlify.app)**
+
 ## What it does
 
-- **Spherical 3D gallery** — 128+ cards arranged on the inside of a sphere band, all facing the camera at origin.
-- **Infinite feel** — Y rotation is unbounded; the sphere stays densely populated by tiling sites around it.
+- **Spherical 3D gallery** — cards arranged on the inside of a sphere band (16 cols × dynamic row count, up to 22 rows), all facing the camera at origin. Densely populated, repeats the same site around the sphere so the band always feels full.
+- **Infinite feel** — Y rotation is unbounded; there's no clamp, so you can keep spinning forever. Idle drift kicks in when you stop dragging so the gallery is always alive.
 - **Real previews** — every static site is screenshotted at build time with headless Chrome and used as the card texture.
-- **Smooth click-through** — a card scales forward, the scene fades, an iframe fades in. ESC, the close button, or browser back returns to the sphere.
-- **Runtime uploads** — the `Upload` button drops .html files into Netlify Blobs via a Function. New sites get a procedural gradient thumbnail and show up in the gallery right away.
+- **Smooth click-through** — clicking a card scales it forward, the scene fades, an iframe fades in. ESC, the close button, or browser back returns to the sphere.
+- **Runtime uploads** — the **Upload** button in the bottom-left drops .html files into Netlify Blobs via a Function. New sites get a procedural gradient thumbnail and show up in the gallery right away. Slug collisions get a timestamp suffix so nothing overwrites silently.
+- **Iframe sandboxing** — the viewer iframe is sandboxed (`allow-scripts allow-same-origin allow-forms allow-popups`) so an uploaded page can't escape into the parent origin.
 
 ## Run locally
 
@@ -54,13 +57,15 @@ npm run previews
 
 This launches system Chrome via `puppeteer-core`, serves `public/` on a local port, and screenshots every site in parallel at 512x720.
 
-## Live deployment
+## Deployment
 
-The site is configured for Netlify (`netlify.toml`). The function `/.netlify/functions/uploads` uses the `uploads` Blobs store. The first deploy provisions the store automatically; no manual setup needed beyond the deploy.
+Configured for Netlify (`netlify.toml`). The `/.netlify/functions/uploads` function uses the `uploads` Blobs store; the store is auto-provisioned on first deploy — no manual setup needed.
 
-## Live URL
+```bash
+netlify deploy --prod --dir=dist
+```
 
-**https://YOUR-SITE-NAME.netlify.app**
+The first deploy produced: **https://darling-basbousa-eb945c.netlify.app**
 
 ## License
 
