@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K I H // KINETIC INTERFACE HEURISTICS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f5f5f4;
+            --text-primary: #0c0c0c;
+            --text-muted: #767676;
+            --border: #e2e2e1;
+            --border-hover: #b5b5b5;
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-mono: 'Space Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            border-radius: 0 !important;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            line-height: 1.5;
+            letter-spacing: -0.01em;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Scrollbars */
+        ::-webkit-scrollbar {
+            width: 2px;
+            height: 2px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* Grid Layout */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            max-width: 1600px;
+            margin: 0 auto;
+            border-left: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+        }
+
+        /* Universal Borders */
+        .col-main-1, .col-main-2, .col-main-3, .col-main-4 {
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .col-main-4 {
+            border-right: none;
+        }
+
+        /* Headers and cells */
+        .header-cell {
+            padding: 3rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .col-span-3 {
+            grid-column: span 3;
+            border-right: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .col-span-4 {
+            grid-column: span 4;
+        }
+
+        .brand {
+            font-family: var(--font-serif);
+            font-size: clamp(3.5rem, 8vw, 7.5rem);
+            font-weight: 300;
+            line-height: 0.75;
+            letter-spacing: -0.04em;
+        }
+
+        .concept {
+            font-size: 9px;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            line-height: 1.6;
+            text-transform: uppercase;
+            max-width: 320px;
+            text-align: right;
+        }
+
+        .meta-item {
+            font-size: 10px;
+            margin-bottom: 1rem;
+        }
+        .meta-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        .section-header {
+            border-bottom: 1px solid var(--border);
+            padding: 1.25rem 2rem;
+            background: #eaeae9;
+            text-transform: uppercase;
+        }
+
+        /* Section blocks */
+        .content-block {
+            padding: 2.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .heading-serif {
+            font-family: var(--font-serif);
+            font-size: clamp(2rem, 3.5vw, 3.2rem);
+            font-weight: 300;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .heading-serif em {
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        .text-body {
+            font-size: 12px;
+            line-height: 1.7;
+            color: #4c4c4c;
+            max-width: 480px;
+        }
+
+        /* Console styling */
+        .log-section {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            min-height: 250px;
+        }
+
+        .log-console {
+            padding: 1.5rem 2rem;
+            font-size: 10px;
+            color: #4c4c4c;
+            overflow-y: auto;
+            flex-grow: 1;
+            max-height: 380px;
+        }
+
+        .log-item {
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .log-time {
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        /* Specimen catalog list */
+        .specimen-list {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .specimen-item {
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .specimen-item:last-child {
+            border-bottom: none;
+        }
+
+        .specimen-item.active {
+            background: #eaeae9;
+            border-left: 2px solid var(--text-primary);
+            padding-left: calc(2rem - 2px);
+        }
+
+        .specimen-item:hover:not(.active) {
+            background: #f0f0ef;
+        }
+
+        .spec-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .specimen-number {
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            font-weight: 300;
+            line-height: 1;
+            width: 45px;
+        }
+
+        .specimen-name {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .spec-type {
+            font-size: 9px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .manifesto-block {
+            padding: 2.5rem 2rem;
+            border-bottom: none;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .text-manifesto {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            font-weight: 300;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+            color: #2c2c2c;
+            border-left: 1px solid var(--border);
+            padding-left: 1.5rem;
+        }
+
+        /* Column 3: Simulator */
+        .simulator-wrapper {
+            border-bottom: 1px solid var(--border);
+            background: #fcfcfb;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+        }
+
+        svg#sim-canvas {
+            width: 100%;
+            height: 100%;
+            max-width: 380px;
+            max-height: 380px;
+            border: 1px solid var(--border);
+        }
+
+        .controls-panel {
+            padding: 2rem;
+            border-bottom: none;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            background: var(--bg);
+            border: none;
+            color: var(--text-primary);
+            padding: 0.75rem 0;
+            font-family: var(--font-mono);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.1s ease;
+        }
+
+        .btn:hover {
+            background: var(--border);
+        }
+
+        .btn.active {
+            background: var(--text-primary);
+            color: var(--bg);
+        }
+
+        .param-slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .slider-row {
+            display: grid;
+            grid-template-columns: 120px 1fr 60px;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mono-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+
+        .param-val {
+            font-size: 10px;
+            text-align: right;
+        }
+
+        /* Customized Slider Track and Thumb */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type="range"]:focus {
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 1px;
+            background: var(--border-hover);
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            height: 10px;
+            width: 10px;
+            background: var(--text-primary);
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -4.5px;
+        }
+
+        /* Column 4: Metrics & calculations */
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .metric-cell {
+            padding: 1.5rem;
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .metric-cell:nth-child(2n) {
+            border-right: none;
+        }
+
+        .metric-cell:nth-child(3), .metric-cell:nth-child(4) {
+            border-bottom: none;
+        }
+
+        .metric-value {
+            font-size: 11px;
+            margin-top: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .graph-section {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .phase-canvas-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            background: #fcfcfb;
+            border: 1px solid var(--border);
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+        }
+
+        canvas#phase-canvas {
+            width: 100%;
+            height: auto;
+            max-width: 240px;
+            aspect-ratio: 4/3;
+        }
+
+        .mono-caption {
+            font-size: 9px;
+            color: var(--text-muted);
+            text-align: center;
+            line-height: 1.4;
+            max-width: 240px;
+        }
+
+        .contact-info {
+            padding: 2.5rem 2rem;
+            border-bottom: none;
+        }
+
+        .contact-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 10px;
+        }
+
+        .contact-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .mono-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--text-primary);
+            padding-bottom: 2px;
+        }
+
+        .mono-link:hover {
+            color: var(--text-muted);
+            border-bottom-color: var(--text-muted);
+        }
+
+        /* Footer cell */
+        footer.footer-cell {
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 9px;
+            color: var(--text-muted);
+        }
+
+        /* Responsive Layouts */
+        @media (max-width: 1120px) {
+            .grid-layout {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .col-span-3 {
+                grid-column: span 1;
+                border-right: 1px solid var(--border);
+            }
+            .col-span-4 {
+                grid-column: span 2;
+            }
+            .header-cell:nth-child(2) {
+                border-right: none;
+            }
+            .col-main-1, .col-main-2 {
+                border-bottom: 1px solid var(--border);
+            }
+            .col-main-2 {
+                border-right: none;
+            }
+            .col-main-3 {
+                border-right: 1px solid var(--border);
+                border-bottom: 1px solid var(--border);
+            }
+            .col-main-4 {
+                border-bottom: 1px solid var(--border);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+            .col-span-3, .col-span-4 {
+                grid-column: span 1;
+                border-right: none;
+            }
+            .header-cell {
+                border-right: none;
+            }
+            .col-main-1, .col-main-2, .col-main-3, .col-main-4 {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            .col-span-3 {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+            }
+            .concept {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-layout">
+        <!-- ROW 1: HEADER -->
+        <header class="header-cell col-span-3">
+            <div class="brand">K I H</div>
+            <div class="concept">KINETIC INTERFACE HEURISTICS<br>LABORATORY FOR STRUCTURAL DECAY</div>
+        </header>
+        <div class="header-cell col-span-1 text-right">
+            <div class="meta-item">
+                <span class="label">LOCATION</span>
+                53.5511° N, 9.9937° E // HAMBURG
+            </div>
+            <div class="meta-item">
+                <span class="label">SYSTEM TIMECODE</span>
+                <span id="system-time">0000000000.000</span>
+            </div>
+        </div>
+
+        <!-- ROW 2: MAIN COLUMN 1 (DEVIATION PRINCIPLE & LOGS) -->
+        <section class="col-main-1">
+            <div class="section-header">
+                <span class="label">01 / OVERVIEW</span>
+            </div>
+            <div class="content-block">
+                <h2 class="heading-serif">Physical systems <em>in decay</em>.</h2>
+                <p class="text-body">
+                    KIH is a speculative repository documenting mechanical inertia, gravitational friction, and tectonic resonances. We monitor physical components subjected to extreme loads, recording their progressive degradation and failure patterns.
+                </p>
+            </div>
+            <div class="log-section">
+                <div class="section-header">
+                    <span class="label">SYSTEM TELEMETRY LOGS</span>
+                </div>
+                <div id="log-console" class="log-console">
+                    <!-- Dynamic Log lines -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ROW 2: MAIN COLUMN 2 (SPECIMENS & MANIFESTO) -->
+        <section class="col-main-2">
+            <div class="section-header">
+                <span class="label">02 / SPECIMEN MATRIX</span>
+            </div>
+            <div class="specimen-list" id="specimen-list">
+                <!-- Javascript will inject list items here -->
+            </div>
+            <div class="manifesto-block">
+                <div class="section-header" style="padding: 0 0 1rem 0; background: transparent;">
+                    <span class="label">MANIFESTO EXCERPT</span>
+                </div>
+                <p class="text-manifesto">
+                    "All structures are temporary configurations of materials waiting for gravity to reclaim them. We design the trajectory of their collapse."
+                </p>
+            </div>
+        </section>
+
+        <!-- ROW 2: MAIN COLUMN 3 (REALTIME KINETIC SIMULATOR) -->
+        <section class="col-main-3">
+            <div class="section-header" style="display: flex; justify-content: space-between;">
+                <span class="label">03 / SIMULATOR</span>
+                <span class="label" id="active-specimen-name">SPECIMEN 104</span>
+            </div>
+            <div class="simulator-wrapper">
+                <svg id="sim-canvas" viewBox="0 0 400 400">
+                    <defs>
+                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#eaeae9" stroke-width="0.5"/>
+                        </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#grid)" />
+                    
+                    <!-- Coordinate crosshair lines -->
+                    <line x1="200" y1="20" x2="200" y2="380" stroke="#e2e2e1" stroke-width="0.5" stroke-dasharray="2,2" />
+                    <line x1="20" y1="200" x2="380" y2="200" stroke="#e2e2e1" stroke-width="0.5" stroke-dasharray="2,2" />
+
+                    <!-- Live coordinate readouts (top left) -->
+                    <text x="15" y="25" fill="#767676" font-family="Space Mono" font-size="8" id="sim-coords">X1: 0.00 Y1: 0.00</text>
+                    <text x="15" y="38" fill="#767676" font-family="Space Mono" font-size="8" id="sim-coords2">X2: 0.00 Y2: 0.00</text>
+
+                    <!-- Trail path -->
+                    <path id="sim-trail" d="" fill="none" stroke="#969695" stroke-width="0.75" />
+
+                    <!-- Pendulum components -->
+                    <line id="arm1" x1="200" y1="200" x2="200" y2="300" stroke="#0c0c0c" stroke-width="1" />
+                    <line id="arm2" x1="200" y1="300" x2="200" y2="380" stroke="#0c0c0c" stroke-width="1" />
+                    
+                    <circle id="mass1" cx="200" cy="300" r="5" fill="#0c0c0c" stroke="#f5f5f4" stroke-width="1" />
+                    <circle id="mass2" cx="200" cy="380" r="3.5" fill="#0c0c0c" stroke="#f5f5f4" stroke-width="1" />
+                </svg>
+            </div>
+            <div class="controls-panel">
+                <div>
+                    <div class="btn-group">
+                        <button class="btn" id="btn-run" onclick="toggleSim()">PAUSE</button>
+                        <button class="btn" onclick="resetSim()">RESET</button>
+                        <button class="btn" onclick="perturbSim()">PERTURB</button>
+                    </div>
+                    <div class="param-slider-group">
+                        <div class="slider-row">
+                            <span class="mono-label">GRAVITY (g)</span>
+                            <input type="range" id="param-g" min="0" max="30" step="0.1" value="9.8" oninput="updateParam('g', this.value)">
+                            <span class="param-val" id="val-g">9.8 m/s²</span>
+                        </div>
+                        <div class="slider-row">
+                            <span class="mono-label">FRICTION (d)</span>
+                            <input type="range" id="param-damp" min="0" max="0.05" step="0.0001" value="0.002" oninput="updateParam('damp', this.value)">
+                            <span class="param-val" id="val-damp">0.0020</span>
+                        </div>
+                        <div class="slider-row">
+                            <span class="mono-label">MASS RATIO</span>
+                            <input type="range" id="param-mass" min="0.1" max="5.0" step="0.1" value="1.0" oninput="updateParam('mass', this.value)">
+                            <span class="param-val" id="val-mass">1.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ROW 2: MAIN COLUMN 4 (NUMERICAL ANALYSIS & DETAILS) -->
+        <section class="col-main-4">
+            <div class="section-header">
+                <span class="label">04 / DATA READOUTS</span>
+            </div>
+            <div class="analysis-grid">
+                <div class="metric-cell">
+                    <span class="label">J1 VELOCITY</span>
+                    <div class="metric-value" id="metric-v1">0.0000 rad/s</div>
+                </div>
+                <div class="metric-cell">
+                    <span class="label">J2 VELOCITY</span>
+                    <div class="metric-value" id="metric-v2">0.0000 rad/s</div>
+                </div>
+                <div class="metric-cell">
+                    <span class="label">KINETIC ENERGY</span>
+                    <div class="metric-value" id="metric-ke">0.0000 J</div>
+                </div>
+                <div class="metric-cell">
+                    <span class="label">POTENTIAL ENERGY</span>
+                    <div class="metric-value" id="metric-pe">0.0000 J</div>
+                </div>
+            </div>
+
+            <div class="graph-section">
+                <div class="section-header" style="border: none; padding: 0 0 1rem 0; background: transparent; width: 100%;">
+                    <span class="label">PHASE SPACE DYNAMICS (&theta;<sub>1</sub> / &theta;<sub>2</sub>)</span>
+                </div>
+                <div class="phase-canvas-wrapper">
+                    <canvas id="phase-canvas" width="240" height="180"></canvas>
+                </div>
+                <div class="mono-caption">
+                    Continuous trajectory plotting of Joint 1 angular position against Joint 2. Attractor shifts when perturbed.
+                </div>
+            </div>
+
+            <div class="contact-info">
+                <div class="section-header" style="border: none; padding: 0 0 1rem 0; background: transparent;">
+                    <span class="label">COMMUNICATION COUPLING</span>
+                </div>
+                <div class="contact-row">
+                    <span style="color: var(--text-muted)">DATAFEED CONNECTION</span>
+                    <a href="mailto:null@kih.systems" class="mono-link">null@kih.systems</a>
+                </div>
+                <div class="contact-row">
+                    <span style="color: var(--text-muted)">LAB NODES</span>
+                    <span>HAMBURG / TOKYO</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ROW 3: FOOTER -->
+        <footer class="footer-cell col-span-4">
+            <div>&copy; 2026 KINETIC INTERFACE HEURISTICS. ALL SYMMETRY DISSOLVED.</div>
+            <div>SYS_VER 4.88 // TERMINAL DYNAMICS</div>
+        </footer>
+    </div>
+
+    <!-- SCRIPT SECTION -->
+    <script>
+        // Data matrix
+        const specimens = [
+            {
+                number: "091",
+                name: "Isotropic Mass",
+                type: "DAMPED RESONANCE",
+                g: 4.0,
+                damp: 0.005,
+                massRatio: 3.5,
+                l1: 110,
+                l2: 80,
+                theta1: Math.PI / 3,
+                theta2: Math.PI / 6,
+                desc: "Decaying orbital sweep. Heavy core mass stabilizes the secondary vector."
+            },
+            {
+                number: "104",
+                name: "Chaotic Bifurcation",
+                type: "DOUBLE PENDULUM",
+                g: 9.8,
+                damp: 0.0002,
+                massRatio: 1.0,
+                l1: 90,
+                l2: 90,
+                theta1: Math.PI / 2,
+                theta2: Math.PI / 2,
+                desc: "Chaotic resonance cascade. Non-linear coupling leads to perpetual bifurcation."
+            },
+            {
+                number: "208",
+                name: "Tectonic Decoupler",
+                type: "DECAY SLIDER",
+                g: 16.0,
+                damp: 0.012,
+                massRatio: 0.3,
+                l1: 60,
+                l2: 130,
+                theta1: Math.PI / 1.5,
+                theta2: Math.PI / 4,
+                desc: "Sub-surface load dampening. Heavy secondary terminal absorbs impact vectors."
+            },
+            {
+                number: "312",
+                name: "Friction Tension",
+                type: "RESISTANCE COUPLER",
+                g: 2.5,
+                damp: 0.038,
+                massRatio: 1.5,
+                l1: 85,
+                l2: 85,
+                theta1: Math.PI / 2,
+                theta2: 0,
+                desc: "Rotational resistance coupler. Friction converts momentum to thermal waste."
+            }
+        ];
+
+        let activeIndex = 1; // Default to specimen 104
+        let isRunning = true;
+
+        // Physics State Variables
+        let theta1 = specimens[activeIndex].theta1;
+        let theta2 = specimens[activeIndex].theta2;
+        let omega1 = 0;
+        let omega2 = 0;
+        
+        let l1 = specimens[activeIndex].l1;
+        let l2 = specimens[activeIndex].l2;
+        let m1 = 1.0; // base mass
+        let m2 = specimens[activeIndex].massRatio; 
+        let g = specimens[activeIndex].g;
+        let damp = specimens[activeIndex].damp;
+
+        let trailPoints = [];
+        const maxTrail = 80;
+
+        // Coordinates mapping pivots
+        const pivotX = 200;
+        const pivotY = 180; // slightly shifted up from center to allow swinging room
+
+        // Phase canvas plotting state
+        let lastPlotX = null;
+        let lastPlotY = null;
+
+        // DOM elements
+        const simTrail = document.getElementById("sim-trail");
+        const arm1 = document.getElementById("arm1");
+        const arm2 = document.getElementById("arm2");
+        const mass1 = document.getElementById("mass1");
+        const mass2 = document.getElementById("mass2");
+        const activeNameEl = document.getElementById("active-specimen-name");
+        
+        const metricV1 = document.getElementById("metric-v1");
+        const metricV2 = document.getElementById("metric-v2");
+        const metricKe = document.getElementById("metric-ke");
+        const metricPe = document.getElementById("metric-pe");
+
+        const simCoords = document.getElementById("sim-coords");
+        const simCoords2 = document.getElementById("sim-coords2");
+
+        const phaseCanvas = document.getElementById("phase-canvas");
+        const phaseCtx = phaseCanvas.getContext("2d");
+
+        // Set inputs default values
+        function syncSlidersUI() {
+            document.getElementById("param-g").value = g;
+            document.getElementById("val-g").textContent = g.toFixed(1) + " m/s²";
+
+            document.getElementById("param-damp").value = damp;
+            document.getElementById("val-damp").textContent = damp.toFixed(4);
+
+            document.getElementById("param-mass").value = (m2 / m1).toFixed(1);
+            document.getElementById("val-mass").textContent = (m2 / m1).toFixed(1);
+        }
+
+        // Initialize Specimen matrix UI
+        function buildSpecimenList() {
+            const listContainer = document.getElementById("specimen-list");
+            listContainer.innerHTML = "";
+            specimens.forEach((spec, idx) => {
+                const item = document.createElement("div");
+                item.className = `specimen-item ${idx === activeIndex ? 'active' : ''}`;
+                item.onclick = () => selectSpecimen(idx);
+                item.innerHTML = `
+                    <div class="spec-meta">
+                        <div class="specimen-number">${spec.number}</div>
+                        <div class="specimen-name">${spec.name}</div>
+                    </div>
+                    <div class="spec-type">${spec.type}</div>
+                `;
+                listContainer.appendChild(item);
+            });
+        }
+
+        function selectSpecimen(idx) {
+            activeIndex = idx;
+            buildSpecimenList();
+            
+            const spec = specimens[idx];
+            activeNameEl.textContent = `SPECIMEN ${spec.number}`;
+            
+            // Set parameters
+            theta1 = spec.theta1;
+            theta2 = spec.theta2;
+            omega1 = 0;
+            omega2 = 0;
+            l1 = spec.l1;
+            l2 = spec.l2;
+            m2 = spec.massRatio;
+            g = spec.g;
+            damp = spec.damp;
+
+            trailPoints = [];
+            lastPlotX = null;
+            lastPlotY = null;
+            clearPhaseCanvas();
+            syncSlidersUI();
+            
+            addCustomLog(`SYSTEM: SYSTEM CALIBRATION SWITCHED TO Specimen ${spec.number}`);
+        }
+
+        function updateParam(param, val) {
+            val = parseFloat(val);
+            if (param === 'g') {
+                g = val;
+                document.getElementById("val-g").textContent = val.toFixed(1) + " m/s²";
+            } else if (param === 'damp') {
+                damp = val;
+                document.getElementById("val-damp").textContent = val.toFixed(4);
+            } else if (param === 'mass') {
+                m2 = val;
+                document.getElementById("val-mass").textContent = val.toFixed(1);
+            }
+        }
+
+        // Run / pause control
+        function toggleSim() {
+            isRunning = !isRunning;
+            document.getElementById("btn-run").textContent = isRunning ? "PAUSE" : "RUN";
+            document.getElementById("btn-run").classList.toggle("active", !isRunning);
+        }
+
+        function resetSim() {
+            const spec = specimens[activeIndex];
+            theta1 = spec.theta1;
+            theta2 = spec.theta2;
+            omega1 = 0;
+            omega2 = 0;
+            trailPoints = [];
+            lastPlotX = null;
+            lastPlotY = null;
+            clearPhaseCanvas();
+            addCustomLog("SYSTEM: KINETIC VECTOR RESET");
+        }
+
+        function perturbSim() {
+            omega1 += (Math.random() - 0.5) * 5.0;
+            omega2 += (Math.random() - 0.5) * 5.0;
+            addCustomLog("SYSTEM: DEVIATION FORCE INJECTED");
+        }
+
+        // Telemetry logs generator
+        const logConsole = document.getElementById("log-console");
+        const logTemplates = [
+            "DECAY_DETECTOR: VERTICAL OSCILLATION STABLE",
+            "INTEGRATOR: RUNGE-KUTTA DIVERGENCE INDEX 0.000",
+            "RESONANCE: TENSION COEFFICIENT WITHIN ENVELOPE",
+            "PRESSURE: VERTICAL LOAD CALIBRATED AT 14.8 kN",
+            "DAMPING: POTENTIAL DISSIPATION FACTOR STEADY",
+            "VECTOR: DEVIATION THRESHOLD MINIMAL (<0.002m)",
+            "SENSOR_D: MATERIAL STRESS RECORDED AT JOINT_2",
+            "SYSTEM: STATE MATRIX ALIGNED",
+            "PHASE_SPACE: ATTRACTOR ENVELOPE ESTABLISHED"
+        ];
+
+        function addCustomLog(message) {
+            const time = new Date().toISOString().slice(11, 23);
+            const logItem = document.createElement("div");
+            logItem.className = "log-item";
+            logItem.innerHTML = `<span class="log-time">[${time}]</span> <span>${message}</span>`;
+            logConsole.appendChild(logItem);
+            logConsole.scrollTop = logConsole.scrollHeight;
+
+            while (logConsole.childElementCount > 25) {
+                logConsole.removeChild(logConsole.firstChild);
+            }
+        }
+
+        function tickLogs() {
+            if (Math.random() > 0.4) {
+                const msg = logTemplates[Math.floor(Math.random() * logTemplates.length)];
+                addCustomLog(msg);
+            }
+            setTimeout(tickLogs, 3000 + Math.random() * 3000);
+        }
+
+        // Timecode update
+        function updateTimecode() {
+            const time = (Date.now() / 1000).toFixed(3);
+            document.getElementById("system-time").textContent = time;
+            requestAnimationFrame(updateTimecode);
+        }
+
+        // Phase canvas clearing
+        function clearPhaseCanvas() {
+            phaseCtx.fillStyle = "#fcfcfb";
+            phaseCtx.fillRect(0, 0, phaseCanvas.width, phaseCanvas.height);
+            
+            // Draw grid in canvas
+            phaseCtx.strokeStyle = "#eaeae9";
+            phaseCtx.lineWidth = 0.5;
+            
+            // vertical line
+            phaseCtx.beginPath();
+            phaseCtx.moveTo(phaseCanvas.width / 2, 0);
+            phaseCtx.lineTo(phaseCanvas.width / 2, phaseCanvas.height);
+            phaseCtx.stroke();
+            
+            // horizontal line
+            phaseCtx.beginPath();
+            phaseCtx.moveTo(0, phaseCanvas.height / 2);
+            phaseCtx.lineTo(phaseCanvas.width, phaseCanvas.height / 2);
+            phaseCtx.stroke();
+        }
+
+        // Draw phase space coordinate
+        function drawPhasePortrait() {
+            let nTheta1 = ((theta1 + Math.PI) % (2 * Math.PI)) - Math.PI;
+            if (nTheta1 < -Math.PI) nTheta1 += 2 * Math.PI;
+
+            let nTheta2 = ((theta2 + Math.PI) % (2 * Math.PI)) - Math.PI;
+            if (nTheta2 < -Math.PI) nTheta2 += 2 * Math.PI;
+
+            const px = ((nTheta1 + Math.PI) / (2 * Math.PI)) * phaseCanvas.width;
+            const py = ((nTheta2 + Math.PI) / (2 * Math.PI)) * phaseCanvas.height;
+
+            if (lastPlotX !== null && lastPlotY !== null) {
+                const dist = Math.hypot(px - lastPlotX, py - lastPlotY);
+                if (dist < 40) {
+                    phaseCtx.strokeStyle = "rgba(12, 12, 12, 0.45)";
+                    phaseCtx.lineWidth = 0.5;
+                    phaseCtx.beginPath();
+                    phaseCtx.moveTo(lastPlotX, lastPlotY);
+                    phaseCtx.lineTo(px, py);
+                    phaseCtx.stroke();
+                }
+            }
+            lastPlotX = px;
+            lastPlotY = py;
+
+            phaseCtx.fillStyle = "rgba(252, 252, 251, 0.0005)";
+            phaseCtx.fillRect(0, 0, phaseCanvas.width, phaseCanvas.height);
+        }
+
+        // Core Physics loop
+        const subSteps = 6;
+        const dt = 0.03;
+
+        function physicsStep() {
+            if (!isRunning) return;
+
+            for (let i = 0; i < subSteps; i++) {
+                let delta = theta1 - theta2;
+
+                // Equations of motion
+                let num1 = -g * (2 * m1 + m2) * Math.sin(theta1) - m2 * g * Math.sin(theta1 - 2 * theta2) - 2 * Math.sin(delta) * m2 * (omega2 * omega2 * l2 + omega1 * omega1 * l1 * Math.cos(delta));
+                let den1 = l1 * (2 * m1 + m2 - m2 * Math.cos(2 * theta1 - 2 * theta2));
+                let alpha1 = num1 / den1;
+
+                let num2 = 2 * Math.sin(delta) * (omega1 * omega1 * l1 * (m1 + m2) + g * (m1 + m2) * Math.cos(theta1) + omega2 * omega2 * l2 * m2 * Math.cos(delta));
+                let den2 = l2 * (2 * m1 + m2 - m2 * Math.cos(2 * theta1 - 2 * theta2));
+                let alpha2 = num2 / den2;
+
+                // Update velocities with damping
+                omega1 += alpha1 * dt;
+                omega2 += alpha2 * dt;
+                omega1 *= (1 - damp);
+                omega2 *= (1 - damp);
+
+                // Update angles
+                theta1 += omega1 * dt;
+                theta2 += omega2 * dt;
+            }
+        }
+
+        function renderFrame() {
+            physicsStep();
+
+            // Calculate coordinates
+            const x1 = pivotX + l1 * Math.sin(theta1);
+            const y1 = pivotY + l1 * Math.cos(theta1);
+            const x2 = x1 + l2 * Math.sin(theta2);
+            const y2 = y1 + l2 * Math.cos(theta2);
+
+            // Update SVG elements
+            arm1.setAttribute("x2", x1);
+            arm1.setAttribute("y2", y1);
+            arm2.setAttribute("x1", x1);
+            arm2.setAttribute("y1", y1);
+            arm2.setAttribute("x2", x2);
+            arm2.setAttribute("y2", y2);
+
+            mass1.setAttribute("cx", x1);
+            mass1.setAttribute("cy", y1);
+            mass2.setAttribute("cx", x2);
+            mass2.setAttribute("cy", y2);
+
+            // Coordinate readouts
+            simCoords.textContent = `X1: ${x1.toFixed(2)} Y1: ${y1.toFixed(2)}`;
+            simCoords2.textContent = `X2: ${x2.toFixed(2)} Y2: ${y2.toFixed(2)}`;
+
+            // Trail drawing
+            if (isRunning) {
+                trailPoints.push({x: x2, y: y2});
+                if (trailPoints.length > maxTrail) {
+                    trailPoints.shift();
+                }
+            }
+
+            if (trailPoints.length > 1) {
+                let pathD = `M ${trailPoints[0].x} ${trailPoints[0].y}`;
+                for (let i = 1; i < trailPoints.length; i++) {
+                    pathD += ` L ${trailPoints[i].x} ${trailPoints[i].y}`;
+                }
+                simTrail.setAttribute("d", pathD);
+            } else {
+                simTrail.setAttribute("d", "");
+            }
+
+            // Numerical readouts update
+            metricV1.textContent = `${omega1.toFixed(4)} rad/s`;
+            metricV2.textContent = `${omega2.toFixed(4)} rad/s`;
+
+            // Calculate Energies
+            const v1_sq = (l1 * omega1) ** 2;
+            const v2_sq = (l1 * omega1) ** 2 + (l2 * omega2) ** 2 + 2 * l1 * l2 * omega1 * omega2 * Math.cos(theta1 - theta2);
+            const ke = 0.5 * m1 * v1_sq + 0.5 * m2 * v2_sq;
+            const pe = -g * ((m1 + m2) * l1 * Math.cos(theta1) + m2 * l2 * Math.cos(theta2));
+
+            metricKe.textContent = `${ke.toFixed(4)} J`;
+            metricPe.textContent = `${pe.toFixed(4)} J`;
+
+            if (isRunning) {
+                drawPhasePortrait();
+            }
+
+            requestAnimationFrame(renderFrame);
+        }
+
+        // Setup
+        buildSpecimenList();
+        syncSlidersUI();
+        clearPhaseCanvas();
+        addCustomLog("SYSTEM: TELESENSOR SYNCED AND READY");
+        tickLogs();
+        updateTimecode();
+        requestAnimationFrame(renderFrame);
+    </script>
+</body>
+</html>

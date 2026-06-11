@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Sphere Gallery — Inside Out</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{
+    width:100%;height:100%;overflow:hidden;
+    background:#080808;color:#fff;
+    font-family:'Inter',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    -webkit-tap-highlight-color:transparent;
+    user-select:none;
+  }
+  canvas#c{display:block;position:fixed;inset:0;cursor:grab;touch-action:none}
+  canvas#c.dragging{cursor:grabbing}
+
+  /* Soft radial vignette over the canvas to evoke depth */
+  .vignette{
+    position:fixed;inset:0;z-index:2;pointer-events:none;
+    background:radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 100%);
+    mix-blend-mode:multiply;
+  }
+  .grain{
+    position:fixed;inset:0;z-index:3;pointer-events:none;opacity:0.06;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* UI overlay */
+  .ui{position:fixed;inset:0;pointer-events:none;z-index:10}
+  .ui > *{pointer-events:auto}
+
+  .logo{
+    position:absolute;top:22px;left:24px;
+    width:44px;height:44px;border-radius:50%;
+    background:#fff;color:#000;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:18px;letter-spacing:-0.02em;
+  }
+  .logo span{transform:translateY(1px)}
+
+  .meta{
+    position:absolute;top:28px;left:50%;transform:translateX(-50%);
+    display:flex;gap:36px;
+    font-size:10px;letter-spacing:0.12em;text-transform:uppercase;
+    color:rgba(255,255,255,0.55);
+  }
+  .meta div{display:flex;flex-direction:column;align-items:center;gap:3px}
+  .meta b{color:#fff;font-weight:500;font-size:11px;letter-spacing:0.08em}
+
+  .talk{
+    position:absolute;top:20px;right:24px;
+    padding:13px 24px;border-radius:999px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.14);
+    color:#fff;font:inherit;font-size:13px;font-weight:500;
+    backdrop-filter:blur(20px) saturate(140%);
+    -webkit-backdrop-filter:blur(20px) saturate(140%);
+    cursor:pointer;transition:.3s;
+  }
+  .talk:hover{background:rgba(255,255,255,0.14);transform:translateY(-1px)}
+
+  .navbar{
+    position:absolute;bottom:26px;left:50%;transform:translateX(-50%);
+    display:flex;background:rgba(18,18,18,0.7);
+    backdrop-filter:blur(20px) saturate(140%);
+    -webkit-backdrop-filter:blur(20px) saturate(140%);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:999px;padding:5px;gap:2px;
+  }
+  .navbar a{
+    padding:10px 22px;border-radius:999px;
+    font-size:13px;font-weight:500;
+    color:rgba(255,255,255,0.65);transition:.25s;cursor:pointer;
+  }
+  .navbar a:hover{color:#fff}
+  .navbar a.active{background:#fff;color:#000}
+
+  .corner-l{position:absolute;bottom:26px;left:24px;display:flex;gap:6px}
+  .corner-l button{
+    width:42px;height:42px;border-radius:12px;
+    background:rgba(18,18,18,0.7);
+    backdrop-filter:blur(20px) saturate(140%);
+    -webkit-backdrop-filter:blur(20px) saturate(140%);
+    border:1px solid rgba(255,255,255,0.08);
+    color:rgba(255,255,255,0.8);font-size:18px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:.25s;
+  }
+  .corner-l button:hover{background:rgba(255,255,255,0.12);color:#fff}
+
+  .corner-r{position:absolute;bottom:26px;right:24px}
+  .corner-r button{
+    padding:12px 22px;border-radius:999px;
+    background:rgba(18,18,18,0.7);
+    backdrop-filter:blur(20px) saturate(140%);
+    -webkit-backdrop-filter:blur(20px) saturate(140%);
+    border:1px solid rgba(255,255,255,0.08);
+    color:#fff;font:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:.25s;
+  }
+  .corner-r button:hover{background:rgba(255,255,255,0.12)}
+
+  .hint{
+    position:absolute;top:50%;left:50%;
+    transform:translate(-50%,calc(50vh - 80px));
+    color:rgba(255,255,255,0.4);
+    font-size:10px;letter-spacing:0.25em;text-transform:uppercase;
+    pointer-events:none;animation:pulse 2.6s infinite ease-in-out;
+    transition:opacity .6s;
+  }
+  .hint.hide{opacity:0}
+  @keyframes pulse{0%,100%{opacity:0.35}50%{opacity:0.7}}
+
+  /* DETAIL PAGE */
+  .detail{
+    position:fixed;inset:0;z-index:50;background:#0a0a0a;
+    opacity:0;pointer-events:none;
+    display:flex;align-items:center;justify-content:center;
+    transition:opacity .5s ease;
+  }
+  .detail.open{opacity:1;pointer-events:auto}
+  .detail .close{
+    position:absolute;top:22px;right:24px;
+    width:44px;height:44px;border-radius:50%;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.15);
+    color:#fff;font-size:16px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:.25s;
+  }
+  .detail .close:hover{background:rgba(255,255,255,0.14);transform:rotate(90deg)}
+
+  .detail .inner{
+    width:100%;max-width:1100px;
+    padding:80px 40px;
+    display:grid;grid-template-columns:1fr 1fr;gap:80px;
+    align-items:center;
+  }
+  .detail .img{
+    aspect-ratio:3/4;background:#1a1a1a;border-radius:6px;
+    background-size:cover;background-position:center;
+    box-shadow:0 30px 80px rgba(0,0,0,0.5);
+  }
+  .detail .info .brand{
+    font-size:11px;letter-spacing:0.2em;text-transform:uppercase;
+    color:rgba(255,255,255,0.5);margin-bottom:18px;
+  }
+  .detail .info h1{
+    font-size:clamp(36px,5.5vw,72px);line-height:0.95;letter-spacing:-0.03em;
+    font-weight:300;margin-bottom:28px;
+  }
+  .detail .info p{
+    font-size:15px;line-height:1.65;color:rgba(255,255,255,0.65);
+    margin-bottom:32px;max-width:46ch;font-weight:300;
+  }
+  .detail .info .tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:36px}
+  .detail .info .tag{
+    padding:6px 14px;border:1px solid rgba(255,255,255,0.18);
+    border-radius:999px;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;
+  }
+  .detail .info .year{
+    font-size:11px;letter-spacing:0.2em;color:rgba(255,255,255,0.4);
+  }
+
+  @media(max-width:820px){
+    .detail .inner{grid-template-columns:1fr;gap:36px;padding:90px 28px 40px}
+    .detail .info h1{font-size:42px}
+    .meta{display:none}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+<div class="vignette"></div>
+<div class="grain"></div>
+
+<div class="ui">
+  <div class="logo"><span>●</span></div>
+  <div class="meta">
+    <div>LONDON, UK<b>09:13 GMT+1</b></div>
+    <div>AUCKLAND, NZ<b>19:13 GMT+12</b></div>
+  </div>
+  <button class="talk">Let's Talk</button>
+
+  <div class="corner-l">
+    <button title="Grid">▦</button>
+    <button title="List">≡</button>
+  </div>
+
+  <div class="navbar">
+    <a class="active">Work</a>
+    <a>About</a>
+    <a>Careers</a>
+  </div>
+
+  <button class="corner-r"><span>Filter</span></button>
+
+  <div class="hint" id="hint">Drag to explore · Scroll to tilt</div>
+</div>
+
+<div class="detail" id="detail">
+  <button class="close" id="closeBtn" aria-label="Close">✕</button>
+  <div class="inner">
+    <div class="img" id="dImg"></div>
+    <div class="info">
+      <div class="brand" id="dBrand"></div>
+      <h1 id="dTitle"></h1>
+      <p id="dDesc">A speculative case study. The detail view is intentionally minimal — the focus of this build is the spherical gallery experience itself. Close and continue exploring.</p>
+      <div class="tags" id="dTags"></div>
+      <div class="year" id="dYear"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+
+/* ---------- DATA ---------- */
+const BRANDS = ['AURORA','KILTER','NORTHCAR','LUMA','ECHO','NIMBUS','FRAME','HORIZON','PIVOT','OBSIDIAN','PRISM','CLOUDFOLK','UMBRA','HALO','SIGNAL','VOID'];
+const TITLES = [
+  'NORTHERN LIGHTS INSTALL','BILLBOARD WAR','EV CONFIGURATOR',
+  'GLOBAL TYPE SYSTEM','SPATIAL AUDIO TOUR','RETAIL ACTIVATION',
+  'OOH PORTRAIT SERIES','BRAND FILM 3D','INTERACTIVE FILM',
+  'VOICE INTERFACE','MUSEUM ACTIVATION','MOTION IDENTITY'
+];
+const TAG_POOL = [
+  ['EXPERIENCE','3D'],
+  ['OOH','BRAND'],
+  ['WEBSITE','PRODUCT'],
+  ['CAMPAIGN','CONTENT'],
+  ['EXPERIENCE','WEBSITE'],
+  ['ILLUSTRATION','3D'],
+  ['MOTION','BRAND'],
+  ['EXPERIENCE','AR']
+];
+const YEARS = ['2023','2024','2025','2026'];
+
+const COLS = 12, ROWS = 4;
+const N = COLS * ROWS;
+const CARDS = [];
+for (let i = 0; i < N; i++) {
+  CARDS.push({
+    brand: BRANDS[i % BRANDS.length],
+    title: TITLES[i % TITLES.length],
+    tags: TAG_POOL[i % TAG_POOL.length],
+    year: YEARS[i % YEARS.length],
+    img: `https://picsum.photos/seed/sphere${i+1}/640/860`
+  });
+}
+
+/* ---------- THREE SETUP ---------- */
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.setClearColor(0x080808, 1);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0x080808, 600, 1400);
+
+const camera = new THREE.PerspectiveCamera(68, innerWidth/innerHeight, 0.1, 5000);
+camera.position.set(0, 0, 0);
+camera.lookAt(0, 0, -1);
+
+const group = new THREE.Group();
+scene.add(group);
+
+const RADIUS = 820;
+const CARD_W = 280;
+const CARD_H = 400;
+const MAX_ANISO = renderer.capabilities.getMaxAnisotropy();
+
+/* ---------- CARD TEXTURE BUILDER ---------- */
+function roundRectPath(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function makeCardTexture(data) {
+  const W = 512, H = 720;
+  const cv = document.createElement('canvas');
+  cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+
+  function paint() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Top label band
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.font = '500 22px Inter, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillText(data.brand, 22, 40);
+    ctx.textAlign = 'right';
+    ctx.fillText(data.title, W - 22, 40);
+
+    // Image area
+    const imgX = 22, imgY = 70, imgW = W - 44, imgH = H - 180;
+
+    ctx.fillStyle = '#141414';
+    ctx.fillRect(imgX, imgY, imgW, imgH);
+
+    if (data._img) {
+      const iw = data._img.naturalWidth;
+      const ih = data._img.naturalHeight;
+      const sa = iw / ih;
+      const ta = imgW / imgH;
+      let sx, sy, sw, sh;
+      if (sa > ta) {
+        sh = ih; sw = ih * ta; sx = (iw - sw) / 2; sy = 0;
+      } else {
+        sw = iw; sh = iw / ta; sx = 0; sy = (ih - sh) / 2;
+      }
+      ctx.drawImage(data._img, sx, sy, sw, sh, imgX, imgY, imgW, imgH);
+    } else {
+      // placeholder gradient while loading
+      const g = ctx.createLinearGradient(imgX, imgY, imgX, imgY + imgH);
+      g.addColorStop(0, '#1c1c1c');
+      g.addColorStop(1, '#0d0d0d');
+      ctx.fillStyle = g;
+      ctx.fillRect(imgX, imgY, imgW, imgH);
+    }
+
+    // subtle bottom darkening on image
+    const sg = ctx.createLinearGradient(0, imgY + imgH - 80, 0, imgY + imgH);
+    sg.addColorStop(0, 'rgba(0,0,0,0)');
+    sg.addColorStop(1, 'rgba(0,0,0,0.5)');
+    ctx.fillStyle = sg;
+    ctx.fillRect(imgX, imgY + imgH - 80, imgW, 80);
+
+    // Tag pills
+    ctx.font = '500 16px Inter, sans-serif';
+    let tx = 22;
+    const ty = H - 56;
+    data.tags.forEach(t => {
+      const padX = 12;
+      const tw = ctx.measureText(t).width + padX * 2;
+      ctx.strokeStyle = 'rgba(255,255,255,0.32)';
+      ctx.lineWidth = 1.2;
+      roundRectPath(ctx, tx, ty, tw, 28, 14);
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.fillText(t, tx + padX, ty + 19);
+      tx += tw + 6;
+    });
+
+    // Year, bottom right
+    ctx.font = '500 20px Inter, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.8)';
+    ctx.textAlign = 'right';
+    ctx.fillText(data.year, W - 22, H - 32);
+
+    texture.needsUpdate = true;
+  }
+
+  const texture = new THREE.CanvasTexture(cv);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = MAX_ANISO;
+  texture.minFilter = THREE.LinearMipmapLinearFilter;
+  texture.generateMipmaps = true;
+
+  paint();
+
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => { data._img = img; paint(); };
+  img.onerror = () => { paint(); };
+  img.src = data.img;
+
+  return texture;
+}
+
+/* ---------- BUILD SPHERE ---------- */
+const meshes = [];
+const originals = []; // remember each card's home transform
+
+CARDS.forEach((data, i) => {
+  const col = i % COLS;
+  const row = Math.floor(i / COLS);
+
+  // Azimuthal angle, 0..2π. theta=0 places card straight ahead (-Z).
+  const theta = (col / COLS) * Math.PI * 2;
+  // Polar angle: limit to a middle band so cards aren't squished at poles.
+  const phi = THREE.MathUtils.lerp(Math.PI * 0.30, Math.PI * 0.70, row / (ROWS - 1));
+
+  const x =  RADIUS * Math.sin(phi) * Math.sin(theta);
+  const y =  RADIUS * Math.cos(phi);
+  const z = -RADIUS * Math.sin(phi) * Math.cos(theta);
+
+  const tex = makeCardTexture(data);
+  const geom = new THREE.PlaneGeometry(CARD_W, CARD_H);
+  const mat = new THREE.MeshBasicMaterial({
+    map: tex,
+    transparent: true,
+    side: THREE.FrontSide,
+    depthWrite: false
+  });
+  const mesh = new THREE.Mesh(geom, mat);
+  mesh.position.set(x, y, z);
+
+  // Face the inside: orient plane normal toward origin (camera).
+  // lookAt(target) aligns local -Z to target; we want local +Z toward origin,
+  // so target = position * 2 (further away from origin along same ray).
+  const lookTarget = mesh.position.clone().multiplyScalar(2);
+  mesh.lookAt(lookTarget);
+
+  mesh.userData = { data, index: i };
+  group.add(mesh);
+  meshes.push(mesh);
+  originals.push({
+    position: mesh.position.clone(),
+    quaternion: mesh.quaternion.clone()
+  });
+});
+
+/* ---------- INTERACTION STATE ---------- */
+const drag = {
+  active: false,
+  x: 0, y: 0,
+  moved: 0,
+  rotX: 0, rotY: 0,         // current applied rotation
+  tRotX: 0, tRotY: 0,       // target rotation (Lenis-style)
+  vX: 0, vY: 0,             // residual velocity for inertia
+  locked: false,
+  pointerId: null,
+  hadInteraction: false
+};
+
+const EASE = 0.085;          // how fast current chases target each frame
+const DRAG_K = 0.0038;       // mouse-px to radians
+const FRICTION = 0.93;       // velocity decay after release
+const TILT_LIMIT = 0.85;     // max vertical tilt (radians)
+
+function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+canvas.addEventListener('pointerdown', e => {
+  if (drag.locked) return;
+  drag.active = true;
+  drag.pointerId = e.pointerId;
+  drag.x = e.clientX;
+  drag.y = e.clientY;
+  drag.moved = 0;
+  drag.vX = 0;
+  drag.vY = 0;
+  canvas.classList.add('dragging');
+  canvas.setPointerCapture(e.pointerId);
+
+  if (!drag.hadInteraction) {
+    drag.hadInteraction = true;
+    document.getElementById('hint').classList.add('hide');
+  }
+});
+
+canvas.addEventListener('pointermove', e => {
+  if (!drag.active) return;
+  const dx = e.clientX - drag.x;
+  const dy = e.clientY - drag.y;
+  drag.x = e.clientX;
+  drag.y = e.clientY;
+
+  drag.tRotY += dx * DRAG_K;
+  drag.tRotX -= dy * DRAG_K; // invert so dragging down tilts down naturally
+  drag.tRotX = clamp(drag.tRotX, -TILT_LIMIT, TILT_LIMIT);
+
+  drag.vY = dx * DRAG_K;
+  drag.vX = -dy * DRAG_K;
+  drag.moved += Math.hypot(dx, dy);
+});
+
+function endDrag(e) {
+  if (!drag.active) return;
+  drag.active = false;
+  if (drag.pointerId != null) {
+    try { canvas.releasePointerCapture(drag.pointerId); } catch (_) {}
+    drag.pointerId = null;
+  }
+  canvas.classList.remove('dragging');
+  if (drag.moved < 6 && e && e.type === 'pointerup') {
+    handleClick(e);
+  }
+}
+canvas.addEventListener('pointerup', endDrag);
+canvas.addEventListener('pointercancel', endDrag);
+
+// Wheel = vertical tilt with smooth easing
+window.addEventListener('wheel', e => {
+  if (drag.locked) return;
+  drag.tRotX -= e.deltaY * 0.0009;
+  drag.tRotX = clamp(drag.tRotX, -TILT_LIMIT, TILT_LIMIT);
+  if (!drag.hadInteraction) {
+    drag.hadInteraction = true;
+    document.getElementById('hint').classList.add('hide');
+  }
+}, { passive: true });
+
+/* ---------- RAYCASTING ---------- */
+const raycaster = new THREE.Raycaster();
+const ndc = new THREE.Vector2();
+
+function handleClick(e) {
+  if (drag.locked) return;
+  ndc.x = (e.clientX / innerWidth) * 2 - 1;
+  ndc.y = -(e.clientY / innerHeight) * 2 + 1;
+  raycaster.setFromCamera(ndc, camera);
+  const hits = raycaster.intersectObjects(meshes, false);
+  if (hits.length) openDetail(hits[0].object);
+}
+
+/* ---------- DETAIL PAGE ANIMATION ---------- */
+const detailEl = document.getElementById('detail');
+const dImg = document.getElementById('dImg');
+const dBrand = document.getElementById('dBrand');
+const dTitle = document.getElementById('dTitle');
+const dTags = document.getElementById('dTags');
+const dYear = document.getElementById('dYear');
+
+function openDetail(mesh) {
+  drag.locked = true;
+  const data = mesh.userData.data;
+
+  // populate
+  dBrand.textContent = data.brand;
+  dTitle.textContent = data.title;
+  dImg.style.backgroundImage = `url(${data.img})`;
+  dTags.innerHTML = '';
+  data.tags.forEach(t => {
+    const el = document.createElement('span');
+    el.className = 'tag';
+    el.textContent = t;
+    dTags.appendChild(el);
+  });
+  dYear.textContent = data.year;
+
+  // animate the clicked card forward + scale up
+  const dir = mesh.position.clone().normalize();
+  const targetPos = dir.multiplyScalar(220);
+
+  gsap.to(mesh.position, {
+    x: targetPos.x, y: targetPos.y, z: targetPos.z,
+    duration: 1.0, ease: 'power3.inOut'
+  });
+  gsap.to(mesh.scale, {
+    x: 1.55, y: 1.55, z: 1.55,
+    duration: 1.0, ease: 'power3.inOut'
+  });
+
+  // fade the rest
+  meshes.forEach(m => {
+    if (m !== mesh) {
+      gsap.to(m.material, { opacity: 0, duration: 0.5, ease: 'power2.out' });
+    }
+  });
+
+  // bring up the detail page
+  gsap.to('.ui', { opacity: 0, duration: 0.4 });
+  gsap.delayedCall(0.55, () => {
+    detailEl.classList.add('open');
+    gsap.fromTo('#detail .img',
+      { opacity: 0, x: -40 },
+      { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out' });
+    gsap.fromTo('#detail .info > *',
+      { opacity: 0, y: 24 },
+      { opacity: 1, y: 0, duration: 0.7, stagger: 0.06, ease: 'power3.out', delay: 0.1 });
+  });
+}
+
+function closeDetail() {
+  detailEl.classList.remove('open');
+  gsap.to('.ui', { opacity: 1, duration: 0.5, delay: 0.3 });
+
+  meshes.forEach((m, i) => {
+    gsap.killTweensOf(m.position);
+    gsap.killTweensOf(m.scale);
+    gsap.killTweensOf(m.material);
+
+    const o = originals[i];
+    gsap.to(m.position, {
+      x: o.position.x, y: o.position.y, z: o.position.z,
+      duration: 0.9, ease: 'power3.inOut', delay: 0.1
+    });
+    gsap.to(m.scale, {
+      x: 1, y: 1, z: 1,
+      duration: 0.9, ease: 'power3.inOut', delay: 0.1
+    });
+    gsap.to(m.material, {
+      opacity: 1, duration: 0.5, delay: 0.4
+    });
+  });
+
+  gsap.delayedCall(1.1, () => { drag.locked = false; });
+}
+
+document.getElementById('closeBtn').addEventListener('click', closeDetail);
+window.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeDetail();
+});
+
+/* ---------- ANIMATION LOOP ---------- */
+function tick() {
+  requestAnimationFrame(tick);
+
+  if (!drag.active && !drag.locked) {
+    drag.tRotY += drag.vY;
+    drag.tRotX += drag.vX;
+    drag.tRotX = clamp(drag.tRotX, -TILT_LIMIT, TILT_LIMIT);
+    drag.vX *= FRICTION;
+    drag.vY *= FRICTION;
+    if (Math.abs(drag.vX) < 1e-5) drag.vX = 0;
+    if (Math.abs(drag.vY) < 1e-5) drag.vY = 0;
+  }
+
+  drag.rotX += (drag.tRotX - drag.rotX) * EASE;
+  drag.rotY += (drag.tRotY - drag.rotY) * EASE;
+
+  group.rotation.x = drag.rotX;
+  group.rotation.y = drag.rotY;
+
+  renderer.render(scene, camera);
+}
+tick();
+
+/* ---------- RESIZE ---------- */
+window.addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+/* ---------- INTRO DRIFT ---------- */
+gsap.to(drag, {
+  tRotY: 0.35,
+  duration: 4.5,
+  ease: 'power2.out',
+  onComplete: () => { drag.vY = 0; }
+});
+</script>
+</body>
+</html>

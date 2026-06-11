@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CACAUX — Fine Dining, Literally</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --chocolate:    #3B1F0B;
+  --dark-mud:     #5C3A1E;
+  --mud:          #7A5230;
+  --taupe:        #A67B5B;
+  --ochre:        #C4944A;
+  --sickly-beige: #D4B896;
+  --cream:        #F0E0C8;
+  --swamp:        #4A6741;
+  --poo:          #8B6914;
+  --deep-poo:     #654321;
+  --blob-shadow:  rgba(59, 31, 11, 0.7);
+  --inset-glow:   rgba(196, 148, 74, 0.25);
+  --space-xs: clamp(0.25rem, 1vw, 0.5rem);
+  --space-sm: clamp(0.5rem, 2vw, 1rem);
+  --space-md: clamp(1rem, 3vw, 2rem);
+  --space-lg: clamp(2rem, 5vw, 4rem);
+  --space-xl: clamp(3rem, 8vw, 6rem);
+  --fs-hero: clamp(3rem, 10vw, 9rem);
+  --fs-h1:   clamp(2.2rem, 6vw, 5rem);
+  --fs-h2:   clamp(1.6rem, 4vw, 3rem);
+  --fs-body: clamp(1rem, 2vw, 1.35rem);
+  --fs-small: clamp(0.8rem, 1.5vw, 1rem);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--chocolate); overflow-x: hidden; }
+body {
+  font-family: 'Fredoka', sans-serif;
+  background: var(--chocolate);
+  color: var(--cream);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+.grid-canvas {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0;
+  position: relative;
+  width: 100%;
+}
+
+.goo-blob {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+.goo-blob--1 {
+  width: clamp(250px, 45vw, 700px);
+  height: clamp(250px, 45vw, 700px);
+  background: radial-gradient(ellipse at 30% 40%, var(--mud), var(--deep-poo));
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  top: -10%; left: -6%;
+  filter: blur(2px); opacity: 0.55;
+  animation: wobble1 12s ease-in-out infinite;
+}
+.goo-blob--2 {
+  width: clamp(180px, 35vw, 500px);
+  height: clamp(200px, 38vw, 550px);
+  background: radial-gradient(ellipse at 60% 30%, var(--dark-mud), var(--chocolate));
+  border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%;
+  top: 18%; right: -10%;
+  filter: blur(3px); opacity: 0.45;
+  animation: wobble2 15s ease-in-out infinite;
+}
+.goo-blob--3 {
+  width: clamp(120px, 28vw, 400px);
+  height: clamp(140px, 30vw, 450px);
+  background: radial-gradient(ellipse at 40% 60%, var(--ochre), var(--mud));
+  border-radius: 30% 70% 50% 50% / 60% 40% 60% 40%;
+  bottom: 5%; left: 25%;
+  filter: blur(4px); opacity: 0.3;
+  animation: wobble3 18s ease-in-out infinite;
+}
+@keyframes wobble1 {
+  0%, 100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; transform: rotate(0deg) scale(1); }
+  33%      { border-radius: 55% 45% 40% 60% / 55% 45% 55% 45%; transform: rotate(3deg) scale(1.03); }
+  66%      { border-radius: 45% 55% 60% 40% / 50% 55% 45% 55%; transform: rotate(-2deg) scale(0.98); }
+}
+@keyframes wobble2 {
+  0%, 100% { border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%; transform: rotate(0deg); }
+  50%      { border-radius: 45% 55% 55% 45% / 45% 50% 50% 55%; transform: rotate(4deg); }
+}
+@keyframes wobble3 {
+  0%, 100% { border-radius: 30% 70% 50% 50% / 60% 40% 60% 40%; }
+  50%      { border-radius: 50% 50% 40% 60% / 40% 60% 50% 50%; }
+}
+
+/* HERO */
+.hero {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-lg);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 120%, rgba(74,103,65,0.3) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 20% 30%, rgba(122,82,48,0.25) 0%, transparent 60%);
+  z-index: 0;
+}
+.hero__emoji-rain {
+  position: absolute; inset: 0;
+  overflow: hidden; pointer-events: none; z-index: 0;
+}
+.hero__emoji {
+  position: absolute;
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  opacity: 0.12;
+  animation: fall linear infinite;
+  filter: blur(1px);
+}
+@keyframes fall {
+  0%   { transform: translateY(-10vh) rotate(0deg); opacity: 0.12; }
+  80%  { opacity: 0.2; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+.hero__badge {
+  display: inline-block;
+  background: var(--swamp);
+  color: var(--cream);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  box-shadow: 0 8px 30px var(--blob-shadow), inset 0 2px 8px var(--inset-glow);
+  margin-bottom: var(--space-md);
+  z-index: 1;
+  animation: blob-pulse 4s ease-in-out infinite;
+}
+@keyframes blob-pulse {
+  0%, 100% { border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; transform: scale(1); }
+  50%      { border-radius: 45% 55% 55% 45% / 55% 45% 55% 45%; transform: scale(1.04); }
+}
+.hero__title {
+  font-family: 'Baloo 2', cursive;
+  font-size: var(--fs-hero);
+  font-weight: 800;
+  line-height: 0.92;
+  color: var(--cream);
+  text-shadow: 0 4px 0 var(--mud), 0 8px 0 var(--deep-poo), 0 12px 40px var(--blob-shadow);
+  z-index: 1; position: relative;
+}
+.hero__title span { display: block; color: var(--ochre); }
+.hero__subtitle {
+  font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+  font-weight: 400;
+  color: var(--sickly-beige);
+  max-width: 30ch;
+  margin: var(--space-md) auto;
+  z-index: 1; position: relative;
+  line-height: 1.4;
+}
+.hero__cta-group {
+  display: flex; gap: var(--space-sm); flex-wrap: wrap; justify-content: center;
+  z-index: 1; position: relative; margin-top: var(--space-md);
+}
+
+/* BUTTONS */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5em;
+  padding: clamp(0.8rem, 2vw, 1.2rem) clamp(1.5rem, 4vw, 2.5rem);
+  font-family: 'Fredoka', sans-serif;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-weight: 600; border: none; cursor: pointer; text-decoration: none;
+  transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s ease;
+}
+.btn:hover { transform: scale(1.06) rotate(-1deg); }
+.btn:active { transform: scale(0.96); }
+.btn--primary {
+  background: linear-gradient(135deg, var(--ochre), var(--poo));
+  color: var(--chocolate);
+  border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+  box-shadow: 0 10px 35px var(--blob-shadow), inset 0 3px 10px var(--inset-glow), inset 0 -3px 10px rgba(0,0,0,0.2);
+}
+.btn--secondary {
+  background: var(--swamp);
+  color: var(--cream);
+  border-radius: 45% 55% 50% 50% / 55% 45% 55% 45%;
+  box-shadow: 0 10px 35px var(--blob-shadow), inset 0 3px 10px rgba(107,143,94,0.4), inset 0 -3px 10px rgba(0,0,0,0.25);
+}
+
+/* THE MENU */
+.menu {
+  grid-column: 1 / 9;
+  grid-row: 2 / 4;
+  z-index: 5;
+  margin-top: -8vh;
+  padding: var(--space-xl) var(--space-lg);
+  background: #3A2010;
+  border-radius: 0 40% 20% 0 / 0 30% 20% 0;
+  box-shadow: 0 -20px 60px var(--blob-shadow), inset 0 10px 40px rgba(0,0,0,0.3);
+  position: relative;
+}
+.menu::after {
+  content: '';
+  position: absolute; bottom: -30px; right: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, var(--mud) 0%, transparent 70%);
+  border-radius: 50%; filter: blur(30px); opacity: 0.4; pointer-events: none;
+}
+.section-label {
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--ochre);
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+}
+.menu__title {
+  font-family: 'Baloo 2', cursive;
+  font-size: var(--fs-h1);
+  font-weight: 800; line-height: 1;
+  margin-bottom: var(--space-lg);
+  color: var(--cream);
+  text-shadow: 0 3px 0 var(--chocolate);
+}
+.menu__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: var(--space-md);
+}
+.menu-card {
+  background: linear-gradient(145deg, #4A2A12, #3D2010);
+  border: 1px solid rgba(196,148,74,0.3);
+  padding: var(--space-md);
+  border-radius: 35% 65% 55% 45% / 55% 40% 60% 45%;
+  box-shadow: 0 12px 40px var(--blob-shadow), inset 0 4px 15px var(--inset-glow), inset 0 -4px 15px rgba(0,0,0,0.3);
+  transition: transform 0.4s cubic-bezier(.34,1.56,.64,1), border-radius 0.6s ease;
+  position: relative;
+  overflow: hidden;
+}
+.menu-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(196,148,74,0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+.menu-card:hover {
+  transform: translateY(-8px) rotate(1deg) scale(1.02);
+  border-radius: 55% 45% 40% 60% / 45% 55% 45% 55%;
+}
+.menu-card__emoji {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  margin-bottom: var(--space-sm);
+  filter: drop-shadow(0 4px 8px var(--blob-shadow));
+}
+.menu-card__name {
+  font-family: 'Baloo 2', cursive;
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 700;
+  color: var(--ochre);
+  margin-bottom: var(--space-xs);
+}
+.menu-card__desc {
+  font-size: var(--fs-body);
+  color: var(--sickly-beige);
+  line-height: 1.5;
+}
+.menu-card__price {
+  display: inline-block;
+  margin-top: var(--space-sm);
+  background: var(--swamp);
+  color: var(--cream);
+  padding: 0.3em 1em;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  font-weight: 700;
+  font-size: var(--fs-body);
+  box-shadow: 0 4px 15px var(--blob-shadow);
+}
+
+/* PHILOSOPHY */
+.philosophy {
+  grid-column: 6 / -1;
+  grid-row: 3 / 5;
+  z-index: 6;
+  margin-top: -12vh;
+  padding: var(--space-xl) var(--space-lg);
+  background:
+    radial-gradient(ellipse 80% 70% at 30% 50%, rgba(122,82,48,0.4) 0%, transparent 60%),
+    var(--chocolate);
+  border-radius: 40% 0 0 35% / 25% 0 0 30%;
+  box-shadow: -20px 0 60px var(--blob-shadow), inset 0 5px 30px var(--inset-glow);
+  position: relative;
+}
+.philosophy__title {
+  font-family: 'Baloo 2', cursive;
+  font-size: var(--fs-h1);
+  font-weight: 800; line-height: 1;
+  margin-bottom: var(--space-lg);
+  color: var(--sickly-beige);
+}
+.philosophy__quote {
+  font-size: clamp(1.15rem, 2.5vw, 1.7rem);
+  font-style: italic;
+  color: var(--ochre);
+  border-left: 4px solid var(--swamp);
+  padding-left: var(--space-md);
+  margin-bottom: var(--space-md);
+  line-height: 1.5;
+  max-width: 35ch;
+}
+.philosophy__text {
+  font-size: var(--fs-body);
+  color: var(--cream);
+  line-height: 1.7;
+  max-width: 40ch;
+  opacity: 0.9;
+}
+.poop-trail {
+  display: flex; gap: var(--space-sm);
+  margin-top: var(--space-lg); flex-wrap: wrap;
+}
+.poop-trail__dot {
+  width: clamp(20px, 4vw, 40px);
+  height: clamp(20px, 4vw, 40px);
+  border-radius: 50% 40% 60% 45% / 55% 50% 50% 45%;
+  animation: wobble1 8s ease-in-out infinite;
+  box-shadow: 0 4px 15px var(--blob-shadow);
+}
+.poop-trail__dot:nth-child(1) { background: var(--chocolate); animation-delay: 0s; }
+.poop-trail__dot:nth-child(2) { background: var(--mud); animation-delay: 0.5s; }
+.poop-trail__dot:nth-child(3) { background: var(--poo); animation-delay: 1s; }
+.poop-trail__dot:nth-child(4) { background: var(--ochre); animation-delay: 1.5s; }
+.poop-trail__dot:nth-child(5) { background: var(--deep-poo); animation-delay: 2s; }
+.poop-trail__dot:nth-child(6) { background: var(--swamp); animation-delay: 2.5s; }
+.poop-trail__dot:nth-child(7) { background: var(--taupe); animation-delay: 3s; }
+
+/* REVIEWS */
+.reviews {
+  grid-column: 1 / 7;
+  grid-row: 5 / 7;
+  z-index: 7;
+  margin-top: -6vh;
+  padding: var(--space-xl) var(--space-lg);
+  background: #2A1808;
+  border-radius: 0 50% 45% 0 / 0 35% 30% 0;
+  box-shadow: 0 15px 50px var(--blob-shadow), inset 0 8px 30px rgba(0,0,0,0.4);
+  position: relative;
+}
+.reviews__title {
+  font-family: 'Baloo 2', cursive;
+  font-size: var(--fs-h1);
+  font-weight: 800; line-height: 1;
+  margin-bottom: var(--space-lg);
+  color: var(--ochre);
+}
+.review-stack { display: flex; flex-direction: column; gap: var(--space-md); }
+.review-card {
+  background: linear-gradient(145deg, #6B4226, #5A3620);
+  border: 1px solid rgba(196,148,74,0.25);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: 55% 45% 40% 60% / 50% 55% 45% 50%;
+  box-shadow: 0 8px 30px var(--blob-shadow), inset 0 3px 12px var(--inset-glow);
+  transition: transform 0.4s cubic-bezier(.34,1.56,.64,1);
+}
+.review-card:hover { transform: rotate(-1deg) scale(1.02); }
+.review-card__stars { font-size: 1.5rem; margin-bottom: var(--space-xs); }
+.review-card__text {
+  font-size: var(--fs-body);
+  color: var(--sickly-beige);
+  line-height: 1.5;
+  margin-bottom: var(--space-sm);
+}
+.review-card__author {
+  font-size: var(--fs-small);
+  color: var(--taupe);
+  font-weight: 600;
+}
+
+/* GROSSTINI */
+.grosstini {
+  grid-column: 5 / -1;
+  grid-row: 6 / 8;
+  z-index: 8;
+  margin-top: -10vh;
+  padding: var(--space-xl) var(--space-lg);
+  background:
+    radial-gradient(ellipse 70% 60% at 70% 40%, rgba(74,103,65,0.2) 0%, transparent 55%),
+    var(--chocolate);
+  border-radius: 50% 0 0 45% / 30% 0 0 25%;
+  box-shadow: -15px 15px 50px var(--blob-shadow), inset 0 5px 25px var(--inset-glow);
+  position: relative;
+}
+.grosstini__title {
+  font-family: 'Baloo 2', cursive;
+  font-size: var(--fs-h1);
+  font-weight: 800; line-height: 1;
+  margin-bottom: var(--space-sm);
+  color: var(--cream);
+}
+.grosstini__subtitle {
+  font-size: var(--fs-body);
+  color: var(--sickly-beige);
+  margin-bottom: var(--space-lg);
+  max-width: 35ch;
+}
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: var(--space-md);
+}
+.stat-blob {
+  text-align: center;
+  padding: var(--space-md);
+  background: linear-gradient(145deg, #6B4226, #5A3620);
+  border: 1px solid rgba(196,148,74,0.25);
+  border-radius: 60% 40% 50% 50% / 45% 55% 45% 55%;
+  box-shadow: 0 10px 35px var(--blob-shadow), inset 0 3px 12px var(--inset-glow);
+  transition: transform 0.3s ease;
+}
+.stat-blob:hover { transform: scale(1.08) rotate(2deg); }
+.stat-blob__number {
+  font-family: 'Baloo 2', cursive;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  color: var(--ochre);
+  display: block; line-height: 1;
+}
+.stat-blob__label {
+  font-size: var(--fs-small);
+  color: var(--sickly-beige);
+  margin-top: var(--space-xs);
+  display: block;
+}
+
+/* CTA */
+.cta-section {
+  grid-column: 1 / -1;
+  grid-row: 8;
+  z-index: 9;
+  margin-top: -8vh;
+  padding: var(--space-xl) var(--space-lg);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  min-height: 55vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.cta-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 90% 80% at 50% 80%, rgba(122,82,48,0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 20% 50%, rgba(74,103,65,0.15) 0%, transparent 50%);
+  z-index: 0;
+}
+.cta__emoji {
+  font-size: clamp(4rem, 12vw, 10rem);
+  z-index: 1; position: relative;
+  animation: blob-pulse 3s ease-in-out infinite;
+  filter: drop-shadow(0 10px 30px var(--blob-shadow));
+}
+.cta__title {
+  font-family: 'Baloo 2', cursive;
+  font-size: var(--fs-h1);
+  font-weight: 800; line-height: 1;
+  z-index: 1; position: relative;
+  margin: var(--space-md) 0;
+  color: var(--cream);
+  text-shadow: 0 4px 0 var(--chocolate), 0 8px 30px var(--blob-shadow);
+}
+.cta__subtext {
+  font-size: var(--fs-body);
+  color: var(--sickly-beige);
+  max-width: 30ch;
+  z-index: 1; position: relative;
+  margin-bottom: var(--space-lg);
+  line-height: 1.5;
+}
+.cta-section .btn--primary {
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  padding: clamp(1rem, 3vw, 1.5rem) clamp(2rem, 5vw, 3.5rem);
+  border-radius: 55% 45% 50% 50% / 50% 55% 45% 50%;
+  z-index: 1; position: relative;
+}
+
+/* WAVE DIVIDERS */
+.wave-divider {
+  width: 100%; display: block; margin: -1px 0;
+  position: relative; z-index: 10;
+}
+.wave-divider svg { display: block; width: 100%; height: auto; }
+
+/* FOOTER */
+.footer {
+  grid-column: 1 / -1;
+  grid-row: 9;
+  z-index: 11;
+  padding: var(--space-lg);
+  background: var(--chocolate);
+  text-align: center;
+  border-top: 2px solid var(--dark-mud);
+}
+.footer__brand {
+  font-family: 'Baloo 2', cursive;
+  font-size: var(--fs-h2);
+  font-weight: 800; color: var(--mud);
+  margin-bottom: var(--space-sm);
+}
+.footer__copy {
+  font-size: var(--fs-small);
+  color: var(--taupe); opacity: 0.6;
+}
+.footer__links {
+  display: flex; gap: var(--space-md);
+  justify-content: center;
+  margin-top: var(--space-md); flex-wrap: wrap;
+}
+.footer__link {
+  color: var(--ochre); text-decoration: none;
+  font-size: var(--fs-small); font-weight: 600;
+  transition: color 0.2s;
+}
+.footer__link:hover { color: var(--sickly-beige); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .grid-canvas { display: flex; flex-direction: column; }
+  .menu, .philosophy, .reviews, .grosstini {
+    margin-top: 0;
+    border-radius: 0;
+    box-shadow: 0 10px 40px var(--blob-shadow), inset 0 5px 20px var(--inset-glow);
+  }
+  .menu { border-radius: 0 0 0 40%; }
+  .philosophy { border-radius: 0 0 40% 0; }
+  .reviews { border-radius: 0 0 0 35%; }
+  .grosstini { border-radius: 0 0 45% 0; }
+  .cta-section { margin-top: 0; min-height: 45vh; }
+}
+@media (max-width: 500px) {
+  .hero__title { font-size: clamp(2.5rem, 14vw, 5rem); }
+  .btn { width: 100%; justify-content: center; }
+  .menu__grid { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+::-webkit-scrollbar { width: 12px; }
+::-webkit-scrollbar-track { background: var(--chocolate); }
+::-webkit-scrollbar-thumb {
+  background: var(--mud);
+  border-radius: 40% 60% 50% 50% / 50% 40% 60% 50%;
+  border: 2px solid var(--chocolate);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--taupe); }
+::selection { background: var(--ochre); color: var(--chocolate); }
+
+.reveal {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.7s cubic-bezier(.34,1.56,.64,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<div class="grid-canvas">
+
+  <section class="hero" id="hero">
+    <div class="hero__emoji-rain" id="emojiRain"></div>
+    <div class="goo-blob goo-blob--1"></div>
+    <div class="goo-blob goo-blob--2"></div>
+    <span class="hero__badge">Michelin ⭐⭐⭐ — Since Yesterday</span>
+    <h1 class="hero__title">CACAux<span>Dining</span></h1>
+    <p class="hero__subtitle">Where chocolate meets conviction. Five courses of artisanal edible dirt, faux-droppings, and zero regrets.</p>
+    <div class="hero__cta-group">
+      <a href="#menu" class="btn btn--primary">🍽️ View the Menu</a>
+      <a href="#reserve" class="btn btn--secondary">💩 Reserve a Table</a>
+    </div>
+  </section>
+
+  <svg class="wave-divider" style="grid-column:1/-1;grid-row:2;" viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,60 C240,120 480,0 720,60 C960,120 1200,0 1440,60 L1440,120 L0,120 Z" fill="#5C3A1E" opacity="0.9"/>
+    <path d="M0,80 C360,20 720,100 1080,40 C1260,10 1380,50 1440,80 L1440,120 L0,120 Z" fill="#3B1F0B" opacity="0.6"/>
+  </svg>
+
+  <section class="menu" id="menu" style="grid-row:3/5;">
+    <div class="goo-blob goo-blob--3"></div>
+    <span class="section-label">The Tasting Experience</span>
+    <h2 class="menu__title reveal">Our Droppings</h2>
+    <div class="menu__grid">
+      <div class="menu-card reveal">
+        <div class="menu-card__emoji">🟤</div>
+        <h3 class="menu-card__name">The Amuse-Bouche</h3>
+        <p class="menu-card__desc">A single truffle "pebble" of 85% dark chocolate, hand-rolled to resemble a garden find. Served on a bed of edible moss.</p>
+        <span class="menu-card__price">💩 $48</span>
+      </div>
+      <div class="menu-card reveal">
+        <div class="menu-card__emoji">🪵</div>
+        <h3 class="menu-card__name">Forest Floor</h3>
+        <p class="menu-card__desc">Milk chocolate "bark" crumbles over cocoa soil with a center of salted caramel that oozes like sap. You'll question everything.</p>
+        <span class="menu-card__price">💩 $72</span>
+      </div>
+      <div class="menu-card reveal">
+        <div class="menu-card__emoji">🐎</div>
+        <h3 class="menu-card__name">The Main Event</h3>
+        <p class="menu-card__desc">A 12-hour sous-vide "log" of dark ganache, glazed in a caramel "bark" shell. Accompanied by a beet reduction that stains.</p>
+        <span class="menu-card__price">💩 $135</span>
+      </div>
+      <div class="menu-card reveal">
+        <div class="menu-card__emoji">🏔️</div>
+        <h3 class="menu-card__name">The Avalanche</h3>
+        <p class="menu-card__desc">White chocolate "snow" avalanche over a mountain of cocoa crumble, with a raspberry "landslide" coulis. Dangerously delicious.</p>
+        <span class="menu-card__price">💩 $89</span>
+      </div>
+      <div class="menu-card reveal">
+        <div class="menu-card__emoji">🧱</div>
+        <h3 class="menu-card__name">Bottom Line</h3>
+        <p class="menu-card__desc">A dense brick of 99% cacao, carved into a shape that leaves nothing to the imagination. Served warm. Bring your own napkin.</p>
+        <span class="menu-card__price">💩 $56</span>
+      </div>
+      <div class="menu-card reveal">
+        <div class="menu-card__emoji">🦴</div>
+        <h3 class="menu-card__name">The Palate Cleanser</h3>
+        <p class="menu-card__desc">A tiny chocolate "bone" dipped in matcha dust. It exists only to reset your shame before the next course.</p>
+        <span class="menu-card__price">💩 Complimentary*</span>
+      </div>
+    </div>
+  </section>
+
+  <svg class="wave-divider" style="grid-column:1/-1;grid-row:5;" viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C360,90 720,0 1080,60 C1260,80 1380,20 1440,40 L1440,100 L0,100 Z" fill="#3B1F0B" opacity="0.7"/>
+  </svg>
+
+  <section class="philosophy" id="philosophy" style="grid-row:5/7;">
+    <span class="section-label">Our Philosophy</span>
+    <h2 class="philosophy__title reveal">Embrace<br>the Gloop</h2>
+    <blockquote class="philosophy__quote reveal">"We looked at fine dining and asked: what if it was worse? Not in quality — in aesthetics. What if the food was beautiful but looked like it belonged in a garden… for the wrong reasons."</blockquote>
+    <p class="philosophy__text reveal">At CACAux, every dish is a conversation between craft and discomfort. Our chocolatiers spent 18 months perfecting the exact shade of brown that triggers both appetite and existential dread. The result? Three Michelin stars and a restraining order from the FDA's visual standards department.</p>
+    <div class="poop-trail reveal" aria-hidden="true">
+      <div class="poop-trail__dot"></div>
+      <div class="poop-trail__dot"></div>
+      <div class="poop-trail__dot"></div>
+      <div class="poop-trail__dot"></div>
+      <div class="poop-trail__dot"></div>
+      <div class="poop-trail__dot"></div>
+      <div class="poop-trail__dot"></div>
+    </div>
+  </section>
+
+  <svg class="wave-divider" style="grid-column:1/-1;grid-row:7;" viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,40 C480,80 960,0 1440,40 L1440,80 L0,80 Z" fill="#654321" opacity="0.8"/>
+  </svg>
+
+  <section class="reviews" id="reviews" style="grid-row:7/9;">
+    <span class="section-label">Guest Testimonials</span>
+    <h2 class="reviews__title reveal">The Bottom Line</h2>
+    <div class="review-stack">
+      <div class="review-card reveal">
+        <div class="review-card__stars">⭐⭐⭐⭐⭐</div>
+        <p class="review-card__text">"I brought my mother-in-law here for her birthday. She hasn't spoken to me since. 10/10, would emotionally devastate again."</p>
+        <span class="review-card__author">— Marcus T., Verified Diner 💩</span>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-card__stars">⭐⭐⭐⭐⭐</div>
+        <p class="review-card__text">"The 'Main Event' made me cry. Not because of the flavor — because I couldn't stop seeing what I was seeing. And then I had seconds."</p>
+        <span class="review-card__author">— Dr. Helena R., Food Critic 🪰</span>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-card__stars">⭐⭐⭐⭐⭐</div>
+        <p class="review-card__text">"My date left mid-course. Joke's on her — more for me. The 'Bottom Line' is the best thing I've ever put in my mouth. That's a sentence I never thought I'd say."</p>
+        <span class="review-card__author">— Kevin D., Permanently Changed 🧻</span>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-card__stars">⭐⭐⭐⭐⭐</div>
+        <p class="review-card__text">"They gave us a certificate at the end. I don't know what it certifies. But I framed it. This place is an institution."</p>
+        <span class="review-card__author">— The Michelin Inspector (anonymous) 🚽</span>
+      </div>
+    </div>
+  </section>
+
+  <svg class="wave-divider" style="grid-column:1/-1;grid-row:9;" viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,20 C360,70 720,10 1080,50 C1260,65 1380,30 1440,20 L1440,80 L0,80 Z" fill="#3B1F0B" opacity="0.6"/>
+  </svg>
+
+  <section class="grosstini" id="grosstini" style="grid-row:9/11;">
+    <span class="section-label">By the Numbers</span>
+    <h2 class="grosstini__title reveal">The Grosstini</h2>
+    <p class="grosstini__subtitle reveal">We tracked everything so you don't have to. You're welcome.</p>
+    <div class="stats-row">
+      <div class="stat-blob reveal">
+        <span class="stat-blob__number" data-target="14823" data-suffix="">0</span>
+        <span class="stat-blob__label">Dishes "Dropped" 💩</span>
+      </div>
+      <div class="stat-blob reveal">
+        <span class="stat-blob__number" data-target="3" data-suffix="">0</span>
+        <span class="stat-blob__label">Michelin Stars ⭐</span>
+      </div>
+      <div class="stat-blob reveal">
+        <span class="stat-blob__number" data-target="97" data-suffix="%">0</span>
+        <span class="stat-blob__label">Guests Surprised 😳</span>
+      </div>
+      <div class="stat-blob reveal">
+        <span class="stat-blob__number" data-target="0" data-suffix="">0</span>
+        <span class="stat-blob__label">Regrets (Allegedly) 🤥</span>
+      </div>
+      <div class="stat-blob reveal">
+        <span class="stat-blob__number" data-target="4200" data-suffix="g">0</span>
+        <span class="stat-blob__label">Chocolate Used Daily 🍫</span>
+      </div>
+      <div class="stat-blob reveal">
+        <span class="stat-blob__number" data-target="1" data-suffix="">0</span>
+        <span class="stat-blob__label">FDA Warning Letters 📬</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section" id="reserve" style="grid-row:11;">
+    <div class="cta__emoji">💩</div>
+    <h2 class="cta__title reveal">Drop In</h2>
+    <p class="cta__subtext reveal">Reservations fill up faster than our bowls. Book now before your next meal becomes a memory of this one.</p>
+    <a href="#" class="btn btn--primary reveal" onclick="alert('🎉 You have been added to the waitlist! We will notify you when a table drops.'); return false;">🪑 Reserve Your Seat (at the Table)</a>
+  </section>
+
+  <footer class="footer" style="grid-row:12;">
+    <div class="footer__brand">CACAux 💩</div>
+    <p class="footer__copy">&copy; 2026 CACAux Dining. All rights reserved. All dishes resembled.</p>
+    <nav class="footer__links">
+      <a href="#" class="footer__link">Privacy (It's Brown)</a>
+      <a href="#" class="footer__link">Terms of Turds</a>
+      <a href="#" class="footer__link">Careers (We're Hiring)</a>
+      <a href="#" class="footer__link">Press Kit 📸</a>
+    </nav>
+  </footer>
+
+</div>
+
+<script>
+(function() {
+  const c = document.getElementById('emojiRain');
+  const e = ['💩','🟤','🪵','🧻','🪰','🍫','🪨','🦴'];
+  for (let i = 0; i < 20; i++) {
+    const s = document.createElement('span');
+    s.className = 'hero__emoji';
+    s.textContent = e[Math.floor(Math.random() * e.length)];
+    s.style.left = (Math.random() * 100) + '%';
+    s.style.animationDuration = (8 + Math.random() * 12) + 's';
+    s.style.animationDelay = (Math.random() * 10) + 's';
+    s.style.fontSize = (1 + Math.random() * 2.5) + 'rem';
+    c.appendChild(s);
+  }
+})();
+
+(function() {
+  const els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(el => el.classList.add('visible'));
+    return;
+  }
+  const obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+  els.forEach(function(el) { obs.observe(el); });
+})();
+
+(function() {
+  var blobs = document.querySelectorAll('.stat-blob__number[data-target]');
+  if (!('IntersectionObserver' in window)) {
+    blobs.forEach(function(b) { b.textContent = b.dataset.target + b.dataset.suffix; });
+    return;
+  }
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      var el = entry.target;
+      var target = parseInt(el.dataset.target, 10);
+      var suffix = el.dataset.suffix || '';
+      var duration = 1800;
+      var start = performance.now();
+      function tick(now) {
+        var p = Math.min((now - start) / duration, 1);
+        var eased = 1 - Math.pow(1 - p, 4);
+        el.textContent = Math.round(eased * target).toLocaleString() + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      obs.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  blobs.forEach(function(b) { obs.observe(b); });
+})();
+
+(function() {
+  var blobs = document.querySelectorAll('.goo-blob');
+  var ticking = false;
+  window.addEventListener('scroll', function() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function() {
+      var y = window.scrollY;
+      blobs.forEach(function(b, i) {
+        b.style.transform = 'translateY(' + (y * (0.02 + i * 0.015)) + 'px)';
+      });
+      ticking = false;
+    });
+  }, { passive: true });
+})();
+
+document.querySelectorAll('.menu-card, .review-card, .stat-blob').forEach(function(el) {
+  el.addEventListener('mouseenter', function() {
+    var r = function() { return 30 + Math.floor(Math.random() * 40); };
+    this.style.borderRadius = r() + '% ' + r() + '% ' + r() + '% ' + r() + '% / ' + r() + '% ' + r() + '% ' + r() + '% ' + r() + '%';
+  });
+});
+
+document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+  a.addEventListener('click', function(e) {
+    var t = document.querySelector(this.getAttribute('href'));
+    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+});
+
+(function() {
+  var seq = [38,38,40,40,37,39,37,39,66,65];
+  var pos = 0;
+  document.addEventListener('keydown', function(e) {
+    if (e.keyCode === seq[pos]) {
+      pos++;
+      if (pos === seq.length) {
+        pos = 0;
+        for (var i = 0; i < 30; i++) {
+          var s = document.createElement('span');
+          s.textContent = '💩';
+          s.style.cssText = 'position:fixed;top:-50px;left:' + (Math.random()*100) + 'vw;font-size:' + (2+Math.random()*3) + 'rem;z-index:9999;pointer-events:none;opacity:0.8;animation:fall ' + (3+Math.random()*4) + 's linear forwards;';
+          document.body.appendChild(s);
+          setTimeout(function(el) { el.remove(); }, 7000, s);
+        }
+      }
+    } else { pos = 0; }
+  });
+})();
+</script>
+
+</body>
+</html>

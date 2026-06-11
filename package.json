@@ -1,0 +1,25 @@
+{
+  "name": "infinite-html-gallery",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "An infinite spherical Three.js gallery for personal HTML pages, with smooth click-through navigation and Netlify-backed uploads.",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview --host",
+    "copy-sites": "node scripts/copy-sites.mjs",
+    "build-manifest": "node scripts/build-manifest.mjs",
+    "previews": "node scripts/generate-previews.mjs",
+    "setup": "npm run copy-sites && npm run build-manifest && npm run previews"
+  },
+  "dependencies": {
+    "@netlify/blobs": "8.1.0",
+    "gsap": "3.12.5",
+    "three": "0.160.0"
+  },
+  "devDependencies": {
+    "puppeteer-core": "23.7.1",
+    "vite": "5.4.10"
+  }
+}

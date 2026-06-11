@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bac de Français - Alexandre Galke | Méthodologie & 15 Textes</title>
+    <meta name="description" content="Ressources complètes pour le bac oral de français : méthodologie détaillée, analyses des 15 textes, citations, entretien.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --paper: oklch(0.97 0.006 75);
+            --paper-dim: oklch(0.93 0.008 75);
+            --paper-warm: oklch(0.95 0.012 65);
+            --ink: oklch(0.22 0.015 40);
+            --ink-light: oklch(0.45 0.012 40);
+            --ink-muted: oklch(0.58 0.008 40);
+            --rouge: oklch(0.48 0.14 25);
+            --rouge-light: oklch(0.62 0.1 25);
+            --rouge-pale: oklch(0.88 0.035 25);
+            --rouge-ghost: oklch(0.95 0.012 25);
+            --gold: oklch(0.72 0.1 80);
+            --gold-pale: oklch(0.93 0.025 80);
+            --rule: oklch(0.90 0.005 75);
+            --rule-strong: oklch(0.82 0.007 75);
+
+            --mouvement-classique: oklch(0.50 0.12 25);
+            --mouvement-lumieres: oklch(0.55 0.10 55);
+            --mouvement-romantisme: oklch(0.52 0.13 340);
+            --mouvement-realisme: oklch(0.45 0.08 60);
+            --mouvement-naturalisme: oklch(0.42 0.10 160);
+            --mouvement-modernisme: oklch(0.55 0.14 270);
+            --mouvement-surrealisme: oklch(0.60 0.15 300);
+            --mouvement-existentialisme: oklch(0.35 0.02 40);
+
+            --font-display: 'Bitter', 'Georgia', serif;
+            --font-body: 'Source Sans 3', 'Segoe UI', system-ui, sans-serif;
+
+            --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+            --space-xs: 0.5rem;
+            --space-sm: 0.75rem;
+            --space-md: 1.25rem;
+            --space-lg: 2rem;
+            --space-xl: 3rem;
+            --space-2xl: 5rem;
+            --space-3xl: 7rem;
+
+            --sidebar-width: 260px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 5rem;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.7;
+            font-size: 1.0625rem;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background: var(--rouge-pale);
+            color: var(--ink);
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--rouge);
+            z-index: 1001;
+            width: 0%;
+            transition: width 100ms linear;
+        }
+
+        /* Hero */
+        .hero {
+            position: relative;
+            padding: var(--space-3xl) var(--space-lg) var(--space-2xl);
+            overflow: hidden;
+            background: linear-gradient(180deg, var(--paper-warm) 0%, var(--paper) 100%);
+        }
+
+        .hero-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 10 L50 30 L40 25 L30 30 Z' fill='%23000'/%3E%3Cpath d='M40 50 L50 70 L40 65 L30 70 Z' fill='%23000'/%3E%3Cpath d='M10 40 L30 30 L25 40 L30 50 Z' fill='%23000'/%3E%3Cpath d='M50 40 L70 30 L65 40 L70 50 Z' fill='%23000'/%3E%3C/svg%3E");
+            background-size: 80px 80px;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 72ch;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-eyebrow {
+            font-family: var(--font-body);
+            font-size: 0.8125rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--rouge);
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .hero-eyebrow::before {
+            content: '';
+            width: 24px;
+            height: 2px;
+            background: var(--rouge);
+            display: inline-block;
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw + 0.5rem, 4.5rem);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            color: var(--ink);
+            text-wrap: balance;
+        }
+
+        .hero h1 span {
+            display: block;
+            color: var(--rouge);
+        }
+
+        .hero .subtitle {
+            font-family: var(--font-body);
+            font-size: 1.1875rem;
+            color: var(--ink-light);
+            margin-top: var(--space-md);
+            max-width: 55ch;
+            line-height: 1.5;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+            padding-top: var(--space-lg);
+            border-top: 1px solid var(--rule-strong);
+            flex-wrap: wrap;
+        }
+
+        .hero-stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero-stat-value {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--rouge);
+            line-height: 1;
+        }
+
+        .hero-stat-label {
+            font-size: 0.8125rem;
+            color: var(--ink-muted);
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 500;
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: oklch(from var(--paper) l c h / 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--rule);
+        }
+
+        nav ul {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+            list-style: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+        }
+
+        nav a {
+            display: block;
+            color: var(--ink-light);
+            text-decoration: none;
+            padding: var(--space-sm) 0;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            position: relative;
+            transition: color 150ms var(--ease-out-quart);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--rouge);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 250ms var(--ease-out-expo);
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--ink);
+        }
+
+        nav a.active::after,
+        nav a:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* Main layout */
+        .page-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-2xl) var(--space-lg) var(--space-3xl);
+            gap: var(--space-2xl);
+        }
+
+        @media (min-width: 1100px) {
+            .page-layout {
+                grid-template-columns: var(--sidebar-width) 1fr;
+            }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 5rem;
+            align-self: start;
+            max-height: calc(100vh - 6rem);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--rule-strong) transparent;
+        }
+
+        .sidebar-title {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--ink-muted);
+            margin-bottom: var(--space-md);
+            padding-bottom: var(--space-xs);
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .sidebar-list {
+            list-style: none;
+        }
+
+        .sidebar-list li {
+            margin-bottom: 2px;
+        }
+
+        .sidebar-list a {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: 0.4rem 0.5rem;
+            font-size: 0.875rem;
+            color: var(--ink-light);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 150ms var(--ease-out-quart);
+        }
+
+        .sidebar-list a:hover {
+            background: var(--rouge-ghost);
+            color: var(--ink);
+        }
+
+        .sidebar-list a.active {
+            background: var(--rouge-pale);
+            color: var(--rouge);
+            font-weight: 600;
+        }
+
+        .sidebar-num {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.75rem;
+            width: 1.5rem;
+            text-align: right;
+            color: var(--ink-muted);
+            flex-shrink: 0;
+        }
+
+        .sidebar-list a.active .sidebar-num {
+            color: var(--rouge);
+        }
+
+        .sidebar-author {
+            font-size: 0.8125rem;
+            color: var(--ink-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Main content */
+        .main-content {
+            min-width: 0;
+        }
+
+        section {
+            margin-bottom: var(--space-3xl);
+        }
+
+        /* Section titles */
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw + 0.25rem, 2rem);
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-sm);
+            border-bottom: 2px solid var(--rouge);
+            text-wrap: balance;
+        }
+
+        /* Search */
+        .search-bar {
+            position: relative;
+            margin-bottom: var(--space-lg);
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.75rem;
+            border: 1px solid var(--rule-strong);
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            background: var(--paper);
+            color: var(--ink);
+            transition: border-color 150ms var(--ease-out-quart), box-shadow 150ms var(--ease-out-quart);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--rouge);
+            box-shadow: 0 0 0 3px var(--rouge-pale);
+        }
+
+        .search-bar input::placeholder {
+            color: var(--ink-muted);
+        }
+
+        .search-bar svg {
+            position: absolute;
+            left: 0.875rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--ink-muted);
+            pointer-events: none;
+        }
+
+        .search-shortcut {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            color: var(--ink-muted);
+            background: var(--paper-dim);
+            padding: 0.2em 0.5em;
+            border-radius: 4px;
+            border: 1px solid var(--rule);
+            font-family: monospace;
+        }
+
+        /* Filter chips */
+        .filter-bar {
+            display: flex;
+            gap: var(--space-xs);
+            flex-wrap: wrap;
+            margin-bottom: var(--space-xl);
+        }
+
+        .filter-chip {
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            border: 1px solid var(--rule-strong);
+            background: var(--paper);
+            color: var(--ink-light);
+            cursor: pointer;
+            transition: all 150ms var(--ease-out-quart);
+            user-select: none;
+        }
+
+        .filter-chip:hover {
+            border-color: var(--rouge-light);
+            color: var(--rouge);
+        }
+
+        .filter-chip.active {
+            background: var(--rouge);
+            color: white;
+            border-color: var(--rouge);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            margin-bottom: var(--space-2xl);
+            padding: var(--space-lg) 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--rule-strong);
+        }
+
+        .timeline-row {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-xs) 0;
+            position: relative;
+            cursor: pointer;
+            transition: opacity 200ms var(--ease-out-quart);
+        }
+
+        .timeline-row::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--rule-strong);
+            border: 2px solid var(--paper);
+            flex-shrink: 0;
+            margin-left: -5px;
+            transition: all 150ms var(--ease-out-quart);
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-row:hover::before {
+            transform: scale(1.4);
+        }
+
+        .timeline-year {
+            font-family: var(--font-display);
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--ink-muted);
+            width: 3.5rem;
+            flex-shrink: 0;
+        }
+
+        .timeline-title {
+            font-size: 0.9375rem;
+            color: var(--ink);
+            font-weight: 500;
+        }
+
+        .timeline-row:hover .timeline-title {
+            color: var(--rouge);
+        }
+
+        .timeline-dot[class*="mvt-"]::before {
+            background: var(--dot-color);
+        }
+
+        /* Methodology */
+        .methodologie {
+            max-width: 72ch;
+        }
+
+        .methodologie h1 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw + 0.25rem, 2rem);
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: var(--space-lg);
+            line-height: 1.2;
+            text-wrap: balance;
+        }
+
+        .methodologie h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.25rem, 2.5vw + 0.2rem, 1.625rem);
+            font-weight: 700;
+            color: var(--ink);
+            margin-top: var(--space-2xl);
+            margin-bottom: var(--space-md);
+            line-height: 1.25;
+        }
+
+        .methodologie h3 {
+            font-family: var(--font-display);
+            font-size: 1.1875rem;
+            font-weight: 600;
+            color: var(--ink-light);
+            margin-top: var(--space-xl);
+            margin-bottom: var(--space-sm);
+        }
+
+        .methodologie p {
+            margin-bottom: var(--space-md);
+            color: var(--ink);
+        }
+
+        .methodologie ul,
+        .methodologie ol {
+            margin-left: 1.5rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .methodologie li {
+            margin-bottom: var(--space-xs);
+        }
+
+        .methodologie li::marker {
+            color: var(--rouge);
+        }
+
+        .methodologie strong {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        .methodologie em {
+            font-style: italic;
+            color: var(--ink-light);
+        }
+
+        .methodologie blockquote,
+        .methodologie .blockquote {
+            border-left: none;
+            padding: var(--space-md) var(--space-lg);
+            margin: var(--space-lg) 0;
+            background: var(--rouge-ghost);
+            border-radius: 0 6px 6px 0;
+            position: relative;
+        }
+
+        .methodologie blockquote::before,
+        .methodologie .blockquote::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--rouge);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .methodologie blockquote p,
+        .methodologie .blockquote p {
+            font-style: italic;
+            color: var(--ink-light);
+            margin-bottom: 0;
+        }
+
+        .methodologie code {
+            background: var(--paper-dim);
+            padding: 0.15em 0.4em;
+            border-radius: 4px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.9em;
+            color: var(--rouge);
+        }
+
+        .methodologie hr {
+            border: none;
+            height: 1px;
+            background: var(--rule);
+            margin: var(--space-xl) 0;
+        }
+
+        /* Accordion */
+        .accordion {
+            margin: var(--space-md) 0;
+        }
+
+        .accordion-item {
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .accordion-trigger {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-md) 0;
+            background: none;
+            border: none;
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--ink);
+            cursor: pointer;
+            text-align: left;
+            transition: color 150ms var(--ease-out-quart);
+        }
+
+        .accordion-trigger:hover {
+            color: var(--rouge);
+        }
+
+        .accordion-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            transition: transform 250ms var(--ease-out-expo);
+            color: var(--ink-muted);
+        }
+
+        .accordion-item.open .accordion-icon {
+            transform: rotate(45deg);
+            color: var(--rouge);
+        }
+
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 400ms var(--ease-out-quart);
+        }
+
+        .accordion-item.open .accordion-body {
+            max-height: 2000px;
+        }
+
+        .accordion-body-inner {
+            padding-bottom: var(--space-lg);
+        }
+
+        /* Pièges section */
+        .pieges {
+            margin: var(--space-lg) 0;
+        }
+
+        .piege-item {
+            display: flex;
+            gap: var(--space-sm);
+            align-items: baseline;
+            padding: var(--space-sm) 0;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .piege-item:last-child {
+            border-bottom: none;
+        }
+
+        .piege-icon {
+            color: var(--rouge);
+            font-weight: 700;
+            flex-shrink: 0;
+            width: 1.5em;
+        }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            margin-left: 0 !important;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-sm);
+            padding: var(--space-sm) 0;
+            border-bottom: 1px solid var(--rule);
+            cursor: pointer;
+            transition: opacity 150ms var(--ease-out-quart);
+        }
+
+        .checklist li:last-child {
+            border-bottom: none;
+        }
+
+        .checklist li.checked {
+            opacity: 0.5;
+        }
+
+        .checklist li.checked .check-text {
+            text-decoration: line-through;
+        }
+
+        .check-box {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--rule-strong);
+            border-radius: 4px;
+            flex-shrink: 0;
+            margin-top: 0.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 150ms var(--ease-out-quart);
+        }
+
+        .checklist li.checked .check-box {
+            background: var(--rouge);
+            border-color: var(--rouge);
+        }
+
+        .check-box svg {
+            width: 12px;
+            height: 12px;
+            color: white;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 150ms var(--ease-out-expo);
+        }
+
+        .checklist li.checked .check-box svg {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .check-text {
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .checklist-progress {
+            margin-top: var(--space-md);
+            padding: var(--space-sm) var(--space-md);
+            background: var(--paper-dim);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            color: var(--ink-muted);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .checklist-progress-bar {
+            flex: 1;
+            height: 4px;
+            background: var(--rule);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .checklist-progress-fill {
+            height: 100%;
+            background: var(--rouge);
+            border-radius: 2px;
+            transition: width 300ms var(--ease-out-expo);
+        }
+
+        /* Textes section */
+        #textes {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .texte-card {
+            padding: var(--space-xl) 0;
+            border-bottom: 1px solid var(--rule);
+            position: relative;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 500ms var(--ease-out-expo), transform 500ms var(--ease-out-expo);
+        }
+
+        .texte-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .texte-card.hidden {
+            display: none;
+        }
+
+        .texte-card:first-of-type {
+            padding-top: 0;
+        }
+
+        .texte-card::before {
+            content: attr(data-num);
+            position: absolute;
+            top: var(--space-xl);
+            left: -3.5rem;
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--rule);
+            line-height: 1;
+            opacity: 0.5;
+            transition: color 300ms var(--ease-out-quart);
+            pointer-events: none;
+        }
+
+        .texte-card:hover::before {
+            color: var(--rouge-pale);
+        }
+
+        .texte-header {
+            margin-bottom: var(--space-md);
+        }
+
+        .texte-header h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.25rem, 2vw + 0.3rem, 1.625rem);
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.2;
+            margin-bottom: var(--space-xs);
+        }
+
+        .texte-header h2 small {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 0.9375rem;
+            font-weight: 400;
+            color: var(--ink-muted);
+            margin-top: 0.2em;
+        }
+
+        .texte-meta {
+            display: flex;
+            gap: var(--space-xs);
+            flex-wrap: wrap;
+            margin-top: var(--space-sm);
+        }
+
+        .tag {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            padding: 0.2em 0.65em;
+            border-radius: 4px;
+            background: var(--rouge-ghost);
+            color: var(--rouge);
+            border: 1px solid var(--rouge-pale);
+        }
+
+        .tag.mvt-classique { background: oklch(from var(--mouvement-classique) l c h / 0.1); color: var(--mouvement-classique); border-color: oklch(from var(--mouvement-classique) l c h / 0.2); }
+        .tag.mvt-lumieres { background: oklch(from var(--mouvement-lumieres) l c h / 0.1); color: var(--mouvement-lumieres); border-color: oklch(from var(--mouvement-lumieres) l c h / 0.2); }
+        .tag.mvt-romantisme { background: oklch(from var(--mouvement-romantisme) l c h / 0.1); color: var(--mouvement-romantisme); border-color: oklch(from var(--mouvement-romantisme) l c h / 0.2); }
+        .tag.mvt-realisme { background: oklch(from var(--mouvement-realisme) l c h / 0.1); color: var(--mouvement-realisme); border-color: oklch(from var(--mouvement-realisme) l c h / 0.2); }
+        .tag.mvt-naturalisme { background: oklch(from var(--mouvement-naturalisme) l c h / 0.1); color: var(--mouvement-naturalisme); border-color: oklch(from var(--mouvement-naturalisme) l c h / 0.2); }
+        .tag.mvt-modernisme { background: oklch(from var(--mouvement-modernisme) l c h / 0.1); color: var(--mouvement-modernisme); border-color: oklch(from var(--mouvement-modernisme) l c h / 0.2); }
+        .tag.mvt-surrealisme { background: oklch(from var(--mouvement-surrealisme) l c h / 0.1); color: var(--mouvement-surrealisme); border-color: oklch(from var(--mouvement-surrealisme) l c h / 0.2); }
+        .tag.mvt-existentialisme { background: oklch(from var(--mouvement-existentialisme) l c h / 0.12); color: var(--mouvement-existentialisme); border-color: oklch(from var(--mouvement-existentialisme) l c h / 0.2); }
+
+        .texte-content {
+            max-width: 72ch;
+        }
+
+        .texte-content p {
+            margin-bottom: var(--space-md);
+        }
+
+        .texte-content h3 {
+            font-family: var(--font-display);
+            font-size: 1.0625rem;
+            font-weight: 600;
+            color: var(--ink-light);
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+        }
+
+        .texte-content ul {
+            margin-left: 1.5rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .texte-content li {
+            margin-bottom: var(--space-xs);
+        }
+
+        .texte-content li::marker {
+            color: var(--rouge);
+        }
+
+        .citation {
+            padding: var(--space-sm) var(--space-md);
+            margin: var(--space-sm) 0;
+            font-style: italic;
+            color: var(--ink-light);
+            border-left: 2px solid var(--gold);
+            background: var(--gold-pale);
+            border-radius: 0 4px 4px 0;
+            position: relative;
+        }
+
+        .citation::before {
+            content: '\201C';
+            position: absolute;
+            top: -0.2rem;
+            left: 0.3rem;
+            font-size: 2rem;
+            color: var(--gold);
+            opacity: 0.4;
+            font-family: var(--font-display);
+            line-height: 1;
+        }
+
+        /* Ressources section */
+        #ressources {
+            max-width: 72ch;
+        }
+
+        #ressources p {
+            margin-bottom: var(--space-md);
+        }
+
+        #ressources ul {
+            margin-left: 1.5rem;
+            margin-bottom: var(--space-md);
+        }
+
+        #ressources li {
+            margin-bottom: var(--space-xs);
+        }
+
+        #ressources li::marker {
+            color: var(--rouge);
+        }
+
+        #ressources code {
+            background: var(--paper-dim);
+            padding: 0.15em 0.4em;
+            border-radius: 4px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.9em;
+            color: var(--rouge);
+        }
+
+        /* Decorative divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin: var(--space-2xl) 0;
+            color: var(--ink-muted);
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--rule);
+        }
+
+        .divider svg {
+            flex-shrink: 0;
+            color: var(--rouge-pale);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: var(--space-2xl) var(--space-lg);
+            border-top: 1px solid var(--rule);
+            color: var(--ink-muted);
+            font-size: 0.9375rem;
+        }
+
+        footer p {
+            margin-bottom: var(--space-xs);
+        }
+
+        footer em {
+            color: var(--ink-light);
+        }
+
+        /* Back to top */
+        .back-to-top {
+            position: fixed;
+            bottom: var(--space-lg);
+            right: var(--space-lg);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--ink);
+            color: var(--paper);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 250ms var(--ease-out-quart),
+                        transform 250ms var(--ease-out-quart),
+                        background 150ms var(--ease-out-quart);
+            pointer-events: none;
+            z-index: 50;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .back-to-top:hover {
+            background: var(--rouge);
+        }
+
+        /* No results */
+        .no-results {
+            text-align: center;
+            padding: var(--space-2xl);
+            color: var(--ink-muted);
+            display: none;
+        }
+
+        .no-results.visible {
+            display: block;
+        }
+
+        .no-results h3 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            color: var(--ink-light);
+            margin-bottom: var(--space-sm);
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 600ms var(--ease-out-expo), transform 600ms var(--ease-out-expo);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+            html { scroll-behavior: auto; }
+            .reveal { opacity: 1; transform: none; }
+            .texte-card { opacity: 1; transform: none; }
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .texte-card::before {
+                left: auto;
+                right: var(--space-lg);
+                top: var(--space-xl);
+                font-size: 2.5rem;
+                opacity: 0.3;
+            }
+
+            .hero {
+                padding: var(--space-2xl) var(--space-md) var(--space-xl);
+            }
+
+            .hero-stats {
+                gap: var(--space-md);
+            }
+
+            main, .page-layout {
+                padding: var(--space-xl) var(--space-md) var(--space-2xl);
+            }
+
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            :root {
+                --space-2xl: 3rem;
+                --space-3xl: 4rem;
+            }
+
+            nav ul {
+                gap: var(--space-md);
+            }
+
+            .texte-card::before {
+                display: none;
+            }
+
+            .texte-meta {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+
+            .hero h1 {
+                font-size: clamp(2rem, 8vw, 3rem);
+            }
+
+            .filter-bar {
+                gap: 0.35rem;
+            }
+
+            .filter-chip {
+                font-size: 0.75rem;
+                padding: 0.3rem 0.65rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- HERO -->
+    <header class="hero">
+        <div class="hero-pattern"></div>
+        <div class="hero-content">
+            <p class="hero-eyebrow">Ressources complètes</p>
+            <h1>Bac de <span>Français</span></h1>
+            <p class="subtitle">Méthodologie complète et analyses des 15 textes pour l'oral du baccalauréat, par Alexandre GALKE (1ère, 2025-2026)</p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-value">15</span>
+                    <span class="hero-stat-label">Textes analysés</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">8</span>
+                    <span class="hero-stat-label">Mouvements</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">3</span>
+                    <span class="hero-stat-label">Siècles couverts</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">40</span>
+                    <span class="hero-stat-label">Minutes d'oral</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAV -->
+    <nav>
+        <ul>
+            <li><a href="#methodologie">Méthodologie</a></li>
+            <li><a href="#textes">15 Textes</a></li>
+            <li><a href="#ressources">Ressources</a></li>
+        </ul>
+    </nav>
+
+    <!-- LAYOUT -->
+    <div class="page-layout">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <p class="sidebar-title">Textes rapides</p>
+            <ul class="sidebar-list" id="sidebarList"></ul>
+        </aside>
+
+        <!-- MAIN -->
+        <div class="main-content">
+            <!-- METHODOLOGIE -->
+            <section id="methodologie">
+                <h2 class="section-title reveal">Méthodologie Complète de l'Oral du Bac</h2>
+                <div class="methodologie">
+                    <h1 class="reveal">Méthodologie Complète - Oral du Bac de Français (Première)</h1>
+
+                    <div class="reveal">
+                        <h2>Vue d'ensemble de l'épreuve</h2>
+                        <p>L'épreuve orale de français au baccalauréat dure <strong>40 minutes</strong> et comporte <strong>deux parties</strong> :</p>
+                        <h3>Partie 1 : Explication de texte (20 minutes)</h3>
+                        <ul>
+                            <li><strong>Préparation</strong> : 20 minutes (avec dossier et dictionnaire)</li>
+                            <li><strong>Exposé</strong> : 10-12 minutes</li>
+                            <li><strong>Entretien</strong> : 8-10 minutes</li>
+                        </ul>
+                        <h3>Partie 2 : Présentation d'un objet d'étude (20 minutes)</h3>
+                        <ul>
+                            <li><strong>Préparation</strong> : 20 minutes</li>
+                            <li><strong>Exposé</strong> : 10-12 minutes</li>
+                            <li><strong>Entretien</strong> : 8-10 minutes</li>
+                        </ul>
+                    </div>
+
+                    <hr>
+
+                    <!-- Accordion for Part 1 -->
+                    <div class="accordion reveal">
+                        <div class="accordion-item open">
+                            <button class="accordion-trigger" aria-expanded="true">
+                                PARTIE 1 : Explication de texte
+                                <svg class="accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            </button>
+                            <div class="accordion-body">
+                                <div class="accordion-body-inner">
+                                    <h3>Objectifs</h3>
+                                    <ul>
+                                        <li>Dégager le <strong>sens</strong> du texte</li>
+                                        <li>Analyser les <strong>procédés littéraires</strong> et leur fonction</li>
+                                        <li>Montrer la <strong>cohérence interne</strong> du texte</li>
+                                        <li>Situer le texte dans son <strong>contexte</strong></li>
+                                    </ul>
+
+                                    <h3>Structure de l'explication (4-5 parties)</h3>
+
+                                    <h3>1. <strong>Introduction</strong> (2-3 minutes)</h3>
+                                    <p><strong>Formule obligatoire</strong> : « Je vais vous présenter une explication de texte de [auteur], extrait de [œuvre], [date/collection]. Ce texte appartient à la [genre/type]. »</p>
+                                    <p><strong>Contenu</strong> :</p>
+                                    <ul>
+                                        <li>Présentation de l'auteur et de l'œuvre (1 phrase)</li>
+                                        <li>Situation du texte dans l'œuvre (moment, place)</li>
+                                        <li>Problématique : question centrale que le texte pose</li>
+                                        <li>Annonce du plan (2 axes maximum)</li>
+                                    </ul>
+                                    <div class="blockquote">
+                                        <p>« Je vais vous présenter une explication de texte de Colette, extrait des <em>Vrilles de la vigne</em>, paru en 1908. Ce texte est un extrait de roman autobiographique. Nous verrons dans un premier temps comment Colette dépeint la complexité de l'identité féminine, puis en second lieu, comment elle utilise le paysage comme reflet des émotions. »</p>
+                                    </div>
+
+                                    <h3>2. <strong>Première partie - Le mouvement du texte</strong> (3-4 minutes)</h3>
+                                    <p><strong>A. Mouvement d'ensemble</strong></p>
+                                    <ul>
+                                        <li>Découper le texte en 2-3 séquences</li>
+                                        <li>Résumer chaque séquence en une phrase</li>
+                                        <li>Montrer l'évolution (progression)</li>
+                                    </ul>
+                                    <p><strong>B. Étude des procédés par séquence</strong></p>
+                                    <p>Pour chaque séquence :</p>
+                                    <ul>
+                                        <li><strong>Champs lexicaux</strong> (dominants, contrastes)</li>
+                                        <li><strong>Figure de style</strong> (métaphore, comparaison, personnification…)</li>
+                                        <li><strong>Registres</strong> (lyrique, élégiaque, satirique…)</li>
+                                        <li><strong>Marqueurs temporels/spatiaux</strong> (chronologie, espace)</li>
+                                        <li><strong>Point de vue</strong> (narrateur, focalisation)</li>
+                                        <li><strong>Construction des phrases</strong> (longueur, ponctuation)</li>
+                                    </ul>
+                                    <p><strong>Astuce</strong> : Reliez toujours les procédés au sens.</p>
+
+                                    <h3>3. <strong>Deuxième partie - Approfondissement</strong> (3-4 minutes)</h3>
+                                    <p>Choisissez <strong>un axe d'approfondissement</strong> selon le texte :</p>
+                                    <p><strong>Option A : Thèmes majeurs</strong></p>
+                                    <ul>
+                                        <li>Amour, mort, nature, société, liberté, identité, mémoire…</li>
+                                    </ul>
+                                    <p><strong>Option B : Style de l'auteur</strong></p>
+                                    <ul>
+                                        <li>Écriture fragmentée / continue</li>
+                                        <li>Usage de l'oral / de l'écrit</li>
+                                        <li>Ironie, auto-dérision, lyrisme</li>
+                                    </ul>
+                                    <p><strong>Option C : Contexte historique/littéraire</strong></p>
+                                    <ul>
+                                        <li>Mouvement littéraire (Classicisme, Romantisme, Naturalisme, Surréalisme…)</li>
+                                        <li>Événements historiques</li>
+                                        <li>Place dans l'œuvre de l'auteur</li>
+                                    </ul>
+
+                                    <h3>4. <strong>Conclusion</strong> (1-2 minutes)</h3>
+                                    <p><strong>Formule</strong> : « Pour conclure… »</p>
+                                    <p><strong>Contenu</strong> :</p>
+                                    <ul>
+                                        <li>Bilan : rappel des deux axes principaux</li>
+                                        <li><strong>Ouverture</strong> : lien avec une autre œuvre, une problématique plus large, une actualité</li>
+                                    </ul>
+                                    <div class="blockquote">
+                                        <p>« Pour conclure, ce texte de Colette montre à la fois la puissance évocatrice du souvenir d'enfance et la manière dont l'écriture permet de transcender le temps. On pourrait prolonger cette réflexion en comparant avec les <em>Mémoires d'une jeune fille rangée</em> de Simone de Beauvoir, où le même travail de mémoire s'opère. »</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <button class="accordion-trigger" aria-expanded="false">
+                                PARTIE 2 : Présentation d'un objet d'étude
+                                <svg class="accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            </button>
+                            <div class="accordion-body">
+                                <div class="accordion-body-inner">
+                                    <h3>Objectifs</h3>
+                                    <ul>
+                                        <li>Montrer votre <strong>culture littéraire</strong></li>
+                                        <li>Proposer une <strong>problématique personnelle</strong></li>
+                                        <li>Argumenter en mobilisant des <strong>œuvres au programme</strong></li>
+                                    </ul>
+
+                                    <h3>Préparation (20 minutes)</h3>
+                                    <p><strong>Matériel autorisé</strong> :</p>
+                                    <ul>
+                                        <li>Dossier rassemblé par l'élève</li>
+                                        <li>Dictionnaire</li>
+                                        <li>Notes personnelles</li>
+                                    </ul>
+                                    <p><strong>Contenu du dossier</strong> (à préparer AVANT) :</p>
+                                    <ul>
+                                        <li>Fiches synthétiques sur chaque œuvre</li>
+                                        <li>Citations marquantes</li>
+                                        <li>Bibliographie personnelle</li>
+                                    </ul>
+
+                                    <h3>Structure de l'exposé (environ 10 minutes)</h3>
+                                    <h3>1. <strong>Introduction</strong> (2 minutes)</h3>
+                                    <p><strong>Formule</strong> : « J'ai choisi de vous présenter [objet d'étude] à travers l'étude de [œuvres]. »</p>
+                                    <p><strong>Contenu</strong> :</p>
+                                    <ul>
+                                        <li>Définition de l'objet d'étude (ex: « la critique sociale dans le roman du XIXe siècle »)</li>
+                                        <li>Présentation des œuvres choisies (auteur, titre, date)</li>
+                                        <li>Problématique : question que vous posez</li>
+                                        <li>Annonce du plan</li>
+                                    </ul>
+                                    <div class="blockquote">
+                                        <p>« J'ai choisi de vous présenter l'objet d'étude <em>Le roman et le personnage du XVIIe siècle à nos jours</em> à travers trois œuvres : <em>La Princesse de Clèves</em> de Madame de Lafayette (1678), <em>Le Rouge et le Noir</em> de Stendhal (1830), et <em>L'Écume des jours</em> de Boris Vian (1947). Ma problématique est la suivante : en quoi le personnage romanesque permet-il de critiquer la société de son époque ? »</p>
+                                    </div>
+
+                                    <h3>2. <strong>Développement</strong> (6-7 minutes)</h3>
+                                    <p><strong>Deux parties maximum</strong> (2 axes), chacune avec :</p>
+                                    <p><strong>A. Analyse d'une œuvre</strong> (3-4 minutes par œuvre)</p>
+                                    <ul>
+                                        <li>Résumé bref (30 secondes)</li>
+                                        <li>Analyse d'un passage clé (procédés, enjeux)</li>
+                                        <li>Lien avec la problématique</li>
+                                    </ul>
+                                    <p><strong>B. Mise en perspective</strong> (dialogue entre œuvres)</p>
+                                    <ul>
+                                        <li>Points communs / contrastes</li>
+                                        <li>Évolution dans le temps</li>
+                                        <li>Différences de traitement du thème</li>
+                                    </ul>
+                                    <p><strong>Astuce</strong> : Parlez des œuvres au programme ET une œuvre de la culture personnelle.</p>
+
+                                    <h3>3. <strong>Conclusion</strong> (1 minute)</h3>
+                                    <ul>
+                                        <li>Bilan des réponses à la problématique</li>
+                                        <li>Ouverture (lien avec un autre objet d'étude, une réflexion personnelle)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <button class="accordion-trigger" aria-expanded="false">
+                                PARTIE 3 : L'entretien
+                                <svg class="accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            </button>
+                            <div class="accordion-body">
+                                <div class="accordion-body-inner">
+                                    <h3>Types de questions possibles</h3>
+                                    <p><strong>Sur votre exposé</strong> :</p>
+                                    <ul>
+                                        <li>« Pourquoi avoir choisi cette problématique ? »</li>
+                                        <li>« Auriez-vous pu prendre un autre exemple ? »</li>
+                                        <li>« Quelle est l'œuvre qui vous a le plus marqué ? »</li>
+                                    </ul>
+                                    <p><strong>Sur les œuvres au programme</strong> :</p>
+                                    <ul>
+                                        <li>Questions sur l'auteur, le contexte</li>
+                                        <li>Comparaisons entre œuvres</li>
+                                        <li>Lectures complémentaires</li>
+                                    </ul>
+                                    <p><strong>Questions plus générales</strong> :</p>
+                                    <ul>
+                                        <li>Définition d'un mouvement littéraire</li>
+                                        <li>Évolution d'un thème à travers les siècles</li>
+                                        <li>Votre opinion personnelle (argumentée)</li>
+                                    </ul>
+
+                                    <h3>Conseils pour l'entretien</h3>
+                                    <ul>
+                                        <li><strong>Ne pas rester muet</strong> : même si vous ne savez pas, proposez une hypothèse</li>
+                                        <li><strong>Relancez</strong> le dialogue : « Cela me fait penser à… »</li>
+                                        <li><strong>Montrez votre curiosité</strong> : mentionnez des lectures personnelles</li>
+                                        <li><strong>Restez poli</strong> et courtois, même face à des questions difficiles</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider reveal">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L14.5 9H22L16 13.5L18.5 21L12 16.5L5.5 21L8 13.5L2 9H9.5L12 2Z"/></svg>
+                    </div>
+
+                    <!-- Conseils généraux -->
+                    <div class="reveal">
+                        <h2>CONSEILS GÉNÉRAUX</h2>
+                        <h3>Avant l'épreuve</h3>
+                        <ul>
+                            <li><strong>S'entraîner à l'oral</strong> (timer 10 minutes)</li>
+                            <li>Préparer des fiches synthétiques</li>
+                            <li>Relire les œuvres au programme en entier</li>
+                            <li>Apprendre des citations clés (auteur, œuvre, page si possible)</li>
+                        </ul>
+                        <h3>Pendant l'épreuve</h3>
+                        <ul>
+                            <li><strong>Parlez distinctement</strong> et à volume normal</li>
+                            <li><strong>Regardez le jury</strong> (pas vos notes en permanence)</li>
+                            <li><strong>Gérez votre temps</strong> : 10 minutes = max 1200 mots à l'oral</li>
+                            <li><strong>Soyez naturel</strong> : évitez l'apprentissage par cœur</li>
+                        </ul>
+                        <h3>Sur la forme</h3>
+                        <ul>
+                            <li>« Bonjour, Madame, Monsieur » / « Au revoir »</li>
+                            <li>Pas de tics de langage (« euh… »)</li>
+                            <li>Posture droite, mains visibles</li>
+                            <li>Langage soutenu mais pas guindé</li>
+                        </ul>
+                        <h3>Sur le fond</h3>
+                        <ul>
+                            <li><strong>Ne faites pas de résumé</strong> : l'analyse prime</li>
+                            <li><strong>Citez des passages</strong> (même approximativement)</li>
+                            <li><strong>Argumentez</strong> : « cela montre que… », « on peut interpréter »</li>
+                            <li><strong>Ne contestez pas le jury</strong> : défendez vos idées avec respect</li>
+                        </ul>
+                    </div>
+
+                    <hr>
+
+                    <!-- Pièges -->
+                    <div class="reveal">
+                        <h2>PIÈGES À ÉVITER</h2>
+                        <div class="pieges">
+                            <div class="piege-item">
+                                <span class="piege-icon">✕</span>
+                                <span><strong>Résumer l'œuvre entière</strong> — Analysez UN passage seulement</span>
+                            </div>
+                            <div class="piege-item">
+                                <span class="piege-icon">✕</span>
+                                <span><strong>Énumérer les figures de style</strong> sans les expliquer</span>
+                            </div>
+                            <div class="piege-item">
+                                <span class="piege-icon">✕</span>
+                                <span><strong>Parler de vos souvenirs de lecture</strong> sans rapport avec le texte</span>
+                            </div>
+                            <div class="piege-item">
+                                <span class="piege-icon">✕</span>
+                                <span><strong>Se plaindre de la difficulté</strong> du texte</span>
+                            </div>
+                            <div class="piege-item">
+                                <span class="piege-icon">✕</span>
+                                <span><strong>Interrompre le jury</strong> pendant ses questions</span>
+                            </div>
+                            <div class="piege-item">
+                                <span class="piege-icon">✕</span>
+                                <span><strong>Lire ses notes pendant toute l'épreuve</strong></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Checklist -->
+                    <div class="reveal">
+                        <h2>CHECKLIST DE RÉVISION</h2>
+                        <ul class="checklist" id="checklist">
+                            <li data-id="chk1"><div class="check-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Connaître les 15 textes obligatoires (auteur, œuvre, siècle, genre)</span></li>
+                            <li data-id="chk2"><div class="check-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Savoir faire une introduction en 2 minutes chrono</span></li>
+                            <li data-id="chk3"><div class="check-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Maîtriser le vocabulaire littéraire (champ lexical, registre, figure de style)</span></li>
+                            <li data-id="chk4"><div class="check-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Avoir 3 citations par œuvre au moins</span></li>
+                            <li data-id="chk5"><div class="check-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Être capable de situer chaque œuvre dans son mouvement littéraire</span></li>
+                            <li data-id="chk6"><div class="check-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Savoir comparer deux œuvres sur un thème</span></li>
+                            <li data-id="chk7"><div class="check-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Avoir préparé un dossier avec fiches synthétiques</span></li>
+                            <li data-id="chk8"><div class="check-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">S'être entraîné à l'oral chronométré</span></li>
+                            <li data-id="chk9"><div class="check-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Avoir relu les consignes officielles de l'épreuve</span></li>
+                        </ul>
+                        <div class="checklist-progress" id="checklistProgress">
+                            <span id="checklistText">0 / 9 révisés</span>
+                            <div class="checklist-progress-bar">
+                                <div class="checklist-progress-fill" id="checklistFill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Ressources complémentaires -->
+                    <div class="reveal">
+                        <h2>RESSOURCES COMPLÉMENTAIRES</h2>
+                        <h3>Sites utiles</h3>
+                        <ul>
+                            <li><strong>Eduscol</strong> : programmes et ressources officielles</li>
+                            <li><strong>Weblettres</strong> : analyses détaillées</li>
+                            <li><strong>Bac Français</strong> : annales et sujets</li>
+                            <li><strong>Kartable</strong> : résumés et quiz</li>
+                        </ul>
+                        <h3>Dictionnaires</h3>
+                        <ul>
+                            <li><em>Le Petit Robert</em> (définitions, étymologie)</li>
+                            <li><em>Dictionnaire des œuvres</em> (Lafont, Robert)</li>
+                        </ul>
+                        <h3>Revues</h3>
+                        <ul>
+                            <li><em>L'école des parents</em> (articles sur la littérature)</li>
+                            <li><em>Le Monde diplomatique</em> (approches critiques)</li>
+                        </ul>
+                    </div>
+
+                    <hr>
+
+                    <!-- Exemple d'intro -->
+                    <div class="reveal">
+                        <h2>EXEMPLE D'INTRODUCTION TYPE</h2>
+                        <div class="blockquote">
+                            <p>« Bonjour, je vais vous présenter une explication de texte de <strong>Victor Hugo</strong>, extrait des <strong>Misérables</strong>, <strong>1862</strong>. Ce passage se situe dans la partie où Jean Valjean découvre la misère des enfants des rues. Il s'agit d'un <strong>texte descriptif et pathétique</strong>. Ma problématique est la suivante : <strong>en quoi ce portrait d'enfant misérable fonctionne-t-il comme un appel à la compassion et à l'action sociale ?</strong> Pour répondre, je analyserai d'abord <strong>la construction d'un pathétique réaliste</strong>, puis <strong>l'engagement humaniste de Hugo</strong> qui transparaît dans ce texte. »</p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <p class="reveal"><strong>Bonne révision !</strong></p>
+                </div>
+            </section>
+
+            <!-- TEXTES -->
+            <section id="textes">
+                <h2 class="section-title reveal">Analyses des 15 Textes à Connaître</h2>
+
+                <!-- Search -->
+                <div class="search-bar reveal">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="searchInput" placeholder="Rechercher un texte, auteur, mouvement...">
+                    <span class="search-shortcut">/</span>
+                </div>
+
+                <!-- Filter chips -->
+                <div class="filter-bar reveal" id="filterBar">
+                    <button class="filter-chip active" data-filter="all">Tous</button>
+                    <button class="filter-chip" data-filter="classique">Classique</button>
+                    <button class="filter-chip" data-filter="lumieres">Lumières</button>
+                    <button class="filter-chip" data-filter="romantisme">Romantisme</button>
+                    <button class="filter-chip" data-filter="realisme">Réalisme</button>
+                    <button class="filter-chip" data-filter="naturalisme">Naturalisme</button>
+                    <button class="filter-chip" data-filter="modernisme">Modernisme</button>
+                    <button class="filter-chip" data-filter="surrealisme">Surréalisme</button>
+                    <button class="filter-chip" data-filter="existentialisme">Absurde</button>
+                </div>
+
+                <!-- Timeline -->
+                <div class="timeline reveal" id="timeline"></div>
+
+                <!-- Cards container -->
+                <div id="textesContainer"></div>
+
+                <div class="no-results" id="noResults">
+                    <h3>Aucun texte trouvé</h3>
+                    <p>Essayez avec d'autres termes de recherche ou réinitialisez les filtres.</p>
+                </div>
+            </section>
+
+            <!-- RESSOURCES -->
+            <section id="ressources">
+                <h2 class="section-title reveal">Ressources & Fichiers</h2>
+                <div class="reveal">
+                    <p>Fichiers générés dans le dossier <code>~/Bureau/BAC_Francais_Complet/</code> :</p>
+                    <ul>
+                        <li><code>Methodologie/methodologie_complete.md</code> – Méthodologie détaillée</li>
+                        <li><code>Textes/Texte_XX_*/analyse.md</code> – Analyses individuelles</li>
+                        <li><code>Site_Web/index.html</code> – Ce site (ouvrir dans un navigateur)</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><strong>Conseil :</strong> Personnalisez les fiches d'analyse avec vos propres observations et les documents fournis par votre professeur (fiches Pronote).</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>Généré le 2026-05-14 pour Alexandre GALKE (1ERE 1, LFVH)</p>
+        <p><em>« Il faut cultiver notre jardin » – Voltaire, <em>Candide</em></em></p>
+    </footer>
+
+    <button class="back-to-top" id="backToTop" aria-label="Retour en haut">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+    </button>
+
+    <script>
+        // Text data
+        const textes = [
+            { num: 1, title: "Le Menteur", author: "Pierre Corneille", year: 1643, mvt: "classique", genre: "Comédie", mvtLabel: "Baroque / Classique",
+              contexte: "Pièce de théâtre classique du XVIIe siècle. Corneille y explore le thème du mensonge à travers Dorante, un jeune homme qui ment systématiquement. C'est une comédie de mœurs.",
+              resume: "Dorante, de retour à Paris après quatre ans, ment sur ses origines. Ses mensonges créent des quiproquos. La vérité éclate à la fin et il est pardonné.",
+              analyse: "<strong>Mouvement</strong> : dialogue vif, répliques courtes. Antithèses vérité/mensonge. Ironie dramatique. Registre comique par calembours et quiproquos. Dorante, antihéros baroque. Remise en cause des conventions.",
+              citations: ["« Je suis né pour mentir, et je mens toute heure »", "« La vérité doit être sévère, mais le mensonge est amusant »", "« Je suis un homme fort simple, et qui ne sait ce qu'il dit »"],
+              entretien: ["Le personnage de Dorante : figure baroque ?", "Comparaison avec <em>Le Misanthrope</em> de Molière", "Le comique de situation vs comique de langage"] },
+            { num: 2, title: "La Prose du Transsibérien", author: "Blaise Cendrars", year: 1913, mvt: "modernisme", genre: "Poème en prose", mvtLabel: "Modernisme / Premier XXe siècle",
+              contexte: "Poème du recueil <em>Les Pâques à New York</em>, Cendrars mêle voyage en train et vision cosmique. Manifeste de modernité poétique.",
+              resume: "Voyage en transsibérien de Moscou à la Sibérie. Paysages défilants, fièvre, rencontre d'envahisseurs venus d'ailleurs.",
+              analyse: "Forme innovante : phrases longues, anacoluthes, peu de ponctuation. Champs lexicaux : vitesse, froid, étrangeté. Mélange réalisme/fantastique. Rythme haletant qui épouse la vitesse.",
+              citations: ["« Dans le Transsibérien... on rencontre des paysagistes qui peignent le givre des vitres »", "« J'ai vu... une nuit noire »", "« Le train a sauté... »"],
+              entretien: ["Cendrars et le modernisme", "Comparaison avec Apollinaire (<em>Zone</em>)", "Le voyage comme source poétique"] },
+            { num: 3, title: "Sido", author: "Colette", year: 1910, mvt: "naturalisme", genre: "Nouvelles autobiographiques", mvtLabel: "Naturalisme / Belle Époque",
+              contexte: "Portrait de la mère de Colette et de l'enfance bourguignonne. 6 nouvelles préparant les <em>Claudine</em>.",
+              resume: "La maison, le jardin, les animaux, la relation fusionnelle Sido-Colette. Chaque nouvelle évoque un aspect de la vie provinciale et l'éveil des sens.",
+              analyse: "Thèmes : nature comme liberté, transmission maternelle, temps, sensualité. Style sensoriel, phrases courtes, vocabulaire concret. Absence de misérabilisme.",
+              citations: ["« Ma maison, c'était le monde »", "« Le jardin était ma maison »", "« On n'ennuie jamais une bête »"],
+              entretien: ["Colette autrice de l'intime", "La nature chez Colette vs Zola", "Figure maternelle dans la littérature"] },
+            { num: 4, title: "Les Vrilles de la vigne", author: "Colette", year: 1908, mvt: "naturalisme", genre: "Recueil de nouvelles", mvtLabel: "Naturalisme tardif / Belle Époque",
+              contexte: "Ve tome des <em>Claudine</em>, tournant dans l'œuvre : mariage avec Willy, attachement à la Provence.",
+              resume: "Claudine, mère, à Rozven. Vie provinciale, saisons, drames conjugaux, quête de liberté féminine.",
+              analyse: "Axes : vrilles comme métaphore de la vie, rejet des conventions, sensualité, liberté féminine. Métaphores filées (vigne). Opposition ville/campagne. Registre lyrique dans descriptions nature. Style vivant et parlé.",
+              citations: ["« Les vrilles de la vigne s'accrochent... »", "« J'ai épousé un homme, je ne me doutais pas que j'épousais tout un décor »", "« Le soleil, ici, n'est pas le même »"],
+              entretien: ["Condition féminine", "Naturalisme revisité", "Comparaison avec <em>Sido</em>"] },
+            { num: 5, title: "Lettres d'une Péruvienne", author: "Françoise de Graffigny", year: 1747, mvt: "lumieres", genre: "Roman épistolaire", mvtLabel: "XVIIIe siècle / Lumières",
+              contexte: "Chef-d'œuvre du roman épistolaire des Lumières. Zilia, princesse inca, écrite à son fiancé après capture par Espagnols et emmenement en France.",
+              resume: "Zilia découvre la société française avec un regard extérieur. Observe mœurs, absolutisme, condition féminine. Tombe amoureuse d'Aza puis retourne au Pérou, libre.",
+              analyse: "Double regard: naïveté de Zilia critique l'Europe, et regard critique du lecteur français. Thèmes : colonisation, condition féminine, despotisme. Zilia incarne vertu et liberté. Registre sentimental et lyrique.",
+              citations: ["« Je ne suis plus qu'une ombre errante »", "« Que l'Europe est vide et le Pérou plein de vie ! »", "« Je suis née libre, et je veux mourir libre »"],
+              entretien: ["Roman épistolaire au XVIIIe", "Figure des Lumières", "Comparaison avec <em>La Nouvelle Héloïse</em>"] },
+            { num: 6, title: "La Princesse de Clèves", author: "Madame de Lafayette", year: 1678, mvt: "classique", genre: "Roman psychologique", mvtLabel: "Classicisme / Préclassique",
+              contexte: "Premier grand roman français, inaugurant le roman d'analyse. S'inscrit dans le mouvement précieux mais dépasse le roman d'aventures.",
+              resume: "Mademoiselle de Chartres épouse le prince de Clèves sans l'aimer. Rencontre le duc de Nemours et en tombe amoureuse. Son mari découvre le secret, meurt, elle se retire dans un couvent.",
+              analyse: "Psychologie : conflit intérieur passion/devoir. Style indirect libre, monologue intérieur. Ironie tragique (le mari meurt de son amour). Thèmes : devoir, honneur, apparences.",
+              citations: ["« Je suis en danger de perdre ma réputation... »", "« Je vous ai aimé avec une passion extrême »", "« Il faut que je vous avoue une vérité... »"],
+              entretien: ["Place des femmes dans le roman classique", "Roman d'analyse vs aventure", "Comparaison avec <em>La Nouvelle Héloïse</em>"] },
+            { num: 7, title: "Candide", author: "Voltaire", year: 1759, mvt: "lumieres", genre: "Conte philosophique", mvtLabel: "Lumières / Philosophie des Lumières",
+              contexte: "Manifeste contre l'optimisme leibnizien. Critique la société (guerre, religion, colonialisme) via les aventures du naïf Candide.",
+              resume: "Candide, élevé dans le meilleur des mondes, parcourt le monde après bannissement. Vit catastrophes, tremblements de terre, inquisition. Retrouve Cunégonde et cultive son jardin : « il faut cultiver notre jardin ».",
+              analyse: "Structure de conte moral, personnages types (Pangloss optimiste, Martin pessimiste). Procédés satiriques : antiphrase, exagération, ironie. Philosophie : rejet de l'optimisme, défense du travail.",
+              citations: ["« Tout est au mieux dans le meilleur des mondes possibles »", "« Il faut cultiver notre jardin »", "« Nous allons cultiver notre jardin »"],
+              entretien: ["Voltaire et la satire", "Le conte philosophique comme genre", "Candide aujourd'hui"] },
+            { num: 8, title: "Le Rouge et le Noir", author: "Stendhal", year: 1830, mvt: "romantisme", genre: "Roman psychologique et social", mvtLabel: "Romantisme / XIXe siècle",
+              contexte: "Sous-titré <em>Chronique du XIXe siècle</em>. Portrait de Julien Sorel, ambitieux qui monte puis chute. Roman de passion et de société (Restauration).",
+              resume: "Fils de menuisier, entre au séminaire puis devient secrétaire de M. de Rênal dont il séduit la femme. Part pour Paris, séduit Mathilde de La Mole. Passe à l'acte (tente de tuer Mme de Rênal), condamné à mort.",
+              analyse: "Psychologie : Julien entre naïveté et calcul, sincérité et hypocrisie. Style indirect libre. Critique sociale : société de la Restauration, ses privilèges et hypocrisie. Tension ancien/nouveau régime.",
+              citations: ["« Jeune, ambitieux, j'aurais pu être un homme supérieur »", "« Le charme de la vie, c'est l'espérance »"],
+              entretien: ["Julien Sorel : héros romantique ou antihéros ?", "Influence du contexte historique", "Comparaison avec <em>L'Étranger</em>"] },
+            { num: 9, title: "Madame Bovary", author: "Gustave Flaubert", year: 1857, mvt: "realisme", genre: "Roman réaliste", mvtLabel: "Réalisme / Naturalisme",
+              contexte: "Chef-d'œuvre du réalisme français, attaqué pour immoralité. Dépeint la vie provinciale et désillusions d'Emma qui rêve d'amour passionné.",
+              resume: "Emma Rouault épouse Charles Bovary, s'ennuie, rêve de luxe, entretient deux liaisons, s'endette. Se suicide avec de l'arsenic.",
+              analyse: "Style flaubertien : style indirect libre, phrases longues travaillées, ironie distanciée, précision des détails concrets. Noms signifiants (Homais, Lheureux). Thèmes : désir, argent, illusion.",
+              citations: ["« Elle voulait mourir, mais elle voulait vivre »", "« Et elle se mit à pleurer... »", "« Ah! vous êtes un homme, vous! »"],
+              entretien: ["Ironie flaubertienne", "Condition féminine au XIXe", "Réalisme contre romantisme"] },
+            { num: 10, title: "L'Assommoir", author: "Émile Zola", year: 1877, mvt: "naturalisme", genre: "Roman naturaliste", mvtLabel: "Naturalisme",
+              contexte: "Étude scientifique de l'alcoolisme et misère ouvrière dans le Paris du Second Empire.",
+              resume: "Gervaise ouvre une blanchisserie, succès modeste. Alcool, maladie et mauvais choix la précipitent dans la misère. Fin désespérée.",
+              analyse: "Naturalisme : déterminisme héréditaire + milieu. Description quasi-médicale. Champs lexicaux saleté, faim. Symbolisme de l'alcool comme fléau social. Critique de la société.",
+              citations: ["« Il n'est de plus grand désespoir que de n'être pas aimé »", "« L'alcool est un assassin »", "« La vie est dure pour les pauvres »"],
+              entretien: ["Zola vs Flaubert", "Description comme arme sociale", "Comparaison avec <em>Germinal</em>"] },
+            { num: 11, title: "Du côté de chez Swann", author: "Marcel Proust", year: 1913, mvt: "modernisme", genre: "Roman-mémoire", mvtLabel: "Modernisme / début XXe siècle",
+              contexte: "Premier tome de <em>À la recherche du temps perdu</em>. Introduit mémoire involontaire, jalousie, snobisme. Méditation sur le temps.",
+              resume: "Enfance du narrateur à Combray. Madeleine trempée dans le thé déclenche mémoire involontaire. Swann aime Odette. Mondanités.",
+              analyse: "Mémoire sensorielle. Style long, digressif, phrases à l'infini. Analyse psychologique minutieuse. Thèmes : temps, mémoire, jalousie. La madeleine comme réminiscence. Art comme rédemption.",
+              citations: ["« Avec un café, un peu de thé, je plongeais pour goûter la saveur »", "« Le temps qu'on a perdu est retrouvé »", "« La vraie vie, peut-être, est-elle la littérature ? »"],
+              entretien: ["Proust et révolution du roman", "Mémoire involontaire vs intellectuelle", "Influence de Bergson"] },
+            { num: 12, title: "L'Étranger", author: "Albert Camus", year: 1942, mvt: "existentialisme", genre: "Roman philosophique", mvtLabel: "Existentialisme / Absurde",
+              contexte: "Chef-d'œuvre incarnant la philosophie de l'absurde. Écrit pendant la Seconde Guerre mondiale.",
+              resume: "Meursault assiste à l'enterrement de sa mère sans pleurer. Tue un Arabe sur une plage. Au procès, jugé non pour le meurtre mais pour son indifférence. Condamné à mort, accepte.",
+              analyse: "Style : phrases courtes, dépouillées, journalistique. Thèmes : absurde, indifférence du monde, révolte. Symboles : soleil (oppressant), mer (évasion), revolver (hasard). Meursault comme absurde incarné.",
+              citations: ["« Aujourd'hui, maman est morte. Ou peut-être hier... »", "« Dans le soleil du matin, j'ai compris que j'avais tué un homme »", "« Je me suis ouvert à la douce indifférence du monde »"],
+              entretien: ["Philosophie de l'absurde", "Style détaché vs révolte intérieure", "Comparaison avec <em>La Peste</em>"] },
+            { num: 13, title: "Les Fleurs du mal", author: "Charles Baudelaire", year: 1857, mvt: "romantisme", genre: "Recueil poétique", mvtLabel: "Romantisme finissant / Parnasse / Symbolisme",
+              contexte: "Chef-d'œuvre poétique moderne, condamné pour outrage. Explore l'âme, le mal, la beauté, la ville, le spleen. Manifeste du symbolisme.",
+              resume: "6 parties : Spleen et Idéal, Tableaux parisiens, Le Vin, Les Fleurs du Mal, Révolte, La Mort. Parcours émotionnel du poète : ennui, désir, révolte, rêve de rédemption par l'art.",
+              analyse: "Thèmes : spleen mal, idéalisation femme, révolte, fascination mort/mal. Forme : alexandrins, poèmes en prose. Symboles récurrents (parfum, fleur, chat). Modernité : ville, rejet romantisme, valorisation laideur.",
+              citations: ["« Je suis comme le roi d'un pays pluvieux »", "« L'homme n'est qu'un être de hasard »", "« Il n'est de erreur que de croire qu'on se trompe »"],
+              entretien: ["Baudelaire et modernité poétique", "Spleen comme sentiment moderne", "Influence sur Verlaine, Mallarmé"] },
+            { num: 14, title: "Le Horla", author: "Guy de Maupassant", year: 1887, mvt: "realisme", genre: "Nouvelle fantastique", mvtLabel: "Réalisme / Fantastique",
+              contexte: "Nouvelle emblématique du fantastique maupassantien. Allégorie de la folie et angoisse fin-de-siècle. Être invisible provenant d'Amérique hante le narrateur.",
+              resume: "Le narrateur sent une présence étrange, entend des bruits, découvre le Horla, être invisible qui le possède. Il se suicide pour échapper.",
+              analyse: "Ambiguïté fantastique : créature réelle ou hallucination ? Journal intime, montée angoisse. Hypotypose du Horla. Folie comme thème central.",
+              citations: ["« Je le sens qui me domine, qui m'envahit »", "« Il est là, il me regarde, il me possède »", "« J'ai peur d'être fou »"],
+              entretien: ["Maupassant et la peur psychologique", "Fantastique fin de siècle", "Folie romantique vs réaliste"] },
+            { num: 15, title: "L'Écume des jours", author: "Boris Vian", year: 1947, mvt: "surrealisme", genre: "Roman fantastique et satirique", mvtLabel: "Surréalisme / Après-guerre",
+              contexte: "Roman culte mêlant fantaisie poétique, satire sociale et tragédie personnelle. Vian invente un monde où les objets ont une âme.",
+              resume: "Colin épouse Chloé. Chloé malade (un nénuphar dans le poumon). Colin dépense sa fortune pour la soigner. Rejeté par la société, meurt de chagrin. Appartement voisin se dégrade en parallèle.",
+              analyse: "Surréalisme : jeux de mots, néologismes, scenettes absurdes. Symbolisme : maladie = métaphore société, cuisine rétrécit = précarité, phénix = espoir impossible. Critique de la société de consommation et inégalités.",
+              citations: ["« J'étais un héros, un dieu, un empereur... »", "« Chloé, je t'aime, je t'aimerai toujours »", "« C'est la vie qui s'en va et la mort qui vient »"],
+              entretien: ["Humour noir chez Vian", "Comparaison avec Prévert", "Littérature engagée ou évasion poétique ?"] }
+        ];
+
+        // Build sidebar
+        const sidebarList = document.getElementById('sidebarList');
+        textes.forEach(t => {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href="#texte-${t.num}"><span class="sidebar-num">${t.num}</span><span class="sidebar-author">${t.author}</span></a>`;
+            sidebarList.appendChild(li);
+        });
+
+        // Build timeline
+        const timeline = document.getElementById('timeline');
+        textes.forEach(t => {
+            const row = document.createElement('a');
+            row.href = `#texte-${t.num}`;
+            row.className = `timeline-row`;
+            row.innerHTML = `<span class="timeline-year">${t.year}</span><span class="timeline-title">${t.title}</span>`;
+            timeline.appendChild(row);
+        });
+
+        // Build text cards
+        const container = document.getElementById('textesContainer');
+        textes.forEach(t => {
+            const card = document.createElement('div');
+            card.className = 'texte-card';
+            card.dataset.num = t.num;
+            card.dataset.mvt = t.mvt;
+            card.dataset.search = `${t.title} ${t.author} ${t.mvtLabel} ${t.genre}`.toLowerCase();
+            card.id = `texte-${t.num}`;
+
+            const citationsHTML = t.citations.map(c => `<li class="citation">${c}</li>`).join('');
+            const entretienHTML = t.entretien.map(e => `<li>${e}</li>`).join('');
+
+            card.innerHTML = `
+                <div class="texte-header">
+                    <h2>${t.title} <small>${t.author}, ${t.year}</small></h2>
+                    <div class="texte-meta">
+                        <span class="tag mvt-${t.mvt}">${t.mvtLabel}</span>
+                        <span class="tag">${t.genre}</span>
+                    </div>
+                </div>
+                <div class="texte-content">
+                    <p><strong>Contexte :</strong> ${t.contexte}</p>
+                    <p><strong>Résumé :</strong> ${t.resume}</p>
+                    <h3>Analyse détaillée</h3>
+                    <p>${t.analyse}</p>
+                    <h3>Citations importantes</h3>
+                    <ul>${citationsHTML}</ul>
+                    <h3>Points pour l'entretien</h3>
+                    <ul>${entretienHTML}</ul>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        // Scroll reveal
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // Card reveal
+        const cardObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    cardObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+
+        document.querySelectorAll('.texte-card').forEach(el => cardObserver.observe(el));
+
+        // Nav highlighting
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('nav a');
+        const sidebarLinks = document.querySelectorAll('.sidebar-list a');
+        const progressBar = document.getElementById('progressBar');
+        const backToTop = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(sec => {
+                const top = sec.offsetTop;
+                if (pageYOffset >= top - 150) current = sec.getAttribute('id');
+            });
+            navLinks.forEach(a => {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+
+            // Sidebar highlighting
+            const texteCards = document.querySelectorAll('.texte-card:not(.hidden)');
+            let activeTexte = '';
+            texteCards.forEach(card => {
+                if (card.getBoundingClientRect().top < 200) {
+                    activeTexte = card.id;
+                }
+            });
+            sidebarLinks.forEach(a => {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + activeTexte);
+            });
+
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled = (window.scrollY / scrollHeight) * 100;
+            progressBar.style.width = scrolled + '%';
+
+            backToTop.classList.toggle('visible', window.scrollY > 600);
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Accordion
+        document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                const item = trigger.parentElement;
+                const isOpen = item.classList.contains('open');
+                item.classList.toggle('open');
+                trigger.setAttribute('aria-expanded', !isOpen);
+            });
+        });
+
+        // Checklist with localStorage
+        const checklist = document.getElementById('checklist');
+        const checklistText = document.getElementById('checklistText');
+        const checklistFill = document.getElementById('checklistFill');
+        const totalItems = checklist.querySelectorAll('li').length;
+
+        function updateChecklist() {
+            const checked = checklist.querySelectorAll('li.checked').length;
+            checklistText.textContent = `${checked} / ${totalItems} révisés`;
+            checklistFill.style.width = `${(checked / totalItems) * 100}%`;
+            const states = {};
+            checklist.querySelectorAll('li').forEach(li => {
+                states[li.dataset.id] = li.classList.contains('checked');
+            });
+            localStorage.setItem('bac-checklist', JSON.stringify(states));
+        }
+
+        // Restore state
+        const saved = JSON.parse(localStorage.getItem('bac-checklist') || '{}');
+        checklist.querySelectorAll('li').forEach(li => {
+            if (saved[li.dataset.id]) li.classList.add('checked');
+            li.addEventListener('click', () => {
+                li.classList.toggle('checked');
+                updateChecklist();
+            });
+        });
+        updateChecklist();
+
+        // Search
+        const searchInput = document.getElementById('searchInput');
+        const noResults = document.getElementById('noResults');
+
+        function filterTextes() {
+            const query = searchInput.value.toLowerCase().trim();
+            const activeFilter = document.querySelector('.filter-chip.active').dataset.filter;
+            let visibleCount = 0;
+
+            document.querySelectorAll('.texte-card').forEach(card => {
+                const matchesSearch = !query || card.dataset.search.includes(query);
+                const matchesFilter = activeFilter === 'all' || card.dataset.mvt === activeFilter;
+                const show = matchesSearch && matchesFilter;
+                card.classList.toggle('hidden', !show);
+                if (show) visibleCount++;
+            });
+
+            noResults.classList.toggle('visible', visibleCount === 0);
+        }
+
+        searchInput.addEventListener('input', filterTextes);
+
+        // Filter chips
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                filterTextes();
+            });
+        });
+
+        // Keyboard shortcut: / to focus search
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+            if (e.key === 'Escape' && document.activeElement === searchInput) {
+                searchInput.blur();
+                searchInput.value = '';
+                filterTextes();
+            }
+        });
+    </script>
+</body>
+</html>

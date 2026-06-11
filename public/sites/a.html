@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REGISTRY-828 // TECTONIC FAULT INJECTION LOGGER</title>
+    <!-- IBM Plex Mono from Google Fonts for utilitarian monospace aesthetic -->
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* DESIGN SYSTEM & VARIABLES */
+        :root {
+            --bg-base: #f4f3ef;            /* Sterile warm technical paper */
+            --bg-panel: #ffffff;           /* Clean panel white */
+            --bg-panel-active: #eae7e0;    /* Highlight/selected panel background */
+            --bg-header: #111111;          /* Dark industrial title bar */
+            --border-color: #111111;       /* Utilitarian thick lines */
+            --border-muted: #888888;       /* Secondary lines */
+            --text-main: #111111;          /* Sterile black text */
+            --text-muted: #555555;         /* Metadata gray */
+            --text-on-dark: #f4f3ef;
+            
+            /* Industrial Safety Accents */
+            --safety-orange: #ff5000;
+            --warning-yellow: #ffd000;
+            --blueprint-blue: #004fd4;
+            --matrix-green: #008f3c;
+            --critical-red: #d40000;
+
+            /* Grid Pattern */
+            --grid-line-color: rgba(0, 0, 0, 0.04);
+        }
+
+        /* RESET & BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            line-height: 1.35;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+            border-radius: 0 !important; /* STRICT NO ROUNDED CORNERS */
+        }
+
+        body {
+            background-color: var(--bg-base);
+            background-image: 
+                linear-gradient(to right, var(--grid-line-color) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--grid-line-color) 1px, transparent 1px);
+            background-size: 20px 20px;
+            padding: 15px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* UTILITY CLASSES */
+        .text-orange { color: var(--safety-orange); }
+        .text-green { color: var(--matrix-green); }
+        .text-red { color: var(--critical-red); }
+        .text-blue { color: var(--blueprint-blue); }
+        .text-muted { color: var(--text-muted); }
+        .bg-orange { background-color: var(--safety-orange); color: white; }
+        .bg-red { background-color: var(--critical-red); color: white; }
+        .bg-yellow { background-color: var(--warning-yellow); color: black; }
+        .bg-dark { background-color: var(--bg-header); color: var(--text-on-dark); }
+        
+        .uppercase { text-transform: uppercase; }
+        .bold { font-weight: 600; }
+        .text-right { text-align: right; }
+        
+        /* LAYOUT CONTAINER */
+        .main-registry {
+            display: grid;
+            grid-template-columns: 320px 1fr 360px;
+            background-color: var(--border-color);
+            gap: 1px;
+            border: 1px solid var(--border-color);
+            box-shadow: none; /* STRICT NO SOFT SHADOWS */
+            flex-grow: 1;
+        }
+
+        @media (max-width: 1150px) {
+            .main-registry {
+                grid-template-columns: 320px 1fr;
+            }
+            .column-right {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .main-registry {
+                grid-template-columns: 1fr;
+            }
+            .column-left, .column-center, .column-right {
+                grid-column: span 1;
+            }
+        }
+
+        /* CELL BOX STRUCTURE */
+        .cell-panel {
+            background-color: var(--bg-panel);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cell-header {
+            background-color: var(--bg-panel-active);
+            border-bottom: 1px solid var(--border-color);
+            padding: 5px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .cell-header-index {
+            color: var(--text-muted);
+            margin-right: 8px;
+            font-weight: 400;
+        }
+
+        .cell-content {
+            padding: 10px;
+            flex-grow: 1;
+        }
+
+        /* HEADER SECTION */
+        .registry-header {
+            grid-column: span 3;
+            background-color: var(--bg-header);
+            border-bottom: 1px solid var(--border-color);
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @media (max-width: 1150px) {
+            .registry-header {
+                grid-column: span 2;
+            }
+        }
+        @media (max-width: 800px) {
+            .registry-header {
+                grid-column: span 1;
+            }
+        }
+
+        .registry-header * {
+            color: var(--text-on-dark);
+        }
+
+        .registry-title-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .registry-title {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .registry-subtitle {
+            font-size: 9px;
+            color: #888888;
+            margin-top: 2px;
+        }
+
+        .system-status-pill {
+            border: 1px solid var(--matrix-green);
+            color: var(--matrix-green);
+            padding: 2px 6px;
+            font-size: 10px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .system-status-pill.alarm {
+            border-color: var(--critical-red);
+            color: var(--critical-red);
+            animation: warning-blink 1s step-end infinite;
+        }
+
+        @keyframes warning-blink {
+            50% { border-color: transparent; color: transparent; }
+        }
+
+        /* CONTROL TABS & BOREHOLE SELECTOR */
+        .borehole-tabs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--bg-panel-active);
+        }
+
+        .borehole-tab {
+            padding: 8px 5px;
+            text-align: center;
+            border-right: 1px solid var(--border-color);
+            cursor: pointer;
+            font-weight: 600;
+            background-color: var(--bg-panel-active);
+        }
+
+        .borehole-tab:last-child {
+            border-right: none;
+        }
+
+        .borehole-tab.active {
+            background-color: var(--bg-panel);
+            color: var(--safety-orange);
+            border-bottom: 2px solid var(--safety-orange);
+        }
+
+        /* FORMS & DATA TABLES */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid var(--border-color);
+            padding: 4px 6px;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .data-table th {
+            background-color: var(--bg-panel-active);
+            font-weight: 600;
+            font-size: 10px;
+        }
+
+        .data-table td.label {
+            font-weight: 600;
+            background-color: #faf9f6;
+            width: 50%;
+        }
+
+        .data-table input[type="text"], .data-table input[type="number"] {
+            width: 100%;
+            border: none;
+            padding: 2px 4px;
+            background-color: transparent;
+            font-family: inherit;
+            font-size: inherit;
+        }
+
+        .data-table input[type="text"]:focus, .data-table input[type="number"]:focus {
+            outline: 1px solid var(--safety-orange);
+            background-color: #ffffdd;
+        }
+
+        /* TECHNICAL CONTROLS & RANGE SLIDERS */
+        .control-row {
+            margin-bottom: 12px;
+        }
+
+        .control-label-wrapper {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .control-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 16px;
+            background: #e1dfd8;
+            border: 1px solid var(--border-color);
+            outline: none;
+        }
+
+        .control-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10px;
+            height: 14px;
+            background: var(--border-color);
+            border: 1px solid var(--bg-panel);
+            cursor: pointer;
+        }
+
+        .control-slider::-webkit-slider-thumb:hover {
+            background: var(--safety-orange);
+        }
+
+        .control-slider::-moz-range-thumb {
+            width: 10px;
+            height: 14px;
+            background: var(--border-color);
+            border: 1px solid var(--bg-panel);
+            cursor: pointer;
+        }
+
+        .control-slider::-moz-range-thumb:hover {
+            background: var(--safety-orange);
+        }
+
+        /* TOGGLE SWITCHES */
+        .toggle-container {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .btn-toggle {
+            flex-grow: 1;
+            padding: 6px 10px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-panel);
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-toggle.active {
+            background-color: var(--border-color);
+            color: var(--text-on-dark);
+        }
+
+        .btn-toggle:hover:not(.active) {
+            background-color: var(--bg-panel-active);
+        }
+
+        /* GRAPH / OSCILLOSCOPE CONTAINER */
+        .waveform-wrapper {
+            border: 1px solid var(--border-color);
+            background-color: #0d121c; /* Deep blueprint navy/black */
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .waveform-label {
+            position: absolute;
+            top: 5px;
+            left: 8px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 8px;
+            pointer-events: none;
+            text-transform: uppercase;
+        }
+
+        .waveform-canvas {
+            display: block;
+            width: 100%;
+            height: 150px;
+        }
+
+        /* STATS / NUMERICS DISPLAY */
+        .numeric-display {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+            background-color: var(--border-color);
+            border: 1px solid var(--border-color);
+            margin-bottom: 10px;
+        }
+
+        .numeric-card {
+            background-color: var(--bg-panel);
+            padding: 6px 10px;
+        }
+
+        .numeric-val {
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: -0.04em;
+            margin-top: 2px;
+        }
+
+        .numeric-label {
+            font-size: 9px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* GEOLOGICAL STRATIGRAPHY CROSS-SECTION */
+        .lithology-grid {
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            border: 1px solid var(--border-color);
+            height: 240px;
+        }
+
+        .depth-axis {
+            background-color: var(--bg-panel-active);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 6px 4px;
+            font-size: 9px;
+        }
+
+        .strata-container {
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .strata-layer {
+            width: 100%;
+            border-bottom: 1px dashed var(--border-muted);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 10px;
+            position: relative;
+            background-color: var(--bg-panel);
+        }
+
+        .strata-layer:last-child {
+            border-bottom: none;
+            flex-grow: 1;
+        }
+
+        .strata-name {
+            font-weight: 600;
+            font-size: 10px;
+            z-index: 2;
+            text-shadow: 1px 1px 0 var(--bg-panel), -1px 1px 0 var(--bg-panel), 1px -1px 0 var(--bg-panel), -1px -1px 0 var(--bg-panel);
+        }
+
+        .strata-desc {
+            font-size: 8px;
+            color: var(--text-muted);
+            z-index: 2;
+            text-shadow: 1px 1px 0 var(--bg-panel), -1px 1px 0 var(--bg-panel), 1px -1px 0 var(--bg-panel), -1px -1px 0 var(--bg-panel);
+        }
+
+        /* Geological Shading Patterns via CSS Gradients */
+        .layer-alluvium {
+            height: 25%;
+            /* Dotted pattern */
+            background-image: radial-gradient(rgba(0,0,0,0.1) 12%, transparent 13%);
+            background-size: 6px 6px;
+        }
+
+        .layer-siltstone {
+            height: 30%;
+            /* Horizontal lines */
+            background-image: repeating-linear-gradient(0deg, transparent, transparent 5px, rgba(0,0,0,0.06) 5px, rgba(0,0,0,0.06) 6px);
+        }
+
+        .layer-carbonates {
+            height: 25%;
+            /* Brick/Block pattern */
+            background-image: 
+                linear-gradient(0deg, transparent 4px, rgba(0,0,0,0.05) 5px),
+                linear-gradient(90deg, transparent 15px, rgba(0,0,0,0.05) 16px);
+            background-size: 20px 8px;
+        }
+
+        .layer-basement {
+            flex-grow: 1;
+            /* Cross hatch lines */
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 6px, rgba(0,0,0,0.07) 6px, rgba(0,0,0,0.07) 7px),
+                repeating-linear-gradient(-45deg, transparent, transparent 6px, rgba(0,0,0,0.07) 6px, rgba(0,0,0,0.07) 7px);
+        }
+
+        .strata-indicator {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            border-top: 2px solid var(--safety-orange);
+            z-index: 10;
+            pointer-events: none;
+            transition: top 0.4s ease;
+        }
+
+        .strata-indicator::after {
+            content: 'INJECTION DEPTH';
+            position: absolute;
+            right: 5px;
+            top: -12px;
+            background-color: var(--safety-orange);
+            color: #ffffff;
+            font-size: 8px;
+            padding: 1px 4px;
+            font-weight: 600;
+        }
+
+        /* MONOSPACE TERMINAL LOG */
+        .terminal-log {
+            background-color: #0b0e14;
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            height: 180px;
+            overflow-y: auto;
+            font-family: 'IBM Plex Mono', monospace;
+            color: #d1d4d8;
+        }
+
+        .terminal-line {
+            margin-bottom: 4px;
+            font-size: 9px;
+            white-space: pre-wrap;
+            line-height: 1.25;
+        }
+
+        .terminal-line span.timestamp {
+            color: #888888;
+        }
+        .terminal-line span.info {
+            color: #88bbff;
+        }
+        .terminal-line span.warning {
+            color: var(--warning-yellow);
+        }
+        .terminal-line span.error {
+            color: #ff6666;
+            font-weight: 600;
+        }
+
+        /* CALIBRATION / DIAGNOSTIC MATRIX */
+        .sensor-matrix-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 60px 80px;
+            gap: 1px;
+            background-color: var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .sensor-matrix-row:last-child {
+            border-bottom: none;
+        }
+
+        .sensor-matrix-header {
+            font-weight: bold;
+            background-color: var(--bg-panel-active);
+        }
+
+        .sensor-matrix-cell {
+            background-color: var(--bg-panel);
+            padding: 4px 6px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-mini {
+            width: 100%;
+            background-color: var(--bg-panel-active);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 9px;
+            padding: 2px 0;
+            text-align: center;
+        }
+
+        .btn-mini:hover {
+            background-color: var(--border-color);
+            color: white;
+        }
+
+        .indicator-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--matrix-green);
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .indicator-dot.fault {
+            background-color: var(--critical-red);
+            animation: warning-blink 0.5s step-end infinite;
+        }
+
+        /* ACTION DECK BAR */
+        .action-deck {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-action {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            font-weight: 600;
+            cursor: pointer;
+            background-color: var(--bg-panel);
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .btn-action:hover {
+            background-color: var(--bg-panel-active);
+        }
+
+        .btn-action.primary {
+            background-color: var(--safety-orange);
+            color: #ffffff;
+            border-color: var(--safety-orange);
+        }
+
+        .btn-action.primary:hover {
+            background-color: #d44300;
+        }
+
+        /* FORMULATION PANEL */
+        .formula-box {
+            background-color: #faf9f6;
+            border: 1px dashed var(--border-muted);
+            padding: 8px;
+            margin-top: 8px;
+            font-size: 10px;
+        }
+
+        .formula-title {
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-muted);
+            margin-bottom: 4px;
+            padding-bottom: 2px;
+            font-size: 9px;
+            color: var(--text-muted);
+        }
+
+        /* COMMITTED SUCCESS BLINK OVERLAY */
+        .registry-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: rgba(17, 17, 17, 0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .registry-modal {
+            background-color: var(--bg-panel);
+            border: 2px solid var(--border-color);
+            width: 480px;
+            padding: 20px;
+        }
+
+        .registry-modal-header {
+            background-color: var(--bg-header);
+            color: var(--text-on-dark);
+            padding: 6px 10px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .registry-modal-body {
+            font-size: 11px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .loading-bar-container {
+            width: 100%;
+            height: 12px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-panel-active);
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .loading-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--safety-orange);
+        }
+
+        /* FOOTER BRANDING */
+        .footer-utility {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+            font-size: 9px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PRIMARY MAIN HEADER -->
+    <header class="registry-header">
+        <div class="registry-title-block">
+            <span class="registry-title uppercase">TECTONIC FAULT INJECTION WELL LOGGER [REG-828]</span>
+            <span class="registry-subtitle uppercase">SYSTEM DIRECTIVE: STABILITY INTEGRITY ARCHIVE // SEC. CLASSIFIED - INTERNAL DIVISION ONLY</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 5px; color: var(--text-on-dark);">
+                <span style="font-size: 9px; color: #888;">AUDIO MONITOR:</span>
+                <button id="btnAudioToggle" class="btn-mini" style="width: 50px; background: #333; color: white; border-color: #555;">OFF</button>
+            </div>
+            <div>
+                <span id="systemStatusPill" class="system-status-pill">SYS: NOMINAL</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- TRIPLE-COLUMN GRID BODY -->
+    <main class="main-registry">
+        
+        <!-- LEFT COLUMN: CONTROLS & BOREHOLE PARAMS -->
+        <section class="column-left" style="display: flex; flex-direction: column; gap: 1px; background-color: var(--border-color);">
+            
+            <!-- BOREHOLE SELECTOR TABS -->
+            <div class="cell-panel">
+                <div class="borehole-tabs">
+                    <div class="borehole-tab active" data-bh="828x">BH-828-X</div>
+                    <div class="borehole-tab" data-bh="829y">BH-829-Y</div>
+                    <div class="borehole-tab" data-bh="830z">BH-830-Z</div>
+                </div>
+                
+                <div class="cell-content">
+                    <div class="cell-header-index" style="margin-bottom: 6px; display: inline-block;">SEC. 01 // GEOTECHNICAL CONFIGURATION</div>
+                    <table class="data-table">
+                        <tbody>
+                            <tr>
+                                <td class="label">COORDINATES</td>
+                                <td><input type="text" id="cfgCoords" value="45°32'12&quot;N 122°40'55&quot;W" readonly></td>
+                            </tr>
+                            <tr>
+                                <td class="label">BASE PORE P_0 (MPa)</td>
+                                <td><input type="number" id="cfgPoreBase" value="28.4" step="0.1"></td>
+                            </tr>
+                            <tr>
+                                <td class="label">FRICTION COEFF (μ)</td>
+                                <td><input type="number" id="cfgFriction" value="0.65" step="0.01"></td>
+                            </tr>
+                            <tr>
+                                <td class="label">NORMAL STRESS σ_N (MPa)</td>
+                                <td><input type="number" id="cfgNormalStress" value="62.5" step="0.1"></td>
+                            </tr>
+                            <tr>
+                                <td class="label">COHESION C_o (MPa)</td>
+                                <td><input type="number" id="cfgCohesion" value="4.2" step="0.1"></td>
+                            </tr>
+                            <tr>
+                                <td class="label">TARGET ZONE DEPTH (m)</td>
+                                <td><input type="number" id="cfgDepth" value="2850" step="50"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PUMP & HYDRAULIC COMMAND -->
+            <div class="cell-panel" style="flex-grow: 1;">
+                <div class="cell-header">
+                    <span>FLUIDIC INJECTION CONTROLS</span>
+                    <span class="cell-header-index">SEC. 02</span>
+                </div>
+                <div class="cell-content">
+                    <div class="control-row">
+                        <div class="control-label-wrapper">
+                            <span>INJECTION FLOW RATE (Q)</span>
+                            <span><span id="lblFlowRate">45.0</span> L/min</span>
+                        </div>
+                        <input type="range" id="sldFlowRate" class="control-slider" min="0" max="180" value="45" step="1">
+                    </div>
+
+                    <div class="control-row">
+                        <div class="control-label-wrapper">
+                            <span>FLUID SPECIFIC DENSITY (ρ)</span>
+                            <span><span id="lblFluidDensity">1.08</span> kg/dm³</span>
+                        </div>
+                        <input type="range" id="sldDensity" class="control-slider" min="0.8" max="1.5" value="1.08" step="0.01">
+                    </div>
+
+                    <div class="control-label-wrapper" style="margin-bottom: 4px;">
+                        <span>VALVE MANIFOLD OVERRIDE</span>
+                    </div>
+                    <div class="toggle-container">
+                        <button id="btnValveA" class="btn-toggle active">VALVE ALPHA [OPEN]</button>
+                        <button id="btnValveB" class="btn-toggle">VALVE BETA [CLOSED]</button>
+                    </div>
+
+                    <div class="formula-box">
+                        <div class="formula-title">HYDRAULIC PRESSURE COMPUTATION [EQ. 4.1]</div>
+                        P_downhole = P_pore + (Q * R_impedance) + (ρ * g * Depth / 1000)<br>
+                        Current Impedance factor: <span id="lblImpedance">0.088</span> MPa/(L/min)<br>
+                        Baseline hydrostatic: <span id="lblHydrostatic">30.2</span> MPa
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- CENTER COLUMN: WAVEFORMS, CHARTS & STRATIGRAPHY -->
+        <section class="column-center" style="display: flex; flex-direction: column; gap: 1px; background-color: var(--border-color);">
+            
+            <!-- ACOUSTIC GEOPHONE SCOPE -->
+            <div class="cell-panel">
+                <div class="cell-header">
+                    <span>MICRO-SEISMIC ACOUSTIC EMISSION MONITOR (GEOPHONE ARRAY)</span>
+                    <span class="cell-header-index">SEC. 04</span>
+                </div>
+                <div class="cell-content">
+                    <div class="waveform-wrapper">
+                        <div class="waveform-label">GEOPHONE CH-4AE (SHEAR AXIS 1000Hz HPF)</div>
+                        <canvas id="canvasSeismic" class="waveform-canvas"></canvas>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 9px; color: var(--text-muted);">
+                        <span>SWEEP SPEED: 250ms/div</span>
+                        <span>AMP GAIN: 48 dB</span>
+                        <span>THRESHOLD FILTER: <span id="lblSeismicThresh">0.25</span> mm/s</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INJECTION PRESSURE VS TIME -->
+            <div class="cell-panel">
+                <div class="cell-header">
+                    <span>HISTORICAL PRESSURES & INJECTION PROFILE</span>
+                    <span class="cell-header-index">SEC. 05</span>
+                </div>
+                <div class="cell-content">
+                    <div class="waveform-wrapper">
+                        <div class="waveform-label">TELEMETRY HISTORY (120s BUFFER) // BLUE = P_d (MPa), ORANGE = Q (L/min)</div>
+                        <canvas id="canvasPressure" class="waveform-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GEOLOGICAL LITHOSTRATIGRAPHY PROFILE -->
+            <div class="cell-panel" style="flex-grow: 1;">
+                <div class="cell-header">
+                    <span>LITHOSTRATIGRAPHIC PROFILE & INJECTION MATRIX TARGET</span>
+                    <span class="cell-header-index">SEC. 06</span>
+                </div>
+                <div class="cell-content" style="display: flex; flex-direction: column; gap: 8px;">
+                    <div class="lithology-grid">
+                        <div class="depth-axis">
+                            <span>0.0 km</span>
+                            <span>0.8 km</span>
+                            <span>1.8 km</span>
+                            <span>2.9 km</span>
+                            <span>3.5 km</span>
+                        </div>
+                        <div class="strata-container" id="strataContainer">
+                            <div class="strata-layer layer-alluvium">
+                                <span class="strata-name">QUATERNARY ALLUVIUM / SANDSTONE</span>
+                                <span class="strata-desc">P_hydrostatic gradient: 9.8 MPa/km</span>
+                            </div>
+                            <div class="strata-layer layer-siltstone">
+                                <span class="strata-name">CRETACEOUS STRATIFIED SILTSTONE</span>
+                                <span class="strata-desc">Low permeability cap rock matrix</span>
+                            </div>
+                            <div class="strata-layer layer-carbonates">
+                                <span class="strata-name">JURASSIC CARBONATES & FLUIDIZED SHALE</span>
+                                <span class="strata-desc">Vuggy porosity, localized fracture network</span>
+                            </div>
+                            <div class="strata-layer layer-basement">
+                                <span class="strata-name">PRECAMBRIAN CRYSTALLINE BASEMENT (TARGET GRANITE)</span>
+                                <span class="strata-desc">Target sheer fracture plane orientation: Dip 62°NW</span>
+                            </div>
+                            <!-- Live horizontal indicator -->
+                            <div class="strata-indicator" id="depthIndicator" style="top: 80%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- RIGHT COLUMN: NUMERICS, CALIBRATION, EVENT LOG -->
+        <section class="column-right" style="display: flex; flex-direction: column; gap: 1px; background-color: var(--border-color);">
+            
+            <!-- STABILITY CALCULATION NUMERICS -->
+            <div class="cell-panel">
+                <div class="cell-header">
+                    <span>MOHR-COULOMB FAULT STABILITY RATIOS</span>
+                    <span class="cell-header-index">SEC. 03</span>
+                </div>
+                <div class="cell-content">
+                    <div class="numeric-display">
+                        <div class="numeric-card">
+                            <div class="numeric-label">DOWNHOLE PRESSURE (P_d)</div>
+                            <div class="numeric-val" id="valDownholePres">57.4 MPa</div>
+                        </div>
+                        <div class="numeric-card">
+                            <div class="numeric-label">EFFECTIVE NORMAL (σ'_N)</div>
+                            <div class="numeric-val" id="valEffNormal">34.1 MPa</div>
+                        </div>
+                        <div class="numeric-card">
+                            <div class="numeric-label">CRIT SHEAR VALUE (τ_CRIT)</div>
+                            <div class="numeric-val" id="valTauCrit">26.3 MPa</div>
+                        </div>
+                        <div class="numeric-card">
+                            <div class="numeric-label">CALCULATED SHEAR (τ)</div>
+                            <div class="numeric-val" id="valShearStress">22.4 MPa</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Safety Bar Indicator -->
+                    <div style="border: 1px solid var(--border-color); padding: 6px;">
+                        <div style="display: flex; justify-content: space-between; font-weight: 600; margin-bottom: 4px; font-size: 10px;">
+                            <span>SLIP DISTURBANCE COEFFICIENT (η)</span>
+                            <span id="lblSlipFactor">0.85</span>
+                        </div>
+                        <div style="height: 12px; background: #e1dfd8; border: 1px solid var(--border-color); position: relative; overflow: hidden;">
+                            <div id="barSlipFactor" style="height: 100%; width: 85%; background: var(--matrix-green); transition: width 0.1s linear;"></div>
+                            <!-- Marker lines at critical zones -->
+                            <div style="position: absolute; left: 80%; top: 0; bottom: 0; width: 1px; background: var(--border-color);"></div>
+                            <div style="position: absolute; left: 100%; top: 0; bottom: 0; width: 1px; background: var(--border-color);"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 8px; color: var(--text-muted); margin-top: 2px;">
+                            <span>0.0 STABLE</span>
+                            <span>0.8 MARGINAL</span>
+                            <span>1.0 CRITICAL SLIP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SENSOR ARRAY DIAGNOSTICS -->
+            <div class="cell-panel">
+                <div class="cell-header">
+                    <span>SENSOR CALIBRATION & TELEMETRY REGISTRY</span>
+                    <span class="cell-header-index">SEC. 08</span>
+                </div>
+                <div class="cell-content">
+                    <div style="border: 1px solid var(--border-color); background-color: var(--border-color); display: flex; flex-direction: column; gap: 1px;">
+                        <div class="sensor-matrix-row sensor-matrix-header">
+                            <div class="sensor-matrix-cell">SENSOR-ID</div>
+                            <div class="sensor-matrix-cell">STATUS</div>
+                            <div class="sensor-matrix-cell text-right">GAIN</div>
+                            <div class="sensor-matrix-cell">CALIB DATE</div>
+                        </div>
+                        <div class="sensor-matrix-row">
+                            <div class="sensor-matrix-cell">SEN-P-01</div>
+                            <div class="sensor-matrix-cell"><span class="indicator-dot" id="dot-p01"></span><span id="status-p01">NOMINAL</span></div>
+                            <div class="sensor-matrix-cell text-right">1.00</div>
+                            <div class="sensor-matrix-cell"><button class="btn-mini btnCalib" data-sensor="p01">2026-03-12</button></div>
+                        </div>
+                        <div class="sensor-matrix-row">
+                            <div class="sensor-matrix-cell">SEN-A-04</div>
+                            <div class="sensor-matrix-cell"><span class="indicator-dot" id="dot-a04"></span><span id="status-a04">NOMINAL</span></div>
+                            <div class="sensor-matrix-cell text-right">250x</div>
+                            <div class="sensor-matrix-cell"><button class="btn-mini btnCalib" data-sensor="a04">2026-04-01</button></div>
+                        </div>
+                        <div class="sensor-matrix-row">
+                            <div class="sensor-matrix-cell">SEN-T-12</div>
+                            <div class="sensor-matrix-cell"><span class="indicator-dot" id="dot-t12"></span><span id="status-t12">NOMINAL</span></div>
+                            <div class="sensor-matrix-cell text-right">1.00</div>
+                            <div class="sensor-matrix-cell"><button class="btn-mini btnCalib" data-sensor="t12">2026-05-19</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MONOSPACE LOG TERMINAL -->
+            <div class="cell-panel" style="flex-grow: 1;">
+                <div class="cell-header">
+                    <span>REAL-TIME INJECTION DATASTREAM LOGS</span>
+                    <span class="cell-header-index">SEC. 07</span>
+                </div>
+                <div class="cell-content" style="display: flex; flex-direction: column; gap: 8px;">
+                    <div id="terminalLog" class="terminal-log">
+                        <!-- Filled by script -->
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
+                        <button id="btnClearLog" class="btn-mini" style="padding: 4px 0;">CLEAR DATA LOGGER</button>
+                        <button id="btnInjectSpike" class="btn-mini text-orange" style="padding: 4px 0; font-weight: bold;">TEST INSTANT PRESSURE RELIEF</button>
+                    </div>
+
+                    <div style="border-top: 1px dashed var(--border-muted); padding-top: 8px;">
+                        <div class="control-label-wrapper">
+                            <span>REGISTRY SIGN-OFF OPERATOR ID</span>
+                        </div>
+                        <div style="display: flex; gap: 5px;">
+                            <input type="text" id="operatorId" value="OP-GEOPHYS-99082" style="border: 1px solid var(--border-color); padding: 4px 6px; width: 100%;">
+                        </div>
+                    </div>
+
+                    <div class="action-deck">
+                        <button id="btnExport" class="btn-action">EXPORT DATA</button>
+                        <button id="btnCommit" class="btn-action primary">COMMIT TO REGISTRY</button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER TECHNICAL LABELS -->
+    <footer class="footer-utility">
+        <div>
+            <span>SYSTEM CONTEXT: DEEPWELL INJECTION PRESSURE STABILITY MATRIX</span>
+            <span style="margin-left: 20px;">D-WELL REGISTRY INDEX: #0828-A7F</span>
+        </div>
+        <div>
+            <span>CALIBRATION PROTOCOL REFERENCE: IEEE-828-GEOTECH</span>
+            <span style="margin-left: 20px;">TIMESTAMP UTC: <span id="lblUtcClock">2026-06-07 17:17:23</span></span>
+        </div>
+    </footer>
+
+    <!-- INTERACTION PROGRESS MODAL / OVERLAY -->
+    <div id="modalOverlay" class="registry-modal-overlay">
+        <div class="registry-modal">
+            <div class="registry-modal-header">
+                <span>SECURE CRYPTOGRAPHIC COMMIT IN PROGRESS</span>
+                <span id="modalProgressText">0%</span>
+            </div>
+            <div class="registry-modal-body">
+                <span class="bold uppercase">TRANSMITTING REGISTRY DATA TO SECURE VAULT DECK...</span>
+                <p class="text-muted" style="margin-top: 5px; font-size: 10px;">
+                    Writing local buffer logs, borehole geometries, friction coefficients, and seismic sensor matrices to irreversible geological blockchain index.
+                </p>
+                <div class="loading-bar-container">
+                    <div id="modalProgressBar" class="loading-bar"></div>
+                </div>
+                <div id="modalLogOutput" style="font-family:'IBM Plex Mono', monospace; font-size:9px; height:60px; background:#111; color:#0f0; margin-top:10px; padding:6px; overflow-y:auto;">
+                    <!-- progress logs -->
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <button id="btnModalClose" class="btn-mini" style="width: 80px; padding: 4px 0; display: none;">ACKNOWLEDGE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN SIMULATION LOGIC & GRAPH INTERACTIVITY -->
+    <script>
+        // BOREHOLE DATA STORAGE
+        const BOREHOLES = {
+            "828x": {
+                coords: "45°32'12\"N 122°40'55\"W",
+                depth: 2850,
+                poreBase: 28.4,
+                normalStress: 62.5,
+                friction: 0.65,
+                cohesion: 4.2,
+                impedance: 0.088,
+                stratRatio: 0.81 // Granitic basement
+            },
+            "829y": {
+                coords: "45°33'01\"N 122°40'11\"W",
+                depth: 1450,
+                poreBase: 14.1,
+                normalStress: 36.2,
+                friction: 0.58,
+                cohesion: 3.1,
+                impedance: 0.145,
+                stratRatio: 0.42 // Siltstone layer
+            },
+            "830z": {
+                coords: "45°31'48\"N 122°41'32\"W",
+                depth: 2100,
+                poreBase: 21.8,
+                normalStress: 48.0,
+                friction: 0.61,
+                cohesion: 3.8,
+                impedance: 0.102,
+                stratRatio: 0.65 // Carbonate layer
+            }
+        };
+
+        // Active State variables
+        let activeBH = "828x";
+        let simulationRate = 1.0;
+        let sensorFaults = { p01: false, a04: false, t12: false };
+        let realTimeSeconds = 0;
+        
+        // Data buffers for graphs (120 values representing 120 seconds)
+        const historyBufferSize = 120;
+        const pressureHistory = Array(historyBufferSize).fill(0);
+        const flowHistory = Array(historyBufferSize).fill(0);
+
+        // Web Audio Variables (lazily initialized)
+        let audioCtx = null;
+        let audioEnabled = false;
+
+        // Initialize elements
+        const sldFlowRate = document.getElementById('sldFlowRate');
+        const sldDensity = document.getElementById('sldDensity');
+        const lblFlowRate = document.getElementById('lblFlowRate');
+        const lblFluidDensity = document.getElementById('lblFluidDensity');
+        const lblImpedance = document.getElementById('lblImpedance');
+        const lblHydrostatic = document.getElementById('lblHydrostatic');
+        const systemStatusPill = document.getElementById('systemStatusPill');
+
+        const valDownholePres = document.getElementById('valDownholePres');
+        const valEffNormal = document.getElementById('valEffNormal');
+        const valTauCrit = document.getElementById('valTauCrit');
+        const valShearStress = document.getElementById('valShearStress');
+        const lblSlipFactor = document.getElementById('lblSlipFactor');
+        const barSlipFactor = document.getElementById('barSlipFactor');
+        const depthIndicator = document.getElementById('depthIndicator');
+        const terminalLog = document.getElementById('terminalLog');
+
+        const btnAudioToggle = document.getElementById('btnAudioToggle');
+        const btnValveA = document.getElementById('btnValveA');
+        const btnValveB = document.getElementById('btnValveB');
+        const btnClearLog = document.getElementById('btnClearLog');
+        const btnInjectSpike = document.getElementById('btnInjectSpike');
+        const btnExport = document.getElementById('btnExport');
+        const btnCommit = document.getElementById('btnCommit');
+        
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalProgressText = document.getElementById('modalProgressText');
+        const modalProgressBar = document.getElementById('modalProgressBar');
+        const modalLogOutput = document.getElementById('modalLogOutput');
+        const btnModalClose = document.getElementById('btnModalClose');
+
+        // UTC Clock
+        function updateClock() {
+            const now = new Date();
+            const utcString = now.toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
+            document.getElementById('lblUtcClock').textContent = utcString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // LOGGING UTILITY
+        function addLog(message, type = 'info') {
+            const time = new Date().toISOString().substring(11, 23);
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+            line.innerHTML = `<span class="timestamp">[${time}]</span> <span class="${type}">${message}</span>`;
+            terminalLog.appendChild(line);
+            terminalLog.scrollTop = terminalLog.scrollHeight;
+        }
+
+        // Web Audio Initializer
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        btnAudioToggle.addEventListener('click', () => {
+            if (!audioEnabled) {
+                initAudio();
+                audioEnabled = true;
+                btnAudioToggle.textContent = "ON";
+                btnAudioToggle.style.backgroundColor = "var(--matrix-green)";
+                addLog("AUDIO TELEMETRY MONITOR INTERFACE ESTABLISHED", "info");
+                // Play short confirm chime
+                playChime(600, 0.05);
+                setTimeout(() => playChime(900, 0.08), 80);
+            } else {
+                audioEnabled = false;
+                btnAudioToggle.textContent = "OFF";
+                btnAudioToggle.style.backgroundColor = "#333";
+                addLog("AUDIO TELEMETRY MONITOR DEACTIVATED", "warning");
+            }
+        });
+
+        function playChime(freq, duration) {
+            if (!audioEnabled || !audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {}
+        }
+
+        // Play crackle sound for shear waves
+        function playCrackle(intensity) {
+            if (!audioEnabled || !audioCtx) return;
+            try {
+                const bufferSize = audioCtx.sampleRate * 0.05; // 50ms pulse
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                // Fill buffer with noise shaped like a quick decaying click
+                for (let i = 0; i < bufferSize; i++) {
+                    const decay = Math.exp(-i / (bufferSize * 0.15));
+                    data[i] = (Math.random() * 2 - 1) * decay * intensity * 0.3;
+                }
+                const noiseNode = audioCtx.createBufferSource();
+                noiseNode.buffer = buffer;
+                
+                // Add a low-frequency rumble if high intensity
+                if (intensity > 0.6) {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(60, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(intensity * 0.08, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.2);
+                }
+
+                noiseNode.connect(audioCtx.destination);
+                noiseNode.start();
+            } catch (e) {}
+        }
+
+        // BOREHOLE TAB SWITCHING
+        const tabs = document.querySelectorAll('.borehole-tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                activeBH = tab.getAttribute('data-bh');
+                
+                // Load configuration
+                const config = BOREHOLES[activeBH];
+                document.getElementById('cfgCoords').value = config.coords;
+                document.getElementById('cfgPoreBase').value = config.poreBase;
+                document.getElementById('cfgFriction').value = config.friction;
+                document.getElementById('cfgNormalStress').value = config.normalStress;
+                document.getElementById('cfgCohesion').value = config.cohesion;
+                document.getElementById('cfgDepth').value = config.depth;
+
+                // Adjust graphical depth indicator
+                depthIndicator.style.top = `${config.stratRatio * 100}%`;
+
+                // Log tab change
+                addLog(`GEOLOGICAL INDEX INTERCHANGE: LOADED BOREHOLE ${tab.textContent} DATA DECK`, 'info');
+                playChime(400, 0.1);
+                
+                // Recalculate simulation parameters instantly
+                runStabilityCalculation();
+            });
+        });
+
+        // VALVE OVERRIDES
+        btnValveA.addEventListener('click', () => {
+            btnValveA.classList.toggle('active');
+            const open = btnValveA.classList.contains('active');
+            btnValveA.textContent = open ? "VALVE ALPHA [OPEN]" : "VALVE ALPHA [SHUT]";
+            addLog(`HYDRAULIC MANIFOLD OVERRIDE: VALVE ALPHA SET TO ${open ? 'OPEN' : 'CLOSED'}`, open ? 'info' : 'warning');
+            playChime(open ? 450 : 350, 0.15);
+        });
+
+        btnValveB.addEventListener('click', () => {
+            btnValveB.classList.toggle('active');
+            const open = btnValveB.classList.contains('active');
+            btnValveB.textContent = open ? "VALVE BETA [OPEN]" : "VALVE BETA [SHUT]";
+            addLog(`HYDRAULIC MANIFOLD OVERRIDE: VALVE BETA SET TO ${open ? 'OPEN' : 'CLOSED'}`, open ? 'info' : 'warning');
+            playChime(open ? 450 : 350, 0.15);
+        });
+
+        btnClearLog.addEventListener('click', () => {
+            terminalLog.innerHTML = "";
+            addLog("LOCAL FLUIDICS REGISTRY LOG TERMINAL CLEARED", "warning");
+        });
+
+        btnInjectSpike.addEventListener('click', () => {
+            // Simulated instantaneous pressure drop/venting
+            sldFlowRate.value = 0;
+            lblFlowRate.textContent = "0.0";
+            addLog("CRITICAL DIRECTIVE: TRIGGERING AUTOMATIC EMERGENCY PRESSURE RELIEF VALVE", "error");
+            playChime(150, 0.4);
+            // Simulate sudden cooling / pressure release
+            for (let i = 0; i < historyBufferSize; i++) {
+                pressureHistory[i] = Math.max(28.4, pressureHistory[i] - 12);
+            }
+        });
+
+        // SENSOR CALIBRATION TRIGGERS
+        document.querySelectorAll('.btnCalib').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const sensor = e.target.getAttribute('data-sensor');
+                const dot = document.getElementById(`dot-${sensor}`);
+                const status = document.getElementById(`status-${sensor}`);
+                
+                e.target.disabled = true;
+                e.target.textContent = "RUNNING...";
+                dot.classList.add('fault'); // yellow-orange blinking equivalent
+                status.textContent = "CALIBRATION";
+                addLog(`CALIBRATING SENSOR DECK ${sensor.toUpperCase()} - RECORDING ZERO-POINT VALUES`, 'warning');
+                playChime(500, 0.2);
+
+                setTimeout(() => {
+                    const today = new Date().toISOString().split('T')[0];
+                    e.target.textContent = today;
+                    e.target.disabled = false;
+                    dot.classList.remove('fault');
+                    status.textContent = "NOMINAL";
+                    addLog(`SENSOR DECK ${sensor.toUpperCase()} CALIBRATION COMMITTED WITH ZERO OFFSET`, 'info');
+                    playChime(800, 0.05);
+                }, 2000);
+            });
+        });
+
+        // MATH CALCULATIONS
+        function runStabilityCalculation() {
+            // Inputs
+            const basePore = parseFloat(document.getElementById('cfgPoreBase').value);
+            const friction = parseFloat(document.getElementById('cfgFriction').value);
+            const normalStress = parseFloat(document.getElementById('cfgNormalStress').value);
+            const cohesion = parseFloat(document.getElementById('cfgCohesion').value);
+            const depth = parseFloat(document.getElementById('cfgDepth').value);
+            const flowRate = parseFloat(sldFlowRate.value);
+            const density = parseFloat(sldDensity.value);
+
+            // Compute Hydrostatic Pressure (P_hydro)
+            // Hydrostatic P = rho * g * depth / 1000
+            const g = 9.806;
+            const hydrostatic = (density * g * depth) / 1000;
+            lblHydrostatic.textContent = hydrostatic.toFixed(2);
+
+            // Impedance decreases if valves are open
+            let impedance = BOREHOLES[activeBH].impedance;
+            const vA = btnValveA.classList.contains('active');
+            const vB = btnValveB.classList.contains('active');
+            
+            // Adjust impedance based on valve configurations
+            if (!vA && !vB) impedance = 0.8; // System completely blocked!
+            else if (vA && vB) impedance = impedance * 0.5; // Flow shared
+            else if (!vA && vB) impedance = impedance * 1.5; // Alternative path restriction
+            lblImpedance.textContent = impedance.toFixed(3);
+
+            // Downhole Pressure
+            // Base pressure + hydrostatic contribution + pressure head due to pump impedance
+            const downholePressure = basePore + (flowRate * impedance);
+            valDownholePres.textContent = `${downholePressure.toFixed(2)} MPa`;
+
+            // Effective Normal Stress (sigma'_N = sigma_N - P_d)
+            const effNormal = Math.max(0, normalStress - downholePressure);
+            valEffNormal.textContent = `${effNormal.toFixed(2)} MPa`;
+
+            // Critical Shear Stress (tau_crit = C_o + mu * sigma'_N)
+            const tauCrit = cohesion + (friction * effNormal);
+            valTauCrit.textContent = `${tauCrit.toFixed(2)} MPa`;
+
+            // Calculated Shear Stress (simulated under shear strain loading)
+            // In a real reservoir, shear stress depends on regional tectonic forces,
+            // modeled here as a function of depth and geological parameters
+            const baselineShear = (normalStress * 0.4) + (depth * 0.001);
+            valShearStress.textContent = `${baselineShear.toFixed(2)} MPa`;
+
+            // Slip Factor (eta = tau / tau_crit)
+            const slipFactor = baselineShear / (tauCrit || 0.1);
+            lblSlipFactor.textContent = slipFactor.toFixed(3);
+            
+            // Adjust Slip safety bar
+            const pct = Math.min(100, Math.max(0, slipFactor * 100));
+            barSlipFactor.style.width = `${pct}%`;
+
+            if (slipFactor >= 1.0) {
+                barSlipFactor.style.backgroundColor = "var(--critical-red)";
+                systemStatusPill.textContent = "ALARM: CRITICAL FAULT SLIP";
+                systemStatusPill.className = "system-status-pill alarm";
+            } else if (slipFactor >= 0.8) {
+                barSlipFactor.style.backgroundColor = "var(--safety-orange)";
+                systemStatusPill.textContent = "WARN: HIGH SLIP FACTOR";
+                systemStatusPill.className = "system-status-pill bg-yellow";
+            } else {
+                barSlipFactor.style.backgroundColor = "var(--matrix-green)";
+                systemStatusPill.textContent = "SYS: NOMINAL";
+                systemStatusPill.className = "system-status-pill";
+            }
+
+            return {
+                downholePressure,
+                slipFactor
+            };
+        }
+
+        // REAL-TIME GRAPHS
+        const canvasSeismic = document.getElementById('canvasSeismic');
+        const ctxSeismic = canvasSeismic.getContext('2d');
+        const canvasPressure = document.getElementById('canvasPressure');
+        const ctxPressure = canvasPressure.getContext('2d');
+
+        function resizeCanvases() {
+            canvasSeismic.width = canvasSeismic.parentElement.clientWidth;
+            canvasSeismic.height = 150;
+            canvasPressure.width = canvasPressure.parentElement.clientWidth;
+            canvasPressure.height = 150;
+        }
+        window.addEventListener('resize', resizeCanvases);
+        resizeCanvases();
+
+        // Audio and physical ticking loop variables
+        let seismicAcoustics = []; // Ring buffer for oscilloscope
+        const seismicMaxPoints = 200;
+        for (let i = 0; i < seismicMaxPoints; i++) seismicAcoustics.push(0);
+
+        function drawSeismicScope(slipFactor) {
+            ctxSeismic.fillStyle = '#0b0e14';
+            ctxSeismic.fillRect(0, 0, canvasSeismic.width, canvasSeismic.height);
+
+            // Draw oscilloscope grid lines
+            ctxSeismic.strokeStyle = 'rgba(255,255,255,0.05)';
+            ctxSeismic.lineWidth = 1;
+            // Vertical divisions
+            const divisions = 8;
+            for (let i = 0; i <= divisions; i++) {
+                const x = (canvasSeismic.width / divisions) * i;
+                ctxSeismic.beginPath();
+                ctxSeismic.moveTo(x, 0);
+                ctxSeismic.lineTo(x, canvasSeismic.height);
+                ctxSeismic.stroke();
+            }
+            // Horizontal baseline
+            ctxSeismic.beginPath();
+            ctxSeismic.moveTo(0, canvasSeismic.height / 2);
+            ctxSeismic.lineTo(canvasSeismic.width, canvasSeismic.height / 2);
+            ctxSeismic.stroke();
+
+            // Shift geophone recording and append new data point
+            seismicAcoustics.shift();
+            
+            // Calculate baseline noise + random acoustic spikes depending on slip factor
+            let noise = (Math.random() - 0.5) * 5;
+            let crackleTriggered = false;
+            let crackleIntensity = 0;
+
+            if (slipFactor > 0.8) {
+                // High probability of micro-seismic cracking events
+                if (Math.random() < (slipFactor - 0.7) * 0.6) {
+                    const amplitude = (slipFactor - 0.7) * 60;
+                    noise += (Math.random() - 0.5) * amplitude;
+                    crackleTriggered = true;
+                    crackleIntensity = (slipFactor - 0.7) * 2;
+                }
+            } else {
+                // Tiny background fracturing
+                if (Math.random() < 0.05) {
+                    noise += (Math.random() - 0.5) * 15;
+                    crackleTriggered = true;
+                    crackleIntensity = 0.15;
+                }
+            }
+
+            if (crackleTriggered) {
+                playCrackle(crackleIntensity);
+                if (crackleIntensity > 0.5) {
+                    addLog(`MICRO-SEISMIC FAULT CRACKLE DETECTED [AMP: ${crackleIntensity.toFixed(2)} mm/s]`, 'warning');
+                }
+            }
+
+            seismicAcoustics.push(noise);
+
+            // Plot the points on the oscilloscope
+            ctxSeismic.strokeStyle = slipFactor >= 1.0 ? '#ff5000' : (slipFactor >= 0.8 ? '#ffd000' : '#00ff66');
+            ctxSeismic.lineWidth = 1.5;
+            ctxSeismic.beginPath();
+            
+            const dx = canvasSeismic.width / (seismicMaxPoints - 1);
+            for (let i = 0; i < seismicMaxPoints; i++) {
+                const x = i * dx;
+                const y = (canvasSeismic.height / 2) + seismicAcoustics[i];
+                if (i === 0) ctxSeismic.moveTo(x, y);
+                else ctxSeismic.lineTo(x, y);
+            }
+            ctxSeismic.stroke();
+        }
+
+        function drawPressureProfile(flowRate, downholePressure) {
+            ctxPressure.fillStyle = '#0b0e14';
+            ctxPressure.fillRect(0, 0, canvasPressure.width, canvasPressure.height);
+
+            // Shift history arrays
+            pressureHistory.shift();
+            pressureHistory.push(downholePressure);
+            flowHistory.shift();
+            flowHistory.push(flowRate);
+
+            // Draw grid
+            ctxPressure.strokeStyle = 'rgba(255,255,255,0.05)';
+            ctxPressure.lineWidth = 1;
+            const divs = 6;
+            for (let i = 0; i <= divs; i++) {
+                const y = (canvasPressure.height / divs) * i;
+                ctxPressure.beginPath();
+                ctxPressure.moveTo(0, y);
+                ctxPressure.lineTo(canvasPressure.width, y);
+                ctxPressure.stroke();
+            }
+
+            const dx = canvasPressure.width / (historyBufferSize - 1);
+
+            // 1. Draw Downhole Pressure in BLUE (scale: 0 to 100 MPa)
+            ctxPressure.strokeStyle = '#3388ff';
+            ctxPressure.lineWidth = 1.5;
+            ctxPressure.beginPath();
+            for (let i = 0; i < historyBufferSize; i++) {
+                const x = i * dx;
+                // invert y because screen coords start at top
+                const y = canvasPressure.height - (pressureHistory[i] / 100) * canvasPressure.height;
+                if (i === 0) ctxPressure.moveTo(x, y);
+                else ctxPressure.lineTo(x, y);
+            }
+            ctxPressure.stroke();
+
+            // 2. Draw Injection Flow Rate in ORANGE (scale: 0 to 200 L/min)
+            ctxPressure.strokeStyle = '#ff6600';
+            ctxPressure.lineWidth = 1;
+            ctxPressure.beginPath();
+            for (let i = 0; i < historyBufferSize; i++) {
+                const x = i * dx;
+                const y = canvasPressure.height - (flowHistory[i] / 200) * canvasPressure.height;
+                if (i === 0) ctxPressure.moveTo(x, y);
+                else ctxPressure.lineTo(x, y);
+            }
+            ctxPressure.stroke();
+        }
+
+        // INPUT EVENT LISTENERS
+        sldFlowRate.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value).toFixed(1);
+            lblFlowRate.textContent = val;
+            runStabilityCalculation();
+        });
+
+        sldDensity.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value).toFixed(2);
+            lblFluidDensity.textContent = val;
+            runStabilityCalculation();
+        });
+
+        document.getElementById('cfgPoreBase').addEventListener('input', runStabilityCalculation);
+        document.getElementById('cfgFriction').addEventListener('input', runStabilityCalculation);
+        document.getElementById('cfgNormalStress').addEventListener('input', runStabilityCalculation);
+        document.getElementById('cfgCohesion').addEventListener('input', runStabilityCalculation);
+        document.getElementById('cfgDepth').addEventListener('input', runStabilityCalculation);
+
+        // SYSTEM CLOCK LOOP FOR CALCULATIONS (runs at 5Hz for smooth rendering)
+        setInterval(() => {
+            const calc = runStabilityCalculation();
+            drawSeismicScope(calc.slipFactor);
+        }, 150);
+
+        // DATASTREAMS BUFFER LOGGING LOOP (runs at 1Hz)
+        setInterval(() => {
+            const calc = runStabilityCalculation();
+            const flowRate = parseFloat(sldFlowRate.value);
+            drawPressureProfile(flowRate, calc.downholePressure);
+
+            // Appends standard telemetry logging
+            realTimeSeconds++;
+            if (realTimeSeconds % 10 === 0) {
+                addLog(`TELEMETRY BROADCAST: P_D=${calc.downholePressure.toFixed(2)}MPa, Q=${flowRate.toFixed(1)}L/MIN, SLIP_ETA=${calc.slipFactor.toFixed(3)}`, 'info');
+            }
+
+            // Occasional simulated warnings
+            if (calc.slipFactor >= 1.0 && realTimeSeconds % 5 === 0) {
+                addLog(`CRITICAL FAILURE: MOHR-COULOMB FAULT SLIP INDEX EXCEEDED ON ACTIVE WELL STRATA`, 'error');
+            } else if (calc.slipFactor >= 0.8 && realTimeSeconds % 8 === 0) {
+                addLog(`WARNING: SHEAR RATE ACCELERATING // MONITOR VALVE MANIFOLD TEMPERATURES`, 'warning');
+            }
+        }, 1000);
+
+        // EXPORT TO CSV RAW TEXT
+        btnExport.addEventListener('click', () => {
+            let csvContent = "data:text/csv;charset=utf-8,TIMESTAMP_UTC,BOREHOLE,DOWNHOLE_PRESSURE_MPA,INJECTION_FLOW_LMIN,SLIP_FACTOR\n";
+            const now = new Date().toISOString();
+            const calc = runStabilityCalculation();
+            csvContent += `"${now}","${activeBH}",${calc.downholePressure.toFixed(3)},${sldFlowRate.value},${calc.slipFactor.toFixed(3)}\n`;
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `REG_${activeBH}_TECTONIC_LOG.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            addLog("METRICS COMPILED AND EXPORTED TO RESERVOIR CSV ARCHIVE", "info");
+            playChime(1000, 0.08);
+        });
+
+        // CRYPTOGRAPHIC REGISTRY COMMIT MODAL FLOW
+        btnCommit.addEventListener('click', () => {
+            modalOverlay.style.display = "flex";
+            btnModalClose.style.style = "none";
+            modalLogOutput.innerHTML = "";
+            
+            addModalLog("Connecting to secure geotechnical distributed registry...");
+            playChime(600, 0.1);
+
+            let progress = 0;
+            const timer = setInterval(() => {
+                progress += Math.floor(Math.random() * 15) + 5;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(timer);
+                    addModalLog("Data signed with cryptokey OP-GEOPHYS-99082.");
+                    addModalLog("Registry block successfully appended and committed.");
+                    addModalLog("STATUS: RECORD IRREVERSIBLE.");
+                    btnModalClose.style.display = "inline-block";
+                    playChime(900, 0.2);
+                } else {
+                    if (progress > 30 && progress < 50) {
+                        addModalLog(`Hashing active log frames (${progress}%)...`);
+                    } else if (progress > 60 && progress < 80) {
+                        addModalLog("Verifying consensus node stability...");
+                    }
+                }
+                modalProgressText.textContent = `${progress}%`;
+                modalProgressBar.style.width = `${progress}%`;
+            }, 250);
+        });
+
+        function addModalLog(text) {
+            const div = document.createElement('div');
+            div.textContent = `> ${text}`;
+            modalLogOutput.appendChild(div);
+            modalLogOutput.scrollTop = modalLogOutput.scrollHeight;
+        }
+
+        btnModalClose.addEventListener('click', () => {
+            modalOverlay.style.display = "none";
+            addLog("SECURE BLOCKCHAIN REGISTRY DIRECTIVE CONFIRMED // ID: COMMITTED", "info");
+        });
+
+        // Initialize calculations & graph profile
+        const initialCalc = runStabilityCalculation();
+        drawPressureProfile(parseFloat(sldFlowRate.value), initialCalc.downholePressure);
+
+        addLog("TECTONIC STRESS REGISTRY DAEMON STARTED", "info");
+        addLog(`BOREHOLE INITIALIZED: ${BOREHOLES[activeBH].coords} - TARGET ZONE: ${BOREHOLES[activeBH].depth}m`, "info");
+    </script>
+</body>
+</html>

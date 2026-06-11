@@ -1,0 +1,2632 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DesignCraft — Interactive UX/UI Playground & Design Systems Lab</title>
+  <meta name="description" content="A premium playground for UI/UX designers to test glassmorphism, create fluid typography scales, preview bezier motion curves, verify color contrast, and export CSS tokens.">
+  
+  <!-- Fonts: Satoshi & Cabinet Grotesk from Fontshare -->
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@900,800,700,500&f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet">
+  
+  <style>
+/* ==========================================================================
+   DesignCraft — Core Design System & Theme Engine
+   Built using Cascade Layers for clean architecture.
+   ========================================================================== */
+
+@layer reset, base, theme, layout, components, utilities;
+
+@layer reset {
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  button, input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+  }
+}
+
+@layer base {
+  :root {
+    /* Brand Design Tokens (Default Dark) */
+    --font-sans: 'Satoshi', system-ui, -apple-system, sans-serif;
+    --font-display: 'Cabinet Grotesk', system-ui, sans-serif;
+
+    /* Theme color variables - OKLCH model */
+    --bg-base: oklch(0.12 0.015 250);
+    --bg-elevated: oklch(0.16 0.02 250);
+    --bg-surface: oklch(0.20 0.025 250);
+    --bg-heavy: oklch(0.24 0.03 250);
+    
+    --text-primary: oklch(0.96 0.005 250);
+    --text-muted: oklch(0.74 0.01 250);
+    --text-subtle: oklch(0.52 0.015 250);
+    
+    --accent: oklch(0.68 0.18 310); /* Neon purple/violet */
+    --accent-hover: oklch(0.74 0.18 310);
+    --accent-dim: oklch(0.68 0.18 310 / 0.15);
+    
+    --border-color: oklch(1 0 0 / 0.08);
+    --border-strong: oklch(1 0 0 / 0.18);
+    
+    /* Layout */
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 8px oklch(0 0 0 / 0.2);
+    --shadow-md: 0 8px 30px oklch(0 0 0 / 0.3);
+    --shadow-lg: 0 20px 50px oklch(0 0 0 / 0.4);
+    
+    /* Transitions */
+    --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fluid: 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  [data-theme="light"] {
+    --bg-base: oklch(0.97 0.005 250);
+    --bg-elevated: oklch(0.93 0.008 250);
+    --bg-surface: oklch(0.88 0.01 250);
+    --bg-heavy: oklch(0.82 0.015 250);
+    
+    --text-primary: oklch(0.18 0.01 250);
+    --text-muted: oklch(0.42 0.015 250);
+    --text-subtle: oklch(0.60 0.015 250);
+    
+    --accent: oklch(0.56 0.18 310);
+    --accent-hover: oklch(0.48 0.18 310);
+    --accent-dim: oklch(0.56 0.18 310 / 0.1);
+    
+    --border-color: oklch(0 0 0 / 0.08);
+    --border-strong: oklch(0 0 0 / 0.18);
+    
+    --shadow-sm: 0 2px 8px oklch(0 0 0 / 0.05);
+    --shadow-md: 0 8px 30px oklch(0 0 0 / 0.08);
+    --shadow-lg: 0 20px 50px oklch(0 0 0 / 0.12);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    color: var(--text-primary);
+    background-color: var(--bg-base);
+    line-height: 1.6;
+    transition: background-color var(--transition-normal), color var(--transition-normal);
+  }
+
+  /* Custom Selection */
+  ::selection {
+    background-color: var(--accent);
+    color: white;
+  }
+
+  /* Custom Scrollbars */
+  scrollbar-color: var(--border-strong) transparent;
+  scrollbar-width: thin;
+
+  /* Global focus visible outline */
+  *:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+}
+
+@layer components {
+  /* Noise overlay for texture */
+  .noise-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  [data-theme="light"] .noise-overlay {
+    opacity: 0.045;
+  }
+
+  /* Sticky Navigation */
+  .nav-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 72px;
+    z-index: 1000;
+    background-color: rgb(from var(--bg-base) r g b / 0.7);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-color);
+    transition: height var(--transition-normal), background-color var(--transition-normal);
+  }
+
+  .nav-container {
+    max-width: 1400px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 1.25rem;
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  .logo-mark {
+    color: var(--accent);
+  }
+
+  .logo-text span {
+    color: var(--accent);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .nav-link {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+    position: relative;
+    padding: 0.5rem 0;
+  }
+
+  .nav-link:hover {
+    color: var(--text-primary);
+  }
+
+  .nav-link.active {
+    color: var(--accent);
+  }
+
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--accent);
+    border-radius: 2px;
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* Theme Switch Button */
+  .theme-toggle-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-primary);
+    transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .theme-toggle-btn:hover {
+    background-color: var(--bg-heavy);
+    border-color: var(--border-strong);
+    transform: scale(1.05);
+  }
+
+  .theme-toggle-btn svg {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  [data-theme="light"] .icon-moon { display: none; }
+  [data-theme="dark"] .icon-sun { display: none; }
+
+  /* Scroll Progress Bar */
+  .scroll-progress-bar {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--accent), oklch(0.7 0.15 150));
+    width: 0%;
+    transition: width 0.1s linear;
+  }
+
+  /* Button Design */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+  }
+
+  .btn-primary {
+    background-color: var(--accent);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--accent-dim);
+  }
+
+  .btn-secondary {
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--bg-heavy);
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+  }
+
+  .btn-copy {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+  }
+
+  .btn-copy:hover {
+    background-color: var(--bg-heavy);
+    border-color: var(--border-strong);
+  }
+
+  .btn-copy.copied {
+    background-color: oklch(0.65 0.14 140); /* green */
+    color: white;
+    border-color: transparent;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    background-color: var(--accent-dim);
+    color: var(--accent);
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Bento Layout Panels */
+  .panel {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+    transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+  }
+
+  .panel:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-md);
+  }
+
+  .panel-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+  }
+
+  .divider {
+    border: 0;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 1.5rem 0;
+  }
+}
+
+@layer layout {
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* Hero Section */
+  .hero-section {
+    padding: 160px 0 100px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Decorative radial blur */
+  .hero-section::after {
+    content: '';
+    position: absolute;
+    top: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent-dim) 0%, transparent 70%);
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .hero-content {
+    max-width: 650px;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--accent), oklch(0.75 0.18 15));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-subtitle {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    margin-bottom: 2.5rem;
+    max-width: 550px;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    gap: 1rem;
+  }
+
+  /* Interactive Hero Glass Card */
+  .hero-visual {
+    display: flex;
+    justify-content: center;
+    perspective: 1000px;
+  }
+
+  .interactive-hero-card {
+    width: 100%;
+    max-width: 440px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(20px);
+    padding: 1.5rem;
+    transition: transform var(--transition-fluid);
+    transform-style: preserve-3d;
+  }
+
+  .card-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .dot.red { background-color: #ff5f56; }
+  .dot.yellow { background-color: #ffbd2e; }
+  .dot.green { background-color: #27c93f; }
+
+  .card-title {
+    font-size: 0.8rem;
+    color: var(--text-subtle);
+    margin-left: auto;
+    font-weight: 500;
+  }
+
+  .card-tag {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .card-heading {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  .card-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .card-visual-element {
+    height: 150px;
+    background: radial-gradient(circle at 30% 30%, var(--accent-dim) 0%, transparent 60%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* General Lab Section Header */
+  .lab-section {
+    padding: 80px 0;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .section-header {
+    margin-bottom: 3.5rem;
+    max-width: 750px;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+  }
+
+  .section-lead {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+  }
+
+  /* Two Column Playground Bento Layout */
+  .playground-grid {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+}
+
+@layer utilities {
+  /* Controls UI */
+  .control-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .control-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .val-display {
+    color: var(--accent);
+    font-family: monospace;
+    font-size: 0.85rem;
+  }
+
+  /* Custom styled sliders */
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    outline: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg-surface);
+    cursor: pointer;
+    transition: transform var(--transition-fast), background var(--transition-fast);
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    background: var(--accent-hover);
+  }
+
+  .bg-selector-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .bg-btn {
+    height: 36px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .bg-btn:hover {
+    transform: scale(1.05);
+  }
+
+  .bg-btn.active {
+    border-color: var(--accent);
+    transform: scale(1.05);
+  }
+
+  /* Code output block styles */
+  .code-output-container {
+    margin-top: 1.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-base);
+    overflow: hidden;
+  }
+
+  .code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--bg-elevated);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .css-code {
+    display: block;
+    padding: 1.25rem;
+    font-family: 'Satoshi-Mono', 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    color: var(--accent-hover);
+    line-height: 1.5;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  /* Glassmorphism Visual Preview Box */
+  .preview-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .preview-area {
+    flex-grow: 1;
+    min-height: 380px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    transition: background 0.3s ease;
+  }
+
+  /* Mesh Background styling */
+  .preview-area[data-bg="gradient"] {
+    background: linear-gradient(135deg, #130f40 0%, #000000 100%);
+  }
+
+  .preview-area[data-bg="dark-mesh"] {
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+  }
+
+  .preview-area[data-bg="radial"] {
+    background: radial-gradient(circle at center, #2e0854 0%, #08020f 80%);
+  }
+
+  .preview-area[data-bg="mesh"] {
+    background: linear-gradient(45deg, #2c003e 0%, #032030 100%);
+  }
+
+  /* Ambient floating blobs for glass visual check */
+  .background-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.65;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .anim-blob-1 {
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, #ff0055 0%, transparent 70%);
+    top: 25%;
+    left: 25%;
+    animation: float-1 12s infinite alternate ease-in-out;
+  }
+
+  .anim-blob-2 {
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, #0055ff 0%, transparent 70%);
+    bottom: 20%;
+    right: 20%;
+    animation: float-2 16s infinite alternate ease-in-out;
+  }
+
+  @keyframes float-1 {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(60px, 40px) scale(1.2); }
+  }
+
+  @keyframes float-2 {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(-80px, -50px) scale(0.9); }
+  }
+
+  /* Interactive card under glass settings */
+  .glass-card-preview {
+    width: 100%;
+    max-width: 360px;
+    padding: 2.25rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    z-index: 2;
+    transition: background 0.2s ease, backdrop-filter 0.2s ease, border-radius 0.2s ease, border 0.2s ease;
+  }
+
+  .glass-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .glass-card-header .icon {
+    font-size: 1.25rem;
+  }
+
+  .glass-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .glass-body {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
+
+  .glass-tag {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  [data-theme="light"] .glass-tag {
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+  }
+
+  /* Preset Selection Buttons */
+  .preset-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .btn-preset {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    text-align: left;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-preset:hover {
+    background-color: var(--bg-heavy);
+  }
+
+  .btn-preset.active {
+    background-color: var(--accent-dim);
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .action-row {
+    margin-top: 1.5rem;
+  }
+
+  .flex-gap {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  /* Cubic Bezier visual design split */
+  .bezier-playground-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    flex-grow: 1;
+    min-height: 280px;
+  }
+
+  .bezier-svg-container {
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .bezier-graph {
+    width: 100%;
+    aspect-ratio: 1;
+    background-color: var(--bg-base);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    overflow: visible;
+  }
+
+  .graph-legend {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .motion-tracks-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .track-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .motion-track {
+    height: 40px;
+    background-color: var(--bg-base);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  .motion-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--accent);
+    box-shadow: 0 0 10px var(--accent-dim);
+    position: absolute;
+    left: 20px;
+    transition: left 0.6s;
+  }
+
+  .motion-dot.linear {
+    background-color: var(--text-muted);
+    box-shadow: none;
+  }
+
+  /* Token Workspace structures */
+  .token-workspace-grid {
+    display: grid;
+    grid-template-columns: 440px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .tabs-header {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .tab-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+
+  .tab-btn.active {
+    background-color: var(--bg-heavy);
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .tab-description {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+  }
+
+  .mt-md {
+    margin-top: 1.25rem;
+  }
+
+  .group-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-subtle);
+    text-transform: uppercase;
+    margin: 1.5rem 0 0.75rem;
+  }
+
+  .palette-swatch-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .color-swatch-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+  }
+
+  .swatch-color-box {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .swatch-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .swatch-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .swatch-hex {
+    font-size: 0.75rem;
+    font-family: monospace;
+    color: var(--text-subtle);
+  }
+
+  .swatch-lch-val {
+    margin-left: auto;
+    font-size: 0.75rem;
+    font-family: monospace;
+    color: var(--accent);
+  }
+
+  .variables-code-wrapper {
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-base);
+    overflow: hidden;
+  }
+
+  .token-preview-area {
+    margin-bottom: 2rem;
+  }
+
+  .preview-example-box {
+    padding: 2rem;
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+  }
+
+  .fluid-preview-text {
+    font-family: var(--font-display);
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .fluid-preview-body {
+    font-size: 1rem;
+    color: var(--text-muted);
+  }
+
+  /* Accessibility Checker Rules */
+  .a11y-tab-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+
+  .a11y-tab-btn.active {
+    background-color: var(--bg-heavy);
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .a11y-tab-content {
+    margin-top: 1.25rem;
+  }
+
+  .picker-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  input[type="color"] {
+    -webkit-appearance: none;
+    border: none;
+    width: 44px;
+    height: 38px;
+    border-radius: 4px;
+    cursor: pointer;
+    background: none;
+  }
+
+  input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+
+  input[type="color"]::-webkit-color-swatch {
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+  }
+
+  .text-hex-field {
+    flex-grow: 1;
+    height: 38px;
+    padding: 0 0.75rem;
+    border-radius: 4px;
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    font-family: monospace;
+    font-size: 0.9rem;
+  }
+
+  .text-hex-field:focus {
+    border-color: var(--accent);
+    outline: none;
+  }
+
+  .a11y-visual-area {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .contrast-preview-display {
+    padding: 3rem 2rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 2rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .contrast-preview-display h4 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+
+  .contrast-preview-display p {
+    font-size: 0.95rem;
+  }
+
+  .contrast-score-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .score-card {
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  .score-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-subtle);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .score-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--accent);
+    font-family: monospace;
+  }
+
+  .badge-status-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .badge-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .status-indicator {
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: white;
+  }
+
+  .status-indicator.pass {
+    background-color: oklch(0.62 0.15 140); /* Soft green */
+  }
+
+  .status-indicator.fail {
+    background-color: oklch(0.60 0.16 25); /* Soft red */
+  }
+
+  /* Target Auditor Arena */
+  .target-grid-visualizer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 1rem;
+    flex-grow: 1;
+  }
+
+  .target-card {
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .target-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-subtle);
+    margin-bottom: 1.5rem;
+  }
+
+  .target-wrapper {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+  }
+
+  /* Target simulated hit boxes */
+  .test-target-button {
+    background-color: var(--accent-dim);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    transition: all var(--transition-fast);
+  }
+
+  .test-target-button:hover {
+    background-color: var(--accent);
+    transform: scale(1.1);
+  }
+
+  .target-24 { width: 24px; height: 24px; }
+  .target-32 { width: 32px; height: 32px; }
+  .target-44 { width: 44px; height: 44px; }
+  .target-48 { width: 48px; height: 48px; }
+
+  /* Pointer simulation touch zone rings helper */
+  .test-target-button::before {
+    content: '';
+    position: absolute;
+    inset: -12px; /* standard coarse pointer click error margin helper */
+    border: 1px dashed var(--accent);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    pointer-events: none;
+  }
+
+  .coarse-pointers .test-target-button::before {
+    opacity: 0.4;
+  }
+
+  .click-indicator {
+    font-size: 0.75rem;
+    font-family: monospace;
+    color: var(--text-subtle);
+    margin-top: 1rem;
+  }
+
+  .click-indicator.hit {
+    color: oklch(0.65 0.15 140);
+    font-weight: 700;
+  }
+
+  /* Footer styling */
+  .footer {
+    border-top: 1px solid var(--border-color);
+    background-color: var(--bg-surface);
+    padding: 2.5rem 0;
+    margin-top: 100px;
+  }
+
+  .footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .footer-logo svg {
+    color: var(--accent);
+  }
+
+  .footer-copy {
+    font-size: 0.85rem;
+    color: var(--text-subtle);
+  }
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .playground-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .token-workspace-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .hero-content {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .hero-subtitle {
+    margin-inline: auto;
+  }
+
+  .hero-cta-group {
+    justify-content: center;
+  }
+
+  .hero-visual {
+    order: -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none; /* simple responsive navigation simplification */
+  }
+
+  .nav-container {
+    padding: 0 1.25rem;
+  }
+
+  .container {
+    padding: 0 1.25rem;
+  }
+
+  .target-grid-visualizer {
+    grid-template-columns: 1fr;
+  }
+
+  .bezier-playground-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hidden {
+  display: none !important;
+}
+
+</style>
+  
+  <!-- Support both dark and light modes -->
+  <meta name="color-scheme" content="dark light">
+  
+  <!-- Early Inline Script: Prevent FOUC and set theme before render -->
+  <script>
+    {
+      const savedTheme = localStorage.getItem("theme");
+      const systemPrefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+      const activeTheme = savedTheme ? savedTheme : (systemPrefersLight ? "light" : "dark");
+      document.documentElement.setAttribute("data-theme", activeTheme);
+      document.querySelector('meta[name="color-scheme"]').content = activeTheme;
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Floating Noise overlay for material texture -->
+  <div class="noise-overlay" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <nav class="nav-bar" id="main-nav" aria-label="Main Navigation">
+    <div class="nav-container">
+      <a href="#" class="nav-logo" aria-label="DesignCraft Home">
+        <svg class="logo-mark" viewBox="0 0 100 100" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="15" y="15" width="70" height="70" rx="20" stroke="currentColor" stroke-width="8" stroke-linejoin="round" />
+          <circle cx="50" cy="50" r="18" stroke="currentColor" stroke-width="6" />
+          <path d="M50 15V32M50 68V85M15 50H32M68 50H85" stroke="currentColor" stroke-width="6" stroke-linecap="round" />
+        </svg>
+        <span class="logo-text">design<span>craft</span></span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#hero" class="nav-link active">Home</a>
+        <a href="#ui-lab" class="nav-link">UI Lab</a>
+        <a href="#motion-studio" class="nav-link">Motion</a>
+        <a href="#token-builder" class="nav-link">Tokens</a>
+        <a href="#a11y-room" class="nav-link">Accessibility</a>
+      </div>
+
+      <div class="nav-actions">
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" aria-pressed="false">
+          <!-- Moon Icon -->
+          <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <!-- Sun Icon -->
+          <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.77" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <!-- Scroll Progress Indicator -->
+    <div class="scroll-progress-bar" id="scroll-progress" aria-hidden="true"></div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section" id="hero">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <span class="badge">DESIGN LAB & STUDIO</span>
+        <h1 class="hero-title">Where Code Meets <br><span class="gradient-text">Pure Aesthetics</span></h1>
+        <p class="hero-subtitle">An interactive canvas for UI engineers and UX designers to craft, test, and export premium design systems, micro-interactions, and visual tokens.</p>
+        <div class="hero-cta-group">
+          <a href="#ui-lab" class="btn btn-primary">Open UI Lab</a>
+          <a href="#token-builder" class="btn btn-secondary">Build Tokens</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="interactive-hero-card">
+          <div class="card-inner">
+            <div class="card-header">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+              <span class="card-title">Interactive Preview</span>
+            </div>
+            <div class="card-body">
+              <p class="card-tag">AURA SYSTEM</p>
+              <h2 class="card-heading">Glassmorphic Material</h2>
+              <p class="card-desc">Move your cursor to witness dynamic lighting effects and backdrop-filtering updates.</p>
+              <div class="card-visual-element"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- Section 1: UI Lab (Glassmorphism & Bento Gallery) -->
+    <section class="lab-section" id="ui-lab">
+      <div class="section-header">
+        <h2 class="section-title">01 / UI Lab & Glassmorphism</h2>
+        <p class="section-lead">Tweak surface specs in real-time. Watch how physical depth and lighting affect layout surfaces, then instantly grab the CSS styling rules.</p>
+      </div>
+
+      <div class="playground-grid">
+        <!-- Controls Panel -->
+        <div class="panel control-panel">
+          <h3 class="panel-title">Material Settings</h3>
+          
+          <div class="control-group">
+            <label for="blur-slider" class="control-label">
+              <span>Backdrop Blur</span>
+              <span class="val-display" id="blur-val">12px</span>
+            </label>
+            <input type="range" id="blur-slider" min="0" max="40" value="12" step="1">
+          </div>
+
+          <div class="control-group">
+            <label for="opacity-slider" class="control-label">
+              <span>Background Opacity</span>
+              <span class="val-display" id="opacity-val">0.30</span>
+            </label>
+            <input type="range" id="opacity-slider" min="0.05" max="0.95" value="0.30" step="0.01">
+          </div>
+
+          <div class="control-group">
+            <label for="saturation-slider" class="control-label">
+              <span>Saturate (Color Boost)</span>
+              <span class="val-display" id="saturation-val">120%</span>
+            </label>
+            <input type="range" id="saturation-slider" min="50" max="250" value="120" step="5">
+          </div>
+
+          <div class="control-group">
+            <label for="border-slider" class="control-label">
+              <span>Border Opacity</span>
+              <span class="val-display" id="border-val">0.12</span>
+            </label>
+            <input type="range" id="border-slider" min="0" max="0.5" value="0.12" step="0.01">
+          </div>
+
+          <div class="control-group">
+            <label for="radius-slider" class="control-label">
+              <span>Border Radius</span>
+              <span class="val-display" id="radius-val">16px</span>
+            </label>
+            <input type="range" id="radius-slider" min="0" max="48" value="16" step="2">
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Preview Background</label>
+            <div class="bg-selector-grid">
+              <button class="bg-btn active" data-bg="gradient" style="background: linear-gradient(135deg, #ff0055, #0055ff);"></button>
+              <button class="bg-btn" data-bg="dark-mesh" style="background: linear-gradient(135deg, #120c1f, #05161a);"></button>
+              <button class="bg-btn" data-bg="radial" style="background: radial-gradient(circle, #8a2be2, #000 70%);"></button>
+              <button class="bg-btn" data-bg="mesh" style="background: linear-gradient(45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Visual Preview -->
+        <div class="panel preview-panel" id="glass-preview-container">
+          <div class="preview-area" id="glass-preview-bg">
+            <!-- Animated background circle for overlay reference -->
+            <div class="background-blob anim-blob-1" id="blob-1"></div>
+            <div class="background-blob anim-blob-2" id="blob-2"></div>
+            
+            <div class="glass-card-preview" id="glass-card">
+              <div class="glass-card-header">
+                <span class="icon">✨</span>
+                <h4 class="glass-title">Dynamic CSS Material</h4>
+              </div>
+              <p class="glass-body">This card uses native CSS backdrop filtering. Move the sliders to dynamically mutate properties on the fly.</p>
+              <div class="glass-tag">OKLCH Compositing</div>
+            </div>
+          </div>
+          
+          <div class="code-output-container">
+            <div class="code-header">
+              <span>CSS Rules</span>
+              <button class="btn btn-copy" id="copy-glass-css" aria-label="Copy CSS code">Copy</button>
+            </div>
+            <pre><code class="css-code" id="glass-css-output">
+background: rgba(255, 255, 255, 0.3);
+backdrop-filter: blur(12px) saturate(120%);
+border: 1px solid rgba(255, 255, 255, 0.12);
+border-radius: 16px;
+            </code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Motion Studio (Cubic Bezier Playground) -->
+    <section class="lab-section" id="motion-studio">
+      <div class="section-header">
+        <h2 class="section-title">02 / Cubic Bezier Motion Studio</h2>
+        <p class="section-lead">Animate micro-interactions using modern cubic-bezier timing functions. Select a curve profile or tweak the coordinates, trigger the motion, and copy the parameters.</p>
+      </div>
+
+      <div class="playground-grid">
+        <!-- Bezier Curve Controller -->
+        <div class="panel control-panel">
+          <h3 class="panel-title">Motion Presets</h3>
+          
+          <div class="preset-buttons-grid">
+            <button class="btn btn-preset active" data-curve="0.25, 1, 0.5, 1">Snappy (Out-Expo)</button>
+            <button class="btn btn-preset" data-curve="0.68, -0.6, 0.32, 1.6">Spring / Elastic</button>
+            <button class="btn btn-preset" data-curve="0.4, 0, 0.2, 1">Fluid (Swift Out)</button>
+            <button class="btn btn-preset" data-curve="0.175, 0.885, 0.32, 1.275">Bouncy Over</button>
+            <button class="btn btn-preset" data-curve="0.25, 0.1, 0.25, 1">Ease</button>
+            <button class="btn btn-preset" data-curve="0, 0, 1, 1">Linear</button>
+          </div>
+
+          <hr class="divider">
+
+          <h3 class="panel-title">Custom Coordinates</h3>
+          <div class="coordinate-sliders">
+            <div class="control-group">
+              <label for="x1-slider" class="control-label">
+                <span>X1 (P1 Time)</span>
+                <span class="val-display" id="x1-val">0.25</span>
+              </label>
+              <input type="range" id="x1-slider" min="0" max="1" value="0.25" step="0.01">
+            </div>
+
+            <div class="control-group">
+              <label for="y1-slider" class="control-label">
+                <span>Y1 (P1 Progress)</span>
+                <span class="val-display" id="y1-val">1.00</span>
+              </label>
+              <input type="range" id="y1-slider" min="-1" max="2" value="1.00" step="0.01">
+            </div>
+
+            <div class="control-group">
+              <label for="x2-slider" class="control-label">
+                <span>X2 (P2 Time)</span>
+                <span class="val-display" id="x2-val">0.50</span>
+              </label>
+              <input type="range" id="x2-slider" min="0" max="1" value="0.50" step="0.01">
+            </div>
+
+            <div class="control-group">
+              <label for="y2-slider" class="control-label">
+                <span>Y2 (P2 Progress)</span>
+                <span class="val-display" id="y2-val">1.00</span>
+              </label>
+              <input type="range" id="y2-slider" min="-1" max="2" value="1.00" step="0.01">
+            </div>
+          </div>
+
+          <div class="action-row">
+            <button class="btn btn-primary" id="run-motion-btn">Run Animation</button>
+          </div>
+        </div>
+
+        <!-- Bezier Graph & Live Preview -->
+        <div class="panel preview-panel">
+          <div class="bezier-playground-split">
+            <!-- Curve Graphic SVG -->
+            <div class="bezier-svg-container">
+              <svg class="bezier-graph" viewBox="-10 -10 120 120" xmlns="http://www.w3.org/2000/svg">
+                <!-- Grid background -->
+                <line x1="0" y1="0" x2="100" y2="0" stroke="var(--border-strong)" stroke-width="0.5" />
+                <line x1="0" y1="100" x2="100" y2="100" stroke="var(--border-strong)" stroke-width="0.5" />
+                <line x1="0" y1="0" x2="0" y2="100" stroke="var(--border-strong)" stroke-width="0.5" />
+                <line x1="100" y1="0" x2="100" y2="100" stroke="var(--border-strong)" stroke-width="0.5" />
+                
+                <!-- Diagonal helper -->
+                <line x1="0" y1="100" x2="100" y2="0" stroke="var(--text-subtle)" stroke-width="0.5" stroke-dasharray="2,2" />
+                
+                <!-- Tangent Lines -->
+                <line id="tangent-1" x1="0" y1="100" x2="25" y2="0" stroke="#ff0055" stroke-width="1.5" />
+                <line id="tangent-2" x1="100" y1="0" x2="50" y2="0" stroke="#0055ff" stroke-width="1.5" />
+                
+                <!-- Bezier Curve Path -->
+                <path id="bezier-curve-path" d="M 0 100 C 25 0, 50 0, 100 0" fill="none" stroke="var(--accent)" stroke-width="3" />
+                
+                <!-- Handles/Anchors -->
+                <circle id="anchor-start" cx="0" cy="100" r="4" fill="var(--text)" />
+                <circle id="anchor-end" cx="100" cy="0" r="4" fill="var(--text)" />
+                <circle id="control-p1" cx="25" cy="0" r="5" fill="#ff0055" />
+                <circle id="control-p2" cx="50" cy="0" r="5" fill="#0055ff" />
+              </svg>
+              <div class="graph-legend">
+                <span style="color:#ff0055">• P1</span>
+                <span style="color:#0055ff">• P2</span>
+              </div>
+            </div>
+
+            <!-- Vertical Motion preview tracks -->
+            <div class="motion-tracks-container">
+              <div class="track-label">Visual Test Block</div>
+              <div class="motion-track">
+                <div class="motion-dot" id="animated-block-1"></div>
+              </div>
+              <div class="track-label">Linear Comparison</div>
+              <div class="motion-track">
+                <div class="motion-dot linear" id="animated-block-2"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-output-container">
+            <div class="code-header">
+              <span>CSS Animation Specs</span>
+              <button class="btn btn-copy" id="copy-bezier-css" aria-label="Copy cubic-bezier CSS">Copy</button>
+            </div>
+            <pre><code class="css-code" id="bezier-css-output">
+transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            </code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Design Token Builder -->
+    <section class="lab-section" id="token-builder">
+      <div class="section-header">
+        <h2 class="section-title">03 / Token Builder</h2>
+        <p class="section-lead">Formulate fluid typography systems and generate highly consistent color ranges. Export them as clean CSS root variables for instant design-to-development setup.</p>
+      </div>
+
+      <div class="token-workspace-grid">
+        <!-- Token Generators -->
+        <div class="panel control-panel">
+          <div class="tabs-header">
+            <button class="btn tab-btn active" data-tab="color-tab">Color Scale</button>
+            <button class="btn tab-btn" data-tab="type-tab">Fluid Type</button>
+          </div>
+
+          <!-- Color Tab -->
+          <div class="tab-content" id="color-tab">
+            <h3 class="panel-title mt-md">OKLCH Brand Hue</h3>
+            <p class="tab-description">Modify the base hue and chroma parameter to generate balanced shades using the modern OKLCH space.</p>
+            
+            <div class="control-group">
+              <label for="hue-slider" class="control-label">
+                <span>Base Hue Angle</span>
+                <span class="val-display" id="hue-val">220°</span>
+              </label>
+              <input type="range" id="hue-slider" min="0" max="360" value="220" step="1">
+            </div>
+
+            <div class="control-group">
+              <label for="chroma-slider" class="control-label">
+                <span>Chroma (Intensity)</span>
+                <span class="val-display" id="chroma-val">0.14</span>
+              </label>
+              <input type="range" id="chroma-slider" min="0.01" max="0.3" value="0.14" step="0.01">
+            </div>
+
+            <h4 class="group-title">Color Palette Map</h4>
+            <div class="palette-swatch-list" id="generated-palette-list">
+              <!-- Swatches generated by JavaScript -->
+            </div>
+          </div>
+
+          <!-- Typography Tab -->
+          <div class="tab-content hidden" id="type-tab">
+            <h3 class="panel-title mt-md">Fluid Size clamp() Configuration</h3>
+            <p class="tab-description">Define minimum and maximum sizing alongside viewport endpoints to output responsive text values that scale flawlessly without media-query fragmentation.</p>
+
+            <div class="control-group">
+              <label for="min-fs-slider" class="control-label">
+                <span>Min Size (Mobile)</span>
+                <span class="val-display" id="min-fs-val">16px</span>
+              </label>
+              <input type="range" id="min-fs-slider" min="12" max="32" value="16" step="1">
+            </div>
+
+            <div class="control-group">
+              <label for="max-fs-slider" class="control-label">
+                <span>Max Size (Desktop)</span>
+                <span class="val-display" id="max-fs-val">24px</span>
+              </label>
+              <input type="range" id="max-fs-slider" min="16" max="64" value="24" step="1">
+            </div>
+
+            <div class="control-group">
+              <label for="min-vp-slider" class="control-label">
+                <span>Min Viewport Width</span>
+                <span class="val-display" id="min-vp-val">360px</span>
+              </label>
+              <input type="range" id="min-vp-slider" min="320" max="600" value="360" step="20">
+            </div>
+
+            <div class="control-group">
+              <label for="max-vp-slider" class="control-label">
+                <span>Max Viewport Width</span>
+                <span class="val-display" id="max-vp-val">1200px</span>
+              </label>
+              <input type="range" id="max-vp-slider" min="800" max="1600" value="1200" step="50">
+            </div>
+          </div>
+        </div>
+
+        <!-- Token Visual Preview & Export -->
+        <div class="panel preview-panel">
+          <div class="token-preview-area">
+            <h3 class="panel-title">System Variables Output</h3>
+            
+            <div class="variables-code-wrapper">
+              <div class="code-header">
+                <span id="token-format-label">CSS Custom Properties (:root)</span>
+                <button class="btn btn-copy" id="copy-tokens-css" aria-label="Copy custom variables">Copy</button>
+              </div>
+              <pre><code class="css-code" id="tokens-css-output">
+/* Variables generated based on selection */
+:root {
+  --font-base: 'Satoshi', sans-serif;
+  --color-primary: oklch(0.60 0.14 220);
+  --color-accent: oklch(0.72 0.18 220);
+  --color-surface: oklch(0.20 0.01 220);
+  --color-border: oklch(1 0 0 / 0.1);
+  --fluid-text: clamp(1rem, 0.8rem + 0.8vw, 1.5rem);
+}
+              </code></pre>
+            </div>
+          </div>
+
+          <div class="preview-example-box" id="typography-preview-box">
+            <div class="track-label">Responsive Scale Preview</div>
+            <h1 class="fluid-preview-text" id="fluid-preview-heading">Responsive Typography Rendering</h1>
+            <p class="fluid-preview-body">Drag your viewport or browser width, or adjust the sliders in the typography tab to verify scale dynamics.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: A11y & Contrast Checker Room -->
+    <section class="lab-section" id="a11y-room">
+      <div class="section-header">
+        <h2 class="section-title">04 / Accessibility & Contrast Room</h2>
+        <p class="section-lead">Good UX must be inclusive. Verify color contrast ratios according to the WCAG guidelines, and inspect target sizes for coarse pointer compliance.</p>
+      </div>
+
+      <div class="playground-grid">
+        <!-- Contrast & Touch Size Inputs -->
+        <div class="panel control-panel">
+          <div class="tabs-header">
+            <button class="btn a11y-tab-btn active" data-tab="contrast-tab">Contrast Analyzer</button>
+            <button class="btn a11y-tab-btn" data-tab="target-tab">Target Auditor</button>
+          </div>
+
+          <!-- Contrast Fields -->
+          <div class="a11y-tab-content" id="contrast-tab">
+            <h3 class="panel-title mt-md">Color Inputs</h3>
+            <p class="tab-description">Modify text and background values to dynamically audit relative luminance calculations.</p>
+
+            <div class="control-group">
+              <label for="text-color-picker" class="control-label">
+                <span>Text Color</span>
+                <span class="val-display" id="text-hex-val">#FFFFFF</span>
+              </label>
+              <div class="picker-row">
+                <input type="color" id="text-color-picker" value="#ffffff">
+                <input type="text" id="text-text-input" class="text-hex-field" value="#ffffff" placeholder="#ffffff">
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="bg-color-picker" class="control-label">
+                <span>Background Color</span>
+                <span class="val-display" id="bg-hex-val">#1A1A2E</span>
+              </label>
+              <div class="picker-row">
+                <input type="color" id="bg-color-picker" value="#1a1a2e">
+                <input type="text" id="bg-text-input" class="text-hex-field" value="#1a1a2e" placeholder="#1a1a2e">
+              </div>
+            </div>
+          </div>
+
+          <!-- Target Tab -->
+          <div class="a11y-tab-content hidden" id="target-tab">
+            <h3 class="panel-title mt-md">Touch Interaction Physics</h3>
+            <p class="tab-description">Modern mobile guidelines require touch targets to be at least 24×24px, ideally 44×44px or 48×48px, preventing accidental triggers. Toggle modes to audit hit bounds.</p>
+            
+            <div class="control-group">
+              <label class="control-label">Coarse Pointer Simulation</label>
+              <div class="action-row flex-gap">
+                <button class="btn btn-preset active" id="pointer-fine-btn">Fine Pointer (Mouse)</button>
+                <button class="btn btn-preset" id="pointer-coarse-btn">Coarse Pointer (Touch)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- A11y Output Visualizer -->
+        <div class="panel preview-panel">
+          <!-- Contrast Auditor Visual Area -->
+          <div class="a11y-visual-area" id="contrast-visuals">
+            <div class="contrast-preview-display" id="contrast-sample-box">
+              <h4 id="contrast-text-sample">Design system accessibility check.</h4>
+              <p id="contrast-subtext-sample">This block renders in the selected colors. Audit the ratios below.</p>
+            </div>
+
+            <div class="contrast-score-row">
+              <div class="score-card">
+                <span class="score-label">Contrast Ratio</span>
+                <span class="score-value" id="contrast-ratio-number">12.5 : 1</span>
+              </div>
+              
+              <div class="badge-status-container">
+                <div class="badge-status">
+                  <span>Normal Text (AA)</span>
+                  <span class="status-indicator pass" id="status-normal-aa">PASS</span>
+                </div>
+                <div class="badge-status">
+                  <span>Normal Text (AAA)</span>
+                  <span class="status-indicator pass" id="status-normal-aaa">PASS</span>
+                </div>
+                <div class="badge-status">
+                  <span>Large Text (AA)</span>
+                  <span class="status-indicator pass" id="status-large-aa">PASS</span>
+                </div>
+                <div class="badge-status">
+                  <span>Large Text (AAA)</span>
+                  <span class="status-indicator pass" id="status-large-aaa">PASS</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Target Auditor Visual Area -->
+          <div class="a11y-visual-area hidden" id="target-visuals">
+            <p class="track-label">Simulated Pointer Canvas (Click targets to test click coverage)</p>
+            <div class="target-grid-visualizer">
+              <div class="target-card">
+                <span class="target-badge">24 × 24px (WCAG Minimum)</span>
+                <div class="target-wrapper">
+                  <button class="test-target-button target-24" aria-label="Test target 24 pixels"></button>
+                </div>
+                <span class="click-indicator" id="click-feedback-24">Ready</span>
+              </div>
+
+              <div class="target-card">
+                <span class="target-badge">32 × 32px</span>
+                <div class="target-wrapper">
+                  <button class="test-target-button target-32" aria-label="Test target 32 pixels"></button>
+                </div>
+                <span class="click-indicator" id="click-feedback-32">Ready</span>
+              </div>
+
+              <div class="target-card">
+                <span class="target-badge">44 × 44px (iOS Standard)</span>
+                <div class="target-wrapper">
+                  <button class="test-target-button target-44" aria-label="Test target 44 pixels"></button>
+                </div>
+                <span class="click-indicator" id="click-feedback-44">Ready</span>
+              </div>
+
+              <div class="target-card">
+                <span class="target-badge">48 × 48px (Android/Chrome)</span>
+                <div class="target-wrapper">
+                  <button class="test-target-button target-48" aria-label="Test target 48 pixels"></button>
+                </div>
+                <span class="click-indicator" id="click-feedback-48">Ready</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <div class="footer-logo">
+        <svg class="logo-mark" viewBox="0 0 100 100" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="15" y="15" width="70" height="70" rx="20" stroke="currentColor" stroke-width="8" stroke-linejoin="round" />
+          <circle cx="50" cy="50" r="18" stroke="currentColor" stroke-width="6" />
+          <path d="M50 15V32M50 68V85M15 50H32M68 50H85" stroke="currentColor" stroke-width="6" stroke-linecap="round" />
+        </svg>
+        <span>designcraft</span>
+      </div>
+      <p class="footer-copy">&copy; 2026 DesignCraft. Designed and built with modern CSS APIs.</p>
+    </div>
+  </footer>
+
+  <script>
+/* ==========================================================================
+   DesignCraft — Interactivity & Live Calculations Engine
+   ========================================================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+  
+  // ==========================================================================
+  // 1. Theme Toggle & System Preference
+  // ==========================================================================
+  const themeToggleBtn = document.getElementById("theme-toggle");
+  
+  function getActiveTheme() {
+    return document.documentElement.getAttribute("data-theme");
+  }
+
+  function setTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    document.querySelector('meta[name="color-scheme"]').content = theme;
+    localStorage.setItem("theme", theme);
+    themeToggleBtn.setAttribute("aria-pressed", theme === "light");
+    
+    // Trigger updates that depend on theme (e.g. glass card text color, colors tab)
+    updateGlassCard();
+    calculateContrast();
+  }
+
+  themeToggleBtn.addEventListener("click", () => {
+    const currentTheme = getActiveTheme();
+    const newTheme = currentTheme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+  });
+
+  // Sync with initial state
+  themeToggleBtn.setAttribute("aria-pressed", getActiveTheme() === "light");
+
+
+  // ==========================================================================
+  // 2. Navigation Scrollspy & Shrinking Header
+  // ==========================================================================
+  const navBar = document.getElementById("main-nav");
+  const scrollProgress = document.getElementById("scroll-progress");
+  const navLinks = document.querySelectorAll(".nav-link");
+  const sections = document.querySelectorAll("header, section");
+
+  window.addEventListener("scroll", () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    
+    // Update scroll progress indicator bar
+    if (scrollProgress) {
+      scrollProgress.style.width = `${scrollPct}%`;
+    }
+
+    // Shrinking Header on Scroll
+    if (scrollTop > 50) {
+      navBar.style.height = "60px";
+      navBar.style.boxShadow = "var(--shadow-md)";
+    } else {
+      navBar.style.height = "72px";
+      navBar.style.boxShadow = "none";
+    }
+
+    // Scrollspy navigation indicator active sync
+    let currentActive = "";
+    sections.forEach((sec) => {
+      const top = sec.offsetTop - 120;
+      if (scrollTop >= top) {
+        currentActive = sec.getAttribute("id");
+      }
+    });
+
+    navLinks.forEach((link) => {
+      link.classList.remove("active");
+      if (link.getAttribute("href") === `#${currentActive}`) {
+        link.classList.add("active");
+      }
+    });
+  });
+
+
+  // ==========================================================================
+  // 3. Interactive Hero Card: Dynamic 3D Parallax Tilt
+  // ==========================================================================
+  const heroCard = document.querySelector(".interactive-hero-card");
+  if (heroCard) {
+    heroCard.addEventListener("mousemove", (e) => {
+      const rect = heroCard.getBoundingClientRect();
+      const x = e.clientX - rect.left; // x position within element
+      const y = e.clientY - rect.top;  // y position within element
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      // Calculate tilt degrees (max 12 deg tilt)
+      const tiltX = ((y - centerY) / centerY) * -12;
+      const tiltY = ((x - centerX) / centerX) * 12;
+      
+      heroCard.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
+    });
+
+    heroCard.addEventListener("mouseleave", () => {
+      heroCard.style.transform = "rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+    });
+  }
+
+
+  // ==========================================================================
+  // 4. UI Lab: Glassmorphic Swatch Builder
+  // ==========================================================================
+  const blurSlider = document.getElementById("blur-slider");
+  const opacitySlider = document.getElementById("opacity-slider");
+  const saturationSlider = document.getElementById("saturation-slider");
+  const borderSlider = document.getElementById("border-slider");
+  const radiusSlider = document.getElementById("radius-slider");
+  
+  const blurVal = document.getElementById("blur-val");
+  const opacityVal = document.getElementById("opacity-val");
+  const saturationVal = document.getElementById("saturation-val");
+  const borderVal = document.getElementById("border-val");
+  const radiusVal = document.getElementById("radius-val");
+  
+  const glassCard = document.getElementById("glass-card");
+  const glassCssOutput = document.getElementById("glass-css-output");
+  const bgButtons = document.querySelectorAll(".bg-btn");
+  const previewBg = document.getElementById("glass-preview-bg");
+
+  function updateGlassCard() {
+    if (!glassCard) return;
+
+    const blur = blurSlider.value;
+    const opacity = opacitySlider.value;
+    const saturation = saturationSlider.value;
+    const borderOpacity = borderSlider.value;
+    const radius = radiusSlider.value;
+
+    // Set Slider Label indicators
+    blurVal.textContent = `${blur}px`;
+    opacityVal.textContent = parseFloat(opacity).toFixed(2);
+    saturationVal.textContent = `${saturation}%`;
+    borderVal.textContent = parseFloat(borderOpacity).toFixed(2);
+    radiusVal.textContent = `${radius}px`;
+
+    const isLight = getActiveTheme() === "light";
+    
+    // Calculate CSS Styling representation
+    const bgRGB = isLight ? "255, 255, 255" : "32, 40, 52";
+    const borderRGB = isLight ? "0, 0, 0" : "255, 255, 255";
+    
+    const backgroundCSS = `rgba(${bgRGB}, ${opacity})`;
+    const backdropCSS = `blur(${blur}px) saturate(${saturation}%)`;
+    const borderCSS = `1px solid rgba(${borderRGB}, ${borderOpacity})`;
+    const borderRadiusCSS = `${radius}px`;
+
+    // Apply styles inline
+    glassCard.style.backgroundColor = backgroundCSS;
+    glassCard.style.backdropFilter = backdropCSS;
+    glassCard.style.webkitBackdropFilter = backdropCSS; // Safari support
+    glassCard.style.border = borderCSS;
+    glassCard.style.borderRadius = borderRadiusCSS;
+
+    // Format code output block
+    glassCssOutput.textContent = 
+`background: ${backgroundCSS};
+backdrop-filter: ${backdropCSS};
+-webkit-backdrop-filter: ${backdropCSS};
+border: ${borderCSS};
+border-radius: ${borderRadiusCSS};`;
+  }
+
+  // Bind change listeners to sliders
+  [blurSlider, opacitySlider, saturationSlider, borderSlider, radiusSlider].forEach((slider) => {
+    slider.addEventListener("input", updateGlassCard);
+  });
+
+  // Background Theme Swapper Grid
+  bgButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      bgButtons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      
+      const newBg = btn.getAttribute("data-bg");
+      previewBg.setAttribute("data-bg", newBg);
+    });
+  });
+
+  updateGlassCard();
+
+
+  // ==========================================================================
+  // 5. Motion Studio: Bezier Customizer
+  // ==========================================================================
+  const presetButtons = document.querySelectorAll(".btn-preset[data-curve]");
+  const x1Slider = document.getElementById("x1-slider");
+  const y1Slider = document.getElementById("y1-slider");
+  const x2Slider = document.getElementById("x2-slider");
+  const y2Slider = document.getElementById("y2-slider");
+  
+  const x1Val = document.getElementById("x1-val");
+  const y1Val = document.getElementById("y1-val");
+  const x2Val = document.getElementById("x2-val");
+  const y2Val = document.getElementById("y2-val");
+
+  const bezierPath = document.getElementById("bezier-curve-path");
+  const controlP1 = document.getElementById("control-p1");
+  const controlP2 = document.getElementById("control-p2");
+  const tangent1 = document.getElementById("tangent-1");
+  const tangent2 = document.getElementById("tangent-2");
+
+  const runBtn = document.getElementById("run-motion-btn");
+  const animatedBlock1 = document.getElementById("animated-block-1");
+  const animatedBlock2 = document.getElementById("animated-block-2");
+  const bezierCssOutput = document.getElementById("bezier-css-output");
+
+  function drawBezierGraph() {
+    const x1 = parseFloat(x1Slider.value);
+    const y1 = parseFloat(y1Slider.value);
+    const x2 = parseFloat(x2Slider.value);
+    const y2 = parseFloat(y2Slider.value);
+
+    x1Val.textContent = x1.toFixed(2);
+    y1Val.textContent = y1.toFixed(2);
+    x2Val.textContent = x2.toFixed(2);
+    y2Val.textContent = y2.toFixed(2);
+
+    // SVG Coordinate Space conversion (100px base, y is inverted since 0,0 is top-left)
+    const px1 = x1 * 100;
+    const py1 = 100 - (y1 * 100);
+    const px2 = x2 * 100;
+    const py2 = 100 - (y2 * 100);
+
+    // Update Bezier path curve
+    bezierPath.setAttribute("d", `M 0 100 C ${px1} ${py1}, ${px2} ${py2}, 100 0`);
+
+    // Position control dot nodes
+    controlP1.setAttribute("cx", px1);
+    controlP1.setAttribute("cy", py1);
+    controlP2.setAttribute("cx", px2);
+    controlP2.setAttribute("cy", py2);
+
+    // Redraw tangent line bars
+    tangent1.setAttribute("x2", px1);
+    tangent1.setAttribute("y2", py1);
+    tangent2.setAttribute("x2", px2);
+    tangent2.setAttribute("y2", py2);
+
+    // Format output CSS snippet
+    bezierCssOutput.textContent = `transition: left 0.8s cubic-bezier(${x1}, ${y1}, ${x2}, ${y2});`;
+  }
+
+  function applyPreset(curveString) {
+    const coords = curveString.split(",").map(Number);
+    x1Slider.value = coords[0];
+    y1Slider.value = coords[1];
+    x2Slider.value = coords[2];
+    y2Slider.value = coords[3];
+    drawBezierGraph();
+  }
+
+  // Bind Preset Clickers
+  presetButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      presetButtons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      applyPreset(btn.getAttribute("data-curve"));
+    });
+  });
+
+  // Bind coordinate sliders
+  [x1Slider, y1Slider, x2Slider, y2Slider].forEach((slider) => {
+    slider.addEventListener("input", () => {
+      presetButtons.forEach((b) => b.classList.remove("active"));
+      drawBezierGraph();
+    });
+  });
+
+  // Motion Animator triggers
+  let toggleState = false;
+  runBtn.addEventListener("click", () => {
+    const x1 = x1Slider.value;
+    const y1 = y1Slider.value;
+    const x2 = x2Slider.value;
+    const y2 = y2Slider.value;
+
+    // Apply bezier transition attributes
+    animatedBlock1.style.transition = `left 0.8s cubic-bezier(${x1}, ${y1}, ${x2}, ${y2})`;
+    animatedBlock2.style.transition = `left 0.8s linear`;
+
+    toggleState = !toggleState;
+    const targetLeft = toggleState ? "calc(100% - 40px)" : "20px";
+
+    animatedBlock1.style.left = targetLeft;
+    animatedBlock2.style.left = targetLeft;
+  });
+
+  drawBezierGraph();
+
+
+  // ==========================================================================
+  // 6. Token Builder: Colors & Fluid Typography Scale
+  // ==========================================================================
+  const tabButtons = document.querySelectorAll(".tab-btn");
+  const tabContents = document.querySelectorAll(".tab-content");
+
+  // Tab switching inside Token Section
+  tabButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      tabButtons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      
+      const target = btn.getAttribute("data-tab");
+      tabContents.forEach((content) => {
+        if (content.getAttribute("id") === target) {
+          content.classList.remove("hidden");
+        } else {
+          content.classList.add("hidden");
+        }
+      });
+      updateTokenGenerator();
+    });
+  });
+
+  // OKLCH variables
+  const hueSlider = document.getElementById("hue-slider");
+  const chromaSlider = document.getElementById("chroma-slider");
+  const hueVal = document.getElementById("hue-val");
+  const chromaVal = document.getElementById("chroma-val");
+  const swatchList = document.getElementById("generated-palette-list");
+  
+  // Fluid Typography variables
+  const minFsSlider = document.getElementById("min-fs-slider");
+  const maxFsSlider = document.getElementById("max-fs-slider");
+  const minVpSlider = document.getElementById("min-vp-slider");
+  const maxVpSlider = document.getElementById("max-vp-slider");
+
+  const minFsVal = document.getElementById("min-fs-val");
+  const maxFsVal = document.getElementById("max-fs-val");
+  const minVpV = document.getElementById("min-vp-val");
+  const maxVpV = document.getElementById("max-vp-val");
+
+  const tokensCssOutput = document.getElementById("tokens-css-output");
+  const fluidHeading = document.getElementById("fluid-preview-heading");
+  const typographyTab = document.getElementById("type-tab");
+
+  function oklchToHex(l, c, h) {
+    // OKLCH to RGB approximation formula for UI display in generator swatches
+    // Real LCH conversions are complex, so we will use dynamic CSS to render swatches,
+    // and provide standard CSS string identifiers.
+    return `oklch(${l.toFixed(2)} ${c.toFixed(2)} ${h})`;
+  }
+
+  function updateTokenGenerator() {
+    const isColorTabActive = !typographyTab.classList.contains("hidden");
+
+    if (!isColorTabActive) {
+      // 1. Color System updates
+      const hue = parseFloat(hueSlider.value);
+      const chroma = parseFloat(chromaSlider.value);
+      
+      hueVal.textContent = `${hue}°`;
+      chromaVal.textContent = chroma.toFixed(2);
+      
+      // Clear swatch wrapper
+      swatchList.innerHTML = "";
+
+      const shadeSteps = [
+        { name: "Brand 10 (Deepest)", l: 0.18, step: "10" },
+        { name: "Brand 30 (Dark Surface)", l: 0.32, step: "30" },
+        { name: "Brand 50 (Accent Core)", l: 0.58, step: "50" },
+        { name: "Brand 70 (Bright Theme)", l: 0.76, step: "70" },
+        { name: "Brand 90 (Light Highlight)", l: 0.92, step: "90" }
+      ];
+
+      let oklchTokensOutputString = `/* OKLCH Theme Design Tokens */\n:root {\n  --brand-hue: ${hue};\n  --brand-chroma: ${chroma};\n\n`;
+
+      shadeSteps.forEach((s) => {
+        const oklchString = `oklch(${s.l} ${chroma} ${hue})`;
+        oklchTokensOutputString += `  --color-brand-${s.step}: ${oklchString};\n`;
+
+        // Render visual UI swatch element row
+        const row = document.createElement("div");
+        row.className = "color-swatch-row";
+        row.innerHTML = `
+          <div class="swatch-color-box" style="background: ${oklchString};"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">${s.name}</span>
+            <span class="swatch-hex">--color-brand-${s.step}</span>
+          </div>
+          <span class="swatch-lch-val">L:${s.l.toFixed(2)} C:${chroma.toFixed(2)}</span>
+        `;
+        swatchList.appendChild(row);
+      });
+
+      oklchTokensOutputString += "}";
+      tokensCssOutput.textContent = oklchTokensOutputString;
+      document.getElementById("token-format-label").textContent = "OKLCH Custom Properties (:root)";
+
+    } else {
+      // 2. Fluid Typography scale calculator
+      const minFs = parseInt(minFsSlider.value);
+      const maxFs = parseInt(maxFsSlider.value);
+      const minVp = parseInt(minVpSlider.value);
+      const maxVp = parseInt(maxVpSlider.value);
+
+      minFsVal.textContent = `${minFs}px`;
+      maxFsVal.textContent = `${maxFs}px`;
+      minVpV.textContent = `${minVp}px`;
+      maxVpV.textContent = `${maxVp}px`;
+
+      // Perform responsive clamp typography maths
+      const slope = (maxFs - minFs) / (maxVp - minVp);
+      const intersection = minFs - (slope * minVp);
+      
+      const slopeVw = slope * 100;
+      const intersectionRem = intersection / 16;
+
+      const clampCSS = `clamp(${(minFs / 16).toFixed(3)}rem, ${intersectionRem.toFixed(3)}rem + ${slopeVw.toFixed(3)}vw, ${(maxFs / 16).toFixed(3)}rem)`;
+
+      // Apply fluid font sizing to preview heading element
+      fluidHeading.style.fontSize = clampCSS;
+
+      tokensCssOutput.textContent = 
+`/* Fluid Font Sizing System */
+:root {
+  --fluid-header-size: ${clampCSS};
+  --viewport-min: ${minVp}px;
+  --viewport-max: ${maxVp}px;
+}
+
+h1 {
+  font-size: var(--fluid-header-size);
+  font-weight: 800;
+  line-height: 1.1;
+}`;
+      document.getElementById("token-format-label").textContent = "CSS Clamp Typography Custom Properties";
+    }
+  }
+
+  // Bind change triggers
+  [hueSlider, chromaSlider, minFsSlider, maxFsSlider, minVpSlider, maxVpSlider].forEach((slider) => {
+    slider.addEventListener("input", updateTokenGenerator);
+  });
+
+  updateTokenGenerator();
+
+
+  // ==========================================================================
+  // 7. Accessibility Room: Contrast checker & Target test sandbox
+  // ==========================================================================
+  const a11yTabButtons = document.querySelectorAll(".a11y-tab-btn");
+  const contrastTab = document.getElementById("contrast-tab");
+  const targetTab = document.getElementById("target-tab");
+  const contrastVisuals = document.getElementById("contrast-visuals");
+  const targetVisuals = document.getElementById("target-visuals");
+
+  // Tab switcher
+  a11yTabButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      a11yTabButtons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      const target = btn.getAttribute("data-tab");
+      if (target === "contrast-tab") {
+        contrastTab.classList.remove("hidden");
+        contrastVisuals.classList.remove("hidden");
+        targetTab.classList.add("hidden");
+        targetVisuals.classList.add("hidden");
+      } else {
+        contrastTab.classList.add("hidden");
+        contrastVisuals.classList.add("hidden");
+        targetTab.classList.remove("hidden");
+        targetVisuals.classList.remove("hidden");
+      }
+    });
+  });
+
+  // Color inputs
+  const textColorPicker = document.getElementById("text-color-picker");
+  const textTextInput = document.getElementById("text-text-input");
+  const bgColorPicker = document.getElementById("bg-color-picker");
+  const bgTextInput = document.getElementById("bg-text-input");
+
+  const sampleBox = document.getElementById("contrast-sample-box");
+  const textSample = document.getElementById("contrast-text-sample");
+  const subtextSample = document.getElementById("contrast-subtext-sample");
+
+  const textHexVal = document.getElementById("text-hex-val");
+  const bgHexVal = document.getElementById("bg-hex-val");
+  const ratioDisplay = document.getElementById("contrast-ratio-number");
+
+  const badgNormalAA = document.getElementById("status-normal-aa");
+  const badgNormalAAA = document.getElementById("status-normal-aaa");
+  const badgLargeAA = document.getElementById("status-large-aa");
+  const badgLargeAAA = document.getElementById("status-large-aaa");
+
+  // Convert Hex string into decimal RGB values
+  function hexToRgb(hex) {
+    const cleaned = hex.replace("#", "");
+    if (cleaned.length === 3) {
+      return {
+        r: parseInt(cleaned[0] + cleaned[0], 16),
+        g: parseInt(cleaned[1] + cleaned[1], 16),
+        b: parseInt(cleaned[2] + cleaned[2], 16)
+      };
+    }
+    return {
+      r: parseInt(cleaned.slice(0, 2), 16) || 0,
+      g: parseInt(cleaned.slice(2, 4), 16) || 0,
+      b: parseInt(cleaned.slice(4, 6), 16) || 0
+    };
+  }
+
+  // Relative Luminance math channel solver
+  function getChannelLuminance(val) {
+    const colorVal = val / 255;
+    return colorVal <= 0.03928 
+      ? colorVal / 12.92 
+      : Math.pow((colorVal + 0.055) / 1.055, 2.4);
+  }
+
+  function getLuminance(rgb) {
+    const r = getChannelLuminance(rgb.r);
+    const g = getChannelLuminance(rgb.g);
+    const b = getChannelLuminance(rgb.b);
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  }
+
+  function calculateContrast() {
+    let textHex = textTextInput.value;
+    let bgHex = bgTextInput.value;
+
+    // Validate hex string forms
+    if (!textHex.startsWith("#")) textHex = "#" + textHex;
+    if (!bgHex.startsWith("#")) bgHex = "#" + bgHex;
+
+    textHexVal.textContent = textHex.toUpperCase();
+    bgHexVal.textContent = bgHex.toUpperCase();
+
+    textColorPicker.value = textHex;
+    bgColorPicker.value = bgHex;
+
+    // Apply color values to visual sample element blocks
+    sampleBox.style.backgroundColor = bgHex;
+    textSample.style.color = textHex;
+    subtextSample.style.color = textHex;
+
+    const rgbText = hexToRgb(textHex);
+    const rgbBg = hexToRgb(bgHex);
+
+    const l1 = getLuminance(rgbText);
+    const l2 = getLuminance(rgbBg);
+
+    const lighter = Math.max(l1, l2);
+    const darker = Math.min(l1, l2);
+
+    const ratio = (lighter + 0.05) / (darker + 0.05);
+    ratioDisplay.textContent = `${ratio.toFixed(2)} : 1`;
+
+    // Apply WCAG badge rules
+    // AA Normal Text: 4.5:1
+    const passNormalAA = ratio >= 4.5;
+    setA11yStatus(badgNormalAA, passNormalAA);
+
+    // AAA Normal Text: 7:1
+    const passNormalAAA = ratio >= 7.0;
+    setA11yStatus(badgNormalAAA, passNormalAAA);
+
+    // AA Large Text: 3.0:1
+    const passLargeAA = ratio >= 3.0;
+    setA11yStatus(badgLargeAA, passLargeAA);
+
+    // AAA Large Text: 4.5:1
+    const passLargeAAA = ratio >= 4.5;
+    setA11yStatus(badgLargeAAA, passLargeAAA);
+  }
+
+  function setA11yStatus(element, isPass) {
+    if (isPass) {
+      element.className = "status-indicator pass";
+      element.textContent = "PASS";
+    } else {
+      element.className = "status-indicator fail";
+      element.textContent = "FAIL";
+    }
+  }
+
+  // Bind hex input changes
+  [textColorPicker, bgColorPicker].forEach((picker) => {
+    picker.addEventListener("input", (e) => {
+      const targetInput = e.target === textColorPicker ? textTextInput : bgTextInput;
+      targetInput.value = e.target.value.toUpperCase();
+      calculateContrast();
+    });
+  });
+
+  [textTextInput, bgTextInput].forEach((input) => {
+    input.addEventListener("input", () => {
+      calculateContrast();
+    });
+  });
+
+  calculateContrast();
+
+
+  // ==========================================================================
+  // 8. Target Auditor physics test triggers
+  // ==========================================================================
+  const pointerFineBtn = document.getElementById("pointer-fine-btn");
+  const pointerCoarseBtn = document.getElementById("pointer-coarse-btn");
+  const visualGrid = document.querySelector(".target-grid-visualizer");
+  const testButtons = document.querySelectorAll(".test-target-button");
+
+  pointerFineBtn.addEventListener("click", () => {
+    pointerFineBtn.classList.add("active");
+    pointerCoarseBtn.classList.remove("active");
+    visualGrid.classList.remove("coarse-pointers");
+  });
+
+  pointerCoarseBtn.addEventListener("click", () => {
+    pointerCoarseBtn.classList.add("active");
+    pointerFineBtn.classList.remove("active");
+    visualGrid.classList.add("coarse-pointers");
+  });
+
+  testButtons.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const sizeClass = btn.className.split(" ").find(c => c.startsWith("target-"));
+      const sizePx = sizeClass ? sizeClass.split("-")[1] : "unknown";
+      
+      const feedbackEl = document.getElementById(`click-feedback-${sizePx}`);
+      if (feedbackEl) {
+        feedbackEl.className = "click-indicator hit";
+        feedbackEl.textContent = "Hit!";
+        
+        // Reset indicator after animation
+        setTimeout(() => {
+          feedbackEl.className = "click-indicator";
+          feedbackEl.textContent = "Ready";
+        }, 1200);
+      }
+    });
+  });
+
+
+  // ==========================================================================
+  // 9. Copy to Clipboard Utility setup
+  // ==========================================================================
+  function setupCopyUtility(btnId, sourceElId) {
+    const copyBtn = document.getElementById(btnId);
+    const sourceEl = document.getElementById(sourceElId);
+
+    if (copyBtn && sourceEl) {
+      copyBtn.addEventListener("click", () => {
+        const textToCopy = sourceEl.textContent.trim();
+        
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          const originalText = copyBtn.textContent;
+          copyBtn.textContent = "Copied!";
+          copyBtn.classList.add("copied");
+          
+          setTimeout(() => {
+            copyBtn.textContent = originalText;
+            copyBtn.classList.remove("copied");
+          }, 2000);
+        }).catch((err) => {
+          console.error("Clipboard copy failed: ", err);
+        });
+      });
+    }
+  }
+
+  setupCopyUtility("copy-glass-css", "glass-css-output");
+  setupCopyUtility("copy-bezier-css", "bezier-css-output");
+  setupCopyUtility("copy-tokens-css", "tokens-css-output");
+
+});
+
+</script></script>
+</body>
+</html>

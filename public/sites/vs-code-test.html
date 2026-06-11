@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Haven Rentals | Find Your Next Home</title>
+  <meta name="description" content="Discover beautiful rental homes, apartments, and lofts with transparent pricing and flexible tours.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f1eb;
+      --bg-soft: #fffaf3;
+      --surface: rgba(255, 255, 255, 0.72);
+      --text: #1f2a1f;
+      --text-muted: #4d5b4f;
+      --brand: #2f6a4e;
+      --brand-strong: #1f4c37;
+      --accent: #e79c6e;
+      --border: rgba(29, 46, 33, 0.16);
+      --shadow: 0 18px 40px rgba(31, 50, 38, 0.12);
+      --radius: 22px;
+      --max: 1140px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Manrope", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 8% 14%, rgba(238, 195, 151, 0.34), transparent 45%),
+        radial-gradient(circle at 92% 26%, rgba(88, 150, 118, 0.25), transparent 38%),
+        linear-gradient(135deg, var(--bg) 0%, var(--bg-soft) 65%, #f6f8f3 100%);
+      line-height: 1.55;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page-shell {
+      width: min(94%, var(--max));
+      margin: 0 auto;
+    }
+
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0.8rem 0;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(to bottom, rgba(244, 241, 235, 0.88), rgba(244, 241, 235, 0.45));
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.7rem 1rem;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      font-family: "Fraunces", serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.01em;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1rem;
+      margin: 0;
+      padding: 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .nav-links a {
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      background: rgba(47, 106, 78, 0.15);
+      color: var(--brand-strong);
+      outline: none;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      padding: 0.75rem 1.2rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease;
+    }
+
+    .btn:hover,
+    .btn:focus-visible {
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    .btn-primary {
+      background: var(--brand);
+      color: #f4fff8;
+      box-shadow: 0 10px 24px rgba(47, 106, 78, 0.32);
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus-visible {
+      background: var(--brand-strong);
+    }
+
+    .btn-secondary {
+      border-color: var(--border);
+      background: rgba(255, 255, 255, 0.62);
+      color: var(--brand-strong);
+    }
+
+    .hero {
+      padding: 3rem 0 1.7rem;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1.4rem;
+      align-items: stretch;
+    }
+
+    .hero-copy,
+    .hero-panel {
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      padding: 1.6rem;
+    }
+
+    .kicker {
+      margin: 0 0 0.6rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--brand);
+    }
+
+    .hero h1 {
+      font-family: "Fraunces", serif;
+      line-height: 1.03;
+      letter-spacing: 0.01em;
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 3.7rem);
+    }
+
+    .lead {
+      margin: 1rem 0 0;
+      font-size: 1.06rem;
+      color: var(--text-muted);
+      max-width: 50ch;
+    }
+
+    .hero-actions {
+      margin-top: 1.3rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+    }
+
+    .mini-stats {
+      margin-top: 1.35rem;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.6rem;
+    }
+
+    .stat {
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.65);
+      padding: 0.8rem;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.25rem;
+      font-family: "Fraunces", serif;
+      line-height: 1.1;
+      margin-bottom: 0.25rem;
+      color: var(--brand-strong);
+    }
+
+    .stat span {
+      font-size: 0.87rem;
+      color: var(--text-muted);
+    }
+
+    .hero-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-panel::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      top: -60px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(231, 156, 110, 0.26), rgba(78, 130, 99, 0.08));
+      pointer-events: none;
+    }
+
+    .tour-card {
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.78);
+      padding: 1rem;
+      position: relative;
+    }
+
+    .tour-card h2 {
+      font-size: 1.05rem;
+      margin: 0 0 0.45rem;
+    }
+
+    .tour-card p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.94rem;
+    }
+
+    .section {
+      margin: 1.2rem 0;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      padding: 1.4rem;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 0.9rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .section h2 {
+      margin: 0;
+      font-family: "Fraunces", serif;
+      font-size: clamp(1.5rem, 3.7vw, 2.2rem);
+      line-height: 1.08;
+    }
+
+    .muted {
+      color: var(--text-muted);
+      margin: 0;
+      max-width: 52ch;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .filter-row input,
+    .filter-row select {
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.82);
+      border-radius: 12px;
+      padding: 0.7rem 0.85rem;
+      font: inherit;
+      color: var(--text);
+      min-width: 170px;
+      flex: 1;
+    }
+
+    .filter-row input:focus,
+    .filter-row select:focus,
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      outline: 2px solid rgba(47, 106, 78, 0.34);
+      outline-offset: 1px;
+      border-color: var(--brand);
+    }
+
+    .property-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.9rem;
+    }
+
+    .property-card {
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.76);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      transform: translateY(14px);
+      opacity: 0;
+      animation: rise-in 0.65s ease forwards;
+    }
+
+    .property-card:nth-child(2) {
+      animation-delay: 0.08s;
+    }
+
+    .property-card:nth-child(3) {
+      animation-delay: 0.16s;
+    }
+
+    .property-card:nth-child(4) {
+      animation-delay: 0.24s;
+    }
+
+    .property-card:nth-child(5) {
+      animation-delay: 0.32s;
+    }
+
+    .property-card:nth-child(6) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes rise-in {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.28rem 0.6rem;
+      font-size: 0.75rem;
+      border-radius: 999px;
+      background: rgba(47, 106, 78, 0.13);
+      color: var(--brand-strong);
+      border: 1px solid rgba(47, 106, 78, 0.2);
+      font-weight: 600;
+    }
+
+    .property-card h3 {
+      margin: 0;
+      font-size: 1.08rem;
+    }
+
+    .price {
+      margin: 0;
+      color: var(--brand-strong);
+      font-weight: 700;
+      font-size: 1.06rem;
+    }
+
+    .meta {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.91rem;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .about-list {
+      padding-left: 1.1rem;
+      margin: 0.75rem 0 0;
+      color: var(--text-muted);
+    }
+
+    .about-list li {
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-form {
+      display: grid;
+      gap: 0.65rem;
+    }
+
+    .contact-form label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--brand-strong);
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.72rem 0.85rem;
+      font: inherit;
+      background: rgba(255, 255, 255, 0.82);
+      color: var(--text);
+    }
+
+    .contact-form textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .auth-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .auth-card {
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.7);
+      padding: 1rem;
+    }
+
+    .auth-card h3 {
+      margin: 0 0 0.4rem;
+      font-size: 1.02rem;
+    }
+
+    .auth-card p {
+      margin: 0 0 0.9rem;
+      color: var(--text-muted);
+      font-size: 0.94rem;
+    }
+
+    .auth-message {
+      margin-top: 0.75rem;
+      min-height: 1.2rem;
+      font-size: 0.93rem;
+      color: var(--text-muted);
+    }
+
+    .auth-message.success {
+      color: #1c6b44;
+    }
+
+    .auth-message.error {
+      color: #a33939;
+    }
+
+    .session-box {
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.6);
+      padding: 0.9rem;
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .session-box strong {
+      color: var(--brand-strong);
+    }
+
+    .session-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    footer {
+      width: min(94%, var(--max));
+      margin: 1.2rem auto 2rem;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.62);
+      padding: 0.9rem 1rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .property-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .nav {
+        border-radius: 20px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .page-shell,
+      footer {
+        width: min(96%, var(--max));
+      }
+
+      .top-bar {
+        padding-top: 0.55rem;
+      }
+
+      .nav {
+        justify-content: center;
+      }
+
+      .nav-links {
+        justify-content: center;
+      }
+
+      .nav .btn {
+        width: 100%;
+      }
+
+      .mini-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .property-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .filter-row {
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="page-shell nav">
+      <a class="brand" href="#home">Haven Rentals</a>
+      <nav aria-label="Main navigation">
+        <ul class="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#properties">Properties</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <a class="btn btn-primary" href="#contact">Book a Tour</a>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section id="home" class="hero">
+      <article class="hero-copy">
+        <p class="kicker">Smart Renting, Human Service</p>
+        <h1>Find a home that fits your rhythm, not just your budget.</h1>
+        <p class="lead">Explore handpicked rentals with real photos, clear terms, and local support. From city lofts to family homes, we make the move easy.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#properties">Browse Listings</a>
+          <a class="btn btn-secondary" href="#about">Why Haven</a>
+        </div>
+        <div class="mini-stats" aria-label="Highlights">
+          <div class="stat">
+            <strong>420+</strong>
+            <span>Active listings</span>
+          </div>
+          <div class="stat">
+            <strong>4.8/5</strong>
+            <span>Tenant rating</span>
+          </div>
+          <div class="stat">
+            <strong>36h</strong>
+            <span>Average response</span>
+          </div>
+        </div>
+      </article>
+
+      <aside class="hero-panel" aria-label="Tour information">
+        <div class="tour-card">
+          <h2>This Week's Open Tour</h2>
+          <p>Saturday, 10:00 AM • 128 Riverstone Ave • 2BR Garden Apartment</p>
+        </div>
+        <div class="tour-card">
+          <h2>Transparent Pricing</h2>
+          <p>No hidden admin fees. Your quote includes rent, service coverage, and move-in details.</p>
+        </div>
+        <a class="btn btn-secondary" href="#contact">Reserve a Spot</a>
+      </aside>
+    </section>
+
+    <section id="properties" class="section">
+      <div class="section-head">
+        <h2>Properties For Rent</h2>
+        <p class="muted">Filter by neighborhood and budget to quickly find the best fit.</p>
+      </div>
+
+      <div class="filter-row" role="search" aria-label="Property filters">
+        <input type="search" id="searchInput" placeholder="Search by area or style" aria-label="Search properties">
+        <select id="budgetFilter" aria-label="Budget filter">
+          <option value="all">Any budget</option>
+          <option value="1800">Up to $1,800</option>
+          <option value="2300">Up to $2,300</option>
+          <option value="3000">Up to $3,000</option>
+        </select>
+        <select id="typeFilter" aria-label="Type filter">
+          <option value="all">All types</option>
+          <option value="Apartment">Apartment</option>
+          <option value="Townhouse">Townhouse</option>
+          <option value="Loft">Loft</option>
+          <option value="House">House</option>
+        </select>
+      </div>
+
+      <div class="property-grid" id="propertyGrid" aria-live="polite">
+        <article class="property-card" data-price="1750" data-type="Apartment" data-search="north bridge apartment near park">
+          <div class="tag-row"><span class="tag">North Bridge</span><span class="tag">Pet Friendly</span></div>
+          <h3>North Bridge Light Apartment</h3>
+          <p class="price">$1,750 / month</p>
+          <p class="meta">2 Beds • 1 Bath • 820 sq ft</p>
+          <button class="btn btn-secondary" type="button">View Details</button>
+        </article>
+
+        <article class="property-card" data-price="2400" data-type="Townhouse" data-search="river district townhouse family">
+          <div class="tag-row"><span class="tag">River District</span><span class="tag">Parking</span></div>
+          <h3>River District Townhouse</h3>
+          <p class="price">$2,400 / month</p>
+          <p class="meta">3 Beds • 2.5 Baths • 1,420 sq ft</p>
+          <button class="btn btn-secondary" type="button">View Details</button>
+        </article>
+
+        <article class="property-card" data-price="2100" data-type="Loft" data-search="central loft modern brick">
+          <div class="tag-row"><span class="tag">Central Arts</span><span class="tag">Gym Access</span></div>
+          <h3>Modern Brick Loft</h3>
+          <p class="price">$2,100 / month</p>
+          <p class="meta">1 Bed • 1 Bath • 760 sq ft</p>
+          <button class="btn btn-secondary" type="button">View Details</button>
+        </article>
+
+        <article class="property-card" data-price="2950" data-type="House" data-search="oak hills house garden">
+          <div class="tag-row"><span class="tag">Oak Hills</span><span class="tag">Private Garden</span></div>
+          <h3>Oak Hills Family House</h3>
+          <p class="price">$2,950 / month</p>
+          <p class="meta">4 Beds • 3 Baths • 2,020 sq ft</p>
+          <button class="btn btn-secondary" type="button">View Details</button>
+        </article>
+
+        <article class="property-card" data-price="1850" data-type="Apartment" data-search="lakeside apartment balcony">
+          <div class="tag-row"><span class="tag">Lakeside</span><span class="tag">Balcony</span></div>
+          <h3>Lakeside Balcony Apartment</h3>
+          <p class="price">$1,850 / month</p>
+          <p class="meta">2 Beds • 2 Baths • 910 sq ft</p>
+          <button class="btn btn-secondary" type="button">View Details</button>
+        </article>
+
+        <article class="property-card" data-price="2650" data-type="House" data-search="sunset valley house office">
+          <div class="tag-row"><span class="tag">Sunset Valley</span><span class="tag">Home Office</span></div>
+          <h3>Sunset Valley Comfort Home</h3>
+          <p class="price">$2,650 / month</p>
+          <p class="meta">3 Beds • 2 Baths • 1,560 sq ft</p>
+          <button class="btn btn-secondary" type="button">View Details</button>
+        </article>
+      </div>
+      <p id="emptyState" class="muted hidden">No properties match your filters yet. Try widening your search.</p>
+    </section>
+
+    <section id="about" class="section split">
+      <article>
+        <div class="section-head">
+          <h2>About Haven</h2>
+        </div>
+        <p class="muted">We are a rental management team focused on trust, speed, and quality homes. You get local experts, honest advice, and long-term support.</p>
+        <ul class="about-list">
+          <li>10+ years helping renters move confidently.</li>
+          <li>Verified listings with transparent terms.</li>
+          <li>Maintenance requests answered in under 24 hours.</li>
+        </ul>
+      </article>
+
+      <article>
+        <div class="section-head">
+          <h2>Need Help Fast?</h2>
+        </div>
+        <p class="muted">Tell us what matters most and we will send tailored options within one business day.</p>
+        <a class="btn btn-primary" href="#contact">Talk To an Agent</a>
+      </article>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="section-head">
+        <h2>Contact Us</h2>
+        <p class="muted">Share your preferred location, budget, and move-in date. We will follow up quickly.</p>
+      </div>
+
+      <form class="contact-form" action="#" method="post">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Your full name" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="I am looking for a 2-bedroom apartment near downtown..." required></textarea>
+
+        <button class="btn btn-primary" type="submit">Send Message</button>
+      </form>
+    </section>
+
+    <section id="login" class="section">
+      <div class="section-head">
+        <h2>Owner Login</h2>
+        <p class="muted">Create a private owner account once, then use it to view saved inquiries and protected data.</p>
+      </div>
+
+      <div class="auth-grid">
+        <div class="auth-card">
+          <h3>First-time setup</h3>
+          <p>This stores your chosen credentials securely as password hashes in SQLite.</p>
+          <form id="setupForm" class="contact-form">
+            <label for="setupUsername">Username</label>
+            <input type="text" id="setupUsername" name="username" placeholder="owner" autocomplete="username" required>
+
+            <label for="setupPassword">Password</label>
+            <input type="password" id="setupPassword" name="password" placeholder="Create a strong password" autocomplete="new-password" required>
+
+            <button class="btn btn-primary" type="submit">Create Owner Account</button>
+          </form>
+        </div>
+
+        <div class="auth-card">
+          <h3>Sign in</h3>
+          <p>Log in to unlock protected dashboard data from this backend.</p>
+          <form id="loginForm" class="contact-form">
+            <label for="loginUsername">Username</label>
+            <input type="text" id="loginUsername" name="username" placeholder="owner" autocomplete="username" required>
+
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" name="password" placeholder="Your password" autocomplete="current-password" required>
+
+            <button class="btn btn-secondary" type="submit">Log In</button>
+          </form>
+
+          <div class="session-box" aria-live="polite">
+            <strong>Session</strong>
+            <span id="sessionInfo">Checking login status...</span>
+            <div class="session-actions">
+              <button id="logoutButton" class="btn btn-secondary" type="button">Log Out</button>
+            </div>
+          </div>
+
+          <div id="dashboardSummary" class="session-box" aria-live="polite">
+            <strong>Protected Dashboard</strong>
+            <span>Log in to view saved inquiries.</span>
+          </div>
+
+          <div id="authMessage" class="auth-message" role="status" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Haven Rentals. All rights reserved.</p>
+  </footer>
+
+  <script>
+    (() => {
+      const searchInput = document.getElementById('searchInput');
+      const budgetFilter = document.getElementById('budgetFilter');
+      const typeFilter = document.getElementById('typeFilter');
+      const cards = Array.from(document.querySelectorAll('.property-card'));
+      const emptyState = document.getElementById('emptyState');
+      const contactForm = document.querySelector('#contact .contact-form');
+      const setupForm = document.getElementById('setupForm');
+      const loginForm = document.getElementById('loginForm');
+      const logoutButton = document.getElementById('logoutButton');
+      const sessionInfo = document.getElementById('sessionInfo');
+      const dashboardSummary = document.getElementById('dashboardSummary');
+      const authMessage = document.getElementById('authMessage');
+
+      const setMessage = (text, tone = '') => {
+        authMessage.textContent = text;
+        authMessage.className = `auth-message${tone ? ` ${tone}` : ''}`;
+      };
+
+      const renderDashboardSummary = (lines) => {
+        dashboardSummary.replaceChildren();
+
+        const title = document.createElement('strong');
+        title.textContent = 'Protected Dashboard';
+        dashboardSummary.appendChild(title);
+
+        lines.forEach((line) => {
+          const span = document.createElement('span');
+          span.textContent = line;
+          dashboardSummary.appendChild(span);
+        });
+      };
+
+      const applyFilters = () => {
+        const query = searchInput.value.trim().toLowerCase();
+        const maxBudget = budgetFilter.value;
+        const selectedType = typeFilter.value;
+
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+          const matchesQuery = card.dataset.search.includes(query);
+          const matchesBudget = maxBudget === 'all' || Number(card.dataset.price) <= Number(maxBudget);
+          const matchesType = selectedType === 'all' || card.dataset.type === selectedType;
+
+          const visible = matchesQuery && matchesBudget && matchesType;
+          card.classList.toggle('hidden', !visible);
+
+          if (visible) {
+            visibleCount += 1;
+          }
+        });
+
+        emptyState.classList.toggle('hidden', visibleCount > 0);
+      };
+
+      const refreshSession = async () => {
+        try {
+          const response = await fetch('/api/me', { credentials: 'include' });
+          const data = await response.json();
+
+          if (response.ok && data.logged_in) {
+            sessionInfo.textContent = `Logged in as ${data.user.username} (${data.user.role})`;
+            logoutButton.disabled = false;
+            renderDashboardSummary(['Loading private stats...']);
+
+            try {
+              const dashboardResponse = await fetch('/api/dashboard', { credentials: 'include' });
+              const dashboard = await dashboardResponse.json();
+              if (dashboardResponse.ok) {
+                const latest = dashboard.recent_inquiries[0];
+                renderDashboardSummary([
+                  `${dashboard.summary.inquiry_count} saved inquiries • ${dashboard.summary.user_count} user account(s)`,
+                  latest ? `Latest inquiry from ${latest.name}` : 'No inquiries saved yet.',
+                ]);
+              } else {
+                renderDashboardSummary(['Unable to load dashboard data.']);
+              }
+            } catch (dashboardError) {
+              renderDashboardSummary(['Unable to load dashboard data.']);
+            }
+            return;
+          }
+
+          sessionInfo.textContent = 'No active session. Use the login form or create the owner account first.';
+          logoutButton.disabled = true;
+          renderDashboardSummary(['Log in to view saved inquiries.']);
+        } catch (error) {
+          sessionInfo.textContent = 'Backend unavailable right now.';
+          logoutButton.disabled = true;
+          renderDashboardSummary(['Backend unavailable right now.']);
+        }
+      };
+
+      const submitJson = async (url, payload) => {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify(payload),
+        });
+
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(data.error || 'Something went wrong.');
+        }
+        return data;
+      };
+
+      if (contactForm) {
+        contactForm.addEventListener('submit', async (event) => {
+          event.preventDefault();
+
+          const formData = new FormData(contactForm);
+          const payload = Object.fromEntries(formData.entries());
+
+          try {
+            await submitJson('/api/contact', payload);
+            contactForm.reset();
+            setMessage('Your message was sent and saved in the backend.', 'success');
+          } catch (error) {
+            setMessage(error.message, 'error');
+          }
+        });
+      }
+
+      if (setupForm) {
+        setupForm.addEventListener('submit', async (event) => {
+          event.preventDefault();
+
+          const formData = new FormData(setupForm);
+          const payload = Object.fromEntries(formData.entries());
+
+          try {
+            await submitJson('/api/setup', payload);
+            setupForm.reset();
+            setMessage('Owner account created successfully. You can log in now.', 'success');
+            await refreshSession();
+          } catch (error) {
+            setMessage(error.message, 'error');
+          }
+        });
+      }
+
+      if (loginForm) {
+        loginForm.addEventListener('submit', async (event) => {
+          event.preventDefault();
+
+          const formData = new FormData(loginForm);
+          const payload = Object.fromEntries(formData.entries());
+
+          try {
+            await submitJson('/api/login', payload);
+            setMessage('Logged in successfully.', 'success');
+            loginForm.reset();
+            await refreshSession();
+          } catch (error) {
+            setMessage(error.message, 'error');
+          }
+        });
+      }
+
+      if (logoutButton) {
+        logoutButton.addEventListener('click', async () => {
+          try {
+            await submitJson('/api/logout', {});
+            setMessage('Logged out.', 'success');
+            await refreshSession();
+          } catch (error) {
+            setMessage(error.message, 'error');
+          }
+        });
+      }
+
+      [searchInput, budgetFilter, typeFilter].forEach((el) => {
+        el.addEventListener('input', applyFilters);
+        el.addEventListener('change', applyFilters);
+      });
+
+      refreshSession();
+    })();
+  </script>
+</body>
+</html>

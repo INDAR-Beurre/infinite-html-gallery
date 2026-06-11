@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LogDrop Deluxe Compost Club</title>
+<style>
+  :root {
+    --espresso: #241308;
+    --dung: #4a2a12;
+    --mud: #6c421d;
+    --taupe: #8a6741;
+    --beige: #c3a06a;
+    --stain: #e0c18a;
+    --corn: #f3c331;
+    --swamp: #738238;
+    --wet: rgba(31, 13, 3, .62);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    overflow-x: hidden;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(243, 195, 49, .18), transparent 18%),
+      radial-gradient(circle at 86% 14%, rgba(67, 39, 15, .62), transparent 24%),
+      radial-gradient(circle at 52% 86%, rgba(115, 130, 56, .23), transparent 25%),
+      linear-gradient(145deg, #2a170a, #5b3516 38%, #8a6741 72%, #3a1e0b);
+    color: var(--stain);
+    font-family: "Arial Rounded MT Bold", "Trebuchet MS", Arial, sans-serif;
+  }
+
+  a,
+  button,
+  input {
+    font: inherit;
+  }
+
+  .drip-top {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    height: 24px;
+    background: var(--espresso);
+    box-shadow: 0 12px 34px rgba(36, 19, 8, .72);
+    pointer-events: none;
+  }
+
+  .drip-top::before {
+    content: "";
+    position: absolute;
+    inset: 15px 0 auto;
+    height: 70px;
+    background:
+      radial-gradient(ellipse at 6% 0%, var(--espresso) 0 40%, transparent 42%),
+      radial-gradient(ellipse at 18% 0%, var(--espresso) 0 58%, transparent 60%),
+      radial-gradient(ellipse at 34% 0%, var(--espresso) 0 34%, transparent 36%),
+      radial-gradient(ellipse at 47% 0%, var(--espresso) 0 68%, transparent 70%),
+      radial-gradient(ellipse at 63% 0%, var(--espresso) 0 46%, transparent 48%),
+      radial-gradient(ellipse at 82% 0%, var(--espresso) 0 62%, transparent 64%),
+      radial-gradient(ellipse at 95% 0%, var(--espresso) 0 36%, transparent 38%);
+  }
+
+  .page {
+    min-height: 100vh;
+    position: relative;
+  }
+
+  header {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    padding: 34px clamp(18px, 4vw, 58px) 18px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--corn);
+    text-decoration: none;
+    font-size: clamp(21px, 3vw, 38px);
+    font-weight: 950;
+    letter-spacing: -.05em;
+    text-shadow: 0 4px 0 #1b0d04, 0 0 18px rgba(36, 19, 8, .9);
+  }
+
+  .brand-mark {
+    width: 58px;
+    height: 48px;
+    border-radius: 48% 52% 68% 32% / 46% 58% 42% 54%;
+    background:
+      radial-gradient(circle at 34% 24%, #fff0b0 0 7%, transparent 8%),
+      radial-gradient(circle at 63% 57%, #2c1506 0 10%, transparent 11%),
+      linear-gradient(145deg, #8f5521, #321607 72%);
+    box-shadow:
+      inset 9px 8px 15px rgba(255, 210, 112, .18),
+      inset -12px -12px 22px rgba(20, 7, 1, .78),
+      0 12px 24px var(--wet);
+    transform: rotate(-8deg);
+  }
+
+  nav {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  nav a {
+    color: var(--stain);
+    text-decoration: none;
+    font-weight: 900;
+    padding: 10px 15px;
+    background: rgba(74, 42, 18, .82);
+    border: 2px solid rgba(224, 193, 138, .28);
+    border-radius: 54% 46% 64% 36% / 42% 60% 40% 58%;
+    box-shadow:
+      inset 4px 5px 10px rgba(255, 226, 156, .09),
+      inset -8px -9px 18px rgba(22, 9, 2, .58),
+      0 11px 24px rgba(31, 13, 3, .48);
+  }
+
+  .hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, .78fr);
+    gap: clamp(24px, 5vw, 72px);
+    align-items: center;
+    min-height: calc(100vh - 110px);
+    padding: clamp(28px, 6vw, 78px) clamp(18px, 5vw, 74px) 110px;
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    left: -8%;
+    right: -8%;
+    bottom: -4px;
+    height: 130px;
+    background:
+      radial-gradient(ellipse at 8% 0, var(--mud) 0 55%, transparent 57%),
+      radial-gradient(ellipse at 24% 0, var(--mud) 0 42%, transparent 44%),
+      radial-gradient(ellipse at 42% 0, var(--mud) 0 68%, transparent 70%),
+      radial-gradient(ellipse at 62% 0, var(--mud) 0 45%, transparent 47%),
+      radial-gradient(ellipse at 82% 0, var(--mud) 0 72%, transparent 74%),
+      linear-gradient(var(--mud), var(--mud));
+    border-radius: 45% 55% 0 0 / 35% 65% 0 0;
+    filter: drop-shadow(0 -16px 24px rgba(36, 19, 8, .52));
+  }
+
+  .hero-copy {
+    position: relative;
+    z-index: 2;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    margin-bottom: 18px;
+    padding: 12px 18px;
+    background: var(--swamp);
+    color: #241308;
+    font-weight: 950;
+    text-transform: uppercase;
+    border-radius: 61% 39% 55% 45% / 50% 38% 62% 50%;
+    box-shadow:
+      inset 6px 7px 13px rgba(255, 240, 176, .22),
+      inset -10px -12px 18px rgba(22, 48, 6, .55),
+      0 14px 30px rgba(31, 13, 3, .64);
+    transform: rotate(-2deg);
+  }
+
+  h1 {
+    margin: 0;
+    max-width: 900px;
+    color: var(--corn);
+    font-size: clamp(58px, 11vw, 156px);
+    line-height: .75;
+    letter-spacing: -.08em;
+    font-weight: 950;
+    text-transform: uppercase;
+    text-shadow:
+      0 8px 0 #2a1405,
+      0 18px 32px rgba(15, 5, 1, .9);
+  }
+
+  .hero-copy p {
+    max-width: 690px;
+    margin: 32px 0 28px;
+    padding: 22px;
+    color: #241308;
+    background:
+      radial-gradient(circle at 12% 20%, rgba(74, 42, 18, .18), transparent 17%),
+      radial-gradient(circle at 82% 78%, rgba(115, 130, 56, .2), transparent 20%),
+      var(--stain);
+    border-radius: 36% 64% 42% 58% / 62% 35% 65% 38%;
+    font-size: clamp(18px, 2.1vw, 26px);
+    line-height: 1.12;
+    font-weight: 900;
+    box-shadow:
+      inset 10px 9px 18px rgba(255, 240, 176, .26),
+      inset -14px -13px 24px rgba(88, 50, 18, .38),
+      0 18px 34px rgba(31, 13, 3, .68);
+    transform: rotate(.8deg);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .blob-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 62px;
+    padding: 17px 24px;
+    border: 0;
+    color: #2c1506;
+    background:
+      radial-gradient(circle at 24% 18%, #fff0a2 0 9%, transparent 10%),
+      linear-gradient(145deg, #ffd94c, #b77c17 74%);
+    border-radius: 65% 35% 58% 42% / 42% 56% 44% 58%;
+    box-shadow:
+      inset 8px 8px 15px rgba(255, 246, 174, .48),
+      inset -13px -14px 24px rgba(76, 40, 4, .45),
+      0 17px 32px rgba(31, 13, 3, .76);
+    font-size: clamp(18px, 2vw, 25px);
+    font-weight: 950;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .blob-button.secondary {
+    background:
+      radial-gradient(circle at 24% 18%, rgba(255, 240, 176, .28) 0 9%, transparent 10%),
+      linear-gradient(145deg, #8a6741, #3a1e0b 78%);
+    color: var(--stain);
+    border-radius: 40% 60% 67% 33% / 54% 44% 56% 46%;
+  }
+
+  .blob-button:active {
+    transform: translateY(4px) scale(.98);
+    box-shadow:
+      inset 12px 14px 24px rgba(36, 19, 8, .54),
+      0 8px 18px rgba(31, 13, 3, .7);
+  }
+
+  .hero-blob {
+    position: relative;
+    z-index: 2;
+    min-height: 560px;
+    border-radius: 45% 55% 62% 38% / 36% 47% 53% 64%;
+    background:
+      radial-gradient(circle at 28% 18%, rgba(255, 232, 142, .42), transparent 11%),
+      radial-gradient(circle at 68% 34%, #2b1305 0 8%, transparent 9%),
+      radial-gradient(circle at 42% 72%, #f3c331 0 5%, transparent 6%),
+      radial-gradient(circle at 77% 78%, #738238 0 7%, transparent 8%),
+      linear-gradient(145deg, #9a5f25, #4a220c 48%, #1b0b03);
+    box-shadow:
+      inset 26px 24px 42px rgba(255, 204, 95, .2),
+      inset -30px -36px 58px rgba(14, 4, 0, .86),
+      0 30px 60px rgba(22, 7, 1, .82);
+    transform: rotate(3deg);
+  }
+
+  .hero-blob::before {
+    content: "💩";
+    position: absolute;
+    left: 50%;
+    top: 48%;
+    transform: translate(-50%, -50%) rotate(-8deg);
+    font-size: clamp(150px, 23vw, 280px);
+    filter: drop-shadow(0 18px 18px rgba(20, 7, 1, .58));
+  }
+
+  .hero-blob::after {
+    content: "premium compost concierge";
+    position: absolute;
+    left: 50%;
+    bottom: 44px;
+    width: 72%;
+    transform: translateX(-50%) rotate(-3deg);
+    padding: 14px 18px;
+    text-align: center;
+    color: #241308;
+    background: var(--corn);
+    border-radius: 48% 52% 36% 64% / 64% 34% 66% 36%;
+    font-weight: 950;
+    text-transform: uppercase;
+    box-shadow:
+      inset 7px 8px 14px rgba(255,255,180,.3),
+      inset -10px -12px 19px rgba(111, 69, 7, .38),
+      0 12px 26px rgba(31, 13, 3, .58);
+  }
+
+  .splatter {
+    position: absolute;
+    border-radius: 50% 45% 60% 40% / 55% 60% 40% 45%;
+    background: #2b1305;
+    box-shadow:
+      inset 5px 4px 10px rgba(255, 220, 142, .08),
+      inset -8px -9px 14px rgba(0,0,0,.55),
+      0 14px 24px rgba(31, 13, 3, .5);
+  }
+
+  .s1 { width: 54px; height: 44px; left: 8%; top: 19%; }
+  .s2 { width: 28px; height: 35px; right: 12%; top: 12%; background: #6c421d; }
+  .s3 { width: 74px; height: 52px; right: 7%; bottom: 22%; background: #4a2a12; }
+  .s4 { width: 34px; height: 30px; left: 30%; bottom: 12%; background: #738238; }
+
+  .features {
+    position: relative;
+    z-index: 3;
+    padding: 90px clamp(18px, 5vw, 74px);
+    background:
+      radial-gradient(circle at 10% 18%, rgba(36, 19, 8, .55), transparent 24%),
+      radial-gradient(circle at 90% 72%, rgba(243, 195, 49, .14), transparent 22%),
+      var(--mud);
+  }
+
+  .section-title {
+    margin: 0 0 36px;
+    color: var(--stain);
+    font-size: clamp(44px, 8vw, 112px);
+    line-height: .82;
+    letter-spacing: -.07em;
+    font-weight: 950;
+    text-transform: uppercase;
+    text-shadow: 0 8px 0 #2a1405, 0 16px 30px rgba(20, 7, 1, .72);
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(18px, 3vw, 34px);
+  }
+
+  .feature {
+    min-height: 330px;
+    padding: 26px;
+    color: #211006;
+    background:
+      radial-gradient(circle at 82% 12%, rgba(243, 195, 49, .38), transparent 18%),
+      radial-gradient(circle at 18% 90%, rgba(36, 19, 8, .18), transparent 22%),
+      var(--beige);
+    border-radius: 34% 66% 49% 51% / 45% 39% 61% 55%;
+    box-shadow:
+      inset 12px 14px 23px rgba(255, 233, 163, .25),
+      inset -18px -17px 32px rgba(76, 40, 12, .46),
+      0 22px 42px rgba(31, 13, 3, .72);
+  }
+
+  .feature:nth-child(2) {
+    transform: translateY(24px) rotate(2deg);
+    border-radius: 58% 42% 38% 62% / 35% 57% 43% 65%;
+    background:
+      radial-gradient(circle at 72% 22%, rgba(255, 228, 118, .42), transparent 16%),
+      var(--swamp);
+  }
+
+  .feature:nth-child(3) {
+    transform: rotate(-2deg);
+    border-radius: 42% 58% 68% 32% / 63% 38% 62% 37%;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(255, 226, 146, .2), transparent 18%),
+      var(--taupe);
+  }
+
+  .feature-icon {
+    display: grid;
+    place-items: center;
+    width: 82px;
+    height: 72px;
+    margin-bottom: 28px;
+    font-size: 43px;
+    border-radius: 60% 40% 54% 46% / 44% 60% 40% 56%;
+    background: #3a1e0b;
+    box-shadow:
+      inset 8px 7px 13px rgba(255, 210, 112, .08),
+      inset -10px -11px 18px rgba(0,0,0,.58),
+      0 13px 23px rgba(31, 13, 3, .54);
+  }
+
+  .feature h3 {
+    margin: 0 0 14px;
+    font-size: clamp(26px, 3vw, 42px);
+    line-height: .92;
+    letter-spacing: -.05em;
+    font-weight: 950;
+    text-transform: uppercase;
+  }
+
+  .feature p {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.18;
+    font-weight: 850;
+  }
+
+  .smear {
+    height: 120px;
+    background:
+      radial-gradient(ellipse at 10% 100%, var(--mud) 0 48%, transparent 50%),
+      radial-gradient(ellipse at 31% 100%, var(--mud) 0 66%, transparent 68%),
+      radial-gradient(ellipse at 55% 100%, var(--mud) 0 42%, transparent 44%),
+      radial-gradient(ellipse at 74% 100%, var(--mud) 0 72%, transparent 74%),
+      radial-gradient(ellipse at 93% 100%, var(--mud) 0 52%, transparent 54%),
+      var(--espresso);
+  }
+
+  .cta {
+    padding: 80px clamp(18px, 5vw, 74px) 90px;
+    background:
+      radial-gradient(circle at 18% 22%, rgba(115, 130, 56, .26), transparent 22%),
+      radial-gradient(circle at 82% 78%, rgba(243, 195, 49, .18), transparent 22%),
+      var(--espresso);
+  }
+
+  .cta-card {
+    display: grid;
+    grid-template-columns: 1fr minmax(280px, 420px);
+    gap: 28px;
+    align-items: center;
+    padding: clamp(24px, 5vw, 52px);
+    background:
+      radial-gradient(circle at 12% 18%, rgba(255, 214, 115, .21), transparent 18%),
+      radial-gradient(circle at 88% 86%, rgba(36, 19, 8, .42), transparent 20%),
+      var(--taupe);
+    border-radius: 35% 65% 42% 58% / 42% 36% 64% 58%;
+    box-shadow:
+      inset 18px 20px 34px rgba(255, 228, 155, .14),
+      inset -28px -32px 50px rgba(25, 9, 2, .62),
+      0 32px 66px rgba(18, 6, 1, .86);
+  }
+
+  .cta h2 {
+    margin: 0;
+    color: var(--corn);
+    font-size: clamp(45px, 8vw, 118px);
+    line-height: .78;
+    letter-spacing: -.07em;
+    font-weight: 950;
+    text-transform: uppercase;
+    text-shadow: 0 8px 0 #2a1405, 0 16px 30px rgba(20, 7, 1, .8);
+  }
+
+  .cta p {
+    max-width: 720px;
+    margin: 24px 0 0;
+    color: #251207;
+    font-size: clamp(18px, 2.2vw, 26px);
+    line-height: 1.12;
+    font-weight: 950;
+  }
+
+  .signup {
+    padding: 22px;
+    background: var(--stain);
+    border-radius: 61% 39% 49% 51% / 42% 58% 42% 58%;
+    box-shadow:
+      inset 10px 10px 18px rgba(255, 241, 187, .28),
+      inset -16px -18px 29px rgba(80, 44, 16, .42),
+      0 20px 34px rgba(31, 13, 3, .68);
+  }
+
+  .signup label {
+    display: block;
+    margin-bottom: 10px;
+    color: #241308;
+    font-weight: 950;
+    text-transform: uppercase;
+  }
+
+  .signup input {
+    width: 100%;
+    min-height: 58px;
+    margin-bottom: 14px;
+    padding: 12px 18px;
+    border: 0;
+    outline: 0;
+    color: var(--stain);
+    background:
+      radial-gradient(circle at 88% 30%, rgba(243, 195, 49, .2), transparent 16%),
+      #2b1305;
+    border-radius: 44% 56% 37% 63% / 52% 41% 59% 48%;
+    box-shadow:
+      inset 8px 9px 18px rgba(0,0,0,.74),
+      inset -5px -6px 14px rgba(255, 220, 142, .06);
+    font-weight: 850;
+  }
+
+  .signup input::placeholder {
+    color: rgba(224, 193, 138, .68);
+  }
+
+  .result {
+    min-height: 34px;
+    margin-top: 14px;
+    color: #2a1405;
+    font-weight: 950;
+    line-height: 1.15;
+  }
+
+  footer {
+    padding: 28px clamp(18px, 5vw, 74px);
+    color: var(--beige);
+    background: #160902;
+    font-weight: 900;
+    text-align: center;
+  }
+
+  @media (max-width: 900px) {
+    header,
+    nav {
+      justify-content: center;
+    }
+
+    header {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .hero,
+    .cta-card {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-blob {
+      min-height: 430px;
+    }
+
+    .feature-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .feature,
+    .feature:nth-child(2),
+    .feature:nth-child(3) {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 560px) {
+    nav a {
+      width: 100%;
+      text-align: center;
+    }
+
+    .hero {
+      padding-bottom: 90px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    .blob-button {
+      width: 100%;
+    }
+
+    .hero-copy p,
+    .cta-card,
+    .signup {
+      border-radius: 26% 74% 32% 68% / 30% 40% 60% 70%;
+    }
+
+    .hero-blob {
+      min-height: 350px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="drip-top" aria-hidden="true"></div>
+
+<div class="page">
+  <header>
+    <a class="brand" href="#top" aria-label="LogDrop Deluxe home">
+      <span class="brand-mark"></span>
+      <span>LogDrop Deluxe</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#features">The Movement</a>
+      <a href="#cta">Drop Zone</a>
+      <a href="#cta">Join the Dump</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="splatter s1" aria-hidden="true"></div>
+      <div class="splatter s2" aria-hidden="true"></div>
+      <div class="splatter s3" aria-hidden="true"></div>
+      <div class="splatter s4" aria-hidden="true"></div>
+
+      <div class="hero-copy">
+        <span class="eyebrow">Luxury compost concierge for dramatic toilets</span>
+        <h1 id="hero-title">Turn Your Throne Nuggets Into Garden Glory.</h1>
+        <p>
+          LogDrop Deluxe collects your most personal brown donations, politely judges their texture, and turns them into
+          boutique compost for people who say “soil profile” at parties. The bottom line: your bottom line becomes basil.
+        </p>
+        <div class="actions">
+          <a class="blob-button" href="#cta">Drop a Log</a>
+          <a class="blob-button secondary" href="#features">Sniff the Features</a>
+        </div>
+      </div>
+
+      <aside class="hero-blob" aria-label="Gloopy compost mascot"></aside>
+    </section>
+
+    <section class="features" id="features" aria-labelledby="features-title">
+      <h2 class="section-title" id="features-title">A Solid Movement, Unfortunately.</h2>
+      <div class="feature-grid">
+        <article class="feature">
+          <div class="feature-icon" aria-hidden="true">🚽</div>
+          <h3>Porcelain-to-Planter Pickup</h3>
+          <p>
+            Our slop-certified couriers arrive with sealed swamp buckets, a straight face, and zero questions unless the
+            log is unusually historical.
+          </p>
+        </article>
+        <article class="feature">
+          <div class="feature-icon" aria-hidden="true">🪰</div>
+          <h3>Chunk Analytics</h3>
+          <p>
+            Every deposit gets a texture readout: pebble, pudding, heroic cable, or “please hydrate.” Science, but damp.
+          </p>
+        </article>
+        <article class="feature">
+          <div class="feature-icon" aria-hidden="true">🌽</div>
+          <h3>Corn-Grade Traceability</h3>
+          <p>
+            Scan your bucket tag and follow the journey from awkward bathroom silence to smug heirloom tomato fertilizer.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <div class="smear" aria-hidden="true"></div>
+
+    <section class="cta" id="cta" aria-labelledby="cta-title">
+      <div class="cta-card">
+        <div>
+          <h2 id="cta-title">Flush Your Worries. Keep the Evidence Useful.</h2>
+          <p>
+            Join the monthly bowel-to-botanical program. We send the bucket, you make the mud, we handle the social
+            consequences. Cancel anytime, preferably after washing your hands.
+          </p>
+        </div>
+
+        <form class="signup" id="signupForm">
+          <label for="email">Bucket requisition email</label>
+          <input id="email" type="email" placeholder="plop@domain.com" required />
+          <button class="blob-button" type="submit">Initiate Poop Loop</button>
+          <div class="result" id="result" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    LogDrop Deluxe Compost Club. No clean whites. No shame. Some odors.
+  </footer>
+</div>
+
+<script>
+  const form = document.getElementById("signupForm");
+  const result = document.getElementById("result");
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const email = document.getElementById("email");
+
+    if (!email.checkValidity()) {
+      result.textContent = "Invalid email. Even the flies are disappointed.";
+      return;
+    }
+
+    result.textContent = "Bucket request logged. Prepare for a deeply personal delivery.";
+    form.reset();
+  });
+</script>
+</body>
+</html>

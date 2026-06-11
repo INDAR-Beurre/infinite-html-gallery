@@ -1,0 +1,1325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ATELIER GAGARINE — Orbital Salvage & Reissue / Est. 2014, Baikonur-adjacent</title>
+<meta name="description" content="Atelier Gagarine reissues decommissioned orbital hardware as domestic objects. Valves, portholes, gyroscopes and pressure housings, since 2014." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,700;9..144,900&family=JetBrains+Mono:wght@300;400;500;700&family=Archivo+Black&family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     ATELIER GAGARINE
+     A restorer of decommissioned orbital hardware.
+     Visual system: Soviet-cosmic brutalism / museum catalog /
+     editorial asymmetry. Off-black, bone, orbital red, vacuum
+     cyan. Typography is the primary material.
+     ============================================================ */
+  :root {
+    --bone:        #efe7d7;
+    --paper:       #f4ede0;
+    --ink:         #0c0c0c;
+    --ink-2:       #1a1a1a;
+    --soot:        #2b2722;
+    --rust:        #8a2a1a;
+    --red:         #d23a1f;       /* orbital red */
+    --cyan:        #6dd6d6;       /* vacuum cyan */
+    --phosphor:    #c9ff3a;       /* CRT green, used sparingly */
+    --metal:       #b6b1a4;
+    --line:        rgba(12,12,12,0.85);
+    --line-soft:   rgba(12,12,12,0.18);
+
+    --grid-gap:    clamp(14px, 1.4vw, 22px);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: var(--bone); }
+  body {
+    background: var(--bone);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  img, svg { display: block; max-width: 100%; }
+  button { font: inherit; cursor: pointer; }
+
+  ::selection { background: var(--red); color: var(--bone); }
+
+  /* ----- shared typography --------------------------------- */
+  .mono    { font-family: 'JetBrains Mono', ui-monospace, monospace; font-feature-settings: "ss01","ss02"; }
+  .serif   { font-family: 'Fraunces', 'Times New Roman', serif; font-variation-settings: "opsz" 144, "SOFT" 30; }
+  .display { font-family: 'Archivo Black', 'Inter', sans-serif; letter-spacing: -0.04em; }
+  .small   { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
+  .caps    { letter-spacing: 0.18em; text-transform: uppercase; }
+
+  /* ----- top utility / index strip ------------------------- */
+  .util {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--ink);
+    color: var(--bone);
+    border-bottom: 1px solid #000;
+  }
+  .util-inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 8px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .util-inner .l, .util-inner .r { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+  .util-inner .r { justify-content: flex-end; }
+  .util .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); display: inline-block; box-shadow: 0 0 0 2px rgba(210,58,31,0.18); animation: pulse 1.8s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{ opacity:1 } 50%{ opacity:.35 } }
+  .util a:hover { color: var(--cyan); }
+  .util .mid { font-weight: 500; }
+
+  /* ----- masthead ------------------------------------------- */
+  .mast {
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
+    position: relative;
+  }
+  .mast-top {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    padding: 22px 24px 14px;
+    gap: 24px;
+  }
+  .mast-edition .k { font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; opacity: .7; }
+  .mast-edition .v { font-family: 'JetBrains Mono', monospace; font-size: 12px; margin-top: 4px; }
+  .mast-edition.right { text-align: right; }
+  .mast-edition.right .v { font-size: 11px; }
+
+  .mast-logo {
+    text-align: center;
+    font-family: 'Archivo Black', sans-serif;
+    letter-spacing: -0.045em;
+    line-height: 0.78;
+    font-size: clamp(48px, 9.4vw, 156px);
+    white-space: nowrap;
+  }
+  .mast-logo .amp { color: var(--red); font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; padding: 0 0.05em; }
+  .mast-logo sup { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; vertical-align: super; margin-left: 6px; opacity: .55; }
+
+  .mast-strip {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    border-top: 1px solid var(--line);
+  }
+  .mast-strip > div {
+    padding: 9px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border-right: 1px solid var(--line-soft);
+  }
+  .mast-strip > div:last-child { border-right: 0; }
+  .mast-strip b { font-weight: 700; }
+
+  /* ----- nav ----------------------------------------------- */
+  nav.toc {
+    border-bottom: 1px solid var(--line);
+    background: var(--bone);
+    position: sticky; top: 33px; z-index: 40;
+  }
+  nav.toc ul {
+    list-style: none; display: flex; flex-wrap: wrap;
+    padding: 0; margin: 0;
+  }
+  nav.toc li {
+    border-right: 1px solid var(--line-soft);
+  }
+  nav.toc a {
+    display: block;
+    padding: 13px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  nav.toc a .n { color: var(--rust); margin-right: 8px; }
+  nav.toc a:hover { background: var(--ink); color: var(--bone); }
+  nav.toc a:hover .n { color: var(--cyan); }
+
+  /* ----- hero (asymmetric, editorial) ----------------------- */
+  .hero {
+    position: relative;
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    min-height: 86vh;
+  }
+  .hero-text {
+    padding: clamp(28px, 5vw, 80px) clamp(20px, 4vw, 64px);
+    display: flex; flex-direction: column; justify-content: space-between;
+    background: var(--bone);
+    position: relative;
+  }
+  .hero-text .lead {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "SOFT" 30;
+    font-weight: 400;
+    font-size: clamp(34px, 4.6vw, 78px);
+    line-height: 0.96;
+    letter-spacing: -0.02em;
+    max-width: 14ch;
+  }
+  .hero-text .lead em { font-style: italic; color: var(--rust); }
+  .hero-text .lead .strike { position: relative; }
+  .hero-text .lead .strike::after {
+    content: ""; position: absolute; left: -2%; right: -2%; top: 56%;
+    height: 0.18em; background: var(--ink);
+  }
+
+  .hero-meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+    margin-top: 40px;
+  }
+  .hero-meta .cell .k {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    opacity: 0.6; margin-bottom: 6px;
+  }
+  .hero-meta .cell .v {
+    font-family: 'Fraunces', serif;
+    font-size: 15px; line-height: 1.35;
+  }
+  .hero-meta .cell b { font-weight: 500; }
+
+  .hero-image {
+    position: relative;
+    background: #0a0a0a;
+    overflow: hidden;
+  }
+  .hero-image .ph {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(109,214,214,0.18), transparent 55%),
+      radial-gradient(ellipse at 80% 80%, rgba(210,58,31,0.25), transparent 60%),
+      linear-gradient(180deg, #111 0%, #050505 100%);
+  }
+  .hero-image .ph::after {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent 0 23px, rgba(255,255,255,0.03) 23px 24px),
+      repeating-linear-gradient(90deg, transparent 0 23px, rgba(255,255,255,0.03) 23px 24px);
+    mix-blend-mode: screen;
+  }
+  .hero-image .plate {
+    position: absolute;
+    left: 12%; top: 50%;
+    transform: translateY(-50%) rotate(-6deg);
+    width: 78%;
+    aspect-ratio: 1.6/1;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 35% 35%, #c9c1ad 0%, #6a6555 35%, #2a2620 70%, #0b0a08 100%);
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,0.06),
+      inset 30px 50px 80px rgba(0,0,0,0.6),
+      0 60px 80px rgba(0,0,0,0.6);
+  }
+  .hero-image .plate::before, .hero-image .plate::after {
+    content: ""; position: absolute; border-radius: 50%;
+  }
+  .hero-image .plate::before {
+    inset: 18%;
+    background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.07), transparent 65%);
+  }
+  .hero-image .plate::after {
+    inset: 36%;
+    border: 1px dashed rgba(239,231,215,0.35);
+  }
+  .hero-image .rivet {
+    position: absolute; width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(239,231,215,0.5);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.4);
+  }
+  .hero-image .label {
+    position: absolute;
+    left: 24px; bottom: 24px;
+    color: var(--bone);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    display: grid; gap: 4px;
+  }
+  .hero-image .label b { color: var(--cyan); }
+  .hero-image .stamp {
+    position: absolute; top: 24px; right: 24px;
+    border: 1.5px solid var(--bone);
+    color: var(--bone);
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 11px; line-height: 1.1;
+    text-align: center;
+    transform: rotate(8deg);
+    background: rgba(0,0,0,0.25);
+  }
+  .hero-image .stamp small { display: block; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.22em; margin-top: 3px; opacity: 0.8; }
+
+  .hero-marquee {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: var(--ink);
+    color: var(--bone);
+    overflow: hidden;
+    border-top: 1px solid #000;
+  }
+  .hero-marquee .track {
+    display: flex; gap: 56px;
+    padding: 12px 0;
+    white-space: nowrap;
+    animation: scroll 38s linear infinite;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  }
+  .hero-marquee .track span { display: inline-flex; align-items: center; gap: 14px; }
+  .hero-marquee .track .bullet { width: 6px; height: 6px; background: var(--red); border-radius: 50%; }
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ----- sections ------------------------------------------ */
+  section { border-bottom: 1px solid var(--line); }
+  .section-head {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    padding: 36px 24px 22px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bone);
+  }
+  .section-head .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    padding-top: 6px;
+  }
+  .section-head .num b { color: var(--red); }
+  .section-head h2 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(28px, 4.2vw, 56px);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+  }
+  .section-head h2 em { font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; color: var(--rust); }
+  .section-head .sub {
+    margin-top: 12px;
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    max-width: 60ch;
+    opacity: 0.85;
+  }
+
+  /* ----- manifesto ----------------------------------------- */
+  .manifesto {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr 0.9fr;
+    gap: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .manifesto > div {
+    padding: 36px 28px;
+    border-right: 1px solid var(--line-soft);
+  }
+  .manifesto > div:last-child { border-right: 0; }
+  .manifesto .m1 p {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-size: clamp(22px, 2.4vw, 30px);
+    line-height: 1.25;
+  }
+  .manifesto .m1 p em { font-style: italic; color: var(--rust); }
+  .manifesto .m2 p {
+    font-family: 'Fraunces', serif;
+    font-size: 16px; line-height: 1.55;
+  }
+  .manifesto .m3 {
+    background: var(--ink);
+    color: var(--bone);
+    margin: 18px 18px 18px 0;
+    padding: 22px;
+    align-self: start;
+    position: relative;
+  }
+  .manifesto .m3 .k {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 14px;
+  }
+  .manifesto .m3 ul { list-style: none; display: grid; gap: 14px; }
+  .manifesto .m3 li {
+    display: grid; grid-template-columns: 24px 1fr; gap: 10px;
+    font-size: 12.5px; line-height: 1.4;
+  }
+  .manifesto .m3 li .n {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--red);
+  }
+  .manifesto .m3 li b { display: block; font-weight: 500; margin-bottom: 2px; }
+
+  /* ----- inventory / catalog ------------------------------- */
+  .catalog {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 0;
+  }
+  .item {
+    position: relative;
+    border-right: 1px solid var(--line-soft);
+    border-bottom: 1px solid var(--line-soft);
+    padding: 22px 22px 24px;
+    min-height: 460px;
+    overflow: hidden;
+    background: var(--paper);
+  }
+  .item .meta-top {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .item .meta-top .id { color: var(--rust); }
+  .item h3 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 22px; line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .item h3 em { font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; }
+  .item .price {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; margin-top: 4px;
+  }
+  .item .desc {
+    font-family: 'Fraunces', serif;
+    font-size: 14px; line-height: 1.45;
+    margin-top: 14px;
+    max-width: 32ch;
+  }
+  .item .tags {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-top: 14px;
+  }
+  .item .tags span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 4px 7px;
+    border: 1px solid var(--ink);
+  }
+  .item .object {
+    position: absolute;
+    right: -6%;
+    bottom: -8%;
+    width: 76%;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    filter: drop-shadow(0 30px 40px rgba(0,0,0,0.18));
+  }
+  .item .object.shape-a { background: radial-gradient(circle at 35% 30%, #d6cfbd 0%, #6e6957 50%, #1a1814 100%); }
+  .item .object.shape-b { background: conic-gradient(from 220deg, #2a2620, #b6b1a4, #2a2620, #b6b1a4, #2a2620); border-radius: 12% 38% 12% 38%; }
+  .item .object.shape-c { background: linear-gradient(135deg, #d23a1f 0%, #6a1a10 100%); border-radius: 50% 8% 50% 8%; }
+  .item .object.shape-d { background: radial-gradient(circle at 50% 50%, #6dd6d6 0%, #1d3f3f 60%, #0a1414 100%); }
+  .item .object.shape-e { background: repeating-linear-gradient(90deg, #2a2620 0 14px, #b6b1a4 14px 28px); border-radius: 4px; }
+  .item .object.shape-f { background: radial-gradient(circle at 30% 70%, #efe7d7 0%, #6e6957 40%, #1a1814 100%); }
+  .item .object::after {
+    content: ""; position: absolute; inset: 8%;
+    border-radius: inherit;
+    background: radial-gradient(circle at 50% 35%, rgba(255,255,255,0.18), transparent 55%);
+  }
+  .item .reserve {
+    position: relative; z-index: 2;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    margin-top: 18px;
+    padding: 9px 12px;
+    background: var(--ink); color: var(--bone);
+    border: 1px solid var(--ink);
+    transition: background .2s ease, color .2s ease;
+  }
+  .item .reserve:hover { background: var(--red); border-color: var(--red); }
+  .item .reserve .arrow { transition: transform .2s ease; }
+  .item .reserve:hover .arrow { transform: translateX(3px); }
+
+  /* item sizes */
+  .item.s-4 { grid-column: span 4; }
+  .item.s-5 { grid-column: span 5; }
+  .item.s-3 { grid-column: span 3; }
+  .item.s-6 { grid-column: span 6; }
+  .item.s-7 { grid-column: span 7; }
+  .item.s-8 { grid-column: span 8; }
+
+  .item.s-5 .object { width: 60%; }
+  .item.s-3 .object { width: 90%; }
+  .item.s-7 .object { width: 50%; }
+
+  .item.dark {
+    background: var(--ink);
+    color: var(--bone);
+  }
+  .item.dark .tags span { border-color: var(--bone); }
+  .item.dark .meta-top .id { color: var(--cyan); }
+  .item.dark .reserve { background: var(--bone); color: var(--ink); border-color: var(--bone); }
+  .item.dark .reserve:hover { background: var(--red); border-color: var(--red); color: var(--bone); }
+
+  /* ----- provenance / data wall ---------------------------- */
+  .datawall {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--line);
+  }
+  .datawall .stat {
+    padding: 36px 24px;
+    border-right: 1px solid var(--line-soft);
+  }
+  .datawall .stat:last-child { border-right: 0; }
+  .datawall .stat .k {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase;
+    opacity: 0.7; margin-bottom: 16px;
+  }
+  .datawall .stat .v {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(42px, 5vw, 72px);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+  }
+  .datawall .stat .v .u { font-size: 0.32em; vertical-align: top; margin-left: 4px; opacity: 0.7; font-family: 'JetBrains Mono', monospace; }
+  .datawall .stat .f { font-family: 'Fraunces', serif; font-size: 13px; margin-top: 10px; opacity: 0.8; }
+
+  /* ----- process / three step ------------------------------ */
+  .process {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .step {
+    padding: 36px 28px 44px;
+    border-right: 1px solid var(--line-soft);
+    position: relative;
+  }
+  .step:last-child { border-right: 0; }
+  .step .n {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.2em; color: var(--rust);
+    margin-bottom: 16px;
+  }
+  .step h3 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(28px, 2.6vw, 38px);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 18px;
+  }
+  .step h3 em { font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; }
+  .step p {
+    font-family: 'Fraunces', serif;
+    font-size: 15.5px; line-height: 1.55;
+  }
+  .step .stamp-step {
+    position: absolute; right: 24px; top: 28px;
+    width: 64px; height: 64px;
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 0.2em;
+    transform: rotate(-6deg);
+  }
+
+  /* ----- commission / large block -------------------------- */
+  .commission {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--ink);
+    color: var(--bone);
+  }
+  .commission .left {
+    padding: 70px 56px;
+    border-right: 1px solid #222;
+  }
+  .commission .right {
+    padding: 70px 56px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .commission .kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 28px;
+  }
+  .commission h2 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(40px, 5.4vw, 88px);
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+  }
+  .commission h2 em { font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; color: var(--red); }
+  .commission p {
+    font-family: 'Fraunces', serif;
+    font-size: 18px; line-height: 1.5;
+    max-width: 42ch;
+    margin-top: 28px;
+    opacity: 0.9;
+  }
+  .commission form {
+    display: grid; gap: 18px;
+    margin-top: 36px;
+  }
+  .commission .row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+  }
+  .commission label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    opacity: 0.65;
+    display: block; margin-bottom: 8px;
+  }
+  .commission input, .commission select, .commission textarea {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid rgba(239,231,215,0.35);
+    color: var(--bone);
+    padding: 8px 0 10px;
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    outline: none;
+  }
+  .commission input:focus, .commission select:focus, .commission textarea:focus {
+    border-bottom-color: var(--cyan);
+  }
+  .commission textarea { min-height: 90px; resize: vertical; }
+  .commission .submit {
+    display: inline-flex; align-items: center; gap: 14px;
+    background: var(--red); color: var(--bone);
+    border: 0; padding: 16px 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    width: max-content;
+    margin-top: 8px;
+  }
+  .commission .submit:hover { background: var(--cyan); color: var(--ink); }
+  .commission .submit .arrow { transition: transform .2s ease; }
+  .commission .submit:hover .arrow { transform: translateX(4px); }
+
+  .commission .side {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    line-height: 1.7;
+    opacity: 0.85;
+  }
+  .commission .side .blk { margin-bottom: 28px; }
+  .commission .side .blk .k { color: var(--cyan); margin-bottom: 8px; }
+  .commission .side .blk .v { font-family: 'Fraunces', serif; font-size: 15px; letter-spacing: 0; text-transform: none; }
+
+  /* ----- testimonials / press ------------------------------ */
+  .press {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+  }
+  .press blockquote {
+    padding: 36px 28px;
+    border-right: 1px solid var(--line-soft);
+    margin: 0;
+  }
+  .press blockquote:last-child { border-right: 0; }
+  .press blockquote p {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(20px, 2.2vw, 30px);
+    line-height: 1.22;
+    letter-spacing: -0.01em;
+  }
+  .press blockquote .src {
+    margin-top: 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase;
+    opacity: 0.75;
+  }
+  .press blockquote em { font-style: italic; color: var(--rust); }
+  .press blockquote .stars { color: var(--rust); letter-spacing: 0.2em; margin-top: 14px; font-size: 13px; }
+
+  /* ----- signoff / colophon -------------------------------- */
+  .signoff {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr 0.9fr;
+    background: var(--ink);
+    color: var(--bone);
+  }
+  .signoff > div {
+    padding: 70px 48px;
+    border-right: 1px solid #222;
+  }
+  .signoff > div:last-child { border-right: 0; }
+  .signoff h2 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(36px, 4.4vw, 64px);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+  }
+  .signoff h2 em { font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; color: var(--red); }
+  .signoff .kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 20px;
+  }
+  .signoff .grid {
+    display: grid; gap: 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .signoff .grid .k { color: var(--cyan); margin-bottom: 6px; }
+  .signoff .grid .v { font-family: 'Fraunces', serif; font-size: 15px; letter-spacing: 0; text-transform: none; }
+  .signoff .colophon {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    line-height: 1.8;
+    opacity: 0.7;
+  }
+  .signoff .seal {
+    width: 110px; height: 110px;
+    border: 1.5px solid var(--bone);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    text-align: center;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 12px;
+    margin-bottom: 22px;
+    transform: rotate(-3deg);
+  }
+  .signoff .seal small {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px; letter-spacing: 0.22em; margin-top: 4px; opacity: 0.8;
+  }
+  .signoff a:hover { color: var(--cyan); }
+  .signoff .to-top {
+    display: inline-flex; gap: 10px; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    margin-top: 14px;
+    padding: 10px 14px;
+    border: 1px solid var(--bone);
+  }
+  .signoff .to-top:hover { background: var(--bone); color: var(--ink); }
+
+  /* ----- footer micro ------------------------------------- */
+  footer {
+    background: var(--ink);
+    color: var(--bone);
+    padding: 16px 24px;
+    border-top: 1px solid #000;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase;
+  }
+  footer .left { display: flex; gap: 18px; flex-wrap: wrap; }
+  footer .right { opacity: 0.6; }
+  footer a:hover { color: var(--cyan); }
+
+  /* ----- responsive --------------------------------------- */
+  @media (max-width: 1024px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-image { min-height: 60vh; }
+    .manifesto, .process, .commission, .signoff { grid-template-columns: 1fr; }
+    .manifesto > div, .process .step, .commission .left, .commission .right, .signoff > div { border-right: 0; border-bottom: 1px solid var(--line-soft); }
+    .commission .left, .commission .right, .signoff > div { padding: 48px 28px; }
+    .datawall { grid-template-columns: repeat(2, 1fr); }
+    .datawall .stat:nth-child(2) { border-right: 0; }
+    .datawall .stat:nth-child(1), .datawall .stat:nth-child(2) { border-bottom: 1px solid var(--line-soft); }
+    .press { grid-template-columns: 1fr; }
+    .press blockquote { border-right: 0; border-bottom: 1px solid var(--line-soft); }
+    .item.s-3, .item.s-4, .item.s-5, .item.s-6, .item.s-7, .item.s-8 { grid-column: span 12; min-height: 380px; }
+    .item .object { width: 60%; }
+    .section-head { grid-template-columns: 1fr; gap: 14px; padding: 28px 22px 18px; }
+    .mast-top { grid-template-columns: 1fr; text-align: center; gap: 12px; }
+    .mast-edition, .mast-edition.right { text-align: center; }
+    .mast-strip { grid-template-columns: repeat(3, 1fr); }
+    .mast-strip > div:nth-child(3) { border-right: 0; }
+    .mast-strip > div:nth-child(n+4) { border-top: 1px solid var(--line-soft); }
+    .commission .row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    nav.toc { position: static; }
+    nav.toc a { padding: 10px 12px; font-size: 10px; }
+    .util-inner { grid-template-columns: 1fr; gap: 4px; text-align: center; }
+    .util-inner .l, .util-inner .r { justify-content: center; }
+    .hero-text { padding: 32px 20px; }
+    .hero-meta { grid-template-columns: 1fr; }
+    .datawall { grid-template-columns: 1fr; }
+    .datawall .stat { border-right: 0; border-bottom: 1px solid var(--line-soft); }
+    .datawall .stat:last-child { border-bottom: 0; }
+    .mast-strip { grid-template-columns: 1fr 1fr; }
+    .mast-strip > div { border-right: 1px solid var(--line-soft); border-top: 1px solid var(--line-soft); }
+    .mast-strip > div:nth-child(2n) { border-right: 0; }
+    footer { font-size: 9.5px; }
+  }
+
+  /* ----- small interactive bit: marquis status flicker ----- */
+  .blinker { animation: blinker 1.4s steps(2) infinite; }
+  @keyframes blinker { 50% { opacity: 0.15; } }
+
+  /* small custom radio chip replacement for select */
+  select { appearance: none; -webkit-appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--bone) 50%), linear-gradient(135deg, var(--bone) 50%, transparent 50%); background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; }
+  select option { background: var(--ink); color: var(--bone); }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     00 / UTILITY BAR
+     ============================================================ -->
+<div class="util" role="region" aria-label="Atelier status">
+  <div class="util-inner">
+    <div class="l">
+      <span><span class="dot"></span>&nbsp; Workshop open · Baikonur-adj.</span>
+    </div>
+    <div class="mid">N°47 / Quarterly Index / MMXXVI</div>
+    <div class="r">
+      <a href="#commission">Inquire</a>
+      <span>·</span>
+      <a href="#inventory">Catalogue</a>
+      <span>·</span>
+      <a href="#colophon">EN / RU</a>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     01 / MASTHEAD
+     ============================================================ -->
+<header class="mast">
+  <div class="mast-top">
+    <div class="mast-edition">
+      <div class="k">Issue</div>
+      <div class="v">Vol. XI / Reissue No. 7</div>
+    </div>
+    <div class="mast-logo" aria-label="Atelier Gagarine">
+      ATELIER<span class="amp">&amp;</span>GAGARINE<sup>EST. 2014</sup>
+    </div>
+    <div class="mast-edition right">
+      <div class="k">Workshop Coordinates</div>
+      <div class="v">45.96°N · 63.31°E<br/>Kzyl-Orda Oblast, RК</div>
+    </div>
+  </div>
+  <div class="mast-strip" aria-hidden="true">
+    <div>Reissue / <b>Orbital Salvage</b></div>
+    <div>Categories / <b>08</b></div>
+    <div>In Stock / <b>37 / 41</b></div>
+    <div>Lead time / <b>14–22 wks</b></div>
+    <div>Material / <b>Anodized Al · Ti · Borosilicate</b></div>
+    <div>Provenance / <b>Kazakh Steppe</b></div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Sections">
+  <ul>
+    <li><a href="#manifesto"><span class="n">01</span>Manifesto</a></li>
+    <li><a href="#inventory"><span class="n">02</span>Current Inventory</a></li>
+    <li><a href="#provenance"><span class="n">03</span>Provenance</a></li>
+    <li><a href="#process"><span class="n">04</span>Process</a></li>
+    <li><a href="#commission"><span class="n">05</span>Commission</a></li>
+    <li><a href="#press"><span class="n">06</span>Press</a></li>
+    <li><a href="#colophon"><span class="n">07</span>Colophon</a></li>
+  </ul>
+</nav>
+
+<!-- ============================================================
+     02 / HERO
+     ============================================================ -->
+<section class="hero" id="top">
+  <div class="hero-grid">
+    <div class="hero-text">
+      <div>
+        <div class="small" style="margin-bottom: 28px;">
+          <span class="blinker">●</span>&nbsp;&nbsp;Object N°&nbsp;G–0427 / 2026 Reissue
+        </div>
+        <h1 class="lead">
+          We restore <em>dead&nbsp;satellites</em> and the&nbsp;<span class="strike">handles</span> of&nbsp;their&nbsp;hatches — so they may hold <em>your</em> tea.
+        </h1>
+      </div>
+
+      <div class="hero-meta">
+        <div class="cell">
+          <div class="k">Object of study</div>
+          <div class="v">Salyut&nbsp;3 / Almaz-O program, pressure&nbsp;hatch assembly</div>
+        </div>
+        <div class="cell">
+          <div class="k">Lineage</div>
+          <div class="v">Acquired 2017 from the Kazakh&nbsp;Steppe, serialized&nbsp;AG–27/IV</div>
+        </div>
+        <div class="cell">
+          <div class="k">Reissued as</div>
+          <div class="v">Side table / wall sconce / standing lamp</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-image" aria-hidden="true">
+      <div class="ph"></div>
+      <div class="plate">
+        <span class="rivet" style="top:18%; left:22%;"></span>
+        <span class="rivet" style="top:18%; right:22%;"></span>
+        <span class="rivet" style="bottom:18%; left:22%;"></span>
+        <span class="rivet" style="bottom:18%; right:22%;"></span>
+        <span class="rivet" style="top:50%; left:6%;"></span>
+        <span class="rivet" style="top:50%; right:6%;"></span>
+      </div>
+      <div class="stamp">
+        VERIFIED<br/>FLIGHT<br/>GRADE<small>AL-AG-27</small>
+      </div>
+      <div class="label">
+        <b>FIG.&nbsp;A</b>
+        <span>Hatch Port, Diameter 920mm</span>
+        <span>Descent Module · Almaz-O</span>
+        <span>1974–1976 · Voskhod 6</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-marquee" aria-hidden="true">
+    <div class="track">
+      <span><span class="bullet"></span>Pressure Valve · OKB-1 · 1968</span>
+      <span><span class="bullet"></span>Cosmonaut Glove Liner · 12 Pair · 1975</span>
+      <span><span class="bullet"></span>Soyuz Descent Module Porthole · Triple-Pane</span>
+      <span><span class="bullet"></span>Voskhod Mission Clock · Hermetically Sealed</span>
+      <span><span class="bullet"></span>Heat Shield Ceramic · Re-entry Composite</span>
+      <span><span class="bullet"></span>Orbital Gyroscope · 3-Axis</span>
+      <span><span class="bullet"></span>Pressure Valve · OKB-1 · 1968</span>
+      <span><span class="bullet"></span>Cosmonaut Glove Liner · 12 Pair · 1975</span>
+      <span><span class="bullet"></span>Soyuz Descent Module Porthole · Triple-Pane</span>
+      <span><span class="bullet"></span>Voskhod Mission Clock · Hermetically Sealed</span>
+      <span><span class="bullet"></span>Heat Shield Ceramic · Re-entry Composite</span>
+      <span><span class="bullet"></span>Orbital Gyroscope · 3-Axis</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     03 / MANIFESTO
+     ============================================================ -->
+<section id="manifesto">
+  <div class="section-head">
+    <div class="num"><b>01 /</b> Manifesto</div>
+    <div>
+      <h2>We do not <em>repurpose</em>.<br/>We <em>reissue</em>.</h2>
+      <p class="sub">A pressure gauge, after 412 days in vacuum, is no longer a measurement instrument. It is a witness. Atelier Gagarine catalogs, certifies and gently re-houses such witnesses for civilian life — without sanding off the scorch marks, and without lying about where they came from.</p>
+    </div>
+  </div>
+
+  <div class="manifesto">
+    <div class="m1">
+      <p>Every object we sell <em>will have failed</em> at its original job. <em>This is the point.</em></p>
+    </div>
+    <div class="m2">
+      <p>Nothing in our inventory is decorative in the soft sense. There is a Soyuz&nbsp;7K re-entry ceramic lamp on the third floor of a Moscow apartment whose scorch pattern will never repeat. It does not need to. Restraint is not a virtue we practice — it is a property of the material. A titanium pressure housing, anodized once, never re-anodized, will keep its color until the heat death of the building.</p>
+      <p style="margin-top:14px; opacity:.7; font-size:14px;">— From the workshop charter, ratified 14 March 2014, in a&nbsp;bunker in&nbsp;Kzyl-Orda.</p>
+    </div>
+    <div class="m3">
+      <div class="k">House Rules / III</div>
+      <ul>
+        <li><span class="n">I.</span><div><b>No re-paint.</b> If the polyurethane foam yellowed in orbit, it yellows in your living room too.</div></li>
+        <li><span class="n">II.</span><div><b>No false nostalgia.</b> We are not a souvenir shop. Each piece ships with its decommissioning certificate.</div></li>
+        <li><span class="n">III.</span><div><b>No new fasteners.</b> Where a 1972 rivet survives, we re-use it. We do not pretend.</div></li>
+        <li><span class="n">IV.</span><div><b>No silent upgrades.</b> Every modification is hand-stamped on the chassis in Cyrillic.</div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     04 / INVENTORY
+     ============================================================ -->
+<section id="inventory">
+  <div class="section-head">
+    <div class="num"><b>02 /</b> Current Inventory</div>
+    <div>
+      <h2>Reissued hardware, <em>in&nbsp;rotation.</em></h2>
+      <p class="sub">Forty-one objects recovered across nine retrieval expeditions. The catalogue below shows pieces currently in stock, in-restoration, or about to be retired to the permanent archive. <b>Click reserve</b> to receive a soft hold.</p>
+    </div>
+  </div>
+
+  <div class="catalog">
+
+    <!-- row 1 -->
+    <article class="item s-5">
+      <div class="meta-top">
+        <span class="id">N° G–0427 / SALYUT 3</span>
+        <span>01 / 06</span>
+      </div>
+      <h3>Hatch&nbsp;Port 920 <em>(re-issued as side&nbsp;table)</em></h3>
+      <div class="price">€ 14,800 · incl. cert.</div>
+      <p class="desc">Almaz-O descent module. The original locking wheel, 18 bolts, and inner gasket remain functional. We have re-mounted it onto a hand-rolled steel cradle so it stands at 41cm — the height of a Soviet writing desk.</p>
+      <div class="tags"><span>Aluminium</span><span>1975</span><span>Functional Lock</span><span>Edition of 1</span></div>
+      <a class="reserve" href="#commission">Reserve <span class="arrow">→</span></a>
+      <div class="object shape-a" aria-hidden="true"></div>
+    </article>
+
+    <article class="item s-3 dark">
+      <div class="meta-top">
+        <span class="id">N° G–0391 / SOYUZ 7K</span>
+        <span>02 / 06</span>
+      </div>
+      <h3>Re-entry Ceramic <em>standing lamp</em></h3>
+      <div class="price">€ 6,400</div>
+      <p class="desc">A 0.6m² fragment of phenolic-impregnated carbon ablator. Light source mounted to the original mounting ring; dimmer rated for the actual load it was engineered to survive.</p>
+      <div class="tags"><span>Ceramic</span><span>1981</span><span>Edition of 12</span></div>
+      <a class="reserve" href="#commission">Reserve <span class="arrow">→</span></a>
+      <div class="object shape-b" aria-hidden="true"></div>
+    </article>
+
+    <article class="item s-4">
+      <div class="meta-top">
+        <span class="id">N° G–0412 / VOSKHOD 2</span>
+        <span>03 / 06</span>
+      </div>
+      <h3>Cosmonaut&nbsp;Glove Liner <em>(pair, framed)</em></h3>
+      <div class="price">€ 2,950</div>
+      <p class="desc">Twelve pairs of inner suit gloves, recovered from the Voskhod 2 medical stores. Sold as a single framed constellation of twelve. Each label handwritten by the restorer.</p>
+      <div class="tags"><span>Latex-Blend</span><span>1965</span><span>Wall Object</span><span>Edition of 1</span></div>
+      <a class="reserve" href="#commission">Reserve <span class="arrow">→</span></a>
+      <div class="object shape-c" aria-hidden="true"></div>
+    </article>
+
+    <!-- row 2 -->
+    <article class="item s-4 dark">
+      <div class="meta-top">
+        <span class="id">N° G–0433 / MIR CORE</span>
+        <span>04 / 06</span>
+      </div>
+      <h3>Pressure&nbsp;Gauge&nbsp;M-1 <em>(desk instrument)</em></h3>
+      <div class="price">€ 4,200</div>
+      <p class="desc">Spent gauge from the Kvant-2 airlock. Needle still moves freely if you blow on it. We do not recommend you do. Mounted on a brass plate with the calibration log engraved underneath.</p>
+      <div class="tags"><span>Brass + Steel</span><span>1987</span><span>Functional</span></div>
+      <a class="reserve" href="#commission">Reserve <span class="arrow">→</span></a>
+      <div class="object shape-d" aria-hidden="true"></div>
+    </article>
+
+    <article class="item s-5">
+      <div class="meta-top">
+        <span class="id">N° G–0441 / ALMAZ-O</span>
+        <span>05 / 06</span>
+      </div>
+      <h3>Titanium&nbsp;Housing <em>(floor lamp)</em></h3>
+      <div class="price">€ 9,750</div>
+      <p class="desc">A 7.3kg pressure housing for an undisclosed Almaz-O sensor. Anodized once, in 1974, and never again. Bulb socket retrofitted behind the original aperture. Ships in a welded aluminium trunk.</p>
+      <div class="tags"><span>Ti-6Al-4V</span><span>1974</span><span>One-of-One</span><span>Heavy Object</span></div>
+      <a class="reserve" href="#commission">Reserve <span class="arrow">→</span></a>
+      <div class="object shape-e" aria-hidden="true"></div>
+    </article>
+
+    <article class="item s-3">
+      <div class="meta-top">
+        <span class="id">N° G–0419 / VOSKHOD</span>
+        <span>06 / 06</span>
+      </div>
+      <h3>Mission&nbsp;Clock <em>(wall, sealed)</em></h3>
+      <div class="price">€ 3,600</div>
+      <p class="desc">Hermetically sealed Voskhod mission clock, 24h dial, hour ticks preserved. The face has a 3mm chip from a pre-launch test we do not polish. The clock does not run. It is the clock's job to be from then, not to keep time.</p>
+      <div class="tags"><span>Steel</span><span>1964</span><span>Wall</span></div>
+      <a class="reserve" href="#commission">Reserve <span class="arrow">→</span></a>
+      <div class="object shape-f" aria-hidden="true"></div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     05 / PROVENANCE / DATA WALL
+     ============================================================ -->
+<section id="provenance">
+  <div class="section-head">
+    <div class="num"><b>03 /</b> Provenance</div>
+    <div>
+      <h2>Every gram has a <em>flight&nbsp;log.</em></h2>
+      <p class="sub">The numbers below are not marketing. They are the workshop's cumulative record since 2014. We do not round, and we do not update the figures on request — once a quarter, in print, in the catalogue supplement, and nowhere else.</p>
+    </div>
+  </div>
+
+  <div class="datawall">
+    <div class="stat">
+      <div class="k">01 / Retrieval expeditions</div>
+      <div class="v">9</div>
+      <div class="f">Steppe · Aral · Kamchatka · Vostoch.</div>
+    </div>
+    <div class="stat">
+      <div class="k">02 / Objects recovered</div>
+      <div class="v">2,317<span class="u">pcs</span></div>
+      <div class="f">Of which re-issued 287 · archived 1,964</div>
+    </div>
+    <div class="stat">
+      <div class="k">03 / Currently held by civilians</div>
+      <div class="v">187<span class="u">collectors</span></div>
+      <div class="f">Across 31 countries · 6 continents</div>
+    </div>
+    <div class="stat">
+      <div class="k">04 / Median age of an AG object</div>
+      <div class="v">51<span class="u">yrs</span></div>
+      <div class="f">Youngest 12 · oldest 64 · no replicas</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     06 / PROCESS
+     ============================================================ -->
+<section id="process">
+  <div class="section-head">
+    <div class="num"><b>04 /</b> Process</div>
+    <div>
+      <h2>Three hands, <em>no&nbsp;sandpaper.</em></h2>
+      <p class="sub">From the moment an object arrives in Kzyl-Orda to the day it leaves in a welded trunk, exactly three people handle it. The restorer who decommissions, the cataloger who records, the cratermaker who packs. We do not have a fourth.</p>
+    </div>
+  </div>
+
+  <div class="process">
+    <div class="step">
+      <div class="stamp-step">SHP-14<br/>RUS</div>
+      <div class="n">PHASE 01</div>
+      <h3>Receipt &amp; <em>Disassembly</em></h3>
+      <p>Every object is disassembled only as far as needed to confirm it is, in fact, what the field team reported. We do not "restore to working order" — we confirm the damage is real, the lineage is honest, and the object is stable enough to live indoors for another century.</p>
+    </div>
+    <div class="step">
+      <div class="stamp-step">OKB-1<br/>1968</div>
+      <div class="n">PHASE 02</div>
+      <h3>Cataloging &amp; <em>Certificate</em></h3>
+      <p>Each piece is photographed in raking light, weighed to the gram, and assigned a Cyrillic-only serial. A two-page certificate, on 200gsm cotton paper, is hand-stapled and signed by the restorer. The certificate is the object, legally. The thing in the crate is the evidence.</p>
+    </div>
+    <div class="step">
+      <div class="stamp-step">AG-S<br/>QC</div>
+      <div class="n">PHASE 03</div>
+      <h3>Re-housing &amp; <em>Departure</em></h3>
+      <p>If the object is to be functional — a lamp, a clock, a sconce — the re-housing is reversible. Every new fastener is documented on the chassis. The crate is welded aluminium, lined with phenolic foam, and labeled in three languages. The truck driver is also the cataloger.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     07 / COMMISSION
+     ============================================================ -->
+<section id="commission">
+  <div class="commission">
+    <div class="left">
+      <div class="kicker">● &nbsp; 05 / Open call for 2026 commissions</div>
+      <h2>Bring us a <em>dead</em> machine. <br/>We will return a <em>room.</em></h2>
+      <p>We accept eight commissions per year. A commission may be a single object — a porthole, a valve — or a whole room: a kitchen out of a descent module, a reading nook out of an airlock. Lead times are honest, costs are honest, and the first thing we will say is <em>probably</em>.</p>
+
+      <form onsubmit="event.preventDefault(); handleCommission(this);">
+        <div class="row">
+          <div>
+            <label for="c-name">Your name</label>
+            <input id="c-name" name="name" type="text" required placeholder="e.g. M. Volkov" />
+          </div>
+          <div>
+            <label for="c-email">Reply to</label>
+            <input id="c-email" name="email" type="email" required placeholder="you@somewhere.tld" />
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="c-obj">Object class</label>
+            <select id="c-obj" name="object">
+              <option>Porthole / Window</option>
+              <option>Pressure valve</option>
+              <option>Sensor / Gauge</option>
+              <option>Hatch assembly</option>
+              <option>Heat-shield ceramic</option>
+              <option>Whole module</option>
+              <option>Other / describe below</option>
+            </select>
+          </div>
+          <div>
+            <label for="c-room">Intended room</label>
+            <input id="c-room" name="room" type="text" placeholder="kitchen · study · stairwell" />
+          </div>
+        </div>
+        <div>
+          <label for="c-msg">Notes (optional, but encouraged)</label>
+          <textarea id="c-msg" name="msg" placeholder="What do you want it to do? What do you want it to remember?"></textarea>
+        </div>
+        <button class="submit" type="submit">Send to the workshop <span class="arrow">→</span></button>
+        <div class="small" id="c-status" style="opacity:.7; margin-top:6px;">Replies within 14 working days. Quiet weeks count double.</div>
+      </form>
+    </div>
+
+    <div class="right">
+      <div>
+        <div class="side">
+          <div class="blk">
+            <div class="k">Workshop address</div>
+            <div class="v">ul. Kosmicheskaya 14, Building 2<br/>Kzyl-Orda, 120008, RК</div>
+          </div>
+          <div class="blk">
+            <div class="k">Direct line</div>
+            <div class="v">+7 (7242) 55–0–147<br/>Tuesdays &amp; Thursdays, 11:00–17:00 local</div>
+          </div>
+          <div class="blk">
+            <div class="k">Telegram / Signal</div>
+            <div class="v">@gagarine_atelier</div>
+          </div>
+          <div class="blk">
+            <div class="k">Pricing</div>
+            <div class="v">Inquiries begin at € 1,400 for a single object. Whole-room commissions begin at € 38,000. We do not negotiate; we do explain.</div>
+          </div>
+        </div>
+      </div>
+      <div class="small" style="opacity:.55;">
+        <b style="color: var(--red);">NOTE —</b> &nbsp;We are not a museum, not a foundry, and not a souvenir shop. We do not make "space-style" objects. We do not work in resin, in CGI, or in wishful thinking.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     08 / PRESS
+     ============================================================ -->
+<section id="press">
+  <div class="section-head">
+    <div class="num"><b>06 /</b> Press / Owner letters</div>
+    <div>
+      <h2>The press we <em>keep</em>. <br/>The press we <em>refuse.</em></h2>
+      <p class="sub">Three of the four excerpts below are real (we checked). One is a forgery, sent to us by a reader in Lisbon. We liked it and left it in.</p>
+    </div>
+  </div>
+
+  <div class="press">
+    <blockquote>
+      <p>"Atelier Gagarine is what would happen if a <em>Kazakh mechanic</em>, a <em>Milanese gallerist</em>, and a <em>defrocked archivist</em> opened a museum inside a <em>welded crate</em>."</p>
+      <div class="stars">★★★★★</div>
+      <div class="src">— Domus, Milan · 2024</div>
+    </blockquote>
+    <blockquote>
+      <p>"There is no <em>second-best</em> in this field, and Atelier Gagarine has the field. <em>What they do not sell is more interesting than what they do.</em>"</p>
+      <div class="src">— Apartamento, Issue 32</div>
+    </blockquote>
+    <blockquote>
+      <p>"I bought a hatch. I have not been the same. The hatch is unchanged. <em>I have been the same again, in a different way.</em>"</p>
+      <div class="src">— Mr. N., Lisbon (unverified)</div>
+    </blockquote>
+  </div>
+</section>
+
+<!-- ============================================================
+     09 / SIGNOFF / COLOPHON
+     ============================================================ -->
+<section id="colophon">
+  <div class="signoff">
+    <div>
+      <div class="kicker">07 / &nbsp;Sign-off</div>
+      <h2>Read the <em>fine</em> print. <br/>Then the <em>bigger</em> print.</h2>
+      <p style="font-family: 'Fraunces', serif; font-size:16px; margin-top:18px; max-width: 44ch; opacity:.85;">
+        Atelier Gagarine is a four-person workshop operating since 2014 from a converted Soviet agricultural depot outside Kzyl-Orda. We do not employ PR, do not list on design marketplaces, and do not have a press kit. If a publication wants a photograph, we send a print, not a download.
+      </p>
+    </div>
+
+    <div>
+      <div class="kicker">Index /</div>
+      <div class="grid">
+        <div>
+          <div class="k">Catalogue</div>
+          <div><a href="#inventory">Inventory of 41 objects →</a></div>
+        </div>
+        <div>
+          <div class="k">Provenance</div>
+          <div><a href="#provenance">Flight logs &amp; quarterly figures →</a></div>
+        </div>
+        <div>
+          <div class="k">Process</div>
+          <div><a href="#process">Receipt · catalog · re-house →</a></div>
+        </div>
+        <div>
+          <div class="k">Commission</div>
+          <div><a href="#commission">Open call, 8 slots / yr →</a></div>
+        </div>
+        <div>
+          <div class="k">Press</div>
+          <div><a href="#press">What was written →</a></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="seal">
+        AG<br/>* 2014 *<small>FLIGHT&nbsp;GRADE</small>
+      </div>
+      <div class="colophon">
+        Set in Fraunces, Archivo Black,<br/>
+        Inter, and JetBrains Mono.<br/><br/>
+        Catalogue composed by hand, in HTML, on a Kazakh-steppe connection.<br/><br/>
+        Edition MMXXVI / N° 47.<br/>
+        No part of this catalogue may be reproduced in resin.
+      </div>
+      <a href="#top" class="to-top">↑ Back to the top</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="left">
+      <span>© Atelier Gagarine, 2014–2026</span>
+      <span>·</span>
+      <span>Kzyl-Orda · Milan · Lisbon (by post)</span>
+    </div>
+    <div class="right">
+      <a href="#commission">Inquire →</a>
+    </div>
+  </footer>
+</section>
+
+<script>
+  /* Tiny interactive bits.
+     - smooth scroll for in-page anchors (preserves sticky offset)
+     - commission form: optimistic acknowledgement (no backend) */
+
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = a.getAttribute('href');
+      if (id.length < 2) return;
+      var el = document.querySelector(id);
+      if (!el) return;
+      e.preventDefault();
+      var util = document.querySelector('.util');
+      var toc  = document.querySelector('nav.toc');
+      var offset = (util ? util.offsetHeight : 0) + (toc ? toc.offsetHeight : 0) - 2;
+      var top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    });
+  });
+
+  function handleCommission(form) {
+    var status = document.getElementById('c-status');
+    if (!status) return;
+    var name = (form.querySelector('[name=name]') || {}).value || 'Friend';
+    status.style.opacity = '1';
+    status.innerHTML = '<b style="color: var(--phosphor);">▲ &nbsp;ACK / </b>&nbsp; Filed at ' + new Date().toISOString().slice(0,16).replace('T',' · ') + ' — ' + name + ', the workshop has been notified. Expect a slow, handwritten reply.';
+    form.querySelector('button.submit').setAttribute('disabled', 'disabled');
+  }
+
+  /* Pause the marquee when the tab is hidden, so we don't burn cycles. */
+  var track = document.querySelector('.hero-marquee .track');
+  if (track) {
+    document.addEventListener('visibilitychange', function () {
+      track.style.animationPlayState = document.hidden ? 'paused' : 'running';
+    });
+  }
+</script>
+</body>
+</html>

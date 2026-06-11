@@ -1,0 +1,880 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DIH: Department of Inaudible Histories</title>
+  <meta name="description" content="A severe one-page typographic dossier for the Department of Inaudible Histories.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;700;900&family=Playfair+Display:wght@600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: oklch(94.5% 0.006 85);
+      --ink: oklch(12.2% 0.006 80);
+      --muted: oklch(38% 0.006 80);
+      --faint: oklch(78% 0.006 80);
+      --hair: oklch(22% 0.006 80);
+      --measure: 68ch;
+      --gutter: clamp(16px, 3.2vw, 48px);
+      --rule: 1px solid var(--hair);
+    }
+
+    * {
+      box-sizing: border-box;
+      border-radius: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Inter Tight", Arial, sans-serif;
+      line-height: 1.08;
+      text-rendering: geometricPrecision;
+      letter-spacing: 0;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, transparent calc(25% - .5px), color-mix(in oklch, var(--ink) 16%, transparent) 25%, transparent calc(25% + .5px)),
+        linear-gradient(90deg, transparent calc(50% - .5px), color-mix(in oklch, var(--ink) 18%, transparent) 50%, transparent calc(50% + .5px)),
+        linear-gradient(90deg, transparent calc(75% - .5px), color-mix(in oklch, var(--ink) 16%, transparent) 75%, transparent calc(75% + .5px));
+      opacity: .28;
+      z-index: -1;
+    }
+
+    a {
+      color: currentColor;
+      text-decoration-thickness: 1px;
+      text-underline-offset: .18em;
+    }
+
+    button {
+      color: inherit;
+      font: inherit;
+    }
+
+    .site-shell {
+      min-height: 100svh;
+      display: grid;
+      grid-template-columns: minmax(58px, 7vw) 1fr;
+    }
+
+    .rail {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      border-right: var(--rule);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: var(--gutter) 11px;
+      background: color-mix(in oklch, var(--paper) 92%, var(--ink) 8%);
+      z-index: 3;
+    }
+
+    .mark {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1;
+      letter-spacing: .08em;
+    }
+
+    .index {
+      align-self: center;
+      display: grid;
+      gap: 12px;
+    }
+
+    .index a {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border: var(--rule);
+      text-decoration: none;
+      font-size: 10px;
+      font-weight: 900;
+      transition: background .18s ease, color .18s ease;
+    }
+
+    .index a[aria-current="true"],
+    .index a:hover {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .coordinate {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-size: 10px;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    section {
+      min-height: 100svh;
+      border-bottom: var(--rule);
+      padding: var(--gutter);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      grid-template-rows: auto 1fr auto;
+      gap: clamp(28px, 5vw, 76px);
+      padding-top: clamp(20px, 2.8vw, 42px);
+    }
+
+    .kicker {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: var(--rule);
+      border-bottom: var(--rule);
+      min-height: 44px;
+    }
+
+    .kicker span {
+      padding: 10px 12px;
+      border-right: var(--rule);
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .kicker span:last-child {
+      border-right: 0;
+      text-align: right;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      align-self: center;
+      font-size: clamp(76px, 17.5vw, 256px);
+      font-weight: 900;
+      letter-spacing: 0;
+      line-height: .76;
+      text-transform: uppercase;
+      max-width: 7ch;
+    }
+
+    .hero-aside {
+      align-self: end;
+      display: grid;
+      gap: clamp(18px, 2vw, 28px);
+      max-width: 390px;
+      justify-self: end;
+    }
+
+    .serial {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(44px, 6.5vw, 112px);
+      font-weight: 800;
+      line-height: .84;
+    }
+
+    .thesis {
+      max-width: 31ch;
+      font-size: clamp(18px, 2vw, 28px);
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .bottom-line {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 20px;
+      border-top: var(--rule);
+      padding-top: 14px;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: minmax(190px, .72fr) minmax(0, 1.28fr);
+      gap: clamp(32px, 8vw, 138px);
+      align-items: start;
+    }
+
+    .section-label {
+      position: sticky;
+      top: var(--gutter);
+      display: grid;
+      gap: 18px;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-label strong {
+      display: block;
+      color: var(--ink);
+      font-size: clamp(38px, 7.8vw, 126px);
+      line-height: .75;
+      letter-spacing: 0;
+    }
+
+    .manifesto {
+      align-self: center;
+    }
+
+    .manifesto p {
+      max-width: 11ch;
+      font-size: clamp(48px, 10.5vw, 156px);
+      font-weight: 900;
+      line-height: .82;
+      text-transform: uppercase;
+    }
+
+    .manifesto p + p {
+      margin-top: clamp(24px, 3vw, 40px);
+      padding-top: clamp(18px, 2.5vw, 34px);
+      border-top: var(--rule);
+      margin-left: clamp(0px, 15vw, 180px);
+      max-width: 9ch;
+      font-family: "Playfair Display", Georgia, serif;
+      font-weight: 800;
+      text-transform: none;
+      font-size: clamp(42px, 8.5vw, 126px);
+    }
+
+    .records {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: var(--rule);
+    }
+
+    .record {
+      min-height: clamp(280px, 46vw, 560px);
+      padding: clamp(18px, 2.6vw, 34px);
+      border-right: var(--rule);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 24px;
+    }
+
+    .record:last-child {
+      border-right: 0;
+    }
+
+    .record time,
+    .record small {
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .record h3 {
+      align-self: center;
+      font-size: clamp(32px, 5.2vw, 86px);
+      line-height: .83;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .record p {
+      max-width: 28ch;
+      font-size: clamp(15px, 1.4vw, 20px);
+      line-height: 1.08;
+    }
+
+    .ledger {
+      display: grid;
+      border-top: var(--rule);
+    }
+
+    .ledger-row {
+      display: grid;
+      grid-template-columns: .6fr 1.2fr .72fr;
+      gap: 18px;
+      padding: clamp(18px, 2.6vw, 34px) 0;
+      border-bottom: var(--rule);
+      align-items: baseline;
+    }
+
+    .ledger-row:last-child {
+      border-bottom: 0;
+    }
+
+    .ledger-row span:first-child {
+      font-size: clamp(36px, 7vw, 118px);
+      font-weight: 900;
+      line-height: .78;
+    }
+
+    .ledger-row span:nth-child(2) {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(28px, 4.4vw, 72px);
+      font-weight: 800;
+      line-height: .88;
+    }
+
+    .ledger-row span:last-child {
+      justify-self: end;
+      max-width: 22ch;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .access {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(30px, 7vw, 120px);
+      align-items: end;
+    }
+
+    .access h2 {
+      max-width: 8ch;
+      font-size: clamp(58px, 12vw, 176px);
+      font-weight: 900;
+      line-height: .78;
+      text-transform: uppercase;
+    }
+
+    .panel {
+      border-top: var(--rule);
+      border-bottom: var(--rule);
+    }
+
+    .panel button {
+      width: 100%;
+      min-height: 68px;
+      border: 0;
+      border-bottom: var(--rule);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 0;
+      cursor: pointer;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .panel button::after {
+      content: "+";
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .panel button[aria-expanded="true"]::after {
+      content: "×";
+    }
+
+    .panel-content {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows .24s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .panel-content[aria-hidden="false"] {
+      grid-template-rows: 1fr;
+    }
+
+    .panel-content > div {
+      overflow: hidden;
+    }
+
+    .panel-copy {
+      padding: clamp(18px, 2.4vw, 32px) 0;
+      max-width: var(--measure);
+      font-size: clamp(18px, 2vw, 25px);
+      line-height: 1.08;
+    }
+
+    .application {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--ink);
+      border: var(--rule);
+    }
+
+    .application > * {
+      background: var(--paper);
+      padding: clamp(18px, 2.5vw, 34px);
+    }
+
+    .application label {
+      display: grid;
+      gap: 13px;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      font: 500 clamp(22px, 3vw, 46px) / .95 "Inter Tight", Arial, sans-serif;
+      outline: 0;
+      padding: 0;
+      text-transform: uppercase;
+    }
+
+    textarea {
+      min-height: 142px;
+      resize: vertical;
+      text-transform: none;
+      line-height: 1;
+    }
+
+    input:focus,
+    textarea:focus {
+      background: color-mix(in oklch, var(--ink) 5%, transparent);
+    }
+
+    .application label:last-of-type {
+      grid-column: 1 / -1;
+    }
+
+    .submit-line {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: center;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .submit-line button {
+      border: var(--rule);
+      background: transparent;
+      min-width: 170px;
+      min-height: 50px;
+      padding: 0 20px;
+      cursor: pointer;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .submit-line button:hover,
+    .submit-line button:focus-visible {
+      background: var(--ink);
+      color: var(--paper);
+      outline: 0;
+    }
+
+    .closing {
+      min-height: 72svh;
+      display: grid;
+      align-content: space-between;
+      gap: 72px;
+    }
+
+    .closing h2 {
+      max-width: 10ch;
+      font-size: clamp(52px, 13vw, 218px);
+      font-weight: 900;
+      line-height: .76;
+      text-transform: uppercase;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 18px;
+      border-top: var(--rule);
+      padding-top: 14px;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    @media (max-width: 920px) {
+      .site-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .rail {
+        position: fixed;
+        inset: auto 0 0;
+        height: 56px;
+        border-top: var(--rule);
+        border-right: 0;
+        grid-template-columns: auto 1fr auto;
+        grid-template-rows: 1fr;
+        align-items: center;
+        padding: 8px var(--gutter);
+      }
+
+      .mark,
+      .coordinate {
+        writing-mode: initial;
+        transform: none;
+      }
+
+      .coordinate {
+        justify-self: end;
+      }
+
+      .index {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .index a {
+        width: 32px;
+        height: 32px;
+      }
+
+      main {
+        padding-bottom: 56px;
+      }
+
+      .hero,
+      .section-grid,
+      .access {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        grid-template-rows: auto auto auto auto;
+      }
+
+      h1 {
+        max-width: 6ch;
+      }
+
+      .hero-aside {
+        justify-self: start;
+      }
+
+      .kicker {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .kicker span:nth-child(2) {
+        border-right: 0;
+      }
+
+      .kicker span:last-child {
+        text-align: left;
+      }
+
+      .section-label {
+        position: static;
+      }
+
+      .records {
+        grid-template-columns: 1fr;
+      }
+
+      .record {
+        min-height: 260px;
+        border-right: 0;
+        border-bottom: var(--rule);
+      }
+
+      .record:last-child {
+        border-bottom: 0;
+      }
+
+      .ledger-row {
+        grid-template-columns: 1fr;
+      }
+
+      .ledger-row span:last-child {
+        justify-self: start;
+        text-align: left;
+      }
+
+      .application,
+      .submit-line {
+        grid-template-columns: 1fr;
+      }
+
+      .application label:last-of-type,
+      .submit-line {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 560px) {
+      :root {
+        --gutter: 16px;
+      }
+
+      body::before {
+        background: linear-gradient(90deg, transparent calc(50% - .5px), color-mix(in oklch, var(--ink) 18%, transparent) 50%, transparent calc(50% + .5px));
+      }
+
+      section {
+        min-height: auto;
+        padding-block: 42px;
+      }
+
+      .hero {
+        min-height: calc(100svh - 56px);
+        padding-top: 16px;
+      }
+
+      .kicker {
+        grid-template-columns: 1fr;
+      }
+
+      .kicker span {
+        border-right: 0;
+        border-bottom: var(--rule);
+      }
+
+      .kicker span:last-child {
+        border-bottom: 0;
+      }
+
+      .bottom-line,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .coordinate {
+        display: none;
+      }
+
+      .mark {
+        font-size: 10px;
+      }
+
+      .rail {
+        grid-template-columns: auto 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-shell">
+    <aside class="rail" aria-label="Section index">
+      <div class="mark">DIH</div>
+      <nav class="index" aria-label="Page sections">
+        <a href="#origin" aria-current="true">00</a>
+        <a href="#doctrine">01</a>
+        <a href="#holdings">02</a>
+        <a href="#access">03</a>
+      </nav>
+      <div class="coordinate">46.9480 N / sealed</div>
+    </aside>
+
+    <main>
+      <section class="hero" id="origin" aria-labelledby="title">
+        <div class="kicker" aria-label="Institution metadata">
+          <span>Private archive</span>
+          <span>Post-acoustic records</span>
+          <span>Founded 1981</span>
+          <span>Zurich, sublevel C</span>
+        </div>
+
+        <h1 id="title">Depart ment of Inaudible Histories</h1>
+
+        <div class="hero-aside">
+          <p class="serial">DIH 00:13</p>
+          <p class="thesis">We catalogue the events that survived only as pressure, pause, and refusal.</p>
+        </div>
+
+        <div class="bottom-line">
+          <span>No tours. No patrons. No acquisitions by gift.</span>
+          <span>Next intake: winter blackout</span>
+        </div>
+      </section>
+
+      <section class="section-grid manifesto" id="doctrine" aria-labelledby="doctrine-title">
+        <div class="section-label">
+          <span>01 / Doctrine</span>
+          <strong id="doctrine-title">Rules</strong>
+        </div>
+        <div>
+          <p>Sound is not evidence.</p>
+          <p>Silence is not absence.</p>
+        </div>
+      </section>
+
+      <section id="holdings" aria-labelledby="holdings-title">
+        <div class="section-grid">
+          <div class="section-label">
+            <span>02 / Holdings</span>
+            <strong id="holdings-title">Three Sealed Lots</strong>
+          </div>
+          <div class="records" aria-label="Archive records">
+            <article class="record">
+              <time datetime="1903">1903</time>
+              <h3>The Basel Murmur Register</h3>
+              <p>Fifty-one minutes of municipal panic transcribed from the vibration of window lead.</p>
+              <small>Lead vellum / ash box / shelf 8</small>
+            </article>
+            <article class="record">
+              <time datetime="1937">1937</time>
+              <h3>Catalogue of Withheld Applause</h3>
+              <p>A court theatre audience refuses a monarch by remaining mathematically still.</p>
+              <small>Bone paper / iron tabs / shelf 2</small>
+            </article>
+            <article class="record">
+              <time datetime="1974">1974</time>
+              <h3>Negative Choir for Nine Elevators</h3>
+              <p>Architectural hum removed from a finance tower, archived by the janitor who noticed.</p>
+              <small>Magnetic dust / black folio / shelf 11</small>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="method-title">
+        <div class="section-grid">
+          <div class="section-label">
+            <span>Method / Index</span>
+            <strong id="method-title">Extraction</strong>
+          </div>
+          <div class="ledger">
+            <div class="ledger-row">
+              <span>1</span>
+              <span>Refusal Trace</span>
+              <span>Gesture recorded after the voice collapses.</span>
+            </div>
+            <div class="ledger-row">
+              <span>2</span>
+              <span>Room Memory</span>
+              <span>Material fatigue measured as civic testimony.</span>
+            </div>
+            <div class="ledger-row">
+              <span>3</span>
+              <span>Pressure Script</span>
+              <span>The sentence present before language appears.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="access" id="access" aria-labelledby="access-title">
+        <h2 id="access-title">Access is a form of damage.</h2>
+        <div>
+          <div class="panel">
+            <button type="button" aria-expanded="false" aria-controls="dossier">Read the restriction</button>
+            <div class="panel-content" id="dossier" aria-hidden="true">
+              <div>
+                <p class="panel-copy">Applicants must surrender one useful recording and one useless certainty. The archive replies only when the request contains no curiosity.</p>
+              </div>
+            </div>
+          </div>
+
+          <form class="application" aria-label="Access request">
+            <label>
+              Name, or substitute mark
+              <input name="name" autocomplete="name" aria-label="Name or substitute mark">
+            </label>
+            <label>
+              Reason for disturbance
+              <input name="reason" aria-label="Reason for disturbance">
+            </label>
+            <label>
+              Statement of loss
+              <textarea name="loss" aria-label="Statement of loss"></textarea>
+            </label>
+            <div class="submit-line">
+              <span id="form-status" role="status">Transmission remains local.</span>
+              <button type="submit">Seal request</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="closing" aria-labelledby="closing-title">
+        <h2 id="closing-title">Nothing leaves. Everything testifies.</h2>
+        <footer class="footer-grid">
+          <span>Department of Inaudible Histories</span>
+          <span>Archive hours: undisclosed</span>
+          <span>All citations expire on contact</span>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const links = Array.from(document.querySelectorAll(".index a"));
+    const sections = links
+      .map((link) => document.querySelector(link.getAttribute("href")))
+      .filter(Boolean);
+
+    const markActive = () => {
+      const offset = window.innerHeight * 0.38;
+      let active = sections[0];
+
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top <= offset) {
+          active = section;
+        }
+      }
+
+      links.forEach((link) => {
+        link.setAttribute("aria-current", link.getAttribute("href") === `#${active.id}`);
+      });
+    };
+
+    document.addEventListener("scroll", markActive, { passive: true });
+    window.addEventListener("resize", markActive);
+    markActive();
+
+    const toggle = document.querySelector("[aria-controls='dossier']");
+    const dossier = document.getElementById("dossier");
+
+    toggle.addEventListener("click", () => {
+      const expanded = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", String(!expanded));
+      dossier.setAttribute("aria-hidden", String(expanded));
+    });
+
+    const form = document.querySelector(".application");
+    const status = document.getElementById("form-status");
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      status.textContent = "Request sealed in this browser.";
+      form.reset();
+    });
+  </script>
+</body>
+</html>

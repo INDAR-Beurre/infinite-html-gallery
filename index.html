@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Infinite HTML Gallery — inside-out sphere of your work</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+
+<canvas id="c"></canvas>
+<div class="vignette"></div>
+<div class="grain"></div>
+<div class="starfield" id="starfield"></div>
+
+<div class="ui" id="ui">
+  <div class="logo" title="Infinite HTML Gallery">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>
+      <ellipse cx="12" cy="12" rx="9" ry="3.4" stroke="currentColor" stroke-width="1.2" transform="rotate(20 12 12)"/>
+      <ellipse cx="12" cy="12" rx="9" ry="3.4" stroke="currentColor" stroke-width="1.2" transform="rotate(-25 12 12)"/>
+    </svg>
+  </div>
+
+  <div class="meta">
+    <div id="countSites"><b>—</b><span>sites</span></div>
+    <div id="countUploads"><b>—</b><span>uploads</span></div>
+    <div id="countTotal"><b>—</b><span>total</span></div>
+  </div>
+
+  <div class="corner-l">
+    <button id="uploadBtn" title="Upload HTML pages">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14M5 12h14"/>
+      </svg>
+      <span>Upload</span>
+    </button>
+  </div>
+
+  <nav class="navbar">
+    <a class="active" data-tab="work">Work</a>
+    <a data-tab="about">About</a>
+    <a data-tab="careers">Careers</a>
+  </nav>
+
+  <div class="corner-r">
+    <button id="resetBtn" title="Reset rotation">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>
+      </svg>
+      <span>Recenter</span>
+    </button>
+  </div>
+
+  <div class="hint" id="hint">Drag to spin · Scroll to tilt · Click a card to open</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<main class="viewer" id="viewer" aria-hidden="true">
+  <header class="viewer-bar">
+    <div class="viewer-info">
+      <div class="viewer-eyebrow" id="vBrand">Project</div>
+      <h1 class="viewer-title" id="vTitle">Title</h1>
+    </div>
+    <div class="viewer-actions">
+      <a class="viewer-open" id="vOpen" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+          <path d="M15 3h6v6"/><path d="M10 14 21 3"/>
+        </svg>
+        <span>Open in new tab</span>
+      </a>
+      <button class="viewer-close" id="vClose" aria-label="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+  <div class="viewer-stage" id="vStage"></div>
+</main>
+
+<div class="modal" id="uploadModal" aria-hidden="true">
+  <div class="modal-card">
+    <header>
+      <h2>Upload HTML pages</h2>
+      <p>Drop .html files below or click to browse. They live in Netlify Blobs and appear in the gallery instantly.</p>
+    </header>
+    <label class="dropzone" id="dropzone">
+      <input type="file" id="modalInput" accept=".html,text/html" multiple>
+      <div class="dropzone-inner">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        <div class="dz-title">Drop HTML files here</div>
+        <div class="dz-sub">or click to browse</div>
+      </div>
+    </label>
+    <ul class="queue" id="queue"></ul>
+    <footer>
+      <button class="btn-ghost" id="cancelUpload">Cancel</button>
+      <button class="btn-primary" id="confirmUpload" disabled>Upload 0 file(s)</button>
+    </footer>
+  </div>
+</div>
+
+<noscript>
+  <div style="position:fixed;inset:0;display:grid;place-items:center;background:#0a0a0a;color:#fff;font-family:sans-serif">
+    This gallery needs JavaScript to run.
+  </div>
+</noscript>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

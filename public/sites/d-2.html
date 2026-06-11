@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEATH WISH — Caffeinated Hot Sauce</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --chartreuse: #ccff00;
+            --magenta: #ff00ff;
+            --cyan: #00ffff;
+            --orange: #ff6600;
+            --red: #ff2200;
+            --yellow: #ffee00;
+            --border-w: 3px;
+        }
+
+        html {
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'Space Mono', 'Courier New', -apple-system, BlinkMacSystemFont, 'Segoe UI', monospace;
+            background-color: var(--white);
+            color: var(--black);
+            line-height: 1.5;
+            -webkit-font-smoothing: auto;
+            overflow-x: hidden;
+        }
+
+        /* ═══════════════ MARQUEE ═══════════════ */
+        .marquee-bar {
+            background: var(--black);
+            color: var(--chartreuse);
+            padding: 10px 0;
+            font-family: 'Bebas Neue', 'Impact', sans-serif;
+            font-size: 18px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            overflow: hidden;
+            white-space: nowrap;
+            border-bottom: var(--border-w) solid var(--chartreuse);
+        }
+
+        .marquee-bar.reverse {
+            background: var(--magenta);
+            color: var(--black);
+            border-bottom: var(--border-w) solid var(--black);
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee-scroll 18s linear infinite;
+        }
+
+        .marquee-bar.reverse .marquee-content {
+            animation-direction: reverse;
+        }
+
+        .marquee-content span {
+            margin-right: 48px;
+        }
+
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ═══════════════ SECTION BASE ═══════════════ */
+        section {
+            padding: 80px 24px;
+            position: relative;
+        }
+
+        @media (max-width: 600px) {
+            section { padding: 48px 16px; }
+        }
+
+        /* ═══════════════ HERO ═══════════════ */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 70vh;
+            background: var(--white);
+            border-bottom: var(--border-w) solid var(--black);
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+        }
+
+        .hero-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 48px 40px;
+            border-right: var(--border-w) solid var(--black);
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .hero-left {
+                border-right: none;
+                border-bottom: var(--border-w) solid var(--black);
+                padding: 36px 24px;
+            }
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--orange);
+            color: var(--black);
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 14px;
+            text-transform: uppercase;
+            padding: 8px 16px;
+            border: var(--border-w) solid var(--black);
+            box-shadow: 6px 6px 0px var(--black);
+            margin-bottom: 24px;
+            letter-spacing: 0.06em;
+            transform: rotate(-1.5deg);
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue', 'Impact', 'Arial Black', sans-serif;
+            font-size: clamp(52px, 8vw, 96px);
+            line-height: 0.88;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+        }
+
+        .hero-title-line {
+            display: block;
+        }
+
+        .hero-title-line.offset {
+            margin-left: 8%;
+            color: var(--magenta);
+            text-shadow: 6px 6px 0px var(--black);
+        }
+
+        .hero-title-line.shadow {
+            text-shadow: 8px 8px 0px rgba(0,0,0,0.12);
+        }
+
+        .hero-sub {
+            font-family: 'Space Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 28px;
+            border-left: var(--border-w) solid var(--orange);
+            padding-left: 16px;
+            max-width: 340px;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 14px 28px;
+            border: var(--border-w) solid var(--black);
+            cursor: pointer;
+            text-decoration: none;
+            position: relative;
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .btn:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0px var(--black);
+        }
+
+        .btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--black);
+        }
+
+        .btn.primary {
+            background: var(--chartreuse);
+            box-shadow: 6px 6px 0px var(--black);
+        }
+
+        .btn.primary:hover {
+            box-shadow: 10px 10px 0px var(--black);
+        }
+
+        .btn.magenta {
+            background: var(--magenta);
+            color: var(--black);
+            box-shadow: 6px 6px 0px var(--black);
+        }
+
+        .btn.black {
+            background: var(--black);
+            color: var(--chartreuse);
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.3);
+        }
+
+        .hero-right {
+            background: var(--chartreuse);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-right::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                -35deg,
+                transparent,
+                transparent 20px,
+                rgba(0,0,0,0.04) 20px,
+                rgba(0,0,0,0.04) 40px
+            );
+            pointer-events: none;
+        }
+
+        .hero-graphic {
+            width: 160px;
+            height: 160px;
+            background: var(--red);
+            border: var(--border-w) solid var(--black);
+            box-shadow: 12px 12px 0px var(--black);
+            transform: rotate(8deg);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-graphic::before {
+            content: '☠';
+            font-size: 90px;
+            line-height: 1;
+            color: var(--black);
+        }
+
+        .hero-graphic::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 8px,
+                rgba(0,0,0,0.12) 8px,
+                rgba(0,0,0,0.12) 16px
+            );
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero-graphic {
+                width: 120px;
+                height: 120px;
+                transform: rotate(5deg);
+            }
+            .hero-graphic::before {
+                font-size: 64px;
+            }
+        }
+
+        /* ═══════════════ STATS STRIP ═══════════════ */
+        .stats-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border-bottom: var(--border-w) solid var(--black);
+            background: var(--black);
+            color: var(--white);
+        }
+
+        @media (max-width: 600px) {
+            .stats-strip {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat-item {
+            padding: 24px 20px;
+            text-align: center;
+            border-right: var(--border-w) solid var(--white);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stat-item:last-child {
+            border-right: none;
+        }
+
+        @media (max-width: 600px) {
+            .stat-item:nth-child(2) { border-right: none; }
+            .stat-item:nth-child(3), .stat-item:nth-child(4) { border-top: var(--border-w) solid var(--white); }
+        }
+
+        .stat-number {
+            font-family: 'Bebas Neue', 'Impact', sans-serif;
+            font-size: clamp(32px, 5vw, 52px);
+            line-height: 1;
+            letter-spacing: -0.01em;
+        }
+
+        .stat-number.cyan { color: var(--cyan); }
+        .stat-number.magenta { color: var(--magenta); }
+        .stat-number.chartreuse { color: var(--chartreuse); }
+        .stat-number.orange { color: var(--orange); }
+
+        .stat-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* ═══════════════ FEATURES ═══════════════ */
+        .features {
+            background: var(--white);
+            border-bottom: var(--border-w) solid var(--black);
+        }
+
+        .section-tag {
+            display: inline-block;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            background: var(--yellow);
+            padding: 6px 14px;
+            border: var(--border-w) solid var(--black);
+            margin-bottom: 32px;
+            transform: rotate(-0.5deg);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+        }
+
+        @media (max-width: 900px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 550px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .feature-card {
+            border: var(--border-w) solid var(--black);
+            padding: 32px 24px;
+            background: var(--white);
+            position: relative;
+        }
+
+        .feature-card:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 8px 8px 0px var(--black);
+            z-index: 2;
+        }
+
+        .feature-card:nth-child(1) { background: var(--chartreuse); }
+        .feature-card:nth-child(2) { background: var(--white); transform: translateY(-12px); }
+        .feature-card:nth-child(3) { background: var(--cyan); }
+        .feature-card:nth-child(4) { background: var(--white); transform: translateY(12px); }
+        .feature-card:nth-child(5) { background: var(--magenta); }
+        .feature-card:nth-child(6) { background: var(--orange); }
+
+        .feature-card:nth-child(2):hover { transform: translateY(-16px) translateX(-4px); }
+        .feature-card:nth-child(4):hover { transform: translateY(8px) translateX(-4px); }
+
+        .feature-icon {
+            font-size: 42px;
+            margin-bottom: 16px;
+            line-height: 1;
+        }
+
+        .feature-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            margin-bottom: 10px;
+        }
+
+        .feature-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* ═══════════════ INGREDIENTS BREAKDOWN ═══════════════ */
+        .ingredients {
+            background: var(--black);
+            color: var(--white);
+            border-bottom: var(--border-w) solid var(--chartreuse);
+        }
+
+        .ingredients .section-tag {
+            background: var(--chartreuse);
+            color: var(--black);
+        }
+
+        .ingredients-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            border: var(--border-w) solid var(--white);
+        }
+
+        @media (max-width: 600px) {
+            .ingredients-table {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .ingredient-row {
+            display: contents;
+        }
+
+        .ingredient-cell {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+        }
+
+        .ingredient-cell:last-child {
+            border-right: none;
+        }
+
+        .ingredient-name {
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .ingredient-name .highlight {
+            background: var(--magenta);
+            color: var(--black);
+            padding: 1px 6px;
+            font-weight: 700;
+        }
+
+        .ingredient-desc {
+            color: rgba(255,255,255,0.65);
+            line-height: 1.5;
+        }
+
+        /* ═══════════════ SOCIAL PROOF ═══════════════ */
+        .social-proof {
+            background: var(--white);
+            border-bottom: var(--border-w) solid var(--black);
+            overflow: hidden;
+        }
+
+        .testimonial-wall {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+        }
+
+        @media (max-width: 900px) {
+            .testimonial-wall {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .testimonial-wall {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .testimonial-sticker {
+            padding: 20px;
+            border: var(--border-w) solid var(--black);
+            background: var(--white);
+            position: relative;
+            box-shadow: 5px 5px 0px var(--black);
+        }
+
+        .testimonial-sticker:nth-child(1) { transform: rotate(-2deg); background: #fffde7; }
+        .testimonial-sticker:nth-child(2) { transform: rotate(1.5deg); background: #fce4ec; }
+        .testimonial-sticker:nth-child(3) { transform: rotate(-1deg); background: #e0f7fa; }
+        .testimonial-sticker:nth-child(4) { transform: rotate(2.5deg); background: #f3e5f5; }
+        .testimonial-sticker:nth-child(5) { transform: rotate(-0.5deg); background: #fff3e0; }
+        .testimonial-sticker:nth-child(6) { transform: rotate(1deg); background: #e8f5e9; }
+        .testimonial-sticker:nth-child(7) { transform: rotate(-1.5deg); background: #fbe9e7; }
+        .testimonial-sticker:nth-child(8) { transform: rotate(0.5deg); background: #ede7f6; }
+
+        .sticker-tag {
+            display: inline-block;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            background: var(--black);
+            color: var(--chartreuse);
+            padding: 3px 8px;
+            margin-bottom: 10px;
+        }
+
+        .sticker-quote {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .sticker-author {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: rgba(0,0,0,0.5);
+        }
+
+        /* ═══════════════ CTA ═══════════════ */
+        .cta-section {
+            background: var(--magenta);
+            border-bottom: var(--border-w) solid var(--black);
+            text-align: center;
+            padding: 80px 24px;
+        }
+
+        .cta-title {
+            font-family: 'Bebas Neue', 'Impact', sans-serif;
+            font-size: clamp(36px, 7vw, 72px);
+            line-height: 0.92;
+            text-transform: uppercase;
+            letter-spacing: -0.01em;
+            margin-bottom: 8px;
+            color: var(--black);
+            text-shadow: 8px 8px 0px rgba(0,0,0,0.2);
+        }
+
+        .cta-sub {
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--black);
+            margin-bottom: 32px;
+        }
+
+        .cta-btn-row {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ═══════════════ FOOTER ═══════════════ */
+        .site-footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 32px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .site-footer a {
+            color: var(--chartreuse);
+            text-decoration: none;
+            border-bottom: 2px solid var(--chartreuse);
+        }
+
+        .site-footer a:hover {
+            color: var(--magenta);
+            border-color: var(--magenta);
+        }
+
+        /* ═══════════════ WARNING BAR ═══════════════ */
+        .warning-strip {
+            background: var(--red);
+            color: var(--black);
+            text-align: center;
+            padding: 8px 16px;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            border-bottom: var(--border-w) solid var(--black);
+        }
+
+        /* ═══════════════ RESPONSIVE OVERRIDES ═══════════════ */
+        @media (max-width: 500px) {
+            .btn {
+                width: 100%;
+                text-align: center;
+                font-size: 13px;
+                padding: 12px 20px;
+            }
+            .hero-cta-group {
+                flex-direction: column;
+            }
+            .cta-btn-row {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <main>
+
+    <!-- ═══════════════ WARNING STRIP ═══════════════ -->
+    <div class="warning-strip">
+        ⚠ WARNING: This product is legally questionable in 14 states. Consume at your own existential risk. ⚠
+    </div>
+
+    <!-- ═══════════════ MARQUEE ═══════════════ -->
+    <div class="marquee-bar">
+        <div class="marquee-content">
+            <span>☠️ DEATH WISH</span>
+            <span>400mg CAFFEINE PER BOTTLE</span>
+            <span>2,200,000 SCOVILLE UNITS</span>
+            <span>☠️ NOT A TOY</span>
+            <span>HOTTER THAN PEPPER SPRAY</span>
+            <span>YOU WILL REGRET THIS</span>
+            <span>☠️ DEATH WISH</span>
+            <span>400mg CAFFEINE PER BOTTLE</span>
+            <span>2,200,000 SCOVILLE UNITS</span>
+            <span>☠️ NOT A TOY</span>
+            <span>HOTTER THAN PEPPER SPRAY</span>
+            <span>YOU WILL REGRET THIS</span>
+        </div>
+    </div>
+
+    <!-- ═══════════════ HERO ═══════════════ -->
+    <section class="hero">
+        <div class="hero-left">
+            <div class="hero-badge">☠ NEW FORMULA — EVEN WORSE</div>
+            <h1 class="hero-title">
+                <span class="hero-title-line shadow">DEATH</span>
+                <span class="hero-title-line offset">WISH</span>
+            </h1>
+            <p class="hero-sub">
+                The world's first caffeinated hot sauce. Hurt yourself twice — once from the heat, once from the heart palpitations.
+            </p>
+            <div class="hero-cta-group">
+                <a href="javascript:void(0)" class="btn primary">BUY NOW — $19.99</a>
+                <a href="javascript:void(0)" class="btn">READ THE WARNING LABEL</a>
+            </div>
+        </div>
+        <div class="hero-right">
+            <div class="hero-graphic"></div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ STATS ═══════════════ -->
+    <div class="stats-strip">
+        <div class="stat-item">
+            <span class="stat-number cyan">2.2M</span>
+            <span class="stat-label">Scoville Units</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number magenta">400mg</span>
+            <span class="stat-label">Caffeine / Bottle</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number chartreuse">47,000+</span>
+            <span class="stat-label">Bottles Sold</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number orange">91%</span>
+            <span class="stat-label">Regret Rate</span>
+        </div>
+    </div>
+
+    <!-- ═══════════════ FEATURES ═══════════════ -->
+    <section class="features">
+        <span class="section-tag">WHY WOULD YOU DO THIS TO YOURSELF?</span>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">☕</div>
+                <h3 class="feature-title">Caffeine + Capsaicin</h3>
+                <p class="feature-text">We combined two things your body already hates into one convenient bottle. Equivalent to four espressos and a ghost pepper having a fistfight in your mouth.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧪</div>
+                <h3 class="feature-title">Questionably Legal</h3>
+                <p class="feature-text">Our lawyers quit halfway through reviewing the recipe. We continued anyway. Currently banned from three state fairs and one minor European nation.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Instant Regret™</h3>
+                <p class="feature-text">Proprietary time-release technology ensures the heat builds for a full 90 seconds before the caffeine kicks in. You'll experience regret in two distinct waves.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📦</div>
+                <h3 class="feature-title">Ships in Disguise</h3>
+                <p class="feature-text">Plain brown box. No logos. Your neighbors will never know you ordered hot sauce strong enough to make a grown adult question every life choice leading to this moment.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3 class="feature-title">Award-Losing</h3>
+                <p class="feature-text">Officially disqualified from 12 hot sauce competitions. The judges called it "a war crime." We put that quote on the bottle.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧯</div>
+                <h3 class="feature-title">Includes Milk Coupon</h3>
+                <p class="feature-text">Every bottle ships with a voucher for one gallon of whole milk. You will need it. No, seriously. Do not attempt this without dairy products nearby.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ MARQUEE 2 ═══════════════ -->
+    <div class="marquee-bar reverse">
+        <div class="marquee-content">
+            <span>🔥 "A WAR CRIME IN A BOTTLE" — Hot Sauce Quarterly</span>
+            <span>💀 "I SAW GOD AND HE WAS SWEATING" — Reddit User u/spicecasualty</span>
+            <span>🚫 BANNED IN FINLAND</span>
+            <span>🔥 "A WAR CRIME IN A BOTTLE" — Hot Sauce Quarterly</span>
+            <span>💀 "I SAW GOD AND HE WAS SWEATING" — Reddit User u/spicecasualty</span>
+            <span>🚫 BANNED IN FINLAND</span>
+        </div>
+    </div>
+
+    <!-- ═══════════════ INGREDIENTS ═══════════════ -->
+    <section class="ingredients">
+        <span class="section-tag">WHAT'S ACTUALLY IN THIS?</span>
+        <div class="ingredients-table">
+            <div class="ingredient-cell">
+                <span class="ingredient-name"><span class="highlight">CAROLINA REAPER</span> PURÉE</span>
+            </div>
+            <div class="ingredient-cell ingredient-desc">The world's former hottest pepper, now reduced to a base ingredient. We use enough to make pepper spray jealous.</div>
+
+            <div class="ingredient-cell">
+                <span class="ingredient-name"><span class="highlight">ANHYDROUS CAFFEINE</span> EXTRACT</span>
+            </div>
+            <div class="ingredient-cell ingredient-desc">Pharmaceutical-grade. The same stuff they use in those pills truckers take to drive through Nebraska at 3am.</div>
+
+            <div class="ingredient-cell">
+                <span class="ingredient-name"><span class="highlight">TRINIDAD SCORPION</span> DISTILLATE</span>
+            </div>
+            <div class="ingredient-cell ingredient-desc">We distill this for purity. The resulting liquid has been described as "angry" by multiple chemists.</div>
+
+            <div class="ingredient-cell">
+                <span class="ingredient-name"><span class="highlight">APPLE CIDER</span> VINEGAR</span>
+            </div>
+            <div class="ingredient-cell ingredient-desc">The only ingredient your grandmother would recognize. It's here for pH balance. And tradition. Mostly tradition.</div>
+
+            <div class="ingredient-cell">
+                <span class="ingredient-name"><span class="highlight">GHOST PEPPER</span> OIL</span>
+            </div>
+            <div class="ingredient-cell ingredient-desc">Cold-pressed from peppers grown in soil that has never known joy. Our farmer has seen things. He doesn't talk about it.</div>
+
+            <div class="ingredient-cell">
+                <span class="ingredient-name"><span class="highlight">LIQUID SMOKE</span> & SPICES</span>
+            </div>
+            <div class="ingredient-cell ingredient-desc">At this point, flavor is mostly theoretical. But we tried. The smoke adds depth before the capsaicin erases your ability to taste anything for 45 minutes.</div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ SOCIAL PROOF ═══════════════ -->
+    <section class="social-proof">
+        <span class="section-tag">PEOPLE WHO MADE TERRIBLE DECISIONS</span>
+
+        <div class="testimonial-wall">
+            <div class="testimonial-sticker">
+                <span class="sticker-tag">VERIFIED PURCHASE</span>
+                <p class="sticker-quote">"I put three drops on my eggs. Thirty seconds later I was standing in my backyard in the rain at 6am questioning my entire existence. My eggs got cold. Five stars."</p>
+                <span class="sticker-author">— Marcus T., Portland OR</span>
+            </div>
+            <div class="testimonial-sticker">
+                <span class="sticker-tag">AMAZON REVIEW</span>
+                <p class="sticker-quote">"My roommate used this without asking. We are no longer roommates. We are no longer on speaking terms. He moved to another city. I'm not saying it was because of the sauce but it definitely didn't help."</p>
+                <span class="sticker-author">— Jordan K., Austin TX</span>
+            </div>
+            <div class="testimonial-sticker">
+                <span class="sticker-tag">RETURN REQUEST DENIED</span>
+                <p class="sticker-quote">"I read the warnings. I watched the videos. I still thought 'how bad could it be?' I have never been more wrong about anything in my life. The milk coupon is insufficient. Send more milk."</p>
+                <span class="sticker-author">— Sarah L., Denver CO</span>
+            </div>
+            <div class="testimonial-sticker">
+                <span class="sticker-tag">DIRECT MESSAGE</span>
+                <p class="sticker-quote">"Bro I ate a wing coated in this and my Apple Watch called 911 automatically. The paramedics said they get 4-5 calls a month from your product specifically."</p>
+                <span class="sticker-author">— DeAndre W., Miami FL</span>
+            </div>
+            <div class="testimonial-sticker">
+                <span class="sticker-tag">1-STAR REVIEW</span>
+                <p class="sticker-quote">"This product should be illegal. It is a chemical weapon disguised as condiment. I use it on everything. My family has staged an intervention. I ordered a case."</p>
+                <span class="sticker-author">— Anonymous, Las Vegas NV</span>
+            </div>
+            <div class="testimonial-sticker">
+                <span class="sticker-tag">FORUM POST</span>
+                <p class="sticker-quote">"Tried the 'Death Wish Challenge' with my buddies. We got through six wings each before someone threw up in my ficus plant. The plant died two days later. Cannot recommend enough."</p>
+                <span class="sticker-author">— Tyler R., Brooklyn NY</span>
+            </div>
+            <div class="testimonial-sticker">
+                <span class="sticker-tag">YOUTUBE COMMENT</span>
+                <p class="sticker-quote">"Did a review video. Got 2.4 million views. Also got a temporary medical ban from consuming capsaicin. Worth it. The thumbnails were incredible."</p>
+                <span class="sticker-author">— SpiceLord9000, YouTube</span>
+            </div>
+            <div class="testimonial-sticker">
+                <span class="sticker-tag">SUPPORT TICKET #8842</span>
+                <p class="sticker-quote">"Is it supposed to make your ears ring? Asking for a friend. The friend is me. My ears are ringing. Also I can see sounds now. Is this normal or should I seek medical attention?"</p>
+                <span class="sticker-author">— Casey M., Seattle WA</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ CTA ═══════════════ -->
+    <section class="cta-section">
+        <h2 class="cta-title">YOU'VE BEEN<br>WARNED.</h2>
+        <p class="cta-sub">Still here? Good. You're exactly the kind of person we made this for.</p>
+        <div class="cta-btn-row">
+            <a href="javascript:void(0)" class="btn black">BUY DEATH WISH — $19.99</a>
+            <a href="javascript:void(0)" class="btn">BUY THE GIFT SET (WHY WOULD YOU DO THAT TO SOMEONE?)</a>
+        </div>
+    </section>
+
+    </main>
+
+    <!-- ═══════════════ FOOTER ═══════════════ -->
+    <footer class="site-footer">
+        <span>© 2024 DEATH WISH SAUCE CO. — NO REFUNDS. NO APOLOGIES.</span>
+        <span>
+            <a href="javascript:void(0)">LEGAL DISCLAIMERS (LOL)</a> &nbsp;|&nbsp;
+            <a href="javascript:void(0)">DO NOT EAT THIS</a> &nbsp;|&nbsp;
+            <a href="javascript:void(0)">CONTACT (COMPLAINTS ONLY)</a>
+        </span>
+    </footer>
+
+    <script>
+        // Double the marquee content for seamless looping
+        document.querySelectorAll('.marquee-content').forEach(el => {
+            el.innerHTML = el.innerHTML + el.innerHTML;
+        });
+    </script>
+
+</body>
+</html>

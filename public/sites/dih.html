@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RIFT/AGENT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f2efe5;
+      --paper-2: #e4dfcf;
+      --ink: #181817;
+      --muted: #5a574e;
+      --line: #181817;
+      --acid: #b8ff14;
+      --orange: #ff5a1f;
+      --white-warm: #fbf8ed;
+      --ease: cubic-bezier(0.32, 0.72, 0, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+      opacity: 0.24;
+      background-image:
+        radial-gradient(circle at 1px 1px, rgba(24, 24, 23, 0.55) 1px, transparent 0),
+        linear-gradient(90deg, rgba(24, 24, 23, 0.05) 1px, transparent 1px),
+        linear-gradient(rgba(24, 24, 23, 0.04) 1px, transparent 1px);
+      background-size: 9px 9px, 48px 48px, 48px 48px;
+      mix-blend-mode: multiply;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .page {
+      position: relative;
+      min-height: 100dvh;
+      border-left: 12px solid var(--line);
+      border-right: 12px solid var(--line);
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 9;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      min-height: 76px;
+      border-bottom: 4px solid var(--line);
+      background: rgba(242, 239, 229, 0.92);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      padding: 0 24px;
+      border-right: 4px solid var(--line);
+      font-family: "Archivo Black", Impact, sans-serif;
+      font-size: clamp(1.2rem, 2vw, 2rem);
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .nav-center {
+      display: flex;
+      gap: 2px;
+      height: 100%;
+      border-right: 4px solid var(--line);
+    }
+
+    .nav-center a,
+    .nav-action {
+      display: grid;
+      place-items: center;
+      min-width: 132px;
+      padding: 0 18px;
+      border-left: 4px solid var(--line);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      transition: background 500ms var(--ease), color 500ms var(--ease), transform 500ms var(--ease);
+    }
+
+    .nav-center a:hover,
+    .nav-action:hover {
+      background: var(--acid);
+      transform: translateY(-2px);
+    }
+
+    .nav-action {
+      justify-self: end;
+      height: 100%;
+      border: 0;
+      border-left: 4px solid var(--line);
+      background: var(--orange);
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.35fr 0.65fr;
+      min-height: calc(100dvh - 76px);
+      border-bottom: 6px solid var(--line);
+      overflow: hidden;
+    }
+
+    .hero-copy {
+      position: relative;
+      padding: clamp(28px, 4vw, 68px) clamp(20px, 5vw, 82px) 40px;
+      border-right: 6px solid var(--line);
+    }
+
+    .stamp-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .stamp {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 7px 11px;
+      border: 3px solid var(--line);
+      background: var(--white-warm);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .stamp.acid {
+      background: var(--acid);
+    }
+
+    .headline {
+      position: relative;
+      z-index: 1;
+      max-width: 1060px;
+      margin: 0;
+      font-family: "Archivo Black", Impact, sans-serif;
+      font-size: clamp(4.1rem, 12vw, 13.4rem);
+      line-height: 0.78;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .headline .overlap {
+      display: block;
+      margin-left: clamp(24px, 8vw, 142px);
+      color: var(--orange);
+      -webkit-text-stroke: clamp(1px, 0.3vw, 5px) var(--line);
+      transform: translateY(-0.03em);
+    }
+
+    .headline .under {
+      display: block;
+      margin-left: clamp(0px, 3vw, 46px);
+      color: var(--ink);
+    }
+
+    .hero-note {
+      position: relative;
+      z-index: 2;
+      max-width: 640px;
+      margin: clamp(24px, 4vw, 52px) 0 0 auto;
+      padding: 18px 20px;
+      border: 4px solid var(--line);
+      background: var(--acid);
+      font-size: clamp(1rem, 1.8vw, 1.4rem);
+      line-height: 1.18;
+      font-weight: 700;
+      transform: rotate(-1.2deg);
+    }
+
+    .hero-rail {
+      position: relative;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-width: 0;
+      background:
+        linear-gradient(135deg, transparent 0 47%, rgba(24, 24, 23, 0.18) 47% 50%, transparent 50%),
+        var(--paper-2);
+      background-size: 34px 34px, auto;
+    }
+
+    .rail-label {
+      padding: 20px;
+      border-bottom: 4px solid var(--line);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .agent-diagram {
+      position: relative;
+      min-height: 430px;
+      overflow: hidden;
+    }
+
+    .agent-diagram svg {
+      position: absolute;
+      inset: 5%;
+      width: 90%;
+      height: 90%;
+    }
+
+    .spec-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 4px solid var(--line);
+    }
+
+    .spec {
+      min-height: 110px;
+      padding: 16px;
+      border-right: 4px solid var(--line);
+      background: var(--white-warm);
+    }
+
+    .spec:nth-child(2) {
+      border-right: 0;
+      background: var(--orange);
+    }
+
+    .spec b {
+      display: block;
+      font-family: "Archivo Black", Impact, sans-serif;
+      font-size: clamp(2rem, 4vw, 4.6rem);
+      line-height: 0.9;
+    }
+
+    .spec span {
+      display: block;
+      margin-top: 8px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .section {
+      border-bottom: 6px solid var(--line);
+    }
+
+    .systems {
+      display: grid;
+      grid-template-columns: 0.75fr 1.25fr;
+      min-height: 720px;
+    }
+
+    .side-title {
+      padding: clamp(24px, 4vw, 58px);
+      border-right: 6px solid var(--line);
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .side-title h2 {
+      margin: 0;
+      font-family: "Archivo Black", Impact, sans-serif;
+      font-size: clamp(3rem, 7vw, 8rem);
+      line-height: 0.82;
+      text-transform: uppercase;
+    }
+
+    .side-title p {
+      max-width: 30rem;
+      margin: 30px 0 0;
+      color: #d3cdbd;
+      font-size: 1.1rem;
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-auto-rows: minmax(138px, auto);
+      background: var(--line);
+      gap: 4px;
+      padding: 4px;
+    }
+
+    .module {
+      position: relative;
+      padding: 20px;
+      background: var(--paper);
+      overflow: hidden;
+      transition: transform 600ms var(--ease), background 600ms var(--ease);
+    }
+
+    .module:hover {
+      background: var(--acid);
+      transform: translate(-4px, -4px);
+    }
+
+    .module.wide {
+      grid-column: span 4;
+      grid-row: span 2;
+    }
+
+    .module.tall {
+      grid-column: span 2;
+      grid-row: span 3;
+      background: var(--orange);
+    }
+
+    .module.mid {
+      grid-column: span 3;
+      grid-row: span 2;
+      background: var(--white-warm);
+    }
+
+    .module.small {
+      grid-column: span 2;
+      background: var(--paper-2);
+    }
+
+    .module h3 {
+      max-width: 16ch;
+      margin: 0;
+      font-family: "Archivo Black", Impact, sans-serif;
+      font-size: clamp(1.7rem, 3.4vw, 4.2rem);
+      line-height: 0.88;
+      text-transform: uppercase;
+    }
+
+    .module p {
+      position: absolute;
+      right: 18px;
+      bottom: 16px;
+      max-width: 26ch;
+      margin: 0;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1.28;
+      text-transform: uppercase;
+    }
+
+    .ticker {
+      display: flex;
+      overflow: hidden;
+      border-bottom: 6px solid var(--line);
+      background: var(--acid);
+      font-family: "Archivo Black", Impact, sans-serif;
+      font-size: clamp(2.6rem, 7vw, 7rem);
+      line-height: 0.9;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .ticker span {
+      display: inline-block;
+      padding: 20px 18px 22px;
+      animation: move 24s linear infinite;
+    }
+
+    @keyframes move {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+
+    .operations {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 760px;
+    }
+
+    .ops-copy {
+      padding: clamp(28px, 5vw, 76px);
+      border-right: 6px solid var(--line);
+    }
+
+    .ops-copy h2 {
+      max-width: 11ch;
+      margin: 0;
+      font-family: "Archivo Black", Impact, sans-serif;
+      font-size: clamp(3.4rem, 8vw, 10rem);
+      line-height: 0.82;
+      text-transform: uppercase;
+    }
+
+    .ops-copy p {
+      max-width: 46rem;
+      margin: 30px 0 0;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 1.7vw, 1.38rem);
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 36px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      min-height: 58px;
+      padding: 12px 14px 12px 20px;
+      border: 4px solid var(--line);
+      background: var(--ink);
+      color: var(--paper);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 500ms var(--ease), background 500ms var(--ease), color 500ms var(--ease);
+    }
+
+    .button span {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      background: var(--acid);
+      color: var(--ink);
+      border: 3px solid var(--paper);
+      transition: transform 500ms var(--ease);
+    }
+
+    .button:hover {
+      background: var(--orange);
+      color: var(--ink);
+      transform: translate(-3px, -3px);
+    }
+
+    .button:hover span {
+      transform: translate(3px, -3px);
+    }
+
+    .ops-board {
+      position: relative;
+      min-height: 620px;
+      background: var(--line);
+      overflow: hidden;
+    }
+
+    .ops-card {
+      position: absolute;
+      border: 5px solid var(--line);
+      background: var(--paper);
+      box-shadow: 12px 12px 0 var(--line);
+    }
+
+    .ops-card.one {
+      top: 8%;
+      left: 8%;
+      width: 64%;
+      min-height: 220px;
+      background: var(--white-warm);
+      transform: rotate(2deg);
+    }
+
+    .ops-card.two {
+      top: 42%;
+      right: 7%;
+      width: 58%;
+      min-height: 250px;
+      background: var(--acid);
+      transform: rotate(-3deg);
+    }
+
+    .ops-card.three {
+      right: 18%;
+      bottom: 7%;
+      width: 42%;
+      min-height: 140px;
+      background: var(--orange);
+      transform: rotate(1deg);
+    }
+
+    .ops-card header {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-bottom: 4px solid var(--line);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .ops-card strong {
+      display: block;
+      padding: 18px;
+      font-family: "Archivo Black", Impact, sans-serif;
+      font-size: clamp(2rem, 4vw, 4.7rem);
+      line-height: 0.82;
+      text-transform: uppercase;
+    }
+
+    .terminal {
+      margin: 0 18px 18px;
+      padding: 14px;
+      border: 3px solid var(--line);
+      background: var(--ink);
+      color: var(--acid);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.78rem;
+      line-height: 1.55;
+      text-transform: uppercase;
+    }
+
+    .manifesto {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      min-height: 720px;
+    }
+
+    .manifesto-mark {
+      display: grid;
+      place-items: center;
+      padding: 30px;
+      border-right: 6px solid var(--line);
+      background: var(--orange);
+    }
+
+    .manifesto-mark svg {
+      width: min(86%, 620px);
+      height: auto;
+      filter: drop-shadow(10px 10px 0 var(--line));
+    }
+
+    .manifesto-copy {
+      padding: clamp(30px, 5vw, 78px);
+      background: var(--paper);
+    }
+
+    .manifesto-copy h2 {
+      margin: 0 0 28px;
+      font-family: "Archivo Black", Impact, sans-serif;
+      font-size: clamp(3.6rem, 8vw, 10.5rem);
+      line-height: 0.8;
+      text-transform: uppercase;
+    }
+
+    .rules {
+      display: grid;
+      gap: 4px;
+      background: var(--line);
+      padding: 4px;
+    }
+
+    .rule {
+      display: grid;
+      grid-template-columns: 82px 1fr;
+      background: var(--white-warm);
+    }
+
+    .rule b {
+      display: grid;
+      place-items: center;
+      min-height: 86px;
+      border-right: 4px solid var(--line);
+      background: var(--acid);
+      font-family: "Archivo Black", Impact, sans-serif;
+      font-size: 2rem;
+    }
+
+    .rule span {
+      align-self: center;
+      padding: 18px;
+      font-size: clamp(1.05rem, 1.7vw, 1.35rem);
+      line-height: 1.16;
+      font-weight: 700;
+    }
+
+    .footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: stretch;
+      background: var(--ink);
+      color: var(--paper);
+      border-bottom: 12px solid var(--line);
+    }
+
+    .footer h2 {
+      margin: 0;
+      padding: 30px;
+      font-family: "Archivo Black", Impact, sans-serif;
+      font-size: clamp(3rem, 9vw, 12rem);
+      line-height: 0.78;
+      text-transform: uppercase;
+    }
+
+    .footer a {
+      display: grid;
+      place-items: center;
+      min-width: min(32vw, 380px);
+      padding: 30px;
+      border-left: 6px solid var(--paper);
+      background: var(--acid);
+      color: var(--ink);
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 700;
+      text-transform: uppercase;
+      transition: transform 500ms var(--ease), background 500ms var(--ease);
+    }
+
+    .footer a:hover {
+      background: var(--orange);
+      transform: translateX(-8px);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(34px);
+      transition: opacity 900ms var(--ease), transform 900ms var(--ease);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .page {
+        border-left-width: 6px;
+        border-right-width: 6px;
+      }
+
+      .nav {
+        grid-template-columns: 1fr;
+        position: relative;
+      }
+
+      .brand,
+      .nav-center,
+      .nav-action {
+        border-right: 0;
+        border-left: 0;
+        border-bottom: 4px solid var(--line);
+      }
+
+      .nav-center {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .nav-center a,
+      .nav-action {
+        min-height: 52px;
+        min-width: 0;
+      }
+
+      .hero,
+      .systems,
+      .operations,
+      .manifesto,
+      .footer {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy,
+      .side-title,
+      .ops-copy,
+      .manifesto-mark {
+        border-right: 0;
+        border-bottom: 6px solid var(--line);
+      }
+
+      .hero-note,
+      .ops-card.one,
+      .ops-card.two,
+      .ops-card.three {
+        transform: none;
+      }
+
+      .module-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .module,
+      .module.wide,
+      .module.tall,
+      .module.mid,
+      .module.small {
+        grid-column: span 1;
+        grid-row: auto;
+        min-height: 220px;
+      }
+
+      .ops-board {
+        min-height: 760px;
+      }
+
+      .ops-card.one,
+      .ops-card.two,
+      .ops-card.three {
+        left: 5%;
+        right: auto;
+        width: 82%;
+      }
+
+      .ops-card.two {
+        top: 36%;
+        left: 13%;
+      }
+
+      .ops-card.three {
+        top: 68%;
+        left: 8%;
+      }
+
+      .footer a {
+        min-width: 0;
+        min-height: 120px;
+        border-left: 0;
+        border-top: 6px solid var(--paper);
+      }
+    }
+
+    @media (max-width: 620px) {
+      .page {
+        border: 0;
+      }
+
+      .brand {
+        padding: 16px;
+      }
+
+      .nav-center {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy,
+      .side-title,
+      .ops-copy,
+      .manifesto-copy {
+        padding: 24px 16px;
+      }
+
+      .headline {
+        font-size: clamp(3.5rem, 19vw, 6.8rem);
+      }
+
+      .headline .overlap,
+      .headline .under {
+        margin-left: 0;
+      }
+
+      .hero-note {
+        margin-right: 0;
+      }
+
+      .agent-diagram {
+        min-height: 330px;
+      }
+
+      .spec-block,
+      .module-grid,
+      .rule {
+        grid-template-columns: 1fr;
+      }
+
+      .spec {
+        border-right: 0;
+        border-bottom: 4px solid var(--line);
+      }
+
+      .module p {
+        position: static;
+        margin-top: 24px;
+      }
+
+      .rule b {
+        justify-content: start;
+        min-height: 58px;
+        padding-left: 18px;
+        border-right: 0;
+        border-bottom: 4px solid var(--line);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="#">RIFT/AGENT</a>
+      <div class="nav-center">
+        <a href="#systems">Systems</a>
+        <a href="#ops">Ops</a>
+        <a href="#manifesto">Manifesto</a>
+      </div>
+      <button class="nav-action" type="button">Request Access</button>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="stamp-row reveal">
+          <span class="stamp acid">Autonomous Workbench</span>
+          <span class="stamp">Human Led</span>
+          <span class="stamp">Build 06.07</span>
+        </div>
+        <h1 class="headline reveal">
+          <span>Agents</span>
+          <span class="overlap">That</span>
+          <span class="under">Push Back</span>
+        </h1>
+        <p class="hero-note reveal">An advanced AI agent system for teams that need judgment, traceability, and useful friction, not another polite autocomplete layer.</p>
+      </div>
+
+      <aside class="hero-rail" aria-label="Agent capability graphic">
+        <div class="rail-label">Live autonomy map / no glowing brains</div>
+        <div class="agent-diagram">
+          <svg viewBox="0 0 500 500" role="img" aria-label="Flat vector diagram of connected agent decisions">
+            <rect x="30" y="34" width="290" height="136" fill="#b8ff14" stroke="#181817" stroke-width="8"/>
+            <rect x="118" y="114" width="310" height="180" fill="#f2efe5" stroke="#181817" stroke-width="8"/>
+            <rect x="70" y="272" width="210" height="126" fill="#ff5a1f" stroke="#181817" stroke-width="8"/>
+            <path d="M315 78 L446 156 L396 404 L128 430 L42 206 Z" fill="none" stroke="#181817" stroke-width="10"/>
+            <circle cx="140" cy="112" r="31" fill="#181817"/>
+            <circle cx="360" cy="210" r="31" fill="#181817"/>
+            <circle cx="180" cy="334" r="31" fill="#181817"/>
+            <path d="M140 112 L360 210 L180 334 Z" fill="none" stroke="#181817" stroke-width="8"/>
+            <path d="M90 76 H254 M156 154 H406 M114 314 H240" stroke="#181817" stroke-width="10"/>
+            <path d="M96 230 H330 M96 252 H286" stroke="#181817" stroke-width="5"/>
+          </svg>
+        </div>
+        <div class="spec-block">
+          <div class="spec"><b>27</b><span>parallel task contracts</span></div>
+          <div class="spec"><b>0</b><span>black box handoffs</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section systems" id="systems">
+      <div class="side-title reveal">
+        <h2>Less Chat.<br>More Consequence.</h2>
+        <p>RIFT/AGENT turns open-ended prompts into inspectable plans, contested assumptions, tool calls, and finished work that can survive review.</p>
+      </div>
+      <div class="module-grid">
+        <article class="module wide reveal">
+          <h3>Plans With Teeth</h3>
+          <p>Agents state what they will change, why it matters, and what would prove the work wrong.</p>
+        </article>
+        <article class="module tall reveal">
+          <h3>Refusal Is A Feature</h3>
+          <p>Contradictions surface before execution. Weak goals get clarified in public.</p>
+        </article>
+        <article class="module mid reveal">
+          <h3>Tool Native</h3>
+          <p>Every action leaves a trail: command, patch, source, result, and rollback context.</p>
+        </article>
+        <article class="module small reveal">
+          <h3>Anti Template</h3>
+          <p>Teams define operating taste, review standards, and escalation behavior.</p>
+        </article>
+        <article class="module small reveal">
+          <h3>Human Center</h3>
+          <p>The agent does the tedious parts while people keep authorship and judgment.</p>
+        </article>
+      </div>
+    </section>
+
+    <div class="ticker" aria-hidden="true">
+      <span>Reason / Act / Verify / Contest / Ship / </span>
+      <span>Reason / Act / Verify / Contest / Ship / </span>
+      <span>Reason / Act / Verify / Contest / Ship / </span>
+    </div>
+
+    <section class="section operations" id="ops">
+      <div class="ops-copy reveal">
+        <span class="stamp acid">Operational Memory</span>
+        <h2>Built For Messy Work.</h2>
+        <p>Research, code, files, briefs, audits, long-running tasks, and tense tradeoffs live in one accountable loop. It is not magic. It is a disciplined machine for reducing ambiguity.</p>
+        <div class="cta-row">
+          <a class="button" href="#manifesto">Read The Method <span>↘</span></a>
+          <a class="button" href="#">Start A Run <span>↗</span></a>
+        </div>
+      </div>
+      <div class="ops-board" aria-label="Stacked operational cards">
+        <article class="ops-card one reveal">
+          <header><span>Phase 01</span><span>Scope</span></header>
+          <strong>Interrogate The Brief</strong>
+          <pre class="terminal">assumption.audit = active
+risk.surface = early
+goal.status = testable</pre>
+        </article>
+        <article class="ops-card two reveal">
+          <header><span>Phase 02</span><span>Execution</span></header>
+          <strong>Patch, Check, Repeat</strong>
+        </article>
+        <article class="ops-card three reveal">
+          <header><span>Phase 03</span><span>Proof</span></header>
+          <strong>Show Receipts</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="section manifesto" id="manifesto">
+      <div class="manifesto-mark reveal">
+        <svg viewBox="0 0 520 520" role="img" aria-label="Abstract brutalist agent mark">
+          <rect x="34" y="34" width="452" height="452" fill="#f2efe5" stroke="#181817" stroke-width="12"/>
+          <path d="M94 122 H412 V196 H254 V258 H450 V332 H254 V414 H94 Z" fill="#181817"/>
+          <path d="M112 140 H264 V178 H112 Z M112 278 H220 V396 H112 Z" fill="#b8ff14"/>
+          <circle cx="378" cy="374" r="54" fill="#ff5a1f" stroke="#181817" stroke-width="10"/>
+          <path d="M378 320 V428 M324 374 H432" stroke="#181817" stroke-width="10"/>
+        </svg>
+      </div>
+      <div class="manifesto-copy reveal">
+        <h2>Agent Rules.</h2>
+        <div class="rules">
+          <div class="rule"><b>01</b><span>Do not hide uncertainty behind fluent language.</span></div>
+          <div class="rule"><b>02</b><span>Prefer inspectable work over impressive theater.</span></div>
+          <div class="rule"><b>03</b><span>Challenge weak instructions before they become expensive mistakes.</span></div>
+          <div class="rule"><b>04</b><span>Let humans decide taste, risk, priority, and acceptable compromise.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <h2>Put The Agent On The Line.</h2>
+      <a href="#">Open The Workbench</a>
+    </footer>
+  </main>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.16 });
+
+    document.querySelectorAll(".reveal").forEach((item) => observer.observe(item));
+  </script>
+</body>
+</html>

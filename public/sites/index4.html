@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOWH2O — Bioluminescent Energy from the Abyss!!!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0}
+:root{
+  --hot-magenta:#ff2bd6;
+  --electric-purple:#b026ff;
+  --neon-green:#5bff2b;
+  --cyan:#2bfff5;
+  --sunset-orange:#ff7a2b;
+  --sky-blue:#2bb8ff;
+  --glow-bg:#0d0221;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Space Grotesk',system-ui,sans-serif;
+  background:var(--glow-bg);
+  color:#fff;
+  overflow-x:hidden;
+  line-height:1.4;
+}
+h1,h2,h3{
+  font-family:'Syne',system-ui,sans-serif;
+  font-weight:800;
+  letter-spacing:-.02em;
+}
+a{color:inherit;text-decoration:none}
+
+/* === AURORA BACKGROUND === */
+.aurora{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 20%,rgba(255,43,214,.35),transparent 50%),
+    radial-gradient(ellipse 70% 80% at 90% 30%,rgba(176,38,255,.35),transparent 50%),
+    radial-gradient(ellipse 90% 50% at 30% 80%,rgba(91,255,43,.25),transparent 50%),
+    radial-gradient(ellipse 70% 70% at 80% 70%,rgba(43,255,245,.3),transparent 50%),
+    radial-gradient(ellipse 80% 40% at 50% 50%,rgba(255,122,43,.2),transparent 50%),
+    radial-gradient(ellipse 60% 60% at 20% 60%,rgba(43,184,255,.25),transparent 50%);
+  animation:aurora-shift 18s infinite alternate ease-in-out;
+}
+@keyframes aurora-shift{
+  0%{transform:scale(1) translate(0,0) rotate(0deg)}
+  33%{transform:scale(1.1) translate(-2%,2%) rotate(.5deg)}
+  66%{transform:scale(1.05) translate(2%,-1%) rotate(-.5deg)}
+  100%{transform:scale(1.15) translate(-1%,1%) rotate(1deg)}
+}
+
+/* === NOISE OVERLAY === */
+.noise{
+  position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.06;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px 200px;
+}
+
+/* === LAYOUT === */
+.wrap{position:relative;z-index:2}
+.contain{max-width:1200px;margin:0 auto;padding:0 1.5rem}
+
+/* === GLASS CARD === */
+.glass{
+  background:rgba(255,255,255,.22);
+  backdrop-filter:blur(22px) saturate(160%);
+  -webkit-backdrop-filter:blur(22px) saturate(160%);
+  border:1px solid rgba(255,255,255,.38);
+  box-shadow:
+    0 10px 40px rgba(255,43,214,.25),
+    0 0 0 1px rgba(255,255,255,.08) inset;
+}
+
+/* === NAV === */
+nav{
+  position:sticky;top:0;z-index:100;
+  padding:1.2rem 0;
+}
+nav .contain{
+  display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center;
+}
+.logo{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:1.6rem;
+  background:linear-gradient(90deg,var(--cyan),var(--hot-magenta),var(--electric-purple));
+  background-size:200% auto;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shine 4s linear infinite;
+  filter:drop-shadow(0 0 12px rgba(255,43,214,.6));
+}
+@keyframes shine{to{background-position:200% center}}
+nav ul{display:flex;flex-wrap:wrap;gap:.6rem;list-style:none;padding:0}
+nav a{
+  padding:.65rem 1.2rem;border-radius:999px;
+  font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.2);
+  transition:all .5s cubic-bezier(.68,-.55,.27,1.55);
+  box-shadow:0 0 0 rgba(255,43,214,0);
+}
+nav a:hover{
+  background:rgba(255,255,255,.22);
+  border-color:rgba(255,255,255,.5);
+  box-shadow:0 0 24px rgba(255,43,214,.4),0 0 60px rgba(176,38,255,.3);
+  transform:translateY(-2px) scale(1.04);
+}
+
+/* === HERO === */
+header.hero{
+  min-height:92vh;
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  padding:7rem 1.5rem 4rem;
+}
+.hero-blob{
+  background:
+    linear-gradient(135deg,rgba(255,43,214,.35),rgba(176,38,255,.35),rgba(43,255,245,.3));
+  border-radius:50% 30% 60% 40% / 40% 50% 30% 60%;
+  padding:3.5rem 2.5rem;
+  box-shadow:0 0 80px rgba(255,43,214,.4),0 0 160px rgba(176,38,255,.3);
+  animation:blob-morph 12s infinite alternate ease-in-out,pulse-glow 3s infinite alternate;
+  position:relative;
+}
+@keyframes blob-morph{
+  0%{border-radius:50% 30% 60% 40%/40% 50% 30% 60%}
+  25%{border-radius:40% 60% 30% 50%/60% 40% 50% 30%}
+  50%{border-radius:60% 40% 50% 30%/30% 60% 40% 50%}
+  75%{border-radius:30% 50% 40% 60%/50% 30% 60% 40%}
+  100%{border-radius:50% 30% 60% 40%/40% 50% 30% 60%}
+}
+@keyframes pulse-glow{
+  0%{box-shadow:0 0 80px rgba(255,43,214,.4),0 0 160px rgba(176,38,255,.3)}
+  100%{box-shadow:0 0 120px rgba(255,43,214,.6),0 0 220px rgba(43,255,245,.4)}
+}
+.hero h1{
+  font-size:clamp(2.8rem,8vw,7rem);
+  line-height:.85;
+  background:linear-gradient(180deg,#fff 0%,var(--cyan) 60%,var(--neon-green) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 4px 20px rgba(43,255,245,.5));
+}
+.tagline{
+  font-size:clamp(1rem,2vw,1.3rem);
+  max-width:52ch;margin:1.2rem auto 2.4rem;
+  opacity:.9;
+}
+.cta{
+  display:inline-block;
+  padding:1.1rem 2.6rem;border-radius:999px;
+  font-weight:700;font-size:1rem;letter-spacing:.05em;text-transform:uppercase;
+  background:linear-gradient(90deg,var(--hot-magenta),var(--electric-purple));
+  color:#fff;
+  box-shadow:0 8px 36px rgba(255,43,214,.5),0 0 0 1px rgba(255,255,255,.2) inset;
+  transition:all .5s cubic-bezier(.68,-.55,.27,1.55);
+  border:none;cursor:pointer;
+}
+.cta:hover{
+  transform:translateY(-4px) scale(1.08);
+  box-shadow:0 16px 50px rgba(255,43,214,.7),0 0 0 1px rgba(255,255,255,.4) inset,0 0 80px rgba(176,38,255,.5);
+}
+
+/* === FLOATERS === */
+.floaters{display:flex;flex-wrap:wrap;gap:1.5rem;justify-content:center;padding:3rem 0}
+.floater{
+  width:140px;height:180px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:3.2rem;
+  border-radius:40% 60% 50% 50%/50% 40% 60% 50%;
+  animation:float-bob 5s infinite alternate ease-in-out;
+  box-shadow:0 12px 40px rgba(0,0,0,.25);
+}
+.floater:nth-child(odd){animation-duration:6s;animation-delay:-1s}
+.floater:nth-child(3n){animation-duration:7s;animation-delay:-2.5s}
+@keyframes float-bob{
+  0%{transform:translateY(0) rotate(0deg) scale(1);border-radius:40% 60% 50% 50%/50% 40% 60% 50%}
+  100%{transform:translateY(-22px) rotate(4deg) scale(1.06);border-radius:50% 40% 60% 40%/40% 60% 40% 60%}
+}
+
+/* === BENTO BLOBS === */
+.bento{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:2rem;padding:4rem 0;
+}
+.blob{
+  border-radius:42% 58% 45% 55%/55% 45% 55% 45%;
+  padding:2.2rem;
+  box-shadow:0 12px 50px rgba(0,0,0,.25);
+  transition:all .5s cubic-bezier(.68,-.55,.27,1.55);
+  position:relative;overflow:hidden;
+}
+.blob::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.25),rgba(255,255,255,0));
+  pointer-events:none;mix-blend-mode:overlay;
+}
+.blob:hover{
+  transform:translateY(-6px) scale(1.04) rotate(-1deg);
+  box-shadow:0 20px 70px rgba(255,43,214,.35),0 10px 30px rgba(176,38,255,.25);
+}
+.blob .emoji{font-size:3rem;filter:drop-shadow(0 0 18px rgba(255,255,255,.4))}
+.blob h3{font-size:1.6rem;margin-top:1rem;line-height:1.05}
+.blob p{opacity:.9;margin-top:.8rem}
+.blob-1{background:linear-gradient(135deg,var(--hot-magenta),var(--electric-purple));color:#fff}
+.blob-2{background:linear-gradient(135deg,var(--neon-green),var(--cyan));color:#0d0221}
+.blob-3{background:linear-gradient(135deg,var(--sunset-orange),var(--hot-magenta));color:#fff}
+.blob-4{background:linear-gradient(135deg,var(--sky-blue),var(--electric-purple));color:#fff}
+.blob-5{background:linear-gradient(135deg,var(--cyan),var(--neon-green));color:#0d0221}
+.blob-6{background:linear-gradient(135deg,var(--electric-purple),var(--hot-magenta));color:#fff}
+
+/* === MARQUEE === */
+.marquee-wrap{
+  padding:3.2rem 0;overflow:hidden;
+  background:linear-gradient(90deg,rgba(255,43,214,.15),rgba(43,255,245,.15),rgba(91,255,43,.15));
+  backdrop-filter:blur(10px);
+  border-top:1px solid rgba(255,255,255,.1);
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+.marquee{
+  display:flex;gap:2rem;width:max-content;
+  animation:marquee 22s linear infinite;
+}
+.marquee span{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.4rem,3vw,2.2rem);
+  white-space:nowrap;text-transform:uppercase;letter-spacing:.05em;
+  color:#fff;
+  text-shadow:0 0 30px rgba(255,43,214,.8),0 0 60px rgba(43,255,245,.6),0 0 90px rgba(91,255,43,.5);
+}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* === FOOTER === */
+footer{
+  padding:5rem 1.5rem;text-align:center;
+  position:relative;z-index:2;
+}
+footer p{
+  font-size:.85rem;opacity:.7;max-width:50ch;margin:0 auto;
+}
+footer .disclaimer{
+  display:inline-block;margin-top:1.2rem;
+  padding:.6rem 1.4rem;border-radius:999px;
+  font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.18);
+}
+
+/* === RESPONSIVE === */
+@media(max-width:640px){
+  .bento{grid-template-columns:1fr}
+  .floater{width:100px;height:130px;font-size:2.2rem}
+}
+</style>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"></div>
+<div class="noise" aria-hidden="true"></div>
+
+<div class="wrap">
+
+  <!-- NAV -->
+  <nav aria-label="Glowh2o ridges">
+    <div class="contain">
+      <a href="#" class="logo">GLOWH2O</a>
+      <ul>
+        <li><a href="#fx">THE FX</a></li>
+        <li><a href="#vibe">THE VIBE</a></li>
+        <li><a href="#pick">YOUR BOTTLE</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-blob">
+      <h1>DRINK THE<br>GLOW!!!</h1>
+      <p class="tagline">
+        Synthetic bioluminescent algae, microbiologically fermented, chemically maximal — this is NOT your dad's electrolyte water. 🔥🌀💧
+      </p>
+      <a href="#pick" class="cta">CHUG THE FUTURE →</a>
+    </div>
+  </header>
+
+  <!-- FLOATERS -->
+  <section class="contain floaters" aria-hidden="true">
+    <div class="glass floater">🫧</div>
+    <div class="glass floater">✨</div>
+    <div class="glass floater">🧬</div>
+    <div class="glass floater">🌊</div>
+    <div class="glass floater">💫</div>
+    <div class="glass floater">🦠</div>
+    <div class="glass floater">⚡</div>
+    <div class="glass floater">🌌</div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee">
+      <span>ZERO SUGAR • MAXIMUM GLOW • ZERO SLEEP • ALGAE POWERED • HYPNOTIC HYDRATION • BIO-LUMINESCENT •</span>
+      <span>ZERO SUGAR • MAXIMUM GLOW • ZERO SLEEP • ALGAE POWERED • HYPNOTIC HYDRATION • BIO-LUMINESCENT •</span>
+    </div>
+  </div>
+
+  <!-- BENTO BLOBS -->
+  <section class="contain bento" id="fx">
+
+    <div class="glass blob blob-1">
+      <div class="emoji">🔥</div>
+      <h3>PURE LAVA ENERGY</h3>
+      <p>Each sip ignites your mitochondria. We harness the same bioluminescent pathway that makes deep-sea jellyfish look like portable raves.</p>
+    </div>
+
+    <div class="glass blob blob-2">
+      <div class="emoji">🫐</div>
+      <h3>ELECTRIC BLUEBERRY</h3>
+      <p>A flavor so electric your tongue files a noise complaint. Blueberries meet synth-wave molecules meet your dreams.</p>
+    </div>
+
+    <div class="glass blob blob-3">
+      <div class="emoji">💥</div>
+      <h3>EXPLOSION MODE</h3>
+      <p>Shake the bottle. Watch the nebula bloom. This is not carbonation — this is a microscopic supernova in every sip.</p>
+    </div>
+
+    <div class="glass blob blob-4">
+      <div class="emoji">🌀</div>
+      <h3>VORTEX HYDRATION</h3>
+      <p>Our patented VortexFill® technology aligns water molecules in a clockwise spiral that your brain can FEEL. Fact.</p>
+    </div>
+
+    <div class="glass blob blob-5">
+      <div class="emoji">🧬</div>
+      <h3>ALGAE FROM THE ABYSS</h3>
+      <p>Grown in pitch-black tank farms lit only by our proprietary purple LEDs. The algae don’t know it’s 3 PM. Neither will you.</p>
+    </div>
+
+    <div class="glass blob blob-6">
+      <div class="emoji">⚡</div>
+      <h3>THUNDERFIST FLAVOR</h3>
+      <p>A limited-edition chili-lime-jackfruit monstrosity so chaotic, ENERGY DRINK REVIEW DOT COM called it “AGGRESSIVELY DRINKABLE.”</p>
+    </div>
+
+  </section>
+
+  <!-- PRODUCT PICK -->
+  <section class="contain" id="pick" style="padding:4rem 0 6rem">
+    <div class="glass" style="border-radius:50% 30% 70% 40%/40% 50% 40% 60%;padding:3rem 2rem;text-align:center;max-width:800px;margin:0 auto;box-shadow:0 14px 60px rgba(43,255,245,.25),0 0 0 1px rgba(255,255,255,.1) inset">
+      <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:1rem;background:linear-gradient(90deg,var(--cyan),var(--neon-green),var(--sunset-orange));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 20px rgba(91,255,43,.5))">
+        PICK YOUR POISON
+      </h2>
+      <p style="font-size:1.15rem;max-width:48ch;margin:0 auto 2rem;opacity:.92">
+        Three flavors. Three frequencies. All glowing. Which wavelength resonates with your soul??? 🌈
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:center">
+        <a href="#" class="cta" style="background:linear-gradient(90deg,var(--hot-magenta),var(--electric-purple))">NEON PINK 💖</a>
+        <a href="#" class="cta" style="background:linear-gradient(90deg,var(--neon-green),var(--cyan))">TOXIC GREEN 🧪</a>
+        <a href="#" class="cta" style="background:linear-gradient(90deg,var(--sunset-orange),var(--hot-magenta))">SOLAR FLARE ☀️</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>GLOWH2O is a fictional beverage created for aesthetic research ONLY. Do not actually drink glowing algae. Your stomach is not a coral reef.</p>
+    <div class="disclaimer">Side effects may include spontaneous raving, mild luminescence, and an unshakeable urge to glow-stick at 2 AM. 😵‍💫</div>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+  document.addEventListener('DOMContentLoaded',function(){
+
+    // Cursor glow follows mouse
+    var glow=document.createElement('div');
+    glow.setAttribute('aria-hidden','true');
+    Object.assign(glow.style,{
+      position:'fixed',width:'320px',height:'320px',borderRadius:'50%',pointerEvents:'none',zIndex:'1',
+      background:'radial-gradient(circle,rgba(255,43,214,.18),rgba(43,255,245,.1),transparent 70%)',
+      transform:'translate(-50%,-50%)',transition:'left .3s ease-out, top .3s ease-out'
+    });
+    document.body.appendChild(glow);
+    window.addEventListener('mousemove',function(e){
+      glow.style.left=e.clientX+'px';
+      glow.style.top=e.clientY+'px';
+    },{passive:true});
+
+    // Soft tilt on glass cards
+    document.querySelectorAll('.glass').forEach(function(card){
+      card.addEventListener('mousemove',function(e){
+        var r=card.getBoundingClientRect();
+        var x=((e.clientX-r.left)/r.width-.5)*8;
+        var y=((e.clientY-r.top)/r.height-.5)*8;
+        card.style.transform='perspective(800px) rotateX('+(-y)+'deg) rotateY('+x+'deg) scale(1.02)';
+        card.style.transition='transform .1s ease-out';
+      });
+      card.addEventListener('mouseleave',function(){
+        card.style.transform='perspective(800px) rotateX(0) rotateY(0) scale(1)';
+        card.style.transition='transform .6s cubic-bezier(.68,-.55,.27,1.55)';
+      });
+    });
+  });
+}());
+</script>
+</body>
+</html>

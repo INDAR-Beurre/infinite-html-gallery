@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Rainfall Archive — Recordings from Distant Forests</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --linen: #ede7dc;
+    --paper: #f4efe6;
+    --fog:   #d9d3c6;
+    --sage:  #8a9183;
+    --clay:  #9a7c66;
+    --indigo:#475263;
+    --ink:   #2f2a25;
+    --muted: #6b6258;
+    --rule:  rgba(47, 42, 37, 0.10);
+  }
+
+  *{ box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body{
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  body::before{
+    content:"";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at 20% 10%, rgba(138,145,131,0.08), transparent 60%),
+      radial-gradient(ellipse at 80% 90%, rgba(154,124,102,0.07), transparent 55%),
+      radial-gradient(ellipse at 50% 50%, rgba(71,82,99,0.04), transparent 70%);
+    z-index: 0;
+  }
+
+  .meta, .label, nav, .index-tag, footer .row span{
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 300;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  main{
+    position: relative;
+    z-index: 1;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 4rem 2.5rem 8rem;
+  }
+
+  /* HEADER */
+  header.masthead{
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    gap: 2rem;
+    padding-bottom: 8rem;
+    border-bottom: 1px solid var(--rule);
+    animation: drift 3s ease-out both;
+  }
+  header.masthead .left{ text-align: left; }
+  header.masthead .center{ text-align: center; }
+  header.masthead .right{ text-align: right; }
+  nav a{
+    color: var(--muted);
+    text-decoration: none;
+    margin-left: 1.4rem;
+    transition: color 1.2s ease;
+  }
+  nav a:first-child{ margin-left: 0; }
+  nav a:hover{ color: var(--ink); }
+
+  .mark{
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+  }
+
+  /* TITLE */
+  .hero{
+    padding: 9rem 0 8rem;
+    text-align: center;
+    animation: drift 3.4s 0.4s ease-out both;
+  }
+  .hero .eyebrow{
+    display: inline-block;
+    margin-bottom: 3.5rem;
+  }
+  .hero h1{
+    font-weight: 300;
+    font-size: clamp(2.6rem, 7vw, 5.4rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    max-width: 18ch;
+    margin: 0 auto;
+  }
+  .hero h1 em{
+    font-style: italic;
+    color: var(--indigo);
+    font-weight: 300;
+  }
+  .hero .sub{
+    margin: 3rem auto 0;
+    max-width: 38ch;
+    font-size: 1.15rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* OPENING PARAGRAPH */
+  .opening{
+    display: grid;
+    grid-template-columns: 1fr 2.4fr;
+    gap: 5rem;
+    padding: 7rem 0;
+    border-bottom: 1px solid var(--rule);
+    animation: drift 3s 0.8s ease-out both;
+  }
+  .opening .label{ padding-top: 0.6rem; }
+  .opening p{
+    font-size: 1.4rem;
+    line-height: 1.55;
+    max-width: 52ch;
+    color: var(--ink);
+  }
+  .opening p + p{ margin-top: 1.4rem; color: var(--muted); }
+
+  /* RECORDINGS */
+  .recordings{
+    padding: 7rem 0 4rem;
+  }
+  .recordings .section-head{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 5rem;
+  }
+  .recordings .section-head h2{
+    font-weight: 300;
+    font-style: italic;
+    font-size: 1.6rem;
+    color: var(--ink);
+  }
+  .grid{
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 3rem 2.5rem;
+  }
+  .entry{
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--rule);
+  }
+  .entry .top{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .entry h3{
+    font-weight: 300;
+    font-size: 1.85rem;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+  .entry h3 .place{
+    display: block;
+    font-style: italic;
+    color: var(--sage);
+    font-size: 1.1rem;
+    margin-top: 0.4rem;
+  }
+  .entry p{
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 38ch;
+  }
+  .entry .listen{
+    margin-top: auto;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 4px;
+    align-self: flex-start;
+    transition: border-color 1.4s ease;
+  }
+  .entry .listen:hover{ border-bottom-color: var(--ink); }
+
+  /* size variations — cascading off-grid */
+  .e1{ grid-column: 1 / span 5; }
+  .e2{ grid-column: 7 / span 4; margin-top: 5rem; }
+  .e3{ grid-column: 2 / span 4; margin-top: 3rem; }
+  .e4{ grid-column: 7 / span 5; }
+  .e5{ grid-column: 1 / span 4; margin-top: 4rem; }
+  .e6{ grid-column: 6 / span 5; margin-top: 1rem; }
+
+  /* SOUND-LINE — gentle visual rhythm of rainfall */
+  .soundline{
+    margin: 7rem 0 6rem;
+    padding: 5rem 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    text-align: center;
+  }
+  .soundline .label{ display: block; margin-bottom: 3rem; }
+  .ticks{
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 6px;
+    height: 90px;
+  }
+  .ticks span{
+    display: inline-block;
+    width: 1px;
+    background: var(--indigo);
+    opacity: 0.35;
+    animation: fall 6s ease-in-out infinite;
+  }
+  @keyframes fall{
+    0%, 100% { height: 8px; opacity: 0.15; }
+    50%      { height: var(--h, 30px); opacity: 0.45; }
+  }
+  .soundline .caption{
+    margin-top: 3rem;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 1.1rem;
+  }
+
+  /* QUIET NOTE */
+  .note{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    padding: 7rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .note blockquote{
+    font-size: 1.7rem;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--ink);
+    max-width: 28ch;
+  }
+  .note .ascribe{
+    align-self: end;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  /* CORRESPONDENCE */
+  .corr{
+    padding: 8rem 0 4rem;
+    text-align: center;
+  }
+  .corr .label{ display: block; margin-bottom: 2.5rem; }
+  .corr p{
+    font-size: 1.6rem;
+    max-width: 36ch;
+    margin: 0 auto 3rem;
+    color: var(--ink);
+    font-style: italic;
+  }
+  .corr a{
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--indigo);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 3px;
+    transition: border-color 1.4s ease;
+  }
+  .corr a:hover{ border-bottom-color: var(--indigo); }
+
+  /* FOOTER */
+  footer{
+    margin-top: 6rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  footer .colophon{
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 42ch;
+  }
+  footer .row{
+    display: flex;
+    gap: 2rem;
+  }
+
+  /* fade-in */
+  @keyframes drift{
+    from{ opacity: 0; transform: translateY(8px); }
+    to{   opacity: 1; transform: translateY(0); }
+  }
+  .recordings, .soundline, .note, .corr, footer{
+    animation: drift 3s ease-out both;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 820px){
+    main{ padding: 2.5rem 1.4rem 5rem; }
+    header.masthead{
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 1.2rem;
+      padding-bottom: 4rem;
+    }
+    header.masthead .left, header.masthead .right{ text-align: center; }
+    nav a{ margin: 0 0.7rem; }
+    .hero{ padding: 5rem 0 4rem; }
+    .opening{ grid-template-columns: 1fr; gap: 1.5rem; padding: 4rem 0; }
+    .opening p{ font-size: 1.2rem; }
+    .grid{ gap: 2rem; }
+    .e1,.e2,.e3,.e4,.e5,.e6{ grid-column: 1 / -1; margin-top: 0; }
+    .note{ grid-template-columns: 1fr; gap: 2rem; padding: 4rem 0; }
+    .note blockquote{ font-size: 1.4rem; }
+    .corr p{ font-size: 1.3rem; }
+    footer{ flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+  <header class="masthead">
+    <div class="left">
+      <span class="meta">Vol. IX &nbsp;·&nbsp; Recorded between mist and morning</span>
+    </div>
+    <div class="center">
+      <span class="mark">The Rainfall Archive</span>
+    </div>
+    <div class="right">
+      <nav>
+        <a href="#recordings">Recordings</a>
+        <a href="#note">Note</a>
+        <a href="#correspondence">Correspondence</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <span class="eyebrow meta">A listening room for distant weather</span>
+    <h1>A quiet archive of <em>rainfalls</em>, gathered from forests no one is hurrying through.</h1>
+    <p class="sub">Each recording is left untouched. The hiss, the dripping, the small interruptions of birds — all of it kept as it was found.</p>
+  </section>
+
+  <section class="opening">
+    <span class="label">An Introduction</span>
+    <div>
+      <p>We began by accident. A field recorder left running beside a fallen cedar; an afternoon of rain that no one had asked to remember. When we returned home and listened, the room grew softer around us.</p>
+      <p>Since then we have travelled, quietly and without much aim, to forests where rain still falls without an audience. We do not edit. We do not arrange. We bring back the recording and shelve it here.</p>
+    </div>
+  </section>
+
+  <section id="recordings" class="recordings">
+    <div class="section-head">
+      <h2>Recent recordings</h2>
+      <span class="meta">Catalogued 2021 — present</span>
+    </div>
+
+    <div class="grid">
+
+      <article class="entry e1">
+        <div class="top">
+          <span class="meta">No. 047</span>
+          <span class="meta">41 min</span>
+        </div>
+        <h3>The slow rain at Kirisawa<span class="place">Cedar grove, western Japan</span></h3>
+        <p>An evening shower that arrived without wind. Distant thrushes. The recorder was suspended from a low branch and left until the battery gave out.</p>
+        <a class="listen" href="#">Listen &nbsp;·&nbsp; Or simply read</a>
+      </article>
+
+      <article class="entry e2">
+        <div class="top">
+          <span class="meta">No. 048</span>
+          <span class="meta">28 min</span>
+        </div>
+        <h3>A passing shower over Lochalsh<span class="place">Birch and bracken, Scottish highlands</span></h3>
+        <p>Brief, almost shy. Begins with the first tapping on dead leaves and ends, unexpectedly, in birdsong.</p>
+        <a class="listen" href="#">Listen &nbsp;·&nbsp; Or simply read</a>
+      </article>
+
+      <article class="entry e3">
+        <div class="top">
+          <span class="meta">No. 049</span>
+          <span class="meta">1 hr 12 min</span>
+        </div>
+        <h3>Night rain in the Cloud Forest<span class="place">Monteverde, Costa Rica</span></h3>
+        <p>Recorded from inside a hollowed strangler fig. The drops gather, hesitate at the canopy, and arrive a full second late.</p>
+        <a class="listen" href="#">Listen &nbsp;·&nbsp; Or simply read</a>
+      </article>
+
+      <article class="entry e4">
+        <div class="top">
+          <span class="meta">No. 050</span>
+          <span class="meta">36 min</span>
+        </div>
+        <h3>The rain that nearly wasn't<span class="place">Pine ridge above Ourika, Atlas Mountains</span></h3>
+        <p>A thin, intermittent rain that the trees mostly held for themselves. Mostly silence, lightly punctuated.</p>
+        <a class="listen" href="#">Listen &nbsp;·&nbsp; Or simply read</a>
+      </article>
+
+      <article class="entry e5">
+        <div class="top">
+          <span class="meta">No. 051</span>
+          <span class="meta">52 min</span>
+        </div>
+        <h3>Drizzle through the silver beeches<span class="place">South Island, Aotearoa</span></h3>
+        <p>Recorded on the morning the rain returned after a long dry month. The forest sounded, our notes read, relieved.</p>
+        <a class="listen" href="#">Listen &nbsp;·&nbsp; Or simply read</a>
+      </article>
+
+      <article class="entry e6">
+        <div class="top">
+          <span class="meta">No. 052</span>
+          <span class="meta">2 hr 04 min</span>
+        </div>
+        <h3>An afternoon storm at Białowieża<span class="place">Oak-hornbeam, eastern Poland</span></h3>
+        <p>The longest of the year. The recorder was forgotten beneath a coat; the coat became unwearable. We do not regret it.</p>
+        <a class="listen" href="#">Listen &nbsp;·&nbsp; Or simply read</a>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="soundline">
+    <span class="label">A visual of recording no. 049</span>
+    <div class="ticks" id="ticks" aria-hidden="true"></div>
+    <p class="caption">Each line, a single minute. The longer the line, the heavier the rain.</p>
+  </section>
+
+  <section id="note" class="note">
+    <blockquote>&ldquo;Rain in a forest is not a sound. It is a slow conversation between things that do not speak.&rdquo;</blockquote>
+    <p class="ascribe">— from the field notes of M.H., gathered while waiting out the storm of no. 052</p>
+  </section>
+
+  <section id="correspondence" class="corr">
+    <span class="label">Correspondence</span>
+    <p>We are slow to reply, but always glad to hear of a forest somewhere still left alone with its weather.</p>
+    <a href="mailto:rain@kirisawa.archive">rain@kirisawa.archive</a>
+  </section>
+
+  <footer>
+    <span class="colophon">Kept quietly since 2021. No advertisements, no algorithms, no metrics &mdash; only weather, and the rooms it passes through.</span>
+    <div class="row">
+      <span>Vol. IX</span>
+      <span>Updated when the rain returns</span>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  // Generate gentle, varied "rainfall" tick heights — like a soft waveform
+  (function(){
+    const wrap = document.getElementById('ticks');
+    if(!wrap) return;
+    const count = window.innerWidth < 820 ? 48 : 96;
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < count; i++){
+      const t = document.createElement('span');
+      // smooth, slow-undulating curve + jitter
+      const base = Math.sin(i / 7) * 22 + 36;
+      const noise = (Math.random() - 0.5) * 14;
+      const h = Math.max(8, Math.round(base + noise));
+      const delay = (i * 0.06).toFixed(2);
+      t.style.setProperty('--h', h + 'px');
+      t.style.animationDelay = delay + 's';
+      t.style.animationDuration = (5 + (i % 5) * 0.6).toFixed(2) + 's';
+      frag.appendChild(t);
+    }
+    wrap.appendChild(frag);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,2360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Meta Tags -->
+  <title>MONOLITH // RAW CLIFFSIDE OBJECTS</title>
+  <meta name="description" content="Avant-garde architectural casting. We deploy single-pour, basalt-reinforced concrete structures onto the earth's most hostile edges. Cast in situ. Permanent anchoring.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Syne:wght@700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  
+  <style>
+    /* -------------------------------------------------------------
+       DESIGN SYSTEM & CSS VARIABLES
+       ------------------------------------------------------------- */
+    :root {
+      --bg-primary: #080808;
+      --bg-secondary: #121212;
+      --text-primary: #FFFFFF;
+      --text-secondary: #8E8E8E;
+      --text-muted: #444444;
+      
+      /* Piercing warning accent */
+      --accent: #FF3E00; 
+      --accent-rgb: 255, 62, 0;
+      --accent-ok: #00FF66;
+      --accent-warn: #FFF500;
+      
+      --border-color: #222222;
+      --grid-line: rgba(255, 255, 255, 0.05);
+      
+      --font-mono: 'Space Mono', monospace;
+      --font-display: 'Syne', sans-serif;
+      --font-serif: 'Cormorant Garamond', serif;
+      
+      --transition-fast: 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --transition-medium: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* -------------------------------------------------------------
+       RESET & BASE ELEMENTS
+       ------------------------------------------------------------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      overflow-x: hidden;
+    }
+
+    /* Hide default cursor on desktop for custom blueprint crosshair */
+    @media (min-width: 769px) {
+      body, a, button, input, select, textarea, label {
+        cursor: none !important;
+      }
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Blueprint grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: 
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Scanlines effect overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      background-size: 100% 4px, 6px 100%;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.4;
+    }
+
+    /* -------------------------------------------------------------
+       CUSTOM CURSOR
+       ------------------------------------------------------------- */
+    #custom-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 32px;
+      height: 32px;
+      border: 1px solid rgba(255, 62, 0, 0.5);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 10000;
+      transition: width 0.2s, height 0.2s, border-color 0.2s, background-color 0.2s;
+    }
+    
+    #custom-cursor::before, #custom-cursor::after {
+      content: '';
+      position: absolute;
+      background: var(--accent);
+      opacity: 0.3;
+    }
+    /* Crosshair lines */
+    #custom-cursor::before {
+      top: 50%;
+      left: -8px;
+      width: 48px;
+      height: 1px;
+    }
+    #custom-cursor::after {
+      left: 50%;
+      top: -8px;
+      width: 1px;
+      height: 48px;
+    }
+
+    #custom-cursor-dot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 4px;
+      background-color: var(--accent);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 10001;
+    }
+
+    /* Hover state modifications via JS */
+    body.cursor-hover #custom-cursor {
+      width: 48px;
+      height: 48px;
+      border-color: var(--text-primary);
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    body.cursor-warn #custom-cursor {
+      width: 56px;
+      height: 56px;
+      border-color: var(--accent);
+      background-color: rgba(255, 62, 0, 0.1);
+      animation: cursorPulse 1s infinite alternate;
+    }
+
+    @keyframes cursorPulse {
+      0% { transform: translate(-50%, -50%) scale(0.9); }
+      100% { transform: translate(-50%, -50%) scale(1.1); }
+    }
+
+    @media (max-width: 768px) {
+      #custom-cursor, #custom-cursor-dot {
+        display: none !important;
+      }
+    }
+
+    /* -------------------------------------------------------------
+       SCROLLBAR
+       ------------------------------------------------------------- */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
+    }
+
+    /* -------------------------------------------------------------
+       TYPOGRAPHY UTILITIES
+       ------------------------------------------------------------- */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 0.9;
+    }
+
+    p {
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    .serif-text {
+      font-family: var(--font-serif);
+      font-style: italic;
+    }
+
+    .mono-text {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .accent-color {
+      color: var(--accent);
+    }
+
+    /* -------------------------------------------------------------
+       HEADER & NAVIGATION
+       ------------------------------------------------------------- */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      border-bottom: 1px solid var(--border-color);
+      background-color: rgba(8, 8, 8, 0.9);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      transition: height var(--transition-medium);
+    }
+
+    header.scrolled {
+      height: 60px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo-mark {
+      width: 20px;
+      height: 20px;
+      background-color: var(--accent);
+      transform: rotate(45deg);
+      transition: transform var(--transition-medium);
+    }
+
+    .logo-container:hover .logo-mark {
+      transform: rotate(135deg);
+    }
+
+    .logo-text {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+    }
+
+    nav {
+      display: flex;
+      gap: 40px;
+    }
+
+    nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+      position: relative;
+      padding: 5px 0;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--accent);
+      transition: width var(--transition-fast);
+    }
+
+    nav a:hover {
+      color: var(--text-primary);
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    /* Telemetry HUD in navbar */
+    .hud-stat {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hud-stat .pulse-indicator {
+      width: 6px;
+      height: 6px;
+      background-color: var(--accent);
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+      100% { opacity: 0.3; transform: scale(0.8); }
+    }
+
+    @media (max-width: 992px) {
+      .hud-stat {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 0 20px;
+      }
+      nav {
+        gap: 15px;
+        font-size: 0.8rem;
+      }
+    }
+
+    /* -------------------------------------------------------------
+       SCROLL INDICATOR
+       ------------------------------------------------------------- */
+    #scroll-indicator {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background-color: var(--accent);
+      z-index: 1001;
+      width: 0%;
+      transition: width 0.1s ease-out;
+    }
+
+    /* -------------------------------------------------------------
+       LAYOUT STRUCTURE & SECTIONS
+       ------------------------------------------------------------- */
+    main {
+      margin-top: 80px;
+      flex-grow: 1;
+      z-index: 2;
+    }
+
+    section {
+      border-bottom: 1px solid var(--border-color);
+      position: relative;
+    }
+
+    /* Asymmetric outer borders and guides */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 100px 40px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 80px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 60px 20px;
+        gap: 40px;
+      }
+    }
+
+    /* -------------------------------------------------------------
+       HERO SECTION (ASYMMETRICAL, EDITORIAL)
+       ------------------------------------------------------------- */
+    #hero {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      min-height: calc(100vh - 80px);
+      border-left: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .hero-left {
+      padding: 80px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid var(--border-color);
+      position: relative;
+    }
+
+    .hero-left::before {
+      content: 'SYSTEM TELEMETRY [ACTIVE] //';
+      position: absolute;
+      top: 40px;
+      left: 60px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+    }
+
+    .hero-title-wrap {
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+
+    .hero-title-sub {
+      font-size: 0.85rem;
+      letter-spacing: 0.3em;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .hero-title {
+      font-size: clamp(3.5rem, 8vw, 8.5rem);
+      color: var(--text-primary);
+      text-transform: uppercase;
+      word-break: break-all;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+      margin-top: 20px;
+      line-height: 1.1;
+      color: var(--text-primary);
+    }
+
+    .hero-left-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-top: 1px solid var(--border-color);
+      padding-top: 40px;
+    }
+
+    .hero-left-bottom p {
+      max-width: 320px;
+      font-size: 0.85rem;
+    }
+
+    .hero-right {
+      position: relative;
+      background-color: #0d0d0d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-image-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .hero-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(140%) brightness(85%);
+      transition: filter var(--transition-medium), transform var(--transition-medium);
+    }
+
+    .hero-image-container:hover .hero-img {
+      filter: grayscale(0%) contrast(110%) brightness(90%);
+      transform: scale(1.03);
+    }
+
+    /* Absolute overlaid widgets */
+    .hero-overlay-hud {
+      position: absolute;
+      bottom: 40px;
+      left: 40px;
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      padding: 20px;
+      z-index: 10;
+      max-width: 300px;
+    }
+
+    .hero-overlay-hud h3 {
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      color: var(--accent);
+    }
+
+    .hero-overlay-hud p {
+      font-size: 0.75rem;
+      line-height: 1.4;
+    }
+
+    .btn-anchor {
+      display: inline-block;
+      margin-top: 15px;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 0.75rem;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 2px;
+      transition: color var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .btn-anchor:hover {
+      color: var(--accent);
+      border-color: var(--text-primary);
+    }
+
+    @media (max-width: 992px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-left {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 60px 30px;
+      }
+      .hero-left::before {
+        left: 30px;
+      }
+      .hero-right {
+        height: 50vh;
+      }
+      .hero-left-bottom {
+        flex-direction: column;
+        gap: 30px;
+        align-items: flex-start;
+      }
+    }
+
+    /* -------------------------------------------------------------
+       MANIFESTO SECTION
+       ------------------------------------------------------------- */
+    .manifesto-layout {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 60px;
+    }
+
+    .manifesto-sticky {
+      position: sticky;
+      top: 120px;
+      height: fit-content;
+    }
+
+    .manifesto-num {
+      font-size: 4rem;
+      color: var(--accent);
+      font-family: var(--font-display);
+      margin-bottom: 20px;
+    }
+
+    .manifesto-sticky h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .manifesto-body {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .manifesto-quote {
+      font-size: clamp(2rem, 3.5vw, 3.2rem);
+      line-height: 1.1;
+      color: var(--text-primary);
+      border-left: 2px solid var(--accent);
+      padding-left: 30px;
+      margin-bottom: 20px;
+    }
+
+    .manifesto-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .manifesto-columns p {
+      font-size: 0.95rem;
+    }
+
+    .manifesto-banner {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      padding: 30px;
+      margin-top: 20px;
+    }
+
+    .manifesto-banner h4 {
+      margin-bottom: 10px;
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+
+    .manifesto-banner p {
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 992px) {
+      .manifesto-layout {
+        grid-template-columns: 1fr;
+      }
+      .manifesto-sticky {
+        position: relative;
+        top: 0;
+      }
+      .manifesto-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* -------------------------------------------------------------
+       INTERACTIVE CALCULATOR / STRESS SIMULATOR
+       ------------------------------------------------------------- */
+    #simulator {
+      background-color: #040404;
+    }
+
+    .sim-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 40px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-primary);
+    }
+
+    .sim-left {
+      padding: 40px;
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sim-header {
+      margin-bottom: 30px;
+    }
+
+    .sim-header h2 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+
+    .sim-header p {
+      font-size: 0.8rem;
+    }
+
+    .control-group {
+      margin-bottom: 25px;
+    }
+
+    .control-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .control-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+    }
+
+    .control-val {
+      font-size: 0.8rem;
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    /* Minimal stark inputs */
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 4px;
+      background: var(--border-color);
+      outline: none;
+      transition: background 0.3s;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      background: var(--accent);
+      border-radius: 0;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.3);
+    }
+
+    .matrix-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .matrix-option {
+      border: 1px solid var(--border-color);
+      padding: 12px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all var(--transition-fast);
+    }
+
+    .matrix-option:hover {
+      border-color: rgba(255, 62, 0, 0.4);
+      background-color: rgba(255, 255, 255, 0.01);
+    }
+
+    .matrix-option.active {
+      border-color: var(--accent);
+      background-color: rgba(255, 62, 0, 0.05);
+    }
+
+    .matrix-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .matrix-specs {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+    }
+
+    .sim-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-color: #0a0a0a;
+    }
+
+    /* Canvas Frame */
+    .canvas-container {
+      width: 100%;
+      position: relative;
+      background-color: #050505;
+      border-bottom: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+
+    #stress-canvas {
+      display: block;
+      width: 100%;
+      height: 420px;
+      background-color: #050505;
+    }
+
+    /* HUD Overlay inside Canvas */
+    .canvas-overlay-warning {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 62, 0, 0.15);
+      border: 2px solid var(--accent);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+      z-index: 10;
+      animation: alertFlicker 0.4s infinite alternate;
+    }
+
+    @keyframes alertFlicker {
+      0% { opacity: 0.4; }
+      100% { opacity: 1; }
+    }
+
+    .warning-text-box {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--accent);
+      padding: 15px 25px;
+      text-align: center;
+    }
+
+    .warning-text-box h4 {
+      color: var(--accent);
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+
+    .warning-text-box p {
+      font-size: 0.75rem;
+      color: var(--text-primary);
+    }
+
+    /* Live Telemetry Panel below Canvas */
+    .telemetry-panel {
+      padding: 30px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      background-color: #0a0a0a;
+    }
+
+    .telemetry-item {
+      border-left: 1px solid var(--border-color);
+      padding-left: 15px;
+    }
+
+    .telemetry-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+
+    .telemetry-value {
+      font-size: 1.1rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    /* Dynamic integrity status colors */
+    .status-ok { color: var(--accent-ok); }
+    .status-warn { color: var(--accent-warn); }
+    .status-fail { color: var(--accent); }
+
+    .deck-toggle-container {
+      margin-top: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .switch-btn {
+      width: 44px;
+      height: 22px;
+      background-color: var(--border-color);
+      border: 1px solid var(--border-color);
+      position: relative;
+      transition: background-color var(--transition-fast);
+    }
+
+    .switch-btn.active {
+      background-color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .switch-handle {
+      width: 14px;
+      height: 14px;
+      background-color: var(--text-primary);
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      transition: left var(--transition-fast);
+    }
+
+    .switch-btn.active .switch-handle {
+      left: 25px;
+    }
+
+    @media (max-width: 992px) {
+      .sim-layout {
+        grid-template-columns: 1fr;
+      }
+      .sim-left {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 30px 20px;
+      }
+      .telemetry-panel {
+        padding: 20px;
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* -------------------------------------------------------------
+       SPECIMENS / GALLERY (ASYMMETRIC GRID)
+       ------------------------------------------------------------- */
+    .gallery-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 40px;
+      margin-bottom: 60px;
+    }
+
+    .gallery-header h2 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 80px;
+    }
+
+    .gallery-card {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-secondary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gallery-card.offset {
+      margin-top: 80px;
+    }
+
+    .card-image-wrap {
+      width: 100%;
+      height: 480px;
+      overflow: hidden;
+      position: relative;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) brightness(80%) contrast(120%);
+      transition: filter var(--transition-medium), transform var(--transition-medium);
+    }
+
+    /* Hover mesh outline animation */
+    .card-wireframe-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(var(--accent) 1px, transparent 1px);
+      background-size: 16px 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-medium);
+      z-index: 5;
+    }
+
+    .gallery-card:hover .card-img {
+      filter: grayscale(100%) brightness(100%) contrast(140%);
+      transform: scale(1.02);
+    }
+
+    .gallery-card:hover .card-wireframe-overlay {
+      opacity: 0.15;
+    }
+
+    .card-info {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--accent);
+    }
+
+    .card-title {
+      font-size: 1.8rem;
+      color: var(--text-primary);
+    }
+
+    .card-desc {
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 992px) {
+      .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .gallery-card.offset {
+        margin-top: 0;
+      }
+      .card-image-wrap {
+        height: 350px;
+      }
+    }
+
+    /* -------------------------------------------------------------
+       INTAKE FORM (RAW BRUTALIST SUBMIT)
+       ------------------------------------------------------------- */
+    #intake {
+      background-color: var(--bg-secondary);
+    }
+
+    .intake-layout {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 60px;
+    }
+
+    .intake-left h2 {
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+    }
+
+    .intake-left p {
+      margin-bottom: 40px;
+    }
+
+    /* Feasibility Diagnostic Widget */
+    .diagnostic-panel {
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-primary);
+      padding: 25px;
+    }
+
+    .diagnostic-panel h4 {
+      font-size: 0.85rem;
+      color: var(--accent);
+      margin-bottom: 15px;
+      letter-spacing: 0.1em;
+    }
+
+    .diag-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .diag-item:last-child {
+      border-bottom: none;
+    }
+
+    .diag-label { color: var(--text-secondary); }
+    .diag-val { font-family: var(--font-mono); font-weight: 700; }
+
+    /* Intake Form Inputs */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+    }
+
+    .form-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-item.full-width {
+      grid-column: span 2;
+    }
+
+    .form-item label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-secondary);
+    }
+
+    .form-input {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      padding: 15px;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color var(--transition-fast), background-color var(--transition-fast);
+    }
+
+    .form-input:focus {
+      border-color: var(--accent);
+      background-color: #0b0b0b;
+    }
+
+    select.form-input {
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg fill='%23FF3E00' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 15px center;
+      padding-right: 40px;
+    }
+
+    .submit-container {
+      margin-top: 40px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-submit {
+      background-color: var(--accent);
+      color: var(--text-primary);
+      border: none;
+      padding: 20px 40px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: background-color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .btn-submit:hover {
+      background-color: var(--text-primary);
+      color: var(--bg-primary);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 992px) {
+      .intake-layout {
+        grid-template-columns: 1fr;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .form-item.full-width {
+        grid-column: span 1;
+      }
+    }
+
+    /* -------------------------------------------------------------
+       FOOTER
+       ------------------------------------------------------------- */
+    footer {
+      background-color: var(--bg-primary);
+      border-top: 1px solid var(--border-color);
+      padding: 60px 40px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      z-index: 2;
+    }
+
+    .footer-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+    }
+
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .footer-col h5 {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      margin-bottom: 5px;
+    }
+
+    .footer-col a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+
+    .footer-col a:hover {
+      color: var(--accent);
+    }
+
+    .footer-bottom {
+      max-width: 1400px;
+      margin: 40px auto 0 auto;
+      border-top: 1px solid var(--border-color);
+      padding-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor Elements -->
+  <div id="custom-cursor"></div>
+  <div id="custom-cursor-dot"></div>
+
+  <!-- Scroll Progress Bar -->
+  <div id="scroll-indicator"></div>
+
+  <!-- HEADER -->
+  <header id="main-header">
+    <div class="logo-container">
+      <div class="logo-mark"></div>
+      <span class="logo-text">MONOLITH</span>
+    </div>
+    
+    <nav>
+      <a href="#hero" class="nav-link">ETHOS</a>
+      <a href="#simulator" class="nav-link">SIMULATOR</a>
+      <a href="#gallery" class="nav-link">SPECIMENS</a>
+      <a href="#intake" class="nav-link">INTAKE</a>
+    </nav>
+
+    <div class="hud-stat">
+      <div class="pulse-indicator"></div>
+      <span>SITE 09 FEED: 42°53'N, 9°16'W</span>
+      <span class="divider">|</span>
+      <span id="header-wind-speed">WIND: 45.2 KTS</span>
+    </div>
+  </header>
+
+  <!-- MAIN EXPERIENCE CONTENT -->
+  <main>
+    
+    <!-- HERO -->
+    <section id="hero">
+      <div class="hero-grid">
+        <div class="hero-left">
+          <div class="hero-title-wrap">
+            <span class="hero-title-sub">CONCRETE ARCHITECTURE // SPEC 001</span>
+            <h1 class="hero-title">MONOLITH</h1>
+            <p class="hero-tagline">WE CAST ANCHORS INTO THE ABYSS.</p>
+          </div>
+          
+          <div class="hero-left-bottom">
+            <p>Deploying single-pour, basalt-reinforced concrete structures onto the earth's most hostile and beautiful clifftops.</p>
+            <a href="#simulator" class="btn-anchor">TEST ANCHOR STABILITY →</a>
+          </div>
+        </div>
+        
+        <div class="hero-right">
+          <div class="hero-image-container">
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1200" alt="Brutalist concrete cantilever architectural structure overlooking deep sky" class="hero-img">
+            <div class="hero-overlay-hud">
+              <h3>SITE INTEGRITY 01</h3>
+              <p>Monolithic concrete shear walls cast directly into coastal basalt substrate. Capable of surviving active erosion and category-5 oceanic squalls.</p>
+              <a href="#gallery" class="btn-anchor">VIEW FILE</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETHOS / MANIFESTO -->
+    <section id="ethos">
+      <div class="container manifesto-layout">
+        <div class="manifesto-sticky">
+          <div class="manifesto-num">01 /</div>
+          <h2>THE RADICAL ETHOS</h2>
+          <p class="mono-text accent-color">No decoration. No compromise. Only geometry.</p>
+        </div>
+        
+        <div class="manifesto-body">
+          <div class="manifesto-quote serif-text">
+            "We reject the temporary. We do not build for comfort or decoration. We build monolithic concrete objects designed to survive the next geological epoch."
+          </div>
+          
+          <div class="manifesto-columns">
+            <div>
+              <p>Architectural design has become fragile and obsessed with impermanence. We cast concrete not as a surface finish, but as a permanent extension of structural geography. Our cantilevers lean directly over drop-offs where traditional builders dare not step.</p>
+            </div>
+            <div>
+              <p>Every project is custom formulated with specialized silica fume and basalt fiber matrixes to resist chemical erosion from high-salinity maritime wind. Once poured, a Monolith object is physically married to its underlying geological substrate.</p>
+            </div>
+          </div>
+
+          <div class="manifesto-banner">
+            <h4 class="mono-text">CORE FORMULATION DET-918</h4>
+            <p>Our standard concrete uses Type IX sulphate-resistant Portland cement mixed with locally sourced igneous basalt aggregate, reinforcing structural stability up to 180 MPa tensile thresholds under mechanical shear tests.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALCULATOR / STRESS SIMULATOR -->
+    <section id="simulator">
+      <div class="container">
+        
+        <div class="sim-layout">
+          
+          <!-- Controls Panel -->
+          <div class="sim-left">
+            <div class="sim-header">
+              <span class="mono-text accent-color">// SIMULATION ENGINE v2.04</span>
+              <h2>STRUCTURAL STRESS CALCULATOR</h2>
+              <p>Configure parameters for a cantilevered concrete structure over an ocean drop-off. Modify factors to evaluate deflection, moment forces, and real-time failure thresholds.</p>
+            </div>
+            
+            <div class="sim-controls">
+              
+              <!-- Cantilever Length -->
+              <div class="control-group">
+                <div class="control-header">
+                  <span class="control-label">CANTILEVER PROJECTION (L)</span>
+                  <span class="control-val" id="val-length">25 m</span>
+                </div>
+                <input type="range" id="input-length" min="5" max="50" value="25" step="1">
+              </div>
+
+              <!-- Slab Thickness -->
+              <div class="control-group">
+                <div class="control-header">
+                  <span class="control-label">SLAB THICKNESS (T)</span>
+                  <span class="control-val" id="val-thickness">4.0 m</span>
+                </div>
+                <input type="range" id="input-thickness" min="1" max="8" value="4" step="0.2">
+              </div>
+
+              <!-- Wind Speed -->
+              <div class="control-group">
+                <div class="control-header">
+                  <span class="control-label">DOWNWARD WIND VELOCITY</span>
+                  <span class="control-val" id="val-wind">45 kts</span>
+                </div>
+                <input type="range" id="input-wind" min="0" max="180" value="45" step="5">
+              </div>
+
+              <!-- Matrix Selection -->
+              <div class="control-group">
+                <span class="control-label">CONCRETE MATRIX SPECIFICATION</span>
+                <div class="matrix-selector">
+                  <div class="matrix-option active" data-matrix="standard">
+                    <div>
+                      <span class="matrix-name">STANDARD CAST</span>
+                      <div class="matrix-specs">f'c = 40 MPa | E = 30 GPa | σ_allow = 5 MPa</div>
+                    </div>
+                  </div>
+                  <div class="matrix-option" data-matrix="carbon">
+                    <div>
+                      <span class="matrix-name">BASALT-CARBON COMPOSITE</span>
+                      <div class="matrix-specs">f'c = 120 MPa | E = 50 GPa | σ_allow = 25 MPa</div>
+                    </div>
+                  </div>
+                  <div class="matrix-option" data-matrix="nanotube">
+                    <div>
+                      <span class="matrix-name">SILICA-NANOTUBE MATRIX</span>
+                      <div class="matrix-specs">f'c = 280 MPa | E = 120 GPa | σ_allow = 150 MPa</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Deck Toggle -->
+              <div class="deck-toggle-container">
+                <button class="switch-btn active" id="toggle-deck">
+                  <div class="switch-handle"></div>
+                </button>
+                <span class="control-label">TERMINAL OBSERVATION DECK LOAD (50t)</span>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Interactive Visualization Canvas & Live Telemetry -->
+          <div class="sim-right">
+            <div class="canvas-container">
+              <canvas id="stress-canvas"></canvas>
+              
+              <!-- Critical structural failure overlay -->
+              <div class="canvas-overlay-warning" id="failure-overlay">
+                <div class="warning-text-box">
+                  <h4 class="mono-text">!!! CRITICAL COLLAPSE !!!</h4>
+                  <p id="failure-msg">TENSION EXCEEDS MAXIMUM ALLOWABLE LIMIT. STRUCTURAL SEGREGATION IMMINENT.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Telemetry -->
+            <div class="telemetry-panel">
+              <div class="telemetry-item">
+                <div class="telemetry-label">BENDING MOMENT AT ANCHOR</div>
+                <div class="telemetry-value" id="tel-moment">0.00 MN·m</div>
+              </div>
+              <div class="telemetry-item">
+                <div class="telemetry-label">MAXIMUM TENSILE STRESS</div>
+                <div class="telemetry-value" id="tel-stress">0.00 MPa</div>
+              </div>
+              <div class="telemetry-item">
+                <div class="telemetry-label">STRUCTURAL DEFLECTION AT TIP</div>
+                <div class="telemetry-value" id="tel-deflection">0.00 mm</div>
+              </div>
+              <div class="telemetry-item">
+                <div class="telemetry-label">STRUCTURAL INTEGRITY INDEX</div>
+                <div class="telemetry-value" id="tel-integrity">100%</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- GALLERY / SPECIMENS -->
+    <section id="gallery">
+      <div class="container">
+        
+        <div class="gallery-header">
+          <div>
+            <span class="mono-text accent-color">// REGISTERED CASTS</span>
+            <h2>COMPLETED SHARDS</h2>
+          </div>
+          <span class="mono-text text-secondary">ACTIVE ARCHIVE (03)</span>
+        </div>
+
+        <div class="gallery-grid">
+          
+          <!-- Specimen 01 -->
+          <div class="gallery-card">
+            <div class="card-image-wrap">
+              <div class="card-wireframe-overlay"></div>
+              <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=800" alt="Minimal stark concrete room interior with light slit" class="card-img">
+            </div>
+            <div class="card-info">
+              <div class="card-meta">
+                <span>COORD: 42°53'N, 9°16'W</span>
+                <span>SUBSTRATE: BASALT ROCK</span>
+              </div>
+              <h3 class="card-title">SITE 01 / FINISTERRE</h3>
+              <p class="card-desc">Designed as a single concrete wedge pointing directly out into the Atlantic ocean, anchored deeply into geological fractures of coastal Galicia.</p>
+            </div>
+          </div>
+
+          <!-- Specimen 02 -->
+          <div class="gallery-card offset">
+            <div class="card-image-wrap">
+              <div class="card-wireframe-overlay"></div>
+              <img src="https://images.unsplash.com/photo-1507382722689-5fa7b01094aa?q=80&w=800" alt="Brutalist concrete building structure showing stark light and shadow patterns" class="card-img">
+            </div>
+            <div class="card-info">
+              <div class="card-meta">
+                <span>COORD: 24°30'S, 69°15'W</span>
+                <span>SUBSTRATE: DECOMPOSED RHYOLITE</span>
+              </div>
+              <h3 class="card-title">SITE 02 / ATACAMA</h3>
+              <p class="card-desc">An experimental shear-wall volume cantilevered over high-elevation canyon faultlines. Structurally reinforced to mitigate major seismic shocks.</p>
+            </div>
+          </div>
+
+          <!-- Specimen 03 -->
+          <div class="gallery-card">
+            <div class="card-image-wrap">
+              <div class="card-wireframe-overlay"></div>
+              <img src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=800" alt="Curves of brutalist concrete building against sky" class="card-img">
+            </div>
+            <div class="card-info">
+              <div class="card-meta">
+                <span>COORD: 68°00'N, 13°30'E</span>
+                <span>SUBSTRATE: GRANITE BLOCK</span>
+              </div>
+              <h3 class="card-title">SITE 03 / LOFOTEN</h3>
+              <p class="card-desc">Sub-zero oceanic exposure. Cast with high silica aggregate mix to withstand freeze-thaw cycles, sub-zero winds, and constant salt spray.</p>
+            </div>
+          </div>
+
+          <!-- Extra Minimal Text Box to balance asymmetry -->
+          <div class="gallery-card offset" style="border: 1px dashed var(--accent); background: transparent; padding: 40px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <span class="mono-text accent-color">// STRUCTURAL REPORT INF-29</span>
+              <h3 class="serif-text" style="font-size: 1.8rem; margin: 20px 0; font-weight: normal; line-height: 1.2;">"A Monolith does not decay. It merely integrates with the coastline's natural degradation."</h3>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">ALL DATA CORROBORATED BY GEOLOGICAL SURVEY DIVISION. ARCHIVE DATA UPDATED QUARTERLY.</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- INTAKE / CLIENT FORM -->
+    <section id="intake">
+      <div class="container intake-layout">
+        
+        <div class="intake-left">
+          <span class="mono-text accent-color">// COMMENCE FEASIBILITY</span>
+          <h2>CAST A MONOLITH OBJECT</h2>
+          <p>Submit coordinates and parameters for a custom site evaluation. Our algorithmic geological system will calculate stress boundaries based on subgrade composition and site exposure profiles.</p>
+          
+          <div class="diagnostic-panel">
+            <h4 class="mono-text">FEASIBILITY REPORT</h4>
+            <div class="diag-item">
+              <span class="diag-label">SUBSTRATE MATCH:</span>
+              <span class="diag-val" id="diag-substrate">VALIDATING...</span>
+            </div>
+            <div class="diag-item">
+              <span class="diag-label">FEASIBILITY STATUS:</span>
+              <span class="diag-val" id="diag-status">VALIDATING...</span>
+            </div>
+            <div class="diag-item">
+              <span class="diag-label">ESTIMATED LIFE CYCLE:</span>
+              <span class="diag-val text-secondary" id="diag-lifecycle">> 5,000 YEARS</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="intake-right">
+          <form id="feasibility-form" onsubmit="event.preventDefault(); alert('SITE LOGGED. CALCULATING DRILL VECTORS.');">
+            <div class="form-grid">
+              
+              <div class="form-item">
+                <label for="form-client">CLIENT IDENTIFIER</label>
+                <input type="text" id="form-client" class="form-input" placeholder="e.g. SEC-04 ARCHIVES" required>
+              </div>
+
+              <div class="form-item">
+                <label for="form-coordinates">TARGET COORDINATES</label>
+                <input type="text" id="form-coordinates" class="form-input" placeholder="e.g. 45°10'N, 122°24'W" required>
+              </div>
+
+              <div class="form-item">
+                <label for="form-substrate">GEOLOGICAL SUBSTRATE</label>
+                <select id="form-substrate" class="form-input" required>
+                  <option value="basalt">SOLID BASALT (STABLE)</option>
+                  <option value="granite">GRANITE BEDROCK (IDEAL)</option>
+                  <option value="sandstone">COMPACTED SANDSTONE (RISKY)</option>
+                  <option value="shale">FRACTURED SHALE (UNSTABLE)</option>
+                </select>
+              </div>
+
+              <div class="form-item">
+                <label for="form-span">DESIRED CANTILEVER LENGTH</label>
+                <select id="form-span" class="form-input" required>
+                  <option value="under20">10m - 20m (CONVENTIONAL)</option>
+                  <option value="under35">20m - 35m (AGGRESSIVE)</option>
+                  <option value="over35">35m - 50m (RADICAL LIMITS)</option>
+                </select>
+              </div>
+
+              <div class="form-item full-width">
+                <label for="form-notes">ADDITIONAL ENGINERING DETAILS</label>
+                <textarea id="form-notes" class="form-input" rows="4" placeholder="e.g. Seismic profiles, marine spray frequency, wind patterns..." style="resize: none;"></textarea>
+              </div>
+
+            </div>
+
+            <div class="submit-container">
+              <button type="submit" class="btn-submit">LOG SITE ASSESSMENT</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h5>MONOLITH //</h5>
+        <p>A radical architectural studio casting concrete objects for the terminal phase of human civilization.</p>
+      </div>
+      <div class="footer-col">
+        <h5>CHANNELS</h5>
+        <a href="#hero">ETHOS</a>
+        <a href="#simulator">SIMULATOR</a>
+        <a href="#gallery">SPECIMENS</a>
+        <a href="#intake">INTAKE</a>
+      </div>
+      <div class="footer-col">
+        <h5>SPECIFICATIONS</h5>
+        <span>TYPE IX CEMENT MATRIX</span>
+        <span>BASALT FIBER TENSILE</span>
+        <span>PRESTRESSED ANCHORS</span>
+        <span>SHEAR DEVIATION METERS</span>
+      </div>
+      <div class="footer-col">
+        <h5>ENQUIRIES</h5>
+        <span>SECURE-TELEMETRY: MONO.CAST</span>
+        <span>PORTLAND OR, SITE OFFICE</span>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <span>© 2026 MONOLITH. ALL ARCHITECTURAL PATENTS FILED AND ASSIGNED.</span>
+      <span>COORDINATED BY GEOLOGICAL INTAKE IN SITU.</span>
+    </div>
+  </footer>
+
+  <!-- SCRIPT FOR SIMULATION PHYSICS, CUSTOM INTERACTIONS, AUDIO SYNTH -->
+  <script>
+    /* -------------------------------------------------------------
+       AUDIO SYNTHESIS SYSTEM (WEB AUDIO API)
+       ------------------------------------------------------------- */
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    // Short synthetic tick sound for user interactions
+    function playTick(freq = 800, duration = 0.012, type = 'sine', volume = 0.03) {
+      try {
+        initAudio();
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        
+        gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        // Suppress browser blocking errors
+      }
+    }
+
+    // Heavy alarms or warnings
+    let alarmInterval = null;
+    function startAlarm() {
+      if (alarmInterval) return;
+      
+      alarmInterval = setInterval(() => {
+        try {
+          initAudio();
+          if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+          }
+          
+          const osc1 = audioCtx.createOscillator();
+          const osc2 = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          
+          osc1.type = 'sawtooth';
+          osc1.frequency.setValueAtTime(120, audioCtx.currentTime);
+          osc1.frequency.linearRampToValueAtTime(80, audioCtx.currentTime + 0.25);
+          
+          osc2.type = 'sine';
+          osc2.frequency.setValueAtTime(240, audioCtx.currentTime);
+          osc2.frequency.linearRampToValueAtTime(160, audioCtx.currentTime + 0.25);
+          
+          gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.25);
+          
+          osc1.connect(gain);
+          osc2.connect(gain);
+          gain.connect(audioCtx.destination);
+          
+          osc1.start();
+          osc2.start();
+          
+          osc1.stop(audioCtx.currentTime + 0.25);
+          osc2.stop(audioCtx.currentTime + 0.25);
+        } catch (e) {}
+      }, 350);
+    }
+
+    function stopAlarm() {
+      if (alarmInterval) {
+        clearInterval(alarmInterval);
+        alarmInterval = null;
+      }
+    }
+
+
+    /* -------------------------------------------------------------
+       CUSTOM BRUTALIST CURSOR & USER FEEDBACK
+       ------------------------------------------------------------- */
+    const cursor = document.getElementById('custom-cursor');
+    const cursorDot = document.getElementById('custom-cursor-dot');
+    let mouseX = 0, mouseY = 0;
+    let cursorX = 0, cursorY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      
+      // Instantly position the center dot
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top = mouseY + 'px';
+    });
+
+    // Lag/inertia for the outer crosshair circle
+    function animateCursor() {
+      const dx = mouseX - cursorX;
+      const dy = mouseY - cursorY;
+      
+      cursorX += dx * 0.15;
+      cursorY += dy * 0.15;
+      
+      cursor.style.left = cursorX + 'px';
+      cursor.style.top = cursorY + 'px';
+      
+      requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    // Hover states for elements
+    const hoverElements = document.querySelectorAll('a, button, input[type="range"], select, textarea, .matrix-option, .switch-btn');
+    hoverElements.forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        document.body.classList.add('cursor-hover');
+        playTick(1200, 0.008, 'sine', 0.015);
+      });
+      el.addEventListener('mouseleave', () => {
+        document.body.classList.remove('cursor-hover');
+      });
+    });
+
+
+    /* -------------------------------------------------------------
+       SCROLL PROGRESS BAR
+       ------------------------------------------------------------- */
+    window.addEventListener('scroll', () => {
+      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById('scroll-indicator').style.width = scrolled + '%';
+      
+      // Header shrink
+      const header = document.getElementById('main-header');
+      if (winScroll > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+
+    /* -------------------------------------------------------------
+       TELEMETRY UPDATES (NAVBAR)
+       ------------------------------------------------------------- */
+    const windSpeedHUD = document.getElementById('header-wind-speed');
+    setInterval(() => {
+      // Fluctuate wind speed slightly in HUD
+      const baseWind = 45.2;
+      const variance = (Math.random() - 0.5) * 6;
+      windSpeedHUD.textContent = `WIND: ${(baseWind + variance).toFixed(1)} KTS`;
+    }, 1500);
+
+
+    /* -------------------------------------------------------------
+       STRESS SIMULATOR PHYSICS ENGINE & CANVAS RENDER
+       ------------------------------------------------------------- */
+    const canvas = document.getElementById('stress-canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Controls
+    const inputLength = document.getElementById('input-length');
+    const inputThickness = document.getElementById('input-thickness');
+    const inputWind = document.getElementById('input-wind');
+    const matrixOptions = document.querySelectorAll('.matrix-option');
+    const btnDeck = document.getElementById('toggle-deck');
+
+    // Value readouts
+    const valLength = document.getElementById('val-length');
+    const valThickness = document.getElementById('val-thickness');
+    const valWind = document.getElementById('val-wind');
+
+    // Telemetry readouts
+    const telMoment = document.getElementById('tel-moment');
+    const telStress = document.getElementById('tel-stress');
+    const telDeflection = document.getElementById('tel-deflection');
+    const telIntegrity = document.getElementById('tel-integrity');
+    const failureOverlay = document.getElementById('failure-overlay');
+    const failureMsg = document.getElementById('failure-msg');
+
+    // Simulator physics variables
+    let currentMatrix = 'standard';
+    let hasDeck = true;
+
+    // Dust particles array for failure state
+    let particles = [];
+
+    // Concrete properties
+    const matrixSpecs = {
+      standard: { E: 30e9, strength: 5e6, name: 'STANDARD CAST' },
+      carbon: { E: 50e9, strength: 25e6, name: 'BASALT-CARBON COMPOSITE' },
+      nanotube: { E: 120e9, strength: 150e6, name: 'SILICA-NANOTUBE MATRIX' }
+    };
+
+    // Handle canvas dimensions
+    function resizeCanvas() {
+      // Set resolution relative to layout display width
+      canvas.width = canvas.parentElement.clientWidth * window.devicePixelRatio;
+      canvas.height = 420 * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Input event handlers with tick audio feedback
+    inputLength.addEventListener('input', (e) => {
+      valLength.textContent = `${e.target.value} m`;
+      playTick(500 + e.target.value * 10, 0.008);
+      updateFeasibilityDiagnostics();
+    });
+
+    inputThickness.addEventListener('input', (e) => {
+      valThickness.textContent = `${parseFloat(e.target.value).toFixed(1)} m`;
+      playTick(400 + e.target.value * 60, 0.008);
+      updateFeasibilityDiagnostics();
+    });
+
+    inputWind.addEventListener('input', (e) => {
+      valWind.textContent = `${e.target.value} kts`;
+      playTick(300 + e.target.value * 2, 0.008);
+    });
+
+    // Matrix selector click
+    matrixOptions.forEach(opt => {
+      opt.addEventListener('click', () => {
+        matrixOptions.forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        currentMatrix = opt.dataset.matrix;
+        playTick(900, 0.02, 'triangle');
+        updateFeasibilityDiagnostics();
+      });
+    });
+
+    // Toggle observation deck load
+    btnDeck.addEventListener('click', () => {
+      hasDeck = !hasDeck;
+      btnDeck.classList.toggle('active', hasDeck);
+      playTick(hasDeck ? 1000 : 700, 0.015, 'sawtooth');
+      updateFeasibilityDiagnostics();
+    });
+
+    // Particle manager class for collapse debris
+    class FractureParticle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.vx = (Math.random() - 0.5) * 2 - 1; // blow leftward under gravity/shear crack
+        this.vy = Math.random() * 3 + 1;
+        this.size = Math.random() * 3 + 1;
+        this.life = 1.0;
+        this.decay = Math.random() * 0.05 + 0.02;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.life -= this.decay;
+      }
+      draw(c) {
+        c.fillStyle = `rgba(255, 62, 0, ${this.life})`;
+        c.fillRect(this.x, this.y, this.size, this.size);
+      }
+    }
+
+    // PHYSICS & RENDERING LOOP
+    function drawSimulation() {
+      // Dimensions mapping
+      const L = parseFloat(inputLength.value); // m
+      const T = parseFloat(inputThickness.value); // m
+      const windVal = parseFloat(inputWind.value); // kts
+      const E = matrixSpecs[currentMatrix].E; // Young's Modulus
+      const allowableStress = matrixSpecs[currentMatrix].strength;
+      
+      const width = canvas.width / window.devicePixelRatio;
+      const height = canvas.height / window.devicePixelRatio;
+
+      // -------------------------------------------------------------
+      // CALCULATE STRUCTURAL TELEMETRY
+      // -------------------------------------------------------------
+      const b = 6.0; // width of slab in meters (constant)
+      const density = 2400.0; // concrete density kg/m3
+      const g = 9.81;
+
+      // Self-weight per meter
+      const q_self = T * b * density * g;
+
+      // Wind force modeling vertical downdrafts/pressure
+      const windSpeedMS = windVal * 0.51444;
+      const windPressure = 0.5 * 1.2 * Math.pow(windSpeedMS, 2) * 1.2; 
+      const q_wind = windPressure * b; // Force per meter along span
+
+      const q_total = q_self + q_wind;
+
+      // Tip point load representing terminal observation deck
+      const P = hasDeck ? 50000 * g : 0.0;
+
+      // Maximum bending moment at support (root of cantilever)
+      const moment = (q_total * Math.pow(L, 2)) / 2.0 + P * L; // N-m
+
+      // Section Modulus for rectangular beam
+      const S = (b * Math.pow(T, 2)) / 6.0;
+
+      // Tensile Stress at extreme fiber (maximum at root)
+      const maxStress = moment / S; // Pa
+
+      // Moment of inertia
+      const I_mom = (b * Math.pow(T, 3)) / 12.0;
+
+      // Deflection calculation at tip: delta = (q * L^4)/(8*E*I) + (P * L^3)/(3*E*I)
+      const deflectionVal = (q_total * Math.pow(L, 4)) / (8.0 * E * I_mom) + (P * Math.pow(L, 3)) / (3.0 * E * I_mom); // meters
+
+      // Factor of Safety
+      const safetyFactor = allowableStress / maxStress;
+
+      // Integrity calculation (scaled for display)
+      let integrity = Math.min(100, Math.max(0, (safetyFactor / 2.0) * 100));
+      if (safetyFactor < 1.0) {
+        integrity = Math.max(0, integrity * (safetyFactor)); // drop faster when failing
+      }
+
+      // -------------------------------------------------------------
+      // DISPLAY HUD TEXT DATA
+      // -------------------------------------------------------------
+      telMoment.textContent = `${(moment / 1e6).toFixed(2)} MN·m`;
+      telStress.textContent = `${(maxStress / 1e6).toFixed(2)} MPa`;
+      telDeflection.textContent = `${(deflectionVal * 1000).toFixed(1)} mm`;
+      
+      const intPercent = Math.round(integrity);
+      telIntegrity.textContent = `${intPercent}%`;
+
+      // Status indicator coloring
+      telIntegrity.className = 'telemetry-value';
+      if (safetyFactor >= 1.5) {
+        telIntegrity.classList.add('status-ok');
+        failureOverlay.style.display = 'none';
+        document.body.classList.remove('cursor-warn');
+        stopAlarm();
+      } else if (safetyFactor >= 1.0) {
+        telIntegrity.classList.add('status-warn');
+        failureOverlay.style.display = 'none';
+        document.body.classList.remove('cursor-warn');
+        stopAlarm();
+      } else {
+        telIntegrity.classList.add('status-fail');
+        failureOverlay.style.display = 'flex';
+        document.body.classList.add('cursor-warn');
+        startAlarm();
+        
+        // Dynamic error message
+        if (safetyFactor < 0.6) {
+          failureMsg.textContent = "CRITICAL BENDING RUPTURE. IMMINENT GEOLOGICAL SHARD DETACHMENT.";
+        } else {
+          failureMsg.textContent = "TENSION EXCEEDS MAXIMUM ALLOWABLE LIMIT. STRUCTURAL SEGREGATION PATH INITIATED.";
+        }
+      }
+
+      // -------------------------------------------------------------
+      // RENDER CANVAS GRAPHICS
+      // -------------------------------------------------------------
+      ctx.clearRect(0, 0, width, height);
+
+      // 1. Draw Technical Grid Lines
+      ctx.strokeStyle = '#181818';
+      ctx.lineWidth = 1;
+      const gridSize = 40;
+      for (let x = 0; x < width; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < height; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      // Base coordinates on canvas
+      const cliffEndX = 180;
+      const slabStartY = 200;
+      
+      // Scaling conversions
+      const pxPerMeterX = (width - cliffEndX - 50) / 50.0; // scale 50m max to remaining canvas
+      const pxPerMeterY = 12; // vertical scale for concrete thickness
+
+      // 2. Draw Rocks / Cliff Substrate
+      ctx.fillStyle = '#0f0f0f';
+      ctx.beginPath();
+      ctx.moveTo(0, slabStartY);
+      ctx.lineTo(cliffEndX, slabStartY);
+      ctx.lineTo(cliffEndX - 60, height);
+      ctx.lineTo(0, height);
+      ctx.closePath();
+      ctx.fill();
+
+      // Geological stratification lines
+      ctx.strokeStyle = '#222';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, slabStartY + 80);
+      ctx.lineTo(cliffEndX - 30, slabStartY + 80);
+      ctx.moveTo(0, slabStartY + 160);
+      ctx.lineTo(cliffEndX - 50, slabStartY + 160);
+      ctx.stroke();
+
+      // Bold cliff face line
+      ctx.strokeStyle = '#333333';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(cliffEndX, slabStartY);
+      ctx.lineTo(cliffEndX - 60, height);
+      ctx.stroke();
+
+      // 3. Draw Concrete Cantilever
+      // Calculate dynamic deflection curve and vibrations
+      const points = [];
+      const steps = 30;
+      const pixelLength = L * pxPerMeterX;
+      const pixelThickness = T * pxPerMeterY;
+      
+      // Elastic curve formula deflection scaling (amplified for visibility)
+      // Visual scale factor adjusts dynamically to fit window nicely
+      const visualScale = 600.0; 
+      
+      // Wind oscillation frequency & amplitude
+      const time = Date.now() / 1000.0;
+      const windFreq = 8.0 + (windVal / 20.0);
+      const windAmplitude = (windVal / 180.0) * (L / 20.0) * 8;
+      const structuralOscillation = Math.sin(time * windFreq) * windAmplitude;
+
+      // Fracture calculation: shear tilt if catastrophic collapse is active
+      const fractureTear = safetyFactor < 0.75 ? (0.75 - safetyFactor) * 200 : 0;
+
+      for (let i = 0; i <= steps; i++) {
+        const fraction = i / steps;
+        const dist = fraction * L; // meters from support
+        
+        // Deflection at point x along length: 
+        // y = (q*x^2)/(24*E*I) * (6L^2 - 4Lx + x^2) + (P*x^2)/(6*E*I) * (3L - x)
+        const x2 = Math.pow(dist, 2);
+        const yLocalDef = (q_total * x2) / (24.0 * E * I_mom) * (6.0 * L * L - 4.0 * L * dist + x2) + 
+                          (P * x2) / (6.0 * E * I_mom) * (3.0 * L - dist);
+        
+        // Scale and add vibration oscillations that intensify towards tip
+        let finalDef = yLocalDef * visualScale + (fraction * structuralOscillation);
+        
+        // Add absolute tear offset if shear failure is active
+        if (safetyFactor < 0.75) {
+          finalDef += fraction * fractureTear;
+        }
+
+        points.push({
+          x: cliffEndX + (fraction * pixelLength),
+          yTop: slabStartY + finalDef,
+          yBottom: slabStartY + pixelThickness + finalDef
+        });
+      }
+
+      // Draw standard concrete shadow fill
+      ctx.fillStyle = '#222';
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].yTop);
+      for (let i = 1; i <= steps; i++) {
+        ctx.lineTo(points[i].x, points[i].yTop);
+      }
+      for (let i = steps; i >= 0; i--) {
+        ctx.lineTo(points[i].x, points[i].yBottom);
+      }
+      ctx.closePath();
+      ctx.fill();
+
+      // Concrete hatch texturing (simulated grain)
+      ctx.strokeStyle = '#2c2c2c';
+      ctx.lineWidth = 1;
+      for (let i = 2; i < steps; i += 3) {
+        ctx.beginPath();
+        ctx.moveTo(points[i].x, points[i].yTop + 2);
+        ctx.lineTo(points[i].x - 5, points[i].yBottom - 2);
+        ctx.stroke();
+      }
+
+      // Draw outer structural boundaries
+      ctx.strokeStyle = safetyFactor < 1.0 ? varColor('--accent') : '#FFFFFF';
+      ctx.lineWidth = 2.5;
+
+      // Slab Top Edge
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].yTop);
+      for (let i = 1; i <= steps; i++) {
+        ctx.lineTo(points[i].x, points[i].yTop);
+      }
+      ctx.stroke();
+
+      // Slab Bottom Edge
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].yBottom);
+      for (let i = 1; i <= steps; i++) {
+        ctx.lineTo(points[i].x, points[i].yBottom);
+      }
+      ctx.stroke();
+
+      // Root vertical cap (anchoring line)
+      ctx.strokeStyle = '#FFFFFF';
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].yTop);
+      ctx.lineTo(points[0].x, points[0].yBottom);
+      ctx.stroke();
+
+      // Tip vertical cap
+      ctx.strokeStyle = safetyFactor < 1.0 ? varColor('--accent') : '#FFFFFF';
+      ctx.beginPath();
+      ctx.moveTo(points[steps].x, points[steps].yTop);
+      ctx.lineTo(points[steps].x, points[steps].yBottom);
+      ctx.stroke();
+
+      // 4. Draw terminal Observation Deck if active
+      if (hasDeck) {
+        const tip = points[steps];
+        ctx.fillStyle = varColor('--accent');
+        ctx.strokeStyle = varColor('--accent');
+        ctx.lineWidth = 1.5;
+
+        // Draw a tiny minimalist brutalist box deck
+        const deckW = 16;
+        const deckH = 20;
+        ctx.beginPath();
+        ctx.rect(tip.x - deckW, tip.yTop - deckH, deckW, deckH);
+        ctx.fill();
+
+        // Deck safety wire indicator
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.moveTo(tip.x - deckW, tip.yTop - deckH);
+        ctx.lineTo(tip.x, tip.yTop - deckH);
+        ctx.stroke();
+      }
+
+      // 5. Draw stress fracture indicators at root if failing
+      if (safetyFactor < 1.0) {
+        ctx.strokeStyle = varColor('--accent');
+        ctx.lineWidth = 2.5;
+        
+        // Jagged crack lines at root
+        const root = points[0];
+        ctx.beginPath();
+        ctx.moveTo(root.x, root.yTop);
+        ctx.lineTo(root.x + 8, root.yTop + 15);
+        ctx.lineTo(root.x - 3, root.yTop + 30);
+        ctx.lineTo(root.x + 5, root.yTop + 45);
+        ctx.stroke();
+
+        // Particles spawn at root fracture bottom
+        if (Math.random() < 0.25) {
+          particles.push(new FractureParticle(root.x + (Math.random() * 8), root.yBottom - (Math.random() * 10)));
+        }
+      }
+
+      // Update and draw fracture debris particles
+      for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update();
+        particles[i].draw(ctx);
+        if (particles[i].life <= 0) {
+          particles.splice(i, 1);
+        }
+      }
+
+      // 6. Technical Annotation Overlays on Canvas
+      ctx.fillStyle = '#666';
+      ctx.font = '9px "Space Mono", monospace';
+      
+      // Vector load arrows representing gravity / wind
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+      ctx.lineWidth = 1;
+      
+      // Gravity arrow
+      const arrowX = cliffEndX + (pixelLength / 2);
+      const arrowY = slabStartY - 30;
+      ctx.beginPath();
+      ctx.moveTo(arrowX, arrowY);
+      ctx.lineTo(arrowX, arrowY + 20);
+      ctx.moveTo(arrowX - 4, arrowY + 16);
+      ctx.lineTo(arrowX, arrowY + 20);
+      ctx.lineTo(arrowX + 4, arrowY + 16);
+      ctx.stroke();
+      ctx.fillText('GRAVITY SECTIONS (q_self)', arrowX - 60, arrowY - 6);
+
+      // Wind force vectors (blowing downward/across)
+      if (windVal > 0) {
+        ctx.strokeStyle = 'rgba(255, 62, 0, 0.4)';
+        ctx.fillStyle = 'rgba(255, 62, 0, 0.7)';
+        for (let j = 0; j < 3; j++) {
+          const wX = cliffEndX + 40 + (j * (pixelLength - 80) / 2);
+          const wY = slabStartY - 70;
+          ctx.beginPath();
+          ctx.moveTo(wX, wY);
+          ctx.lineTo(wX, wY + 20);
+          ctx.moveTo(wX - 3, wY + 17);
+          ctx.lineTo(wX, wY + 20);
+          ctx.lineTo(wX + 3, wY + 17);
+          ctx.stroke();
+        }
+        ctx.fillText(`WIND LOADING (q_wind: ${windVal} kts)`, cliffEndX + 35, slabStartY - 78);
+      }
+
+      // Dimensions annotations
+      ctx.strokeStyle = '#444';
+      ctx.fillStyle = '#888';
+      
+      // Span Dimension Line
+      const dimY = height - 20;
+      ctx.beginPath();
+      ctx.moveTo(cliffEndX, dimY);
+      ctx.lineTo(cliffEndX + pixelLength, dimY);
+      ctx.moveTo(cliffEndX, dimY - 4);
+      ctx.lineTo(cliffEndX, dimY + 4);
+      ctx.moveTo(cliffEndX + pixelLength, dimY - 4);
+      ctx.lineTo(cliffEndX + pixelLength, dimY + 4);
+      ctx.stroke();
+      ctx.fillText(`SPAN L = ${L} meters`, cliffEndX + (pixelLength / 2) - 45, dimY - 8);
+
+      // Deflection Dimension indicator
+      if (deflectionVal > 0.001) {
+        const tip = points[steps];
+        ctx.strokeStyle = varColor('--accent');
+        ctx.beginPath();
+        ctx.moveTo(tip.x + 8, slabStartY);
+        ctx.lineTo(tip.x + 8, tip.yTop);
+        ctx.moveTo(tip.x + 4, slabStartY);
+        ctx.lineTo(tip.x + 12, slabStartY);
+        ctx.moveTo(tip.x + 4, tip.yTop);
+        ctx.lineTo(tip.x + 12, tip.yTop);
+        ctx.stroke();
+        ctx.fillStyle = varColor('--accent');
+        ctx.fillText(`δ = ${(deflectionVal * 1000).toFixed(0)}mm`, tip.x + 14, tip.yTop - (tip.yTop - slabStartY)/2 + 3);
+      }
+
+      // Redraw simulation continuously
+      requestAnimationFrame(drawSimulation);
+    }
+
+    // Helper function to read CSS variable colors in canvas rendering
+    function varColor(cssVarName) {
+      return getComputedStyle(document.documentElement).getPropertyValue(cssVarName).trim();
+    }
+
+    // Kickstart physics loop
+    drawSimulation();
+
+
+    /* -------------------------------------------------------------
+       INTAKE FEASIBILITY DIAGNOSTICS (DYNAMIC HUD CORRELATION)
+       ------------------------------------------------------------- */
+    const selectSubstrate = document.getElementById('form-substrate');
+    const selectSpan = document.getElementById('form-span');
+    const diagSubstrate = document.getElementById('diag-substrate');
+    const diagStatus = document.getElementById('diag-status');
+    const diagLifecycle = document.getElementById('diag-lifecycle');
+
+    function updateFeasibilityDiagnostics() {
+      const sub = selectSubstrate.value;
+      const span = selectSpan.value;
+      
+      // Evaluate base rock stability
+      if (sub === 'granite') {
+        diagSubstrate.textContent = 'GRANITE BLOCK / MAXIMUM COHESION';
+        diagSubstrate.className = 'diag-val status-ok';
+      } else if (sub === 'basalt') {
+        diagSubstrate.textContent = 'SOLID BASALT / HIGH RIGIDITY';
+        diagSubstrate.className = 'diag-val status-ok';
+      } else if (sub === 'sandstone') {
+        diagSubstrate.textContent = 'COMPACTED SANDSTONE / HIGH POROSITY';
+        diagSubstrate.className = 'diag-val status-warn';
+      } else {
+        diagSubstrate.textContent = 'SHALE FRACTURE / CRITICAL LAYER RISK';
+        diagSubstrate.className = 'diag-val status-fail';
+      }
+
+      // Calculate combined stability risk index
+      let riskScore = 0; // 0 = ideal, 3 = dangerous collapse
+      
+      if (sub === 'sandstone') riskScore += 1;
+      if (sub === 'shale') riskScore += 2;
+
+      if (span === 'under35') riskScore += 1;
+      if (span === 'over35') riskScore += 2;
+
+      // Adjust based on the actual simulator values currently configured
+      const simulatedLength = parseFloat(inputLength.value);
+      if (simulatedLength > 30) riskScore += 1;
+      if (simulatedLength > 42) riskScore += 1;
+      if (currentMatrix === 'standard') riskScore += 1;
+
+      // Render feasibility text
+      if (riskScore <= 1) {
+        diagStatus.textContent = 'VIABLE / ARCHITECTURALLY SECURE';
+        diagStatus.className = 'diag-val status-ok';
+        diagLifecycle.textContent = '> 10,000 YEARS';
+        diagLifecycle.className = 'diag-val status-ok';
+      } else if (riskScore <= 3) {
+        diagStatus.textContent = 'CONDITIONAL / DEMANDS CORE BONDING';
+        diagStatus.className = 'diag-val status-warn';
+        diagLifecycle.textContent = 'approx 2,500 YEARS';
+        diagLifecycle.className = 'diag-val status-warn';
+      } else {
+        diagStatus.textContent = 'CRITICAL FAILURE RISK / CAST RETRACTED';
+        diagStatus.className = 'diag-val status-fail';
+        diagLifecycle.textContent = '< 50 YEARS';
+        diagLifecycle.className = 'diag-val status-fail';
+      }
+    }
+
+    // Bind change events to form elements
+    selectSubstrate.addEventListener('change', () => {
+      playTick(750, 0.02, 'triangle');
+      updateFeasibilityDiagnostics();
+    });
+    selectSpan.addEventListener('change', () => {
+      playTick(850, 0.02, 'triangle');
+      updateFeasibilityDiagnostics();
+    });
+
+    // Run initial evaluation
+    updateFeasibilityDiagnostics();
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register — The Keyboard Designed for Designers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   REGISTER — Editorial Landing Page
+   Product:  Premium mechanical keyboard
+   Hero:     Central poster, floating edges
+   Accent:   Violet
+   ═══════════════════════════════════════ */
+
+/* ── Design Tokens ── */
+:root {
+  --ink: #120f0a;
+  --muted: #5e5548;
+  --paper: #fff7e6;
+  --cream: #ffeec5;
+  --red: #ff4d2e;
+  --blue: #1d4dff;
+  --violet: #7b3dff;
+  --lime: #d8ff38;
+  --rose: #ff8ab3;
+  --charcoal: #17130f;
+
+  --display: 'Clash Display', 'Plus Jakarta Sans', 'Avenir Next', system-ui, sans-serif;
+  --body: 'Plus Jakarta Sans', 'Avenir Next', system-ui, sans-serif;
+
+  --bezier: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --container: min(1180px, calc(100% - 48px));
+
+  --section-pad: clamp(88px, 10vw, 128px);
+}
+
+/* ── Reset ── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--body);
+  background:
+    radial-gradient(circle at 12% 12%, rgba(255, 77, 46, 0.28), transparent 28rem),
+    radial-gradient(circle at 88% 8%, rgba(29, 77, 255, 0.22), transparent 30rem),
+    linear-gradient(135deg, #fff7e6 0%, #ffedbc 54%, #ffd7bd 100%);
+  background-attachment: fixed;
+  color: var(--ink);
+  overflow-x: hidden;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ── Grain overlay ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ── Container ── */
+.container {
+  width: var(--container);
+  margin: 0 auto;
+}
+
+/* ── Scroll reveal ── */
+/* Elements are visible by default. JS adds .js-ready to hide, then .revealed to show. */
+[data-reveal].js-ready {
+  opacity: 0;
+  transform: translateY(54px);
+  filter: blur(10px);
+  transition:
+    opacity 0.9s var(--bezier),
+    transform 0.9s var(--bezier),
+    filter 0.9s var(--bezier);
+  will-change: opacity, transform, filter;
+}
+[data-reveal].js-ready.revealed {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+[data-reveal].revealed-delay-1 { transition-delay: 0.08s; }
+[data-reveal].revealed-delay-2 { transition-delay: 0.16s; }
+[data-reveal].revealed-delay-3 { transition-delay: 0.24s; }
+[data-reveal].revealed-delay-4 { transition-delay: 0.32s; }
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal].js-ready {
+    transition: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* ═══════════════════════════════
+   1. FLOATING NAV
+   ═══════════════════════════════ */
+.nav {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 247, 230, 0.72);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border-radius: 100px;
+  padding: 6px 8px 6px 8px;
+  border: 1px solid rgba(18, 15, 10, 0.06);
+  box-shadow:
+    0 1px 2px rgba(18, 15, 10, 0.04),
+    0 8px 32px rgba(18, 15, 10, 0.06);
+  transition: box-shadow 0.3s var(--bezier);
+}
+
+.nav:hover {
+  box-shadow:
+    0 1px 2px rgba(18, 15, 10, 0.04),
+    0 12px 40px rgba(18, 15, 10, 0.1);
+}
+
+.nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 8px 18px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav__brand-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--violet);
+  flex-shrink: 0;
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  list-style: none;
+}
+
+.nav__link {
+  display: block;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  border-radius: 100px;
+  transition: color 0.2s var(--bezier), background 0.2s var(--bezier);
+  white-space: nowrap;
+}
+
+.nav__link:hover {
+  color: var(--ink);
+  background: rgba(18, 15, 10, 0.05);
+}
+
+.nav__cta {
+  display: block;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--paper);
+  background: var(--violet);
+  border-radius: 100px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.25s var(--bezier), box-shadow 0.25s var(--bezier);
+}
+
+.nav__cta:hover {
+  transform: scale(1.04);
+  box-shadow: 0 4px 16px rgba(123, 61, 255, 0.35);
+}
+
+/* Mobile nav toggle */
+.nav__toggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+/* Mobile overlay */
+.nav__overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 15, 10, 0.96);
+  z-index: 999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  opacity: 0;
+  transition: opacity 0.4s var(--bezier);
+}
+
+.nav__overlay.open {
+  display: flex;
+  opacity: 1;
+}
+
+.nav__overlay-link {
+  font-family: var(--display);
+  font-size: clamp(32px, 8vw, 56px);
+  font-weight: 800;
+  color: var(--paper);
+  text-decoration: none;
+  letter-spacing: -0.04em;
+  transition: color 0.2s var(--bezier);
+}
+
+.nav__overlay-link:hover { color: var(--violet); }
+
+.nav__overlay-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  border-radius: 50%;
+  color: var(--paper);
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .nav__links, .nav__cta { display: none; }
+  .nav__toggle { display: flex; }
+  .nav { top: 12px; padding: 4px 4px 4px 8px; }
+}
+
+/* ═══════════════════════════════
+   2. HERO SECTION
+   ═══════════════════════════════ */
+.hero {
+  padding-top: clamp(120px, 16vw, 180px);
+  padding-bottom: var(--section-pad);
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.hero__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.hero__left {
+  position: relative;
+  z-index: 2;
+}
+
+.hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+
+.hero__eyebrow-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--violet);
+}
+
+.hero__title {
+  font-family: var(--display);
+  font-size: clamp(64px, 9vw, 138px);
+  font-weight: 900;
+  line-height: 0.85;
+  letter-spacing: -0.075em;
+  color: var(--ink);
+  margin-bottom: 28px;
+}
+
+.hero__title-accent {
+  color: var(--violet);
+  position: relative;
+  display: inline-block;
+}
+
+.hero__title-accent::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: var(--lime);
+  opacity: 0.5;
+  border-radius: 4px;
+  z-index: -1;
+}
+
+.hero__sub {
+  font-size: clamp(16px, 1.8vw, 21px);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 42ch;
+  margin-bottom: 40px;
+}
+
+.hero__cta-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 32px 18px 28px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 100px;
+  font-family: var(--body);
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  transition: transform 0.3s var(--bezier), box-shadow 0.3s var(--bezier);
+}
+
+.hero__cta:hover {
+  transform: scale(1.03) translateY(-2px);
+  box-shadow: 0 8px 32px rgba(18, 15, 10, 0.25);
+}
+
+.hero__cta-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--lime);
+  color: var(--ink);
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: 800;
+  transition: transform 0.35s var(--bezier);
+}
+
+.hero__cta:hover .hero__cta-arrow {
+  transform: translate(3px, -3px);
+}
+
+.hero__price-note {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.hero__price-note strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* ── Right side: poster composition ── */
+.hero__right {
+  position: relative;
+  height: clamp(400px, 55vw, 600px);
+  z-index: 1;
+}
+
+.hero__poster {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__poster-main {
+  width: 340px;
+  height: 420px;
+  background: var(--violet);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 20px 60px rgba(123, 61, 255, 0.3);
+  transform: rotate(-2deg);
+  transition: transform 0.5s var(--bezier);
+}
+
+.hero__poster-main:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+.hero__poster-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 16px;
+}
+
+.hero__poster-title {
+  font-family: var(--display);
+  font-size: 56px;
+  font-weight: 900;
+  line-height: 0.88;
+  letter-spacing: -0.06em;
+  color: white;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.hero__poster-sub {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.hero__poster-keycap {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  margin-top: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Floating cards */
+.hero__float {
+  position: absolute;
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(18, 15, 10, 0.12);
+  transition: transform 0.5s var(--bezier);
+}
+
+.hero__float:hover {
+  transform: scale(1.05) !important;
+}
+
+.hero__float-1 {
+  width: 160px;
+  height: 120px;
+  background: var(--red);
+  top: -20px;
+  right: -10px;
+  transform: rotate(6deg);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 18px;
+  z-index: 3;
+}
+
+.hero__float-2 {
+  width: 130px;
+  height: 100px;
+  background: var(--lime);
+  bottom: 40px;
+  left: -30px;
+  transform: rotate(-5deg);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 15px;
+  z-index: 3;
+}
+
+.hero__float-3 {
+  width: 110px;
+  height: 90px;
+  background: var(--cream);
+  top: 20px;
+  left: -40px;
+  transform: rotate(-8deg);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  z-index: 3;
+  border: 1px solid rgba(18, 15, 10, 0.06);
+}
+
+.hero__float-3-big {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 28px;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.hero__float-3-small {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.hero__float-4 {
+  width: 120px;
+  height: 80px;
+  background: var(--blue);
+  bottom: -10px;
+  right: 20px;
+  transform: rotate(4deg);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 14px;
+  z-index: 3;
+}
+
+@media (max-width: 900px) {
+  .hero__grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .hero__right {
+    height: 360px;
+    order: -1;
+  }
+  .hero__poster-main {
+    width: 260px;
+    height: 320px;
+  }
+  .hero__poster-title { font-size: 40px; }
+  .hero__float-1 { width: 120px; height: 90px; font-size: 14px; }
+  .hero__float-2 { width: 100px; height: 75px; font-size: 12px; }
+  .hero__float-3 { width: 90px; height: 70px; }
+  .hero__float-4 { width: 95px; height: 65px; font-size: 12px; }
+}
+
+/* ═══════════════════════════════
+   3. TICKER STRIP
+   ═══════════════════════════════ */
+.ticker {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 18px 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.ticker__track {
+  display: flex;
+  width: max-content;
+  animation: ticker-scroll 30s linear infinite;
+}
+
+.ticker__track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker__item {
+  flex-shrink: 0;
+  padding: 0 40px;
+  font-family: var(--display);
+  font-size: clamp(16px, 2vw, 22px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.ticker__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ticker__dot--violet { background: var(--violet); }
+.ticker__dot--red { background: var(--red); }
+.ticker__dot--lime { background: var(--lime); }
+.ticker__dot--blue { background: var(--blue); }
+.ticker__dot--rose { background: var(--rose); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker__track { animation: none; }
+}
+
+/* ═══════════════════════════════
+   4. WORK / BENTO SECTION
+   ═══════════════════════════════ */
+.work {
+  padding: var(--section-pad) 0;
+}
+
+.work__header {
+  margin-bottom: clamp(40px, 6vw, 72px);
+}
+
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.section-eyebrow__line {
+  width: 32px;
+  height: 2px;
+  background: var(--violet);
+  border-radius: 1px;
+}
+
+.section-title {
+  font-family: var(--display);
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+  color: var(--ink);
+}
+
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: minmax(200px, auto);
+  gap: 16px;
+}
+
+/* Double-bezel card system */
+.bento__card {
+  position: relative;
+  border-radius: 24px;
+  padding: 12px;
+  background: rgba(255, 247, 230, 0.5);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(18, 15, 10, 0.06);
+  transition: transform 0.4s var(--bezier), box-shadow 0.4s var(--bezier);
+  overflow: hidden;
+}
+
+.bento__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(18, 15, 10, 0.1);
+}
+
+.bento__card-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(20px, 3vw, 32px);
+  position: relative;
+  overflow: hidden;
+  min-height: 220px;
+}
+
+.bento__card-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Card color variants */
+.bento--violet .bento__card-inner { background: var(--violet); color: white; }
+.bento--red .bento__card-inner { background: var(--red); color: white; }
+.bento--lime .bento__card-inner { background: var(--lime); color: var(--ink); }
+.bento--blue .bento__card-inner { background: var(--blue); color: white; }
+.bento--ink .bento__card-inner { background: var(--ink); color: var(--paper); }
+.bento--rose .bento__card-inner { background: var(--rose); color: var(--ink); }
+.bento--cream .bento__card-inner { background: var(--cream); color: var(--ink); }
+.bento--charcoal .bento__card-inner { background: var(--charcoal); color: var(--paper); }
+
+.bento__card-tag {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+.bento__card-title {
+  font-family: var(--display);
+  font-size: clamp(20px, 2.5vw, 28px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  margin-bottom: 8px;
+}
+
+.bento__card-desc {
+  font-size: 14px;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+/* ── Grid placement ── */
+.bento--1 { grid-column: 1 / 8; grid-row: 1 / 2; }
+.bento--2 { grid-column: 8 / 13; grid-row: 1 / 2; }
+.bento--3 { grid-column: 1 / 5; grid-row: 2 / 3; }
+.bento--4 { grid-column: 5 / 13; grid-row: 2 / 3; }
+.bento--5 { grid-column: 1 / 6; grid-row: 3 / 4; }
+.bento--6 { grid-column: 6 / 9; grid-row: 3 / 4; }
+.bento--7 { grid-column: 9 / 13; grid-row: 3 / 4; }
+
+@media (max-width: 768px) {
+  .bento {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+  .bento--1, .bento--2, .bento--3, .bento--4,
+  .bento--5, .bento--6, .bento--7 {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+}
+
+/* ═══════════════════════════════
+   5. METHOD SECTION
+   ═══════════════════════════════ */
+.method {
+  padding: var(--section-pad) 0;
+}
+
+.method__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.method__left {
+  position: sticky;
+  top: 120px;
+}
+
+.method__eyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.method__title {
+  font-family: var(--display);
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+  color: var(--ink);
+  margin-bottom: 20px;
+}
+
+.method__text {
+  font-size: clamp(15px, 1.5vw, 18px);
+  line-height: 1.65;
+  color: var(--muted);
+  max-width: 40ch;
+}
+
+.method__right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.method__proof {
+  border-radius: 20px;
+  padding: clamp(24px, 3vw, 36px);
+  position: relative;
+  transition: transform 0.4s var(--bezier);
+}
+
+.method__proof:hover {
+  transform: translateY(-4px) rotate(0deg) !important;
+}
+
+.method__proof--red {
+  background: var(--red);
+  color: white;
+  transform: rotate(-1deg);
+}
+
+.method__proof--violet {
+  background: var(--violet);
+  color: white;
+  transform: rotate(0.5deg);
+}
+
+.method__proof--lime {
+  background: var(--lime);
+  color: var(--ink);
+  transform: rotate(-0.8deg);
+}
+
+.method__proof-number {
+  font-family: var(--display);
+  font-size: clamp(40px, 6vw, 64px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  margin-bottom: 8px;
+}
+
+.method__proof-label {
+  font-size: 15px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.method__proof-desc {
+  font-size: 14px;
+  opacity: 0.7;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .method__grid { grid-template-columns: 1fr; }
+  .method__left { position: static; }
+}
+
+/* ═══════════════════════════════
+   6. PROOF QUOTE
+   ═══════════════════════════════ */
+.quote-section {
+  padding: var(--section-pad) 0;
+}
+
+.quote-section__shell {
+  border-radius: 28px;
+  padding: 12px;
+  background: rgba(255, 247, 230, 0.5);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(18, 15, 10, 0.06);
+}
+
+.quote-section__inner {
+  background: var(--ink);
+  border-radius: 20px;
+  padding: clamp(40px, 6vw, 80px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.quote-section__marks {
+  font-family: var(--display);
+  font-size: 72px;
+  font-weight: 900;
+  line-height: 0.5;
+  color: var(--violet);
+  margin-bottom: 20px;
+}
+
+.quote-section__text {
+  font-family: var(--display);
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.05em;
+  color: var(--paper);
+  max-width: 22ch;
+  margin-bottom: 24px;
+}
+
+.quote-section__author {
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255, 247, 230, 0.5);
+}
+
+.quote-section__author strong {
+  color: var(--paper);
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════
+   7. FINAL CTA
+   ═══════════════════════════════ */
+.cta-final {
+  padding: var(--section-pad) 0;
+}
+
+.cta-final__panel {
+  background:
+    linear-gradient(135deg, var(--red), var(--blue));
+  border-radius: 28px;
+  padding: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-final__panel::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -60px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--lime) 0%, transparent 60%);
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.cta-final__panel::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  left: -40px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, var(--rose) 0%, transparent 60%);
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.cta-final__inner {
+  background: var(--ink);
+  border-radius: 20px;
+  padding: clamp(48px, 8vw, 96px);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-final__eyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--violet);
+  margin-bottom: 16px;
+}
+
+.cta-final__title {
+  font-family: var(--display);
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+  color: var(--paper);
+  max-width: 18ch;
+  margin: 0 auto 24px;
+}
+
+.cta-final__title em {
+  font-style: normal;
+  color: var(--lime);
+}
+
+.cta-final__sub {
+  font-size: clamp(15px, 1.5vw, 18px);
+  line-height: 1.6;
+  color: rgba(255, 247, 230, 0.6);
+  max-width: 40ch;
+  margin: 0 auto 40px;
+}
+
+.cta-final__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.cta-final__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 36px;
+  border-radius: 100px;
+  font-family: var(--body);
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.3s var(--bezier), box-shadow 0.3s var(--bezier);
+}
+
+.cta-final__btn:hover {
+  transform: scale(1.04) translateY(-2px);
+}
+
+.cta-final__btn--primary {
+  background: var(--violet);
+  color: white;
+  box-shadow: 0 8px 32px rgba(123, 61, 255, 0.3);
+}
+
+.cta-final__btn--primary:hover {
+  box-shadow: 0 12px 40px rgba(123, 61, 255, 0.45);
+}
+
+.cta-final__btn--secondary {
+  background: rgba(255, 247, 230, 0.1);
+  color: var(--paper);
+  border: 1px solid rgba(255, 247, 230, 0.15);
+}
+
+.cta-final__btn--secondary:hover {
+  background: rgba(255, 247, 230, 0.15);
+}
+
+/* ═══════════════════════════════
+   FOOTER
+   ═══════════════════════════════ */
+.footer {
+  padding: 48px 0;
+  border-top: 1px solid rgba(18, 15, 10, 0.08);
+}
+
+.footer__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.footer__brand {
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer__brand-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--violet);
+}
+
+.footer__copy {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.footer__links {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+
+.footer__link {
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s var(--bezier);
+}
+
+.footer__link:hover { color: var(--ink); }
+
+@media (max-width: 600px) {
+  .footer__inner { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav__brand">
+    <span class="nav__brand-dot"></span>
+    Register
+  </a>
+  <ul class="nav__links">
+    <li><a href="#work" class="nav__link">Work</a></li>
+    <li><a href="#method" class="nav__link">Method</a></li>
+    <li><a href="#about" class="nav__link">About</a></li>
+  </ul>
+  <a href="#cta" class="nav__cta">Pre-order</a>
+  <button class="nav__toggle" id="navToggle" aria-label="Open menu">☰</button>
+</nav>
+
+<!-- Mobile overlay -->
+<div class="nav__overlay" id="navOverlay">
+  <button class="nav__overlay-close" id="navClose" aria-label="Close menu">✕</button>
+  <a href="#work" class="nav__overlay-link" data-overlay-link>Work</a>
+  <a href="#method" class="nav__overlay-link" data-overlay-link>Method</a>
+  <a href="#about" class="nav__overlay-link" data-overlay-link>About</a>
+  <a href="#cta" class="nav__overlay-link" style="color: var(--violet);" data-overlay-link>Pre-order</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero__grid">
+      <div class="hero__left" data-reveal>
+        <div class="hero__eyebrow">
+          <span class="hero__eyebrow-dot"></span>
+          Mechanical Keyboard
+        </div>
+        <h1 class="hero__title">
+          Type with<br>
+          <span class="hero__title-accent">intent.</span>
+        </h1>
+        <p class="hero__sub">
+          Every keystroke is a decision. Register is the premium mechanical keyboard machined from solid aluminum, tuned for designers who refuse to compromise on feel, sound, or sight.
+        </p>
+        <div class="hero__cta-row">
+          <a href="#cta" class="hero__cta">
+            Pre-order now
+            <span class="hero__cta-arrow">→</span>
+          </a>
+          <span class="hero__price-note"><strong>$349</strong> — Ships Q4 2026</span>
+        </div>
+      </div>
+
+      <div class="hero__right" data-reveal data-reveal class="revealed-delay-2">
+        <div class="hero__poster">
+          <div class="hero__poster-main">
+            <span class="hero__poster-label">Register</span>
+            <span class="hero__poster-title">R1</span>
+            <span class="hero__poster-sub">Precision-machined<br>aluminum chassis</span>
+            <div class="hero__poster-keycap">⌘</div>
+          </div>
+        </div>
+        <div class="hero__float hero__float-1" data-reveal data-reveal class="revealed-delay-1">65%</div>
+        <div class="hero__float hero__float-2" data-reveal data-reveal class="revealed-delay-2">CNC</div>
+        <div class="hero__float hero__float-3" data-reveal data-reveal class="revealed-delay-3">
+          <span class="hero__float-3-big">4mm</span>
+          <span class="hero__float-3-small">Plate</span>
+        </div>
+        <div class="hero__float hero__float-4" data-reveal data-reveal class="revealed-delay-4">VIA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TICKER ═══ -->
+<div class="ticker">
+  <div class="ticker__track" id="tickerTrack">
+    <span class="ticker__item"><span class="ticker__dot ticker__dot--violet"></span> Designed in Brooklyn</span>
+    <span class="ticker__item"><span class="ticker__dot ticker__dot--red"></span> Machined from 6063 aluminum</span>
+    <span class="ticker__item"><span class="ticker__dot ticker__dot--lime"></span> Gasket-mounted plate</span>
+    <span class="ticker__item"><span class="ticker__dot ticker__dot--blue"></span> VIA / QMK compatible</span>
+    <span class="ticker__item"><span class="ticker__dot ticker__dot--rose"></span> Hot-swappable switches</span>
+    <span class="ticker__item"><span class="ticker__dot ticker__dot--violet"></span> Sound-tuned case foam</span>
+    <span class="ticker__item"><span class="ticker__dot ticker__dot--red"></span> PBT double-shot keycaps</span>
+    <span class="ticker__item"><span class="ticker__dot ticker__dot--lime"></span> USB-C + Wireless</span>
+    <!-- Duplicate for seamless loop -->
+    <span class="ticker__item"><span class="ticker__dot ticker__dot--violet"></span> Designed in Brooklyn</span>
+    <span class="ticker__item"><span class="ticker__dot ticker__dot--red"></span> Machined from 6063 aluminum</span>
+    <span class="ticker__item"><span class="ticker__dot ticker__dot--lime"></span> Gasket-mounted plate</span>
+    <span class="ticker__item"><span class="ticker__dot ticker__dot--blue"></span> VIA / QMK compatible</span>
+    <span class="ticker__item"><span class="ticker__dot ticker__dot--rose"></span> Hot-swappable switches</span>
+    <span class="ticker__item"><span class="ticker__dot ticker__dot--violet"></span> Sound-tuned case foam</span>
+    <span class="ticker__item"><span class="ticker__dot ticker__dot--red"></span> PBT double-shot keycaps</span>
+    <span class="ticker__item"><span class="ticker__dot ticker__dot--lime"></span> USB-C + Wireless</span>
+  </div>
+</div>
+
+<!-- ═══ WORK / BENTO ═══ -->
+<section class="work" id="work">
+  <div class="container">
+    <div class="work__header" data-reveal>
+      <div class="section-eyebrow">
+        <span class="section-eyebrow__line"></span>
+        What we built
+      </div>
+      <h2 class="section-title">Every detail<br>earns its place.</h2>
+    </div>
+
+    <div class="bento">
+      <div class="bento__card bento--1 bento--violet" data-reveal>
+        <div class="bento__card-inner">
+          <span class="bento__card-tag">Chassis</span>
+          <h3 class="bento__card-title">Solid aluminum unibody</h3>
+          <p class="bento__card-desc">CNC-machined from a single block of 6063 aluminum. No seams, no flex, no shortcuts. 1.8kg of deliberate mass.</p>
+        </div>
+      </div>
+
+      <div class="bento__card bento--2 bento--charcoal" data-reveal data-reveal class="revealed-delay-1">
+        <div class="bento__card-inner">
+          <span class="bento__card-tag">Sound</span>
+          <h3 class="bento__card-title">Acoustic chamber</h3>
+          <p class="bento__card-desc">Layered silicone dampening with a tuned cavity. Every bottom-out sounds like a typewriter falling in love.</p>
+        </div>
+      </div>
+
+      <div class="bento__card bento--3 bento--ink" data-reveal data-reveal class="revealed-delay-1">
+        <div class="bento__card-inner">
+          <span class="bento__card-tag">Plate</span>
+          <h3 class="bento__card-title">Gasket mount, 4mm thick</h3>
+          <p class="bento__card-desc">FR4 plate suspended on silicone gaskets. Soft, even flex without the mush.</p>
+        </div>
+      </div>
+
+      <div class="bento__card bento--4 bento--red" data-reveal data-reveal class="revealed-delay-2">
+        <div class="bento__card-inner">
+          <span class="bento__card-tag">Switches</span>
+          <h3 class="bento__card-title">Hot-swap everything</h3>
+          <p class="bento__card-desc">5-pin hot-swap sockets. Cherry, Gateron, Kailh — swap in 30 seconds, no soldering iron required.</p>
+        </div>
+      </div>
+
+      <div class="bento__card bento--5 bento--cream" data-reveal data-reveal class="revealed-delay-1">
+        <div class="bento__card-inner">
+          <span class="bento__card-tag">Keycaps</span>
+          <h3 class="bento__card-title">PBT double-shot legends</h3>
+          <p class="bento__card-desc">Cherry profile, 1.5mm thick PBT. Legends never fade. The texture is the kind you keep touching.</p>
+        </div>
+      </div>
+
+      <div class="bento__card bento--6 bento--blue" data-reveal data-reveal class="revealed-delay-2">
+        <div class="bento__card-inner">
+          <span class="bento__card-tag">Firmware</span>
+          <h3 class="bento__card-title">VIA native</h3>
+          <p class="bento__card-desc">Remap every key in real-time. No drivers. No restarts. Your layout, your rules.</p>
+        </div>
+      </div>
+
+      <div class="bento__card bento--7 bento--lime" data-reveal data-reveal class="revealed-delay-3">
+        <div class="bento__card-inner">
+          <span class="bento__card-tag">Connectivity</span>
+          <h3 class="bento__card-title">Dual mode</h3>
+          <p class="bento__card-desc">USB-C wired with 1000Hz polling. Bluetooth 5.3 with 3-device switching. Choose your weapon.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ METHOD ═══ -->
+<section class="method" id="method">
+  <div class="container">
+    <div class="method__grid">
+      <div class="method__left" data-reveal>
+        <div class="method__eyebrow">Our method</div>
+        <h2 class="method__title">We don't design keyboards.<br>We design <em style="font-style:italic;color:var(--violet)">rituals.</em></h2>
+        <p class="method__text">
+          Register started with a frustration: every "premium" keyboard on the market felt like a copy of a copy. Same plastic shells, same hollow thud, same forgettable experience. We asked one question — what if a keyboard could feel like a handshake? Firm. Considered. Memorable.
+        </p>
+      </div>
+
+      <div class="method__right">
+        <div class="method__proof method__proof--red" data-reveal data-reveal class="revealed-delay-1">
+          <div class="method__proof-number">18</div>
+          <div class="method__proof-label">Months of prototyping</div>
+          <div class="method__proof-desc">From clay models to CNC first articles. We broke 12 prototypes before we built one worth keeping.</div>
+        </div>
+
+        <div class="method__proof method__proof--violet" data-reveal data-reveal class="revealed-delay-2">
+          <div class="method__proof-number">47</div>
+          <div class="method__proof-label">Acoustic tests per revision</div>
+          <div class="method__proof-desc">We measure frequency response, resonance decay, and peak amplitude. Yes, we're that serious about sound.</div>
+        </div>
+
+        <div class="method__proof method__proof--lime" data-reveal data-reveal class="revealed-delay-3">
+          <div class="method__proof-number">1</div>
+          <div class="method__proof-label">Unibody. Zero compromise.</div>
+          <div class="method__proof-desc">No screws on the top case. No visible seams. One block of aluminum, one vision, one standard.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROOF QUOTE ═══ -->
+<section class="quote-section">
+  <div class="container">
+    <div class="quote-section__shell" data-reveal>
+      <div class="quote-section__inner">
+        <div class="quote-section__marks">"</div>
+        <p class="quote-section__text">The best keyboard is the one that makes you want to type more.</p>
+        <span class="quote-section__author">— <strong>Register Design Team</strong>, from the workshop</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FINAL CTA ═══ -->
+<section class="cta-final" id="cta">
+  <div class="container">
+    <div class="cta-final__panel" data-reveal>
+      <div class="cta-final__inner">
+        <div class="cta-final__eyebrow">Limited first run</div>
+        <h2 class="cta-final__title">Make the next keystroke <em>feel</em> something.</h2>
+        <p class="cta-final__sub">
+          500 units. Individually numbered. Ships Q4 2026. Once they're gone, the price goes up and the wait gets longer.
+        </p>
+        <div class="cta-final__actions">
+          <a href="#" class="cta-final__btn cta-final__btn--primary" onclick="alert('You are on the list. We will email you when pre-orders open.'); return false;">
+            Pre-order — $349
+          </a>
+          <a href="#work" class="cta-final__btn cta-final__btn--secondary">
+            See the details
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <span class="footer__brand-dot"></span>
+        Register
+      </div>
+      <p class="footer__copy">© 2026 Register Keyboard Co. Brooklyn, NY.</p>
+      <ul class="footer__links">
+        <li><a href="#" class="footer__link">Privacy</a></li>
+        <li><a href="#" class="footer__link">Terms</a></li>
+        <li><a href="#" class="footer__link">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  // ═══ Scroll Reveal ═══
+  var revealEls = document.querySelectorAll('[data-reveal]');
+  var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Mark elements as JS-ready (hides them via CSS)
+  for (var i = 0; i < revealEls.length; i++) {
+    revealEls[i].classList.add('js-ready');
+  }
+
+  if (prefersReducedMotion) {
+    for (var j = 0; j < revealEls.length; j++) {
+      revealEls[j].classList.add('revealed');
+    }
+    return;
+  }
+
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      for (var k = 0; k < entries.length; k++) {
+        if (entries[k].isIntersecting) {
+          var el = entries[k].target;
+          el.classList.add('revealed');
+          observer.unobserve(el);
+        }
+      }
+    }, {
+      threshold: 0.05,
+      rootMargin: '0px 0px -20px 0px'
+    });
+
+    for (var m = 0; m < revealEls.length; m++) {
+      observer.observe(revealEls[m]);
+    }
+  } else {
+    for (var n = 0; n < revealEls.length; n++) {
+      revealEls[n].classList.add('revealed');
+    }
+  }
+
+  // ═══ Mobile Nav ═══
+  var toggle = document.getElementById('navToggle');
+  var overlay = document.getElementById('navOverlay');
+  var close = document.getElementById('navClose');
+  var overlayLinks = document.querySelectorAll('[data-overlay-link]');
+
+  if (toggle && overlay) {
+    toggle.addEventListener('click', function() {
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+
+    close.addEventListener('click', function() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+
+    for (var m = 0; m < overlayLinks.length; m++) {
+      overlayLinks[m].addEventListener('click', function() {
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    }
+  }
+
+  // ═══ Smooth anchor scroll ═══
+  var anchors = document.querySelectorAll('a[href^="#"]');
+  for (var n = 0; n < anchors.length; n++) {
+    anchors[n].addEventListener('click', function(e) {
+      var target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+
+  // ═══ Parallax floating cards on mouse ═══
+  var heroRight = document.querySelector('.hero__right');
+  if (heroRight && !prefersReducedMotion) {
+    var floats = heroRight.querySelectorAll('.hero__float');
+    document.addEventListener('mousemove', function(e) {
+      var rect = heroRight.getBoundingClientRect();
+      var cx = rect.left + rect.width / 2;
+      var cy = rect.top + rect.height / 2;
+      var dx = (e.clientX - cx) / rect.width;
+      var dy = (e.clientY - cy) / rect.height;
+
+      for (var p = 0; p < floats.length; p++) {
+        var factor = (p + 1) * 8;
+        var tx = dx * factor;
+        var ty = dy * factor;
+        floats[p].style.transform =
+          floats[p].style.transform.replace(/translate\([^)]+\)/, '') +
+          ' translate(' + tx + 'px, ' + ty + 'px)';
+      }
+    });
+  }
+
+})();
+</script>
+
+</body>
+</html>

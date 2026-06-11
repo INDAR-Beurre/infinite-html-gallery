@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CRYO-MAG VALVE INDEX / CMV-17B</title>
+  <style>
+    :root {
+      --paper: #e9eef2;
+      --paper-2: #dce6ee;
+      --ink: #07131d;
+      --line: #143d64;
+      --line-soft: rgba(20, 61, 100, 0.38);
+      --blue: #005ca8;
+      --orange: #ff5b00;
+      --yellow: #f6ff00;
+      --green: #1aa84b;
+      --muted: #577083;
+      --cell: 1px solid var(--line);
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      --sans: Inter, Roboto, Arial, Helvetica, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      background:
+        linear-gradient(var(--line-soft) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line-soft) 1px, transparent 1px),
+        var(--paper);
+      background-size: 24px 24px;
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 12px 12px, rgba(7, 19, 29, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 91, 0, 0.12) 0 2px, transparent 2px 100%);
+      background-size: 8px 8px, 96px 100%;
+      letter-spacing: 0.02em;
+    }
+
+    button,
+    input {
+      font: inherit;
+      color: inherit;
+      border-radius: 0;
+    }
+
+    button {
+      background: var(--paper-2);
+      border: var(--cell);
+      cursor: pointer;
+      min-height: 28px;
+      text-transform: uppercase;
+    }
+
+    button[aria-pressed="true"] {
+      background: var(--orange);
+      color: #050505;
+      font-weight: 800;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    th,
+    td {
+      border: var(--cell);
+      padding: 5px 6px;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+
+    th {
+      background: var(--line);
+      color: var(--paper);
+      font-size: 10px;
+      text-align: left;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    td {
+      background: rgba(233, 238, 242, 0.86);
+      font-size: 11px;
+      line-height: 1.25;
+    }
+
+    dl {
+      display: grid;
+      grid-template-columns: minmax(92px, 0.8fr) 1.2fr;
+      margin: 0;
+    }
+
+    dt,
+    dd {
+      border-bottom: var(--cell);
+      margin: 0;
+      padding: 6px;
+      min-height: 28px;
+    }
+
+    dt {
+      color: var(--muted);
+      text-transform: uppercase;
+      border-right: var(--cell);
+    }
+
+    dd {
+      font-weight: 700;
+    }
+
+    .sheet {
+      width: min(1680px, calc(100vw - 18px));
+      margin: 9px auto;
+      border: 2px solid var(--line);
+      background: var(--paper);
+      min-height: calc(100vh - 18px);
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+    }
+
+    .mast {
+      display: grid;
+      grid-template-columns: 1.2fr 2fr 1.1fr;
+      border-bottom: 2px solid var(--line);
+    }
+
+    .mast > * {
+      border-right: var(--cell);
+      min-width: 0;
+    }
+
+    .mast > *:last-child { border-right: 0; }
+
+    .stamp {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 122px;
+    }
+
+    .stamp small,
+    .panel-label {
+      display: block;
+      padding: 5px 7px;
+      background: var(--line);
+      color: var(--paper);
+      font-size: 10px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .stamp strong {
+      align-self: center;
+      padding: 10px;
+      font-family: var(--sans);
+      font-size: clamp(28px, 4.6vw, 68px);
+      line-height: 0.86;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      font-weight: 950;
+    }
+
+    .stamp code {
+      display: block;
+      padding: 6px 8px;
+      border-top: var(--cell);
+      color: var(--blue);
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .titleblock {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-auto-rows: minmax(34px, auto);
+    }
+
+    .titleblock div {
+      border-right: var(--cell);
+      border-bottom: var(--cell);
+      padding: 6px;
+      min-width: 0;
+    }
+
+    .titleblock div:nth-child(6n) { border-right: 0; }
+    .titleblock div:nth-last-child(-n+6) { border-bottom: 0; }
+    .span2 { grid-column: span 2; }
+    .span3 { grid-column: span 3; }
+
+    .k {
+      display: block;
+      color: var(--muted);
+      font-size: 9px;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .v {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .notice {
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .notice p {
+      margin: 0;
+      padding: 8px;
+      font-size: 11px;
+      line-height: 1.35;
+      text-transform: uppercase;
+    }
+
+    .notice mark {
+      background: var(--yellow);
+      color: var(--ink);
+      padding: 1px 2px;
+      font-weight: 900;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 92px repeat(4, minmax(96px, 1fr)) 1.4fr;
+      border-bottom: 2px solid var(--line);
+    }
+
+    .toolbar > * {
+      border-right: var(--cell);
+      padding: 6px;
+      min-width: 0;
+    }
+
+    .toolbar > *:last-child { border-right: 0; }
+
+    .toolbar .readout {
+      background: var(--ink);
+      color: #dff5e6;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .pulse {
+      width: 9px;
+      height: 9px;
+      display: inline-block;
+      background: var(--green);
+      animation: blink 1.2s steps(2, start) infinite;
+    }
+
+    @keyframes blink { 50% { opacity: 0.12; } }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1.2fr 0.9fr;
+      grid-template-rows: auto minmax(340px, 1fr) auto;
+      min-height: 0;
+    }
+
+    .box {
+      border-right: var(--cell);
+      border-bottom: var(--cell);
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .box:nth-child(3n) { border-right: 0; }
+
+    .box.full { grid-column: 1 / -1; border-right: 0; }
+
+    .box-pad { padding: 8px; }
+
+    .schematic {
+      min-height: 390px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    .diagram {
+      position: relative;
+      min-height: 320px;
+      background:
+        linear-gradient(0deg, transparent 23px, rgba(20, 61, 100, 0.36) 24px),
+        linear-gradient(90deg, transparent 23px, rgba(20, 61, 100, 0.36) 24px);
+      background-size: 24px 24px;
+      overflow: hidden;
+    }
+
+    .core,
+    .ring,
+    .coil,
+    .sensor,
+    .axis {
+      position: absolute;
+      border: 2px solid var(--line);
+      background: rgba(233, 238, 242, 0.72);
+    }
+
+    .core {
+      width: 44%;
+      height: 28%;
+      left: 28%;
+      top: 35%;
+      display: grid;
+      place-items: center;
+      font-family: var(--sans);
+      font-size: clamp(18px, 3.8vw, 54px);
+      font-weight: 950;
+      letter-spacing: 0;
+      color: var(--line);
+    }
+
+    .ring {
+      width: 62%;
+      height: 54%;
+      left: 19%;
+      top: 21%;
+      background: transparent;
+    }
+
+    .coil {
+      width: 12%;
+      height: 16%;
+      background:
+        repeating-linear-gradient(90deg, var(--line) 0 2px, transparent 2px 7px),
+        var(--paper-2);
+    }
+
+    .c1 { left: 8%; top: 18%; }
+    .c2 { right: 8%; top: 18%; }
+    .c3 { left: 8%; bottom: 18%; }
+    .c4 { right: 8%; bottom: 18%; }
+
+    .sensor {
+      width: 9px;
+      height: 9px;
+      background: var(--orange);
+    }
+
+    .s1 { left: 50%; top: 12%; }
+    .s2 { left: 50%; bottom: 12%; }
+    .s3 { left: 13%; top: 50%; }
+    .s4 { right: 13%; top: 50%; }
+
+    .axis {
+      border: 0;
+      background: var(--line);
+    }
+
+    .xaxis { height: 2px; width: 100%; left: 0; top: 50%; }
+    .yaxis { width: 2px; height: 100%; left: 50%; top: 0; }
+
+    .tag {
+      position: absolute;
+      border: var(--cell);
+      background: var(--paper);
+      padding: 3px 5px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .t1 { left: 3%; top: 4%; }
+    .t2 { right: 3%; top: 4%; }
+    .t3 { left: 3%; bottom: 4%; }
+    .t4 { right: 3%; bottom: 4%; }
+
+    .section-index {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: var(--cell);
+    }
+
+    .section-index span {
+      padding: 6px;
+      border-right: var(--cell);
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    .section-index span:last-child { border-right: 0; }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      border-top: var(--cell);
+      border-left: var(--cell);
+    }
+
+    .matrix b {
+      min-height: 32px;
+      border-right: var(--cell);
+      border-bottom: var(--cell);
+      display: grid;
+      place-items: center;
+      font-size: 10px;
+      background: rgba(220, 230, 238, 0.72);
+    }
+
+    .matrix b.hot { background: var(--orange); color: #050505; }
+    .matrix b.warn { background: var(--yellow); color: #050505; }
+    .matrix b.lock { background: var(--line); color: var(--paper); }
+
+    .barcode {
+      min-height: 52px;
+      background:
+        repeating-linear-gradient(90deg,
+          var(--ink) 0 2px,
+          transparent 2px 5px,
+          var(--ink) 5px 6px,
+          transparent 6px 13px,
+          var(--ink) 13px 17px,
+          transparent 17px 22px);
+      border: var(--cell);
+      margin: 8px;
+    }
+
+    .strip {
+      background:
+        repeating-linear-gradient(135deg, var(--orange) 0 10px, var(--ink) 10px 20px);
+      color: var(--paper);
+      font-weight: 900;
+      padding: 6px 8px;
+      text-transform: uppercase;
+      border-top: var(--cell);
+      border-bottom: var(--cell);
+    }
+
+    .log {
+      max-height: 356px;
+      overflow: auto;
+      border-top: var(--cell);
+    }
+
+    .log ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: log;
+    }
+
+    .log li {
+      counter-increment: log;
+      display: grid;
+      grid-template-columns: 44px 86px 1fr 68px;
+      border-bottom: var(--cell);
+      min-height: 30px;
+    }
+
+    .log li::before {
+      content: counter(log, decimal-leading-zero);
+      border-right: var(--cell);
+      padding: 6px;
+      color: var(--muted);
+    }
+
+    .log time,
+    .log samp,
+    .log data {
+      padding: 6px;
+      border-right: var(--cell);
+    }
+
+    .log data { border-right: 0; font-weight: 800; }
+
+    .critical td:first-child,
+    .critical data { background: var(--orange); color: #050505; font-weight: 900; }
+
+    .nominal { color: var(--green); }
+    .warning { color: #9a3600; font-weight: 900; }
+
+    .filter-hide { display: none !important; }
+
+    .foot {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr 0.7fr;
+      border-top: 2px solid var(--line);
+    }
+
+    .foot > * {
+      border-right: var(--cell);
+      padding: 7px;
+      min-width: 0;
+    }
+
+    .foot > *:last-child { border-right: 0; }
+
+    .seal {
+      font-family: var(--sans);
+      font-weight: 950;
+      font-size: clamp(22px, 4vw, 58px);
+      line-height: 0.9;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .micro {
+      font-size: 10px;
+      line-height: 1.35;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1180px) {
+      .mast,
+      .main-grid,
+      .foot {
+        grid-template-columns: 1fr;
+      }
+
+      .mast > *,
+      .box,
+      .foot > * {
+        border-right: 0;
+      }
+
+      .box:nth-child(3n) { border-right: 0; }
+
+      .titleblock {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .titleblock div:nth-child(6n) { border-right: var(--cell); }
+      .titleblock div:nth-child(3n) { border-right: 0; }
+      .titleblock div:nth-last-child(-n+6) { border-bottom: var(--cell); }
+      .titleblock div:nth-last-child(-n+3) { border-bottom: 0; }
+    }
+
+    @media (max-width: 760px) {
+      html { font-size: 11px; }
+      .sheet { width: calc(100vw - 8px); margin: 4px auto; }
+      .toolbar { grid-template-columns: 1fr 1fr; }
+      .toolbar > *:nth-child(2n) { border-right: 0; }
+      .toolbar .readout { grid-column: 1 / -1; border-top: var(--cell); }
+      .titleblock { grid-template-columns: 1fr 1fr; }
+      .titleblock div,
+      .titleblock div:nth-child(3n),
+      .titleblock div:nth-child(6n) { border-right: var(--cell); }
+      .titleblock div:nth-child(2n) { border-right: 0; }
+      .titleblock div:nth-last-child(-n+3) { border-bottom: var(--cell); }
+      .titleblock div:nth-last-child(-n+2) { border-bottom: 0; }
+      .span2,
+      .span3 { grid-column: span 2; }
+      .section-index { grid-template-columns: 1fr 1fr; }
+      .section-index span:nth-child(2n) { border-right: 0; }
+      .log li { grid-template-columns: 36px 74px 1fr 56px; }
+      th,
+      td { padding: 4px; font-size: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="sheet" aria-labelledby="document-title">
+    <header class="mast">
+      <section class="stamp" aria-label="Archive identity">
+        <small>SEC. 00 / REFRIGERANT PERMISSIONED ASSEMBLY</small>
+        <strong id="document-title">CMV-17B<br>INDEX</strong>
+        <code>ARCHIVE://NQ-7/VALVE/LN2-HELIUM/REV.06</code>
+      </section>
+
+      <section class="titleblock" aria-label="Document metadata">
+        <div class="span2"><span class="k">Instrument Class</span><span class="v">Cryogenic Maglev Isolation Valve</span></div>
+        <div><span class="k">Plant</span><span class="v">AURIGA-NORTH</span></div>
+        <div><span class="k">Rack</span><span class="v">QF-44</span></div>
+        <div><span class="k">Bay</span><span class="v">07</span></div>
+        <div><span class="k">Pressure Spec</span><span class="v">18.40 MPA</span></div>
+        <div><span class="k">Coolant</span><span class="v">LHE/LN2 MIX</span></div>
+        <div><span class="k">Rotor Gap</span><span class="v">0.083 MM</span></div>
+        <div><span class="k">Flux Bias</span><span class="v">4.19 T</span></div>
+        <div><span class="k">Bearing Type</span><span class="v">SC-MAG Ø38</span></div>
+        <div><span class="k">Seal Alloy</span><span class="v">IN-718 / AG</span></div>
+        <div class="span3"><span class="k">Retention Notice</span><span class="v">FOR INTERNAL FAILURE RECONSTRUCTION ONLY; DO NOT USE AS INSTALLATION CLEARANCE.</span></div>
+        <div class="span3"><span class="k">Last Cold Pull</span><span class="v"><time datetime="2083-11-19T03:14:22Z">2083-11-19 03:14:22Z</time> / OPERATOR K-204</span></div>
+      </section>
+
+      <aside class="notice" aria-label="Warning notice">
+        <span class="panel-label">[ CONTROL EXCEPTION ]</span>
+        <p>Valve body exhibits <mark>asymmetric flux creep</mark> after run cycle 17,991. Local actuation is prohibited below 42 kelvin unless eddy brake shunt is hard-bonded at terminal J9. Three surviving wafer sensors report phase inversion.</p>
+      </aside>
+    </header>
+
+    <nav class="toolbar" aria-label="Archive filters">
+      <div class="micro">FILTER<br>EVENT SET</div>
+      <button type="button" data-filter="all" aria-pressed="true">ALL RECORDS</button>
+      <button type="button" data-filter="critical" aria-pressed="false">CRITICAL</button>
+      <button type="button" data-filter="thermal" aria-pressed="false">THERMAL</button>
+      <button type="button" data-filter="coil" aria-pressed="false">COIL PATH</button>
+      <div class="readout"><span class="pulse" aria-hidden="true"></span><output id="readout">SCAN READY / 18 ROWS VISIBLE / CHECKSUM 4F-19-A0</output></div>
+    </nav>
+
+    <section class="main-grid">
+      <article class="box schematic" aria-label="Figure 4A valve cross section">
+        <span class="panel-label">FIG. 4A / SUPERCONDUCTING VALVE BODY CROSS-SECTION</span>
+        <div class="diagram" role="img" aria-label="Blueprint-style schematic of CMV-17B valve core, field coils, sensors, and axis references">
+          <i class="axis xaxis"></i>
+          <i class="axis yaxis"></i>
+          <i class="ring"></i>
+          <i class="coil c1"></i>
+          <i class="coil c2"></i>
+          <i class="coil c3"></i>
+          <i class="coil c4"></i>
+          <i class="sensor s1"></i>
+          <i class="sensor s2"></i>
+          <i class="sensor s3"></i>
+          <i class="sensor s4"></i>
+          <b class="core">Ø38<br>MAG</b>
+          <span class="tag t1">C1: 91.2A</span>
+          <span class="tag t2">C2: 88.7A</span>
+          <span class="tag t3">S-WAFER NULL</span>
+          <span class="tag t4">J9 SHUNT REQ.</span>
+        </div>
+        <div class="section-index">
+          <span>FIG REF: CMV17B-XRAY-004A</span>
+          <span>PLANE: XZ / 0.5MM SLICE</span>
+          <span>COIL PHASE: 270 DEG</span>
+          <span>GRID: 24MM NOMINAL</span>
+        </div>
+      </article>
+
+      <article class="box" aria-label="Valve register">
+        <span class="panel-label">SEC. 01 / COMPONENT REGISTER</span>
+        <table>
+          <thead>
+            <tr>
+              <th>IDX</th>
+              <th>Part Identifier</th>
+              <th>Location</th>
+              <th>Measured State</th>
+              <th>Limit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>01</td><td>CMV17B-ROTOR-CER-38</td><td>CORE Ø</td><td>0.083 MM GAP</td><td>0.090 MAX</td></tr>
+            <tr class="critical"><td>02</td><td>WAFER-SENS-S3</td><td>SOUTH QUAD</td><td>NO RETURN PULSE</td><td>2.0V MIN</td></tr>
+            <tr><td>03</td><td>COIL-HELM-C1</td><td>NORTH-WEST</td><td>91.2 AMP HOLD</td><td>96.0 MAX</td></tr>
+            <tr><td>04</td><td>COIL-HELM-C2</td><td>NORTH-EAST</td><td>88.7 AMP HOLD</td><td>96.0 MAX</td></tr>
+            <tr class="critical"><td>05</td><td>EDDY-BRAKE-J9</td><td>AFT BUS</td><td>OPEN SHUNT</td><td>CLOSED</td></tr>
+            <tr><td>06</td><td>SEAL-IN718-AG-R2</td><td>OUTER LIP</td><td>14 MICRON SCAR</td><td>22 MAX</td></tr>
+            <tr><td>07</td><td>HEATER-TRACE-5</td><td>STEM</td><td>0.7 W/M</td><td>1.2 MAX</td></tr>
+            <tr><td>08</td><td>THERMISTOR-TK9</td><td>INLET</td><td>39.8 K</td><td>42.0 MIN</td></tr>
+          </tbody>
+        </table>
+        <div class="barcode" aria-hidden="true"></div>
+      </article>
+
+      <aside class="box" aria-label="Calibration definition list">
+        <span class="panel-label">SEC. 02 / COLD-STATE PARAMETERS</span>
+        <dl>
+          <dt>Archive ID</dt><dd>CMV-17B/NQ7/QF44/0718</dd>
+          <dt>Datum</dt><dd>HALL ARRAY H-04</dd>
+          <dt>Thermal Floor</dt><dd><data value="38.7">38.7 K</data></dd>
+          <dt>Rotor Drag</dt><dd><data value="0.0041">0.0041 N·M</data></dd>
+          <dt>Leak Rate</dt><dd><data value="0.0008">8.0E-4 SCCM</data></dd>
+          <dt>Flux Creep</dt><dd><data value="13.8">13.8 MTPH</data></dd>
+          <dt>Spool Offset</dt><dd><data value="-0.32">-0.32 DEG</data></dd>
+          <dt>Command Bus</dt><dd>TTL-B / HARDLINE ONLY</dd>
+          <dt>Permitted Act</dt><dd>NONE BELOW 42 K</dd>
+        </dl>
+        <div class="strip">FIELD NOTE: WARM-UP MUST NOT EXCEED 2.4 K/MIN ACROSS STEM NODE TK9.</div>
+      </aside>
+
+      <article class="box" aria-label="Flux cell matrix">
+        <span class="panel-label">SEC. 03 / HALL-CELL FLUX MATRIX</span>
+        <div class="box-pad micro">VALUES ARE NORMALIZED AGAINST H-04 DATUM. ORANGE CELLS EXCEED PHASE-DRIFT TOLERANCE; YELLOW CELLS REQUIRE MANUAL RE-SAMPLE AFTER WARM-UP.</div>
+        <div class="matrix" aria-label="Flux matrix cells">
+          <b>H01<br>0.91</b><b>H02<br>0.94</b><b>H03<br>0.98</b><b class="lock">H04<br>1.00</b><b>H05<br>1.02</b><b>H06<br>1.04</b><b class="warn">H07<br>1.11</b><b>H08<br>1.03</b>
+          <b>H09<br>0.89</b><b>H10<br>0.92</b><b>H11<br>0.95</b><b>H12<br>0.99</b><b class="warn">H13<br>1.12</b><b>H14<br>1.06</b><b>H15<br>1.01</b><b>H16<br>0.97</b>
+          <b>H17<br>0.88</b><b class="hot">H18<br>1.31</b><b>H19<br>1.08</b><b>H20<br>0.96</b><b>H21<br>0.93</b><b>H22<br>0.91</b><b>H23<br>0.90</b><b>H24<br>0.92</b>
+          <b>H25<br>0.86</b><b class="hot">H26<br>1.29</b><b class="warn">H27<br>1.14</b><b>H28<br>1.00</b><b>H29<br>0.99</b><b>H30<br>0.96</b><b>H31<br>0.94</b><b>H32<br>0.90</b>
+        </div>
+      </article>
+
+      <article class="box" aria-label="Fault chronology">
+        <span class="panel-label">SEC. 04 / FAULT CHRONOLOGY</span>
+        <div class="log" id="eventLog">
+          <ol>
+            <li data-type="thermal"><time>03:14:22</time><samp>TK9 DESCENDED TO 39.8 K DURING HOLD INTERVAL.</samp><data>THERMAL</data></li>
+            <li data-type="coil"><time>03:14:31</time><samp>C1 CURRENT EXCEEDED C2 BY 3.5 AMP FOR 44 SECONDS.</samp><data>COIL</data></li>
+            <li data-type="critical"><time>03:14:52</time><samp>S3 WAFER RETURN PULSE ABSENT ON THREE CONSECUTIVE SAMPLES.</samp><data>CRITICAL</data></li>
+            <li data-type="thermal"><time>03:15:18</time><samp>STEM HEATER TRACE THROTTLED TO 0.7 W/M BY LEGACY LOOP.</samp><data>THERMAL</data></li>
+            <li data-type="coil"><time>03:15:41</time><samp>H18 AND H26 REPORTED FLUX EXCURSION ABOVE 1.28 NORMAL.</samp><data>COIL</data></li>
+            <li data-type="critical"><time>03:16:03</time><samp>J9 EDDY-BRAKE SHUNT VERIFIED OPEN UNDER COLD LOAD.</samp><data>CRITICAL</data></li>
+            <li data-type="thermal"><time>03:16:44</time><samp>LHE MIX VALVE OSCILLATION DETECTED AT 6.2 HZ.</samp><data>THERMAL</data></li>
+            <li data-type="coil"><time>03:17:10</time><samp>PHASE INVERSION SUSPECTED BETWEEN C3 COMMAND AND HALL ARRAY.</samp><data>COIL</data></li>
+            <li data-type="critical"><time>03:18:25</time><samp>REMOTE ACTUATION LOCKOUT WRITTEN TO BUS TTL-B.</samp><data>CRITICAL</data></li>
+          </ol>
+        </div>
+      </article>
+
+      <article class="box" aria-label="Service action table">
+        <span class="panel-label">SEC. 05 / REQUIRED SERVICE ACTIONS</span>
+        <table>
+          <thead>
+            <tr>
+              <th>SEQ</th>
+              <th>Action</th>
+              <th>Prerequisite</th>
+              <th>Verification</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>A1</td><td>WARM STEM NODE TK9 TO 44 K</td><td>PRESSURE &lt; 2.1 MPA</td><td>RATE LOG &lt; 2.4 K/MIN</td></tr>
+            <tr><td>A2</td><td>HARD-BOND EDDY SHUNT J9</td><td>BUS TTL-B ISOLATED</td><td>CONTINUITY &lt; 0.04 OHM</td></tr>
+            <tr><td>A3</td><td>RE-SAMPLE H17-H28</td><td>COIL HOLD 72 AMP</td><td>DEVIANCE &lt; 1.08 NORMAL</td></tr>
+            <tr><td>A4</td><td>REPLACE WAFER-SENS-S3</td><td>ROTOR PINNED</td><td>RETURN PULSE &gt; 2.0 V</td></tr>
+            <tr><td>A5</td><td>RELEASE ACTUATION LOCKOUT</td><td>DUAL SIGNATURE</td><td>DRY CYCLE 004 PASS</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article class="box full" aria-label="Recovered telemetry packet table">
+        <span class="panel-label">SEC. 06 / RECOVERED TELEMETRY PACKETS</span>
+        <table>
+          <thead>
+            <tr>
+              <th>Packet</th>
+              <th>Source</th>
+              <th>Hex Prefix</th>
+              <th>Decoded Field</th>
+              <th>Status</th>
+              <th>Archive Remark</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-type="thermal"><td>PK-4481</td><td>TK9</td><td>8F 00 2D 91</td><td>STEM_TEMP=39.8K</td><td class="warning">LOW</td><td>THERMAL FLOOR BREACHED FOR 17.2 SECONDS.</td></tr>
+            <tr data-type="coil"><td>PK-4482</td><td>C1 BUS</td><td>8F 00 31 A2</td><td>COIL_AMP=91.2</td><td class="nominal">LIVE</td><td>CURRENT WITHIN HARD LIMIT BUT OUTSIDE MATCHED PAIR TOLERANCE.</td></tr>
+            <tr data-type="coil"><td>PK-4483</td><td>H18</td><td>8F 00 44 B8</td><td>FLUX_NORM=1.31</td><td class="warning">DRIFT</td><td>LIKELY ROTOR SIDELOAD; COMPARE TO H26.</td></tr>
+            <tr data-type="critical" class="critical"><td>PK-4484</td><td>J9</td><td>8F FF 00 00</td><td>SHUNT_STATE=OPEN</td><td>FAIL</td><td>CONTROL EXCEPTION GENERATED; LOCAL COMMANDS BLOCKED.</td></tr>
+            <tr data-type="thermal"><td>PK-4485</td><td>LHE MIX</td><td>8F 00 0C E1</td><td>VALVE_OSC=6.2HZ</td><td class="warning">UNSTABLE</td><td>OSCILLATION OCCURRED AFTER TK9 DESCENT.</td></tr>
+            <tr data-type="critical" class="critical"><td>PK-4486</td><td>S3</td><td>8F 00 00 03</td><td>PULSE_RETURN=NULL</td><td>FAIL</td><td>WAFER SENSOR SHOULD BE TREATED AS NON-RECOVERABLE.</td></tr>
+          </tbody>
+        </table>
+      </article>
+    </section>
+
+    <footer class="foot">
+      <div class="seal">DO NOT<br>ACTUATE</div>
+      <p class="micro">DOCUMENT CMV-17B-ARC-06 IS A FAILURE RECONSTRUCTION INDEX. IT IS NOT A LIVE OPERATING PROCEDURE. ALL VALUES ARE COLD-PULL SNAPSHOTS RECORDED AFTER LOCKOUT WRITE TTL-B/4481.</p>
+      <p class="micro">CHECKSUM: 4F-19-A0<br>GRID: BLUEPRINT-24<br>PRINT SCALE: 1:14<br>RETENTION: 90 YEARS<br>AUTH: MATERIALS CELL QF</p>
+    </footer>
+  </main>
+
+  <script>
+    const buttons = Array.from(document.querySelectorAll("[data-filter]"));
+    const readout = document.getElementById("readout");
+    const eventRows = Array.from(document.querySelectorAll("[data-type]"));
+
+    function applyFilter(filter) {
+      let visible = 0;
+      eventRows.forEach((row) => {
+        const show = filter === "all" || row.dataset.type === filter;
+        row.classList.toggle("filter-hide", !show);
+        if (show) visible += 1;
+      });
+
+      buttons.forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.filter === filter));
+      });
+
+      readout.textContent = `SCAN READY / ${String(visible).padStart(2, "0")} ROWS VISIBLE / FILTER ${filter.toUpperCase()} / CHECKSUM 4F-19-A0`;
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => applyFilter(button.dataset.filter));
+    });
+  </script>
+</body>
+</html>

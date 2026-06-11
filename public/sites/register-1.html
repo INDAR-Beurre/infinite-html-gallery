@@ -1,0 +1,1845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register — Websites that feel impossible to ignore, effortless to trust.</title>
+  <meta name="description" content="Register is a color-forward landing experience for design-conscious builders. Editorial typography, saturated color blocks, and premium physical motion.">
+  
+  <!-- Fontshare Clash Display & Google Fonts Plus Jakarta Sans -->
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ----------------------------------------------------
+       1. Core Design Tokens & Variables
+    ---------------------------------------------------- */
+    :root {
+      --ink: #120f0a;
+      --muted: #5e5548;
+      --paper: #fff7e6;
+      --cream: #ffeec5;
+      --red: #ff4d2e;
+      --blue: #1d4dff;
+      --violet: #7b3dff;
+      --lime: #d8ff38;
+      --rose: #ff8ab3;
+      --charcoal: #17130f;
+
+      --display: 'Clash Display', 'Plus Jakarta Sans', 'Avenir Next', system-ui, sans-serif;
+      --body: 'Plus Jakarta Sans', 'Avenir Next', system-ui, sans-serif;
+      --bezier: cubic-bezier(0.32, 0.72, 0, 1);
+    }
+
+    /* Reset & Base Setup */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: var(--body);
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      line-height: 1.5;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      position: relative;
+      background:
+        radial-gradient(circle at 12% 12%, rgba(255, 77, 46, 0.28), transparent 38rem),
+        radial-gradient(circle at 88% 8%, rgba(29, 77, 255, 0.22), transparent 40rem),
+        linear-gradient(135deg, #fff7e6 0%, #ffedbc 54%, #ffd7bd 100%);
+      background-attachment: fixed;
+    }
+
+    /* Custom Selection */
+    ::selection {
+      background: var(--ink);
+      color: var(--lime);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--paper);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--ink);
+      border-radius: 99px;
+      border: 3px solid var(--paper);
+    }
+
+    /* Layout Constraints */
+    .container {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    /* Typography Hierarchy */
+    h1 {
+      font-family: var(--display);
+      font-size: clamp(48px, 8.5vw, 112px);
+      font-weight: 950;
+      line-height: 0.81;
+      letter-spacing: -0.065em;
+      color: var(--ink);
+    }
+
+    h2 {
+      font-family: var(--display);
+      font-size: clamp(38px, 6.2vw, 88px);
+      font-weight: 950;
+      line-height: 0.86;
+      letter-spacing: -0.06em;
+      color: var(--ink);
+    }
+
+    h3 {
+      font-family: var(--display);
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+    }
+
+    p {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: clamp(16px, 1.8vw, 19px);
+      line-height: 1.45;
+    }
+
+    /* Section Spacing */
+    section {
+      padding: 128px 0;
+      position: relative;
+    }
+
+    /* ----------------------------------------------------
+       2. Fixed Grain Overlay
+    ---------------------------------------------------- */
+    .grain {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.045;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ----------------------------------------------------
+       3. Pill Navigation (Desktop & Mobile Menu)
+    ---------------------------------------------------- */
+    .site-header {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(calc(100% - 32px), 720px);
+      height: 56px;
+      border-radius: 999px;
+      background: rgba(255, 247, 230, 0.72);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow: 0 24px 70px rgba(57, 29, 6, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(18, 15, 10, 0.08);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 12px;
+      transition: transform 0.4s var(--bezier);
+    }
+
+    .brand-pill {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 8px 20px;
+      border-radius: 999px;
+      font-family: var(--display);
+      font-weight: 900;
+      font-size: 16px;
+      letter-spacing: -0.03em;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.3s var(--bezier), background 0.3s var(--bezier);
+    }
+
+    .brand-pill:hover {
+      transform: scale(1.03);
+      background: var(--charcoal);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-link {
+      color: var(--muted);
+      font-family: var(--body);
+      font-weight: 700;
+      font-size: 14px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: all 0.3s var(--bezier);
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--ink);
+      background: rgba(18, 15, 10, 0.05);
+    }
+
+    .hamburger {
+      display: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--ink);
+      border: none;
+      cursor: pointer;
+      position: relative;
+      justify-content: center;
+      align-items: center;
+      z-index: 1100;
+      transition: transform 0.3s var(--bezier);
+    }
+
+    .hamburger:hover {
+      transform: scale(1.05);
+    }
+
+    .hamburger span {
+      display: block;
+      width: 16px;
+      height: 2px;
+      background: var(--paper);
+      position: absolute;
+      transition: transform 0.3s var(--bezier), top 0.3s var(--bezier);
+    }
+
+    .hamburger span:first-child {
+      top: 18px;
+    }
+
+    .hamburger span:last-child {
+      top: 24px;
+    }
+
+    .hamburger.open span:first-child {
+      transform: rotate(45deg);
+      top: 21px;
+    }
+
+    .hamburger.open span:last-child {
+      transform: rotate(-45deg);
+      top: 21px;
+    }
+
+    /* Mobile Menu Overlay */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      background: var(--charcoal);
+      z-index: 1050;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s var(--bezier);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+
+    .mobile-menu.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .mobile-menu-links {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .mobile-menu-link {
+      font-family: var(--display);
+      font-size: clamp(40px, 8.5vw, 68px);
+      font-weight: 950;
+      color: var(--paper);
+      text-decoration: none;
+      letter-spacing: -0.05em;
+      line-height: 0.9;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.5s var(--bezier), transform 0.5s var(--bezier);
+    }
+
+    .mobile-menu.open .mobile-menu-link {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mobile-menu.open .mobile-menu-link:nth-child(1) { transition-delay: 0.1s; }
+    .mobile-menu.open .mobile-menu-link:nth-child(2) { transition-delay: 0.2s; }
+    .mobile-menu.open .mobile-menu-link:nth-child(3) { transition-delay: 0.3s; }
+    .mobile-menu.open .mobile-menu-link:nth-child(4) { transition-delay: 0.4s; }
+    .mobile-menu.open .mobile-menu-link:nth-child(5) { transition-delay: 0.5s; }
+
+    /* ----------------------------------------------------
+       4. Buttons & CTAs System
+    ---------------------------------------------------- */
+    .btn-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--body);
+      font-weight: 800;
+      font-size: 16px;
+      padding: 8px 8px 8px 24px;
+      border-radius: 999px;
+      text-decoration: none;
+      border: 1.5px solid var(--ink);
+      box-shadow: 0 12px 32px rgba(18, 15, 10, 0.12);
+      cursor: pointer;
+      transition:
+        transform 650ms var(--bezier),
+        box-shadow 650ms var(--bezier),
+        background 650ms var(--bezier);
+      gap: 16px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 40px rgba(18, 15, 10, 0.2);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary .arrow-chip {
+      background: var(--lime);
+      color: var(--ink);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 650ms var(--bezier), background 650ms var(--bezier);
+      font-size: 16px;
+    }
+
+    .btn-primary:hover .arrow-chip {
+      transform: translate(4px, -2px) scale(1.05);
+      background: var(--paper);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(18, 15, 10, 0.04);
+      color: var(--ink);
+      font-family: var(--body);
+      font-weight: 800;
+      font-size: 16px;
+      padding: 16px 28px;
+      border-radius: 999px;
+      text-decoration: none;
+      border: 1.5px solid rgba(18, 15, 10, 0.08);
+      cursor: pointer;
+      transition: transform 650ms var(--bezier), background 650ms var(--bezier), border 650ms var(--bezier);
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      background: rgba(18, 15, 10, 0.08);
+      border: 1.5px solid rgba(18, 15, 10, 0.15);
+    }
+
+    .btn-secondary:active {
+      transform: scale(0.98);
+    }
+
+    /* ----------------------------------------------------
+       5. Hero Section
+    ---------------------------------------------------- */
+    .hero {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+      gap: 56px;
+      padding: 144px 0 96px;
+      align-items: center;
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-family: var(--body);
+      font-weight: 800;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--red);
+      margin-bottom: 24px;
+      background: rgba(255, 77, 46, 0.08);
+      padding: 6px 14px;
+      border-radius: 99px;
+      border: 1px solid rgba(255, 77, 46, 0.15);
+    }
+
+    .hero-heading {
+      margin-bottom: 32px;
+    }
+
+    .hero-description {
+      margin-bottom: 48px;
+      max-width: 540px;
+    }
+
+    /* Hero Visual Stage */
+    .hero-visual {
+      position: relative;
+      width: 100%;
+      height: 540px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .poster-card {
+      position: relative;
+      width: 82%;
+      height: 440px;
+      border-radius: 44px;
+      background: linear-gradient(135deg, var(--red) 0%, var(--blue) 50%, var(--violet) 100%);
+      transform: rotate(3deg);
+      box-shadow: 0 32px 80px rgba(57, 29, 6, 0.22), inset 0 2px 10px rgba(255, 255, 255, 0.35);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      transition: transform 0.6s var(--bezier), background 0.8s var(--bezier);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .poster-card::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      left: -30%;
+      width: 160%;
+      height: 160%;
+      background: radial-gradient(circle at 15% 15%, var(--lime) 0%, transparent 45%),
+                  radial-gradient(circle at 85% 85%, var(--rose) 0%, transparent 45%);
+      mix-blend-mode: color-dodge;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .poster-text {
+      font-family: var(--display);
+      font-weight: 950;
+      font-size: clamp(26px, 3.2vw, 38px);
+      line-height: 0.88;
+      color: var(--paper);
+      text-align: center;
+      letter-spacing: -0.05em;
+      z-index: 2;
+      text-shadow: 0 4px 16px rgba(18, 15, 10, 0.25);
+    }
+
+    .floating-card {
+      position: absolute;
+      border-radius: 22px;
+      padding: 16px 24px;
+      box-shadow: 0 24px 56px rgba(18, 15, 10, 0.2);
+      font-family: var(--body);
+      z-index: 10;
+      transition: transform 0.6s var(--bezier);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .floating-card-red {
+      background: var(--red);
+      color: var(--paper);
+      top: 20px;
+      right: -10px;
+      transform: rotate(7deg);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .floating-card-blue {
+      background: var(--blue);
+      color: var(--paper);
+      bottom: 20px;
+      left: -10px;
+      transform: rotate(-6deg);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .floating-card-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      opacity: 0.85;
+      font-weight: 800;
+    }
+
+    .floating-card-value {
+      font-family: var(--display);
+      font-weight: 950;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .hero-visual:hover .poster-card {
+      transform: rotate(1deg) scale(1.02);
+    }
+
+    .hero-visual:hover .floating-card-red {
+      transform: rotate(12deg) translateY(-10px) translateX(6px);
+    }
+
+    .hero-visual:hover .floating-card-blue {
+      transform: rotate(-10deg) translateY(10px) translateX(-6px);
+    }
+
+    /* ----------------------------------------------------
+       6. Ticker Strip
+    ---------------------------------------------------- */
+    .ticker-section {
+      background: var(--ink);
+      overflow: hidden;
+      padding: 32px 0;
+      border-top: 1px solid rgba(255, 247, 230, 0.1);
+      border-bottom: 1px solid rgba(255, 247, 230, 0.1);
+      z-index: 5;
+    }
+
+    .ticker-container {
+      display: flex;
+      width: max-content;
+      animation: marquee 30s linear infinite;
+    }
+
+    .ticker-item {
+      font-family: var(--display);
+      font-weight: 950;
+      font-size: clamp(32px, 5.5vw, 68px);
+      color: var(--paper);
+      letter-spacing: -0.04em;
+      padding: 0 48px;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    .ticker-dot {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--lime);
+      margin-right: 48px;
+      flex-shrink: 0;
+    }
+
+    @keyframes marquee {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
+    }
+
+    /* ----------------------------------------------------
+       7. Work / Visual Argument Section (Bento Grid)
+    ---------------------------------------------------- */
+    .work-section-header {
+      max-width: 680px;
+      margin-bottom: 64px;
+    }
+
+    .work-eyebrow {
+      display: inline-block;
+      font-family: var(--body);
+      font-weight: 800;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--blue);
+      margin-bottom: 16px;
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 32px;
+    }
+
+    .bento-card {
+      border-radius: 38px;
+      background: rgba(255, 255, 255, 0.45);
+      border: 1px solid rgba(18, 15, 10, 0.08);
+      padding: 10px;
+      box-shadow: 0 16px 48px rgba(57, 29, 6, 0.06);
+      display: flex;
+      transition: transform 0.6s var(--bezier), box-shadow 0.6s var(--bezier);
+    }
+
+    .bento-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 64px rgba(57, 29, 6, 0.12);
+    }
+
+    .bento-inner {
+      flex: 1;
+      border-radius: 28px;
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      min-height: 420px;
+      box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.25), inset 0 -2px 6px rgba(18, 15, 10, 0.05);
+    }
+
+    /* Specific Grid Layout */
+    .bento-card-1 {
+      grid-column: span 7;
+      grid-row: span 2;
+    }
+
+    .bento-card-1 .bento-inner {
+      background: var(--violet);
+      color: var(--paper);
+    }
+
+    .bento-card-2 {
+      grid-column: span 5;
+      grid-row: span 2;
+    }
+
+    .bento-card-2 .bento-inner {
+      background: var(--red);
+      color: var(--paper);
+    }
+
+    .bento-card-3 {
+      grid-column: span 12;
+    }
+
+    .bento-card-3 .bento-inner {
+      background: var(--charcoal);
+      color: var(--paper);
+      min-height: 480px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    /* Bento Card Contents styling */
+    .bento-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 800;
+      margin-bottom: 24px;
+      display: inline-block;
+    }
+
+    .bento-card-1 .bento-label { color: var(--lime); }
+    .bento-card-2 .bento-label { color: var(--paper); opacity: 0.9; }
+    .bento-card-3 .bento-label { color: var(--rose); }
+
+    .bento-title {
+      font-size: clamp(32px, 4.5vw, 54px);
+      line-height: 0.88;
+      letter-spacing: -0.05em;
+      margin-bottom: 20px;
+    }
+
+    .bento-body {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.5;
+      max-width: 480px;
+    }
+
+    .bento-card-3 .bento-body {
+      color: rgba(255, 247, 230, 0.75);
+    }
+
+    /* Interactive Swatch Element inside Bento 1 */
+    .palette-sandbox {
+      margin-top: 32px;
+      background: rgba(18, 15, 10, 0.2);
+      border-radius: 20px;
+      padding: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .sandbox-header {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--lime);
+      margin-bottom: 16px;
+    }
+
+    .swatches-grid {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .swatch-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.4s var(--bezier), border-color 0.3s var(--bezier);
+    }
+
+    .swatch-btn:hover {
+      transform: scale(1.15) translateY(-2px);
+    }
+
+    .swatch-btn.active {
+      border-color: var(--paper);
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px rgba(18, 15, 10, 0.3);
+    }
+
+    .swatch-btn span {
+      position: absolute;
+      bottom: -28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      font-size: 9px;
+      font-family: var(--body);
+      font-weight: 700;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 3px 6px;
+      border-radius: 4px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s var(--bezier);
+      white-space: nowrap;
+    }
+
+    .swatch-btn:hover span {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Interactive Physics Button inside Bento 2 */
+    .tension-sandbox {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .btn-tension {
+      background: var(--ink);
+      color: var(--paper);
+      border: none;
+      padding: 20px 24px;
+      border-radius: 20px;
+      font-family: var(--body);
+      font-weight: 800;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      outline: none;
+      transition: transform 0.1s var(--bezier), background 0.3s var(--bezier);
+      box-shadow: 0 12px 28px rgba(18, 15, 10, 0.2);
+    }
+
+    .btn-tension:hover {
+      background: var(--charcoal);
+    }
+
+    .tension-label {
+      letter-spacing: -0.01em;
+    }
+
+    .tension-value {
+      font-family: var(--display);
+      font-weight: 900;
+      background: var(--lime);
+      color: var(--ink);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .tension-gauge-wrapper {
+      background: rgba(18, 15, 10, 0.25);
+      border-radius: 99px;
+      height: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .tension-gauge-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--lime);
+      border-radius: 99px;
+      transition: width 0.1s var(--bezier);
+    }
+
+    .tension-note {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+    }
+
+    /* Interactive Layout Toggle inside Bento 3 */
+    .composition-sandbox {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 24px;
+      padding: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      height: 100%;
+      justify-content: center;
+    }
+
+    .composition-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .comp-toggle-btn {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--paper);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-family: var(--body);
+      font-weight: 800;
+      font-size: 13px;
+      padding: 8px 18px;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: all 0.3s var(--bezier);
+    }
+
+    .comp-toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .comp-toggle-btn.active {
+      background: var(--lime);
+      color: var(--ink);
+      border-color: var(--lime);
+    }
+
+    .composition-display {
+      display: grid;
+      gap: 16px;
+      height: 180px;
+      transition: all 0.6s var(--bezier);
+    }
+
+    .comp-box {
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--display);
+      font-weight: 900;
+      font-size: 14px;
+      transition: all 0.6s var(--bezier);
+      position: relative;
+      box-shadow: 0 8px 24px rgba(18, 15, 10, 0.1);
+    }
+
+    /* Asymmetric (Default) Mode */
+    .comp-display-asymmetric {
+      grid-template-columns: 1.4fr 0.9fr 1.2fr;
+    }
+
+    .comp-display-asymmetric .box-1 {
+      background: var(--red);
+      color: var(--paper);
+      transform: rotate(-3deg) translateY(4px);
+      border-radius: 24px;
+    }
+
+    .comp-display-asymmetric .box-2 {
+      background: var(--blue);
+      color: var(--paper);
+      transform: translateY(-8px) rotate(4deg);
+      border-radius: 18px;
+    }
+
+    .comp-display-asymmetric .box-3 {
+      background: var(--lime);
+      color: var(--ink);
+      transform: rotate(-1deg) translateY(8px);
+      border-radius: 28px;
+    }
+
+    /* Symmetric Mode */
+    .comp-display-symmetric {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .comp-display-symmetric .comp-box {
+      background: rgba(255, 255, 255, 0.15) !important;
+      color: rgba(255, 255, 255, 0.4) !important;
+      transform: none !important;
+      border-radius: 8px !important;
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      box-shadow: none;
+    }
+
+    /* ----------------------------------------------------
+       8. Method Section (Sticky + Stacked Cards)
+    ---------------------------------------------------- */
+    .method-section {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 96px;
+      align-items: start;
+    }
+
+    .method-sticky {
+      position: sticky;
+      top: 144px;
+    }
+
+    .method-eyebrow {
+      display: inline-block;
+      font-family: var(--body);
+      font-weight: 800;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--red);
+      margin-bottom: 16px;
+    }
+
+    .method-heading {
+      margin-bottom: 32px;
+    }
+
+    .method-description {
+      max-width: 480px;
+    }
+
+    .method-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .proof-card {
+      border-radius: 36px;
+      padding: 48px;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 32px 70px rgba(57, 29, 6, 0.14);
+      transition: transform 0.6s var(--bezier), box-shadow 0.6s var(--bezier);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .proof-card-label {
+      font-family: var(--display);
+      font-size: clamp(24px, 3.2vw, 36px);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      margin-bottom: 40px;
+    }
+
+    .proof-card-text {
+      font-family: var(--display);
+      font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 950;
+      line-height: 0.88;
+      letter-spacing: -0.06em;
+    }
+
+    .proof-card-red {
+      background: var(--red);
+      color: var(--paper);
+      transform: rotate(-1.5deg);
+    }
+
+    .proof-card-red .proof-card-label {
+      color: var(--lime);
+    }
+
+    .proof-card-violet {
+      background: var(--violet);
+      color: var(--paper);
+      transform: rotate(2deg);
+    }
+
+    .proof-card-violet .proof-card-label {
+      color: var(--rose);
+    }
+
+    .proof-card-lime {
+      background: var(--lime);
+      color: var(--ink);
+      transform: rotate(-1deg);
+    }
+
+    .proof-card-lime .proof-card-label {
+      color: var(--blue);
+    }
+
+    .proof-card:hover {
+      transform: translateY(-8px) scale(1.01) rotate(0deg);
+      box-shadow: 0 40px 80px rgba(57, 29, 6, 0.2);
+      z-index: 5;
+    }
+
+    /* ----------------------------------------------------
+       9. Proof Quote Section
+    ---------------------------------------------------- */
+    .quote-outer {
+      border-radius: 48px;
+      background: rgba(255, 238, 197, 0.35);
+      border: 1px solid rgba(18, 15, 10, 0.08);
+      padding: 12px;
+      box-shadow: 0 32px 80px rgba(57, 29, 6, 0.08);
+    }
+
+    .quote-inner {
+      background: var(--ink);
+      color: var(--paper);
+      border-radius: 36px;
+      padding: clamp(48px, 8vw, 96px) 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.1);
+    }
+
+    .quote-text {
+      font-family: var(--display);
+      font-size: clamp(32px, 5.2vw, 68px);
+      font-weight: 950;
+      line-height: 0.92;
+      letter-spacing: -0.06em;
+      max-width: 980px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .quote-author {
+      margin-top: 40px;
+      font-family: var(--body);
+      font-weight: 700;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--lime);
+      display: block;
+    }
+
+    .quote-bg-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60%;
+      height: 60%;
+      background: radial-gradient(circle, rgba(123, 61, 255, 0.25) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* ----------------------------------------------------
+       10. Final CTA Section
+    ---------------------------------------------------- */
+    .final-cta-outer {
+      border-radius: 48px;
+      background: rgba(255, 255, 255, 0.45);
+      border: 1px solid rgba(18, 15, 10, 0.08);
+      padding: 12px;
+      box-shadow: 0 32px 80px rgba(57, 29, 6, 0.08);
+    }
+
+    .final-cta-inner {
+      border-radius: 36px;
+      background: linear-gradient(135deg, var(--red) 0%, var(--blue) 100%);
+      position: relative;
+      min-height: 520px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px;
+      text-align: center;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .final-cta-inner::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      left: -30%;
+      width: 160%;
+      height: 160%;
+      background: radial-gradient(circle at 20% 20%, var(--lime) 0%, transparent 45%),
+                  radial-gradient(circle at 80% 80%, var(--rose) 0%, transparent 45%);
+      mix-blend-mode: color-dodge;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .final-cta-eyebrow {
+      font-family: var(--body);
+      font-weight: 800;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--lime);
+      margin-bottom: 24px;
+      z-index: 2;
+      background: rgba(18, 15, 10, 0.25);
+      padding: 6px 14px;
+      border-radius: 99px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .final-cta-heading {
+      font-size: clamp(44px, 7vw, 84px);
+      font-weight: 950;
+      line-height: 0.82;
+      letter-spacing: -0.065em;
+      color: var(--paper);
+      margin-bottom: 48px;
+      max-width: 800px;
+      z-index: 2;
+      text-shadow: 0 4px 16px rgba(18, 15, 10, 0.15);
+    }
+
+    .final-cta-btn {
+      z-index: 2;
+    }
+
+    /* ----------------------------------------------------
+       11. Site Footer
+    ---------------------------------------------------- */
+    .site-footer {
+      padding: 64px 0 128px;
+      border-top: 1px solid rgba(18, 15, 10, 0.08);
+      background: rgba(18, 15, 10, 0.02);
+    }
+
+    .footer-grid {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 32px;
+    }
+
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-brand {
+      font-family: var(--display);
+      font-weight: 950;
+      font-size: 24px;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .footer-copyright {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      transition: color 0.3s var(--bezier);
+    }
+
+    .footer-link:hover {
+      color: var(--ink);
+    }
+
+    /* ----------------------------------------------------
+       12. Scroll Reveal Animations Setup
+    ---------------------------------------------------- */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(54px);
+      filter: blur(10px);
+      transition:
+        opacity 900ms var(--bezier),
+        transform 900ms var(--bezier),
+        filter 900ms var(--bezier);
+      will-change: opacity, transform, filter;
+    }
+
+    [data-reveal].is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+
+    /* Stagger helpers */
+    .stagger-1 { transition-delay: 100ms; }
+    .stagger-2 { transition-delay: 200ms; }
+    .stagger-3 { transition-delay: 300ms; }
+
+    /* ----------------------------------------------------
+       13. Responsive Rules
+    ---------------------------------------------------- */
+    @media (max-width: 992px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 120px;
+        gap: 64px;
+        text-align: center;
+      }
+
+      .hero-content {
+        align-items: center;
+      }
+
+      .hero-description {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .btn-group {
+        justify-content: center;
+      }
+
+      .method-section {
+        grid-template-columns: 1fr;
+        gap: 64px;
+      }
+
+      .method-sticky {
+        position: relative;
+        top: 0;
+      }
+    }
+
+    @media (max-width: 860px) {
+      section {
+        padding: 88px 0;
+      }
+
+      /* Navigation */
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      /* Bento Grid Collapse */
+      .bento-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bento-card-1, .bento-card-2, .bento-card-3 {
+        grid-column: span 12;
+      }
+
+      .bento-card-3 .bento-inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      /* Remove rotatations */
+      .poster-card,
+      .proof-card,
+      .floating-card {
+        transform: none !important;
+      }
+
+      .hero-visual:hover .poster-card,
+      .hero-visual:hover .floating-card-red,
+      .hero-visual:hover .floating-card-blue,
+      .proof-card:hover {
+        transform: none !important;
+      }
+
+      .container {
+        width: min(100% - 32px, 1180px);
+      }
+    }
+
+    @media (max-width: 520px) {
+      .btn-primary, .btn-secondary, .btn-tension {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .hero-visual {
+        height: 400px;
+      }
+
+      .poster-card {
+        width: 100%;
+        height: 320px;
+        padding: 24px;
+      }
+
+      .floating-card {
+        padding: 10px 16px;
+      }
+
+      .floating-card-value {
+        font-size: 16px;
+      }
+
+      .quote-outer, .final-cta-outer {
+        padding: 6px;
+        border-radius: 36px;
+      }
+
+      .quote-inner, .final-cta-inner {
+        border-radius: 28px;
+        padding: 48px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Grain Layer overlay -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Floating Nav -->
+  <header class="site-header" id="navbar">
+    <a href="#top" class="brand-pill">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(45deg);"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
+      Register
+    </a>
+    
+    <nav class="nav-links" aria-label="Main Navigation">
+      <a href="#top" class="nav-link active">Home</a>
+      <a href="#work" class="nav-link">Argument</a>
+      <a href="#method" class="nav-link">Method</a>
+      <a href="#quote" class="nav-link">Proof</a>
+      <a href="#cta" class="nav-link">Contact</a>
+    </nav>
+
+    <!-- Mobile Menu Button -->
+    <button class="hamburger" id="menuToggle" aria-label="Open mobile menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu-links">
+      <a href="#top" class="mobile-menu-link">Home</a>
+      <a href="#work" class="mobile-menu-link">Argument</a>
+      <a href="#method" class="mobile-menu-link">Method</a>
+      <a href="#quote" class="mobile-menu-link">Proof</a>
+      <a href="#cta" class="mobile-menu-link">Contact</a>
+    </div>
+  </div>
+
+  <main id="top">
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container hero">
+        <div class="hero-content" data-reveal>
+          <span class="hero-eyebrow">Audacious frontend craft</span>
+          <h1 class="hero-heading">Websites that feel impossible to ignore, effortless to trust.</h1>
+          <p class="hero-description">Register is a color-forward landing experience for visitors who decide in seconds whether a brand has taste.</p>
+          <div class="btn-group">
+            <a href="#work" class="btn-primary">
+              Start the scroll 
+              <span class="arrow-chip">↗</span>
+            </a>
+            <a href="#method" class="btn-secondary">See the system</a>
+          </div>
+        </div>
+
+        <div class="hero-visual" data-reveal class="stagger-1">
+          <!-- Asymmetric Stage Card -->
+          <div class="poster-card" id="heroPoster">
+            <div class="poster-text">Color carries meaning. Typography carries weight. Motion carries memory.</div>
+          </div>
+          <!-- Floating elements -->
+          <div class="floating-card floating-card-red">
+            <span class="floating-card-label">Launch color</span>
+            <span class="floating-card-value">FF4D2E</span>
+          </div>
+          <div class="floating-card floating-card-blue">
+            <span class="floating-card-label">Attention curve</span>
+            <span class="floating-card-value">0.82</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marquee Ticker -->
+    <section class="ticker-section" aria-hidden="true">
+      <div class="ticker-container" id="tickerContainer">
+        <!-- Sequence 1 -->
+        <span class="ticker-item"><span class="ticker-dot"></span>Color with intent</span>
+        <span class="ticker-item"><span class="ticker-dot"></span>Motion with restraint</span>
+        <span class="ticker-item"><span class="ticker-dot"></span>Layouts that refuse the template</span>
+        <!-- Sequence 2 -->
+        <span class="ticker-item"><span class="ticker-dot"></span>Color with intent</span>
+        <span class="ticker-item"><span class="ticker-dot"></span>Motion with restraint</span>
+        <span class="ticker-item"><span class="ticker-dot"></span>Layouts that refuse the template</span>
+        <!-- Sequence 3 -->
+        <span class="ticker-item"><span class="ticker-dot"></span>Color with intent</span>
+        <span class="ticker-item"><span class="ticker-dot"></span>Motion with restraint</span>
+        <span class="ticker-item"><span class="ticker-dot"></span>Layouts that refuse the template</span>
+      </div>
+    </section>
+
+    <!-- Work / Visual Argument Section -->
+    <section id="work">
+      <div class="container">
+        <div class="work-section-header" data-reveal>
+          <span class="work-eyebrow">The visual argument</span>
+          <h2>Every section earns its scroll.</h2>
+        </div>
+
+        <!-- Bento Grid with Double-Bezel Design -->
+        <div class="bento-grid">
+          <!-- Bento Card 1: Palette Logic -->
+          <div class="bento-card bento-card-1" data-reveal>
+            <div class="bento-inner">
+              <div>
+                <span class="bento-label">Palette logic</span>
+                <h3 class="bento-title">High energy, zero chaos.</h3>
+                <p class="bento-body">Blocks of saturated color create hierarchy, route attention, and give the page a voice before a word is read.</p>
+              </div>
+              
+              <!-- Interactive Palette Builder widget -->
+              <div class="palette-sandbox">
+                <div class="sandbox-header">Click Swatch to shift theme</div>
+                <div class="swatches-grid">
+                  <button class="swatch-btn active" data-color="default" style="background: linear-gradient(135deg, var(--red) 0%, var(--blue) 100%);" aria-label="Default theme">
+                    <span>Default</span>
+                  </button>
+                  <button class="swatch-btn" data-color="red" style="background-color: var(--red);" aria-label="Red theme">
+                    <span>FF4D2E</span>
+                  </button>
+                  <button class="swatch-btn" data-color="blue" style="background-color: var(--blue);" aria-label="Blue theme">
+                    <span>1D4DFF</span>
+                  </button>
+                  <button class="swatch-btn" data-color="violet" style="background-color: var(--violet);" aria-label="Violet theme">
+                    <span>7B3DFF</span>
+                  </button>
+                  <button class="swatch-btn" data-color="lime" style="background-color: var(--lime);" aria-label="Lime theme">
+                    <span>D8FF38</span>
+                  </button>
+                  <button class="swatch-btn" data-color="rose" style="background-color: var(--rose);" aria-label="Rose theme">
+                    <span>FF8AB3</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bento Card 2: Interaction -->
+          <div class="bento-card bento-card-2" data-reveal class="stagger-1">
+            <div class="bento-inner">
+              <div>
+                <span class="bento-label">Interaction</span>
+                <h3 class="bento-title">Buttons with physical tension.</h3>
+                <p class="bento-body">Presses, reveals, and hovers use mass-like timing instead of default web stiffness.</p>
+              </div>
+              
+              <!-- Tension tester widget -->
+              <div class="tension-sandbox">
+                <button class="btn-tension" id="tensionBtn" aria-label="Press and hold to test tension">
+                  <span class="tension-label">Hold for Tension</span>
+                  <span class="tension-value" id="tensionVal">0.00</span>
+                </button>
+                <div class="tension-gauge-wrapper">
+                  <div class="tension-gauge-bar" id="tensionBar"></div>
+                </div>
+                <div class="tension-note">Click and hold the button to experience custom easing spring curves.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bento Card 3: Composition -->
+          <div class="bento-card bento-card-3" data-reveal>
+            <div class="bento-inner">
+              <div>
+                <span class="bento-label">Composition</span>
+                <h3 class="bento-title">Asymmetry keeps the eye awake.</h3>
+                <p class="bento-body">No three-column sameness. No decorative metrics. Just deliberate spatial rhythm.</p>
+              </div>
+
+              <!-- Composition Preview widget -->
+              <div class="composition-sandbox">
+                <div class="composition-controls">
+                  <button class="comp-toggle-btn active" id="btnAsym">Asymmetrical Grid</button>
+                  <button class="comp-toggle-btn" id="btnSym">Standard Grid</button>
+                </div>
+                <div class="composition-display comp-display-asymmetric" id="compDisplay">
+                  <div class="comp-box box-1">Playful</div>
+                  <div class="comp-box box-2">Bold</div>
+                  <div class="comp-box box-3">Intentional</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Method Section -->
+    <section id="method">
+      <div class="container method-section">
+        <!-- Left Side: Sticky Text -->
+        <div class="method-sticky" data-reveal>
+          <span class="method-eyebrow">Method</span>
+          <h2 class="method-heading">Surprise the eye. Respect the mind.</h2>
+          <p class="method-description">We combine high-energy layouts with strict visual logic. Every interaction is designed to prove that somebody cared deeply about the implementation.</p>
+        </div>
+
+        <!-- Right Side: Proof Cards -->
+        <div class="method-cards">
+          <!-- Card 1 -->
+          <div class="proof-card proof-card-red" data-reveal>
+            <span class="proof-card-label">01 / Signal</span>
+            <div class="proof-card-text">A first fold built to stop the scroll without begging for attention.</div>
+          </div>
+          <!-- Card 2 -->
+          <div class="proof-card proof-card-violet" data-reveal>
+            <span class="proof-card-label">02 / Rhythm</span>
+            <div class="proof-card-text">Sections land like chapters, each one changing scale, pace, and temperature.</div>
+          </div>
+          <!-- Card 3 -->
+          <div class="proof-card proof-card-lime" data-reveal>
+            <span class="proof-card-label">03 / Finish</span>
+            <div class="proof-card-text">Tiny interaction details create the feeling that someone cared deeply.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Proof Quote Section -->
+    <section id="quote">
+      <div class="container" data-reveal>
+        <div class="quote-outer">
+          <div class="quote-inner">
+            <div class="quote-bg-glow"></div>
+            <blockquote class="quote-text">
+              “The page itself is the product: captivating enough to remember, clear enough to convert.”
+            </blockquote>
+            <span class="quote-author">Register Craft manifesto</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section id="cta">
+      <div class="container" data-reveal>
+        <div class="final-cta-outer">
+          <div class="final-cta-inner">
+            <span class="final-cta-eyebrow">Ready</span>
+            <h2 class="final-cta-heading">Make the next visitor feel something.</h2>
+            <a href="mailto:hello@example.com" class="btn-primary final-cta-btn">
+              hello@example.com 
+              <span class="arrow-chip">↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-left">
+        <a href="#top" class="footer-brand">Register</a>
+        <span class="footer-copyright">© 2026 Register. All craft reserved.</span>
+      </div>
+      <div class="footer-links">
+        <a href="#top" class="footer-link">Back to Top</a>
+        <a href="#work" class="footer-link">Argument</a>
+        <a href="#method" class="footer-link">Method</a>
+        <a href="#cta" class="footer-link">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ----------------------------------------------------
+       14. Premium Interaction Scripts
+  ---------------------------------------------------- */ -->
+  <script>
+    // Reveal Animations using IntersectionObserver
+    document.addEventListener('DOMContentLoaded', () => {
+      const targets = document.querySelectorAll('[data-reveal]');
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        targets.forEach((target) => target.classList.add('is-visible'));
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+
+      targets.forEach((target) => observer.observe(target));
+    });
+
+    // Mobile Navigation Drawer Toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+
+    function toggleMenu() {
+      const isOpen = menuToggle.classList.toggle('open');
+      mobileMenu.classList.toggle('open', isOpen);
+      menuToggle.setAttribute('aria-expanded', isOpen);
+      mobileMenu.setAttribute('aria-hidden', !isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
+
+    menuToggle.addEventListener('click', toggleMenu);
+    mobileMenuLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (menuToggle.classList.contains('open')) {
+          toggleMenu();
+        }
+      });
+    });
+
+    // Highlight active link in Floating Nav on Scroll
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id], main#top');
+
+    window.addEventListener('scroll', () => {
+      let currentSectionId = 'top';
+      const scrollPosition = window.scrollY + 100;
+
+      sections.forEach(sec => {
+        const top = sec.offsetTop;
+        const height = sec.offsetHeight;
+        if (scrollPosition >= top && scrollPosition < top + height) {
+          currentSectionId = sec.getAttribute('id') || 'top';
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        const href = link.getAttribute('href').substring(1);
+        if (href === currentSectionId || (href === 'top' && currentSectionId === 'top')) {
+          link.classList.add('active');
+        }
+      });
+    });
+
+    // Interactive Swatch Feature (Theme Swapper for Hero Poster)
+    const swatches = document.querySelectorAll('.swatch-btn');
+    const heroPoster = document.getElementById('heroPoster');
+
+    swatches.forEach(swatch => {
+      swatch.addEventListener('click', () => {
+        const color = swatch.getAttribute('data-color');
+        
+        // Remove active class from all swatches
+        swatches.forEach(s => s.classList.remove('active'));
+        swatch.classList.add('active');
+
+        // Apply background transitions based on selected colors
+        switch(color) {
+          case 'default':
+            heroPoster.style.background = 'linear-gradient(135deg, var(--red) 0%, var(--blue) 50%, var(--violet) 100%)';
+            break;
+          case 'red':
+            heroPoster.style.background = 'linear-gradient(135deg, var(--red) 0%, var(--rose) 100%)';
+            break;
+          case 'blue':
+            heroPoster.style.background = 'linear-gradient(135deg, var(--blue) 0%, var(--lime) 100%)';
+            break;
+          case 'violet':
+            heroPoster.style.background = 'linear-gradient(135deg, var(--violet) 0%, var(--red) 100%)';
+            break;
+          case 'lime':
+            heroPoster.style.background = 'linear-gradient(135deg, var(--lime) 0%, var(--blue) 100%)';
+            break;
+          case 'rose':
+            heroPoster.style.background = 'linear-gradient(135deg, var(--rose) 0%, var(--violet) 100%)';
+            break;
+        }
+
+        // Quick scale effect on poster card
+        heroPoster.style.transform = 'rotate(3deg) scale(1.05)';
+        setTimeout(() => {
+          heroPoster.style.transform = 'rotate(3deg) scale(1)';
+        }, 300);
+      });
+    });
+
+    // Tactile Buttons Physics Sandbox (Bento 2)
+    const tensionBtn = document.getElementById('tensionBtn');
+    const tensionVal = document.getElementById('tensionVal');
+    const tensionBar = document.getElementById('tensionBar');
+    let tension = 0;
+    let isPressing = false;
+    let animationFrame;
+
+    function animateTension() {
+      if (isPressing) {
+        tension += (1.00 - tension) * 0.15; // Spring approach
+        if (tension > 0.99) tension = 1.00;
+      } else {
+        tension += (0.00 - tension) * 0.25; // Snap back ease out
+        if (tension < 0.01) tension = 0.00;
+      }
+
+      tensionVal.textContent = tension.toFixed(2);
+      tensionBar.style.width = `${tension * 100}%`;
+
+      // Scale compression to simulate button material tension
+      const scale = 1 - (tension * 0.06);
+      const rotate = tension * 1.5;
+      tensionBtn.style.transform = `scale(${scale}) rotate(${rotate}deg)`;
+
+      if (tension > 0 || isPressing) {
+        animationFrame = requestAnimationFrame(animateTension);
+      }
+    }
+
+    const startPress = (e) => {
+      e.preventDefault();
+      isPressing = true;
+      cancelAnimationFrame(animationFrame);
+      animationFrame = requestAnimationFrame(animateTension);
+    };
+
+    const endPress = () => {
+      if (isPressing) {
+        isPressing = false;
+        // Trigger bounce animation
+        tensionBtn.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        tensionBtn.style.transform = 'scale(1.03) rotate(-1deg)';
+        setTimeout(() => {
+          tensionBtn.style.transition = 'transform 0.1s var(--bezier)';
+        }, 500);
+      }
+    };
+
+    tensionBtn.addEventListener('mousedown', startPress);
+    tensionBtn.addEventListener('touchstart', startPress, { passive: false });
+    window.addEventListener('mouseup', endPress);
+    window.addEventListener('touchend', endPress);
+
+    // Composition Asymmetric vs Symmetric toggle demo (Bento 3)
+    const btnAsym = document.getElementById('btnAsym');
+    const btnSym = document.getElementById('btnSym');
+    const compDisplay = document.getElementById('compDisplay');
+
+    btnAsym.addEventListener('click', () => {
+      btnSym.classList.remove('active');
+      btnAsym.classList.add('active');
+      compDisplay.className = 'composition-display comp-display-asymmetric';
+    });
+
+    btnSym.addEventListener('click', () => {
+      btnAsym.classList.remove('active');
+      btnSym.classList.add('active');
+      compDisplay.className = 'composition-display comp-display-symmetric';
+    });
+
+  </script>
+</body>
+</html>

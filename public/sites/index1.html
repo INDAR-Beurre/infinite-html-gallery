@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TurdBrain OS™ - The Smart-Toilet OS Powered by bowel-intelligence AI</title>
+  <meta name="description" content="Why just poop when you can compile data? Optimize your output, mine $DUNG tokens, and experience active splashback deflection with the world's premier fecal-recognition operating system.">
+  
+  <!-- Bubbly, Chunky Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ----------------------------------
+       THE MUDDY DESIGN SYSTEM (NO WHITE)
+       ---------------------------------- */
+    :root {
+      --bg-base: #f0e6df;          /* Sickly, soft beige */
+      --bg-card: #e5ccb8;          /* Muddy warm beige */
+      --bg-accent: #edd5c0;        /* Wet sand */
+      --chocolate-dark: #27170a;   /* Deep chocolate brown */
+      --mud-taupe: #5c3e21;        /* Mid-tone mud */
+      --ochre-yellow: #a8763e;     /* Ochre/Piss yellow */
+      --swamp-green: #4f5d2f;      /* Swampy green */
+      --sickly-green: #828a50;     /* Slime green */
+      --viscous-shadow: 0 16px 0px var(--chocolate-dark);
+      --viscous-shadow-hover: 0 24px 0px var(--chocolate-dark);
+      --inset-gloop: inset 0 8px 16px rgba(39, 23, 10, 0.25), inset 0 -8px 0px rgba(39, 23, 10, 0.15);
+      --border-thick: 5px solid var(--chocolate-dark);
+      
+      /* Bloopy border radius variables */
+      --gloop-1: 45% 55% 70% 30% / 45% 50% 60% 55%;
+      --gloop-2: 60% 40% 65% 35% / 40% 60% 45% 55%;
+      --gloop-3: 50% 50% 30% 70% / 50% 60% 40% 50%;
+      --gloop-btn: 35% 65% 55% 45% / 45% 45% 55% 55%;
+    }
+
+    /* Oozing Animation */
+    @keyframes ooze {
+      0% { border-radius: var(--gloop-1); }
+      33% { border-radius: var(--gloop-2); }
+      66% { border-radius: var(--gloop-3); }
+      100% { border-radius: var(--gloop-1); }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(1deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+
+    @keyframes drip {
+      0% { transform: scaleY(1); }
+      50% { transform: scaleY(1.08); }
+      100% { transform: scaleY(1); }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 20px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-base);
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: var(--chocolate-dark);
+      border-radius: 10px;
+      border: 5px solid var(--bg-base);
+    }
+
+    body {
+      font-family: 'Fredoka', sans-serif;
+      background-color: var(--bg-base);
+      color: var(--chocolate-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      font-size: 1.1rem;
+      padding-bottom: 5rem;
+    }
+
+    /* Ambient fly game info banner */
+    .game-banner {
+      background: var(--chocolate-dark);
+      color: var(--bg-base);
+      text-align: center;
+      padding: 0.6rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: var(--border-thick);
+    }
+    .game-banner span {
+      background: var(--swamp-green);
+      color: #faf0e6;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      margin-left: 5px;
+    }
+
+    /* Sticky Gloopy Navbar */
+    header {
+      max-width: 1200px;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem;
+      z-index: 999;
+      position: relative;
+    }
+
+    .nav-container {
+      background: var(--bg-card);
+      border: var(--border-thick);
+      box-shadow: 8px 8px 0px var(--chocolate-dark);
+      border-radius: 25px 45px 30px 40px / 35px 30px 40px 35px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      text-decoration: none;
+      color: var(--chocolate-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo span {
+      color: var(--swamp-green);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--chocolate-dark);
+      text-decoration: none;
+      font-weight: 700;
+      padding: 0.5rem 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--swamp-green);
+      transform: scale(1.05);
+    }
+
+    /* BUTTONS */
+    .gloopy-btn {
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--chocolate-dark);
+      background: var(--accent-yellow);
+      border: var(--border-thick);
+      padding: 0.8rem 1.6rem;
+      box-shadow: 4px 4px 0px var(--chocolate-dark);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+      animation: ooze 6s infinite ease-in-out;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .gloopy-btn:hover {
+      transform: translate(-3px, -3px) scale(1.03);
+      box-shadow: 7px 7px 0px var(--chocolate-dark);
+      background: var(--sickly-green);
+      color: var(--bg-base);
+    }
+
+    .gloopy-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px var(--chocolate-dark);
+    }
+
+    .btn-secondary {
+      background: var(--swamp-green);
+      color: var(--bg-base);
+    }
+    .btn-secondary:hover {
+      background: var(--ochre-yellow);
+      color: var(--chocolate-dark);
+    }
+
+    /* ----------------------------------
+       BRUTALIST COLLIDING GRID LAYOUT
+       ---------------------------------- */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 2.5rem;
+      max-width: 1300px;
+      margin: 2rem auto;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .gloopy-card {
+      background: var(--bg-card);
+      border: var(--border-thick);
+      box-shadow: var(--viscous-shadow);
+      padding: 2.5rem;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .gloopy-card:hover {
+      transform: scale(1.01) rotate(0deg) !important;
+      box-shadow: var(--viscous-shadow-hover);
+      z-index: 10 !important;
+    }
+
+    /* Specific Blob Shapes for Cards to Make them Look Wet */
+    .shape-1 { border-radius: 40px 80px 50px 90px / 50px 40px 90px 60px; }
+    .shape-2 { border-radius: 80px 40px 90px 50px / 60px 80px 50px 90px; }
+    .shape-3 { border-radius: 60px 90px 40px 80px / 80px 50px 90px 40px; }
+    .shape-4 { border-radius: 90px 50px 80px 40px / 40px 90px 60px 80px; }
+
+    /* GRID PLACEMENTS (DESKTOP) */
+    .hero-card {
+      grid-column: 1 / 8;
+      grid-row: 1 / 3;
+      transform: rotate(-1deg);
+      z-index: 2;
+      background: var(--bg-accent);
+    }
+
+    .simulator-card {
+      grid-column: 7 / 13;
+      grid-row: 1 / 4;
+      transform: rotate(1.5deg);
+      z-index: 3;
+      background: var(--bg-card);
+      border-color: var(--chocolate-dark);
+    }
+
+    .token-card {
+      grid-column: 1 / 5;
+      grid-row: 3 / 5;
+      transform: rotate(2deg);
+      z-index: 2;
+      background: var(--bg-accent);
+    }
+
+    .feature-1 {
+      grid-column: 5 / 9;
+      grid-row: 4 / 6;
+      transform: rotate(-1.5deg);
+      z-index: 1;
+    }
+
+    .feature-2 {
+      grid-column: 9 / 13;
+      grid-row: 4 / 6;
+      transform: rotate(1deg);
+      z-index: 2;
+    }
+
+    .feature-3 {
+      grid-column: 1 / 6;
+      grid-row: 5 / 7;
+      transform: rotate(-2deg);
+      z-index: 3;
+    }
+
+    .feature-4 {
+      grid-column: 6 / 10;
+      grid-row: 6 / 8;
+      transform: rotate(1.5deg);
+      z-index: 2;
+    }
+
+    .testimonials-card {
+      grid-column: 10 / 13;
+      grid-row: 6 / 9;
+      transform: rotate(-1deg);
+      z-index: 3;
+    }
+
+    .pricing-card {
+      grid-column: 2 / 10;
+      grid-row: 8 / 10;
+      transform: rotate(0.5deg);
+      z-index: 4;
+      background: var(--bg-accent);
+    }
+
+    /* ----------------------------------
+       TYPOGRAPHY & CONTENT STYLING
+       ---------------------------------- */
+    h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1.1;
+      font-weight: 800;
+      color: var(--chocolate-dark);
+      margin-bottom: 1.5rem;
+    }
+
+    h1 mark {
+      background: none;
+      color: var(--swamp-green);
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 800;
+      margin-bottom: 1.2rem;
+    }
+
+    h3 {
+      font-size: 1.4rem;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    p {
+      line-height: 1.6;
+      color: var(--mud-taupe);
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    .card-footer {
+      display: flex;
+      gap: 1rem;
+      margin-top: auto;
+      flex-wrap: wrap;
+    }
+
+    /* ----------------------------------
+       INTERACTIVE SIMULATOR (BOWEL AI)
+       ---------------------------------- */
+    .simulator-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .sim-group {
+      background: rgba(39, 23, 10, 0.06);
+      padding: 1rem;
+      border-radius: 15px;
+      border: 2px dashed var(--chocolate-dark);
+    }
+
+    .sim-group-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--mud-taupe);
+    }
+
+    .radio-tiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+      gap: 0.5rem;
+    }
+
+    .radio-tile {
+      position: relative;
+      background: var(--bg-base);
+      border: 3px solid var(--chocolate-dark);
+      border-radius: 12px;
+      padding: 0.6rem 0.3rem;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+    }
+
+    .radio-tile input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .radio-tile span {
+      display: block;
+    }
+
+    .radio-tile .emoji {
+      font-size: 1.6rem;
+    }
+
+    .radio-tile:hover {
+      background: var(--bg-accent);
+      transform: scale(1.03);
+    }
+
+    .radio-tile input:checked + .tile-content {
+      color: var(--bg-base);
+    }
+
+    .radio-tile:has(input:checked) {
+      background: var(--swamp-green);
+      border-color: var(--chocolate-dark);
+      color: var(--bg-base);
+    }
+
+    /* Progress & Loading States */
+    .progress-container {
+      display: none;
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    .toilet-spinner {
+      font-size: 3.5rem;
+      display: inline-block;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    .progress-text {
+      font-weight: 700;
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+      color: var(--swamp-green);
+    }
+
+    /* Simulator Results Screen */
+    .result-container {
+      display: none;
+      background: rgba(39, 23, 10, 0.08);
+      border: 3px solid var(--chocolate-dark);
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin-top: 1rem;
+      animation: float 4s infinite ease-in-out;
+    }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--chocolate-dark);
+      padding-bottom: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .result-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--chocolate-dark);
+    }
+
+    .badge {
+      background: var(--ochre-yellow);
+      color: var(--chocolate-dark);
+      padding: 0.3rem 0.8rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      border: 2px solid var(--chocolate-dark);
+    }
+
+    .result-metric {
+      margin-bottom: 0.8rem;
+      font-size: 0.95rem;
+    }
+
+    .result-metric strong {
+      display: block;
+      color: var(--mud-taupe);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+
+    .reward-box {
+      background: var(--sickly-green);
+      color: var(--bg-base);
+      border: 3px solid var(--chocolate-dark);
+      border-radius: 15px;
+      padding: 1rem;
+      text-align: center;
+      margin-top: 1.2rem;
+      font-weight: 800;
+      box-shadow: 4px 4px 0px var(--chocolate-dark);
+    }
+
+    /* ----------------------------------
+       $DUNG TOKEN & INTERACTIVE MINER
+       ---------------------------------- */
+    .token-display {
+      background: var(--chocolate-dark);
+      color: var(--bg-base);
+      border-radius: 15px;
+      padding: 1rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      border: 3px solid var(--chocolate-dark);
+    }
+
+    .token-price {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--ochre-yellow);
+    }
+
+    .token-stats {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      display: flex;
+      justify-content: space-around;
+      margin-top: 0.5rem;
+    }
+
+    .miner-interface {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .gas-meter-container {
+      background: rgba(39, 23, 10, 0.2);
+      border: 3px solid var(--chocolate-dark);
+      border-radius: 20px;
+      height: 30px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .gas-meter-bar {
+      background: var(--sickly-green);
+      width: 45%;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .gas-meter-text {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--chocolate-dark);
+    }
+
+    /* ----------------------------------
+       TESTIMONIALS (SPLASH ZONE)
+       ---------------------------------- */
+    .testimonial-slide {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 1rem;
+      border: 3px solid var(--chocolate-dark);
+      margin-bottom: 1rem;
+    }
+
+    .testimonial-author {
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-align: right;
+      color: var(--swamp-green);
+      margin-top: 0.5rem;
+    }
+
+    /* ----------------------------------
+       PRICING TABLE (SELECT THRONE)
+       ---------------------------------- */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .pricing-tier {
+      background: var(--bg-card);
+      border: 3px solid var(--chocolate-dark);
+      border-radius: 20px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+
+    .pricing-tier:hover {
+      transform: translateY(-5px);
+      box-shadow: 4px 4px 0px var(--chocolate-dark);
+    }
+
+    .tier-header {
+      text-align: center;
+      border-bottom: 2px dashed var(--chocolate-dark);
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .tier-price {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--swamp-green);
+      margin-top: 0.5rem;
+    }
+
+    .tier-features {
+      list-style-type: none;
+      font-size: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tier-features li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* ----------------------------------
+       BACKGROUND ELEMENTS & OOZE
+       ---------------------------------- */
+    .bg-blobs {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-blob {
+      position: absolute;
+      opacity: 0.2;
+      filter: blur(50px);
+    }
+
+    .blob-a {
+      width: 400px;
+      height: 400px;
+      background: var(--swamp-green);
+      top: 15%;
+      left: -100px;
+      border-radius: var(--gloop-1);
+    }
+
+    .blob-b {
+      width: 500px;
+      height: 500px;
+      background: var(--ochre-yellow);
+      top: 50%;
+      right: -150px;
+      border-radius: var(--gloop-2);
+    }
+
+    .blob-c {
+      width: 350px;
+      height: 350px;
+      background: var(--sickly-green);
+      bottom: 10%;
+      left: 20%;
+      border-radius: var(--gloop-3);
+    }
+
+    /* SVG Ooze Wave Divider at Footer */
+    .ooze-divider-container {
+      width: 100%;
+      margin-top: 4rem;
+      margin-bottom: -10px;
+      position: relative;
+    }
+
+    .ooze-divider {
+      display: block;
+      width: 100%;
+      height: 80px;
+      fill: var(--chocolate-dark);
+    }
+
+    footer {
+      background: var(--chocolate-dark);
+      color: var(--bg-base);
+      padding: 4rem 2rem;
+      text-align: center;
+      position: relative;
+      border-top: var(--border-thick);
+    }
+
+    .footer-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--ochre-yellow);
+      font-weight: 700;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.5rem 1rem;
+      border-radius: 30% 70% 40% 60% / 50% 60% 40% 50%;
+      border: 2px solid var(--ochre-yellow);
+      transition: all 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      transform: scale(1.05);
+      background: var(--ochre-yellow);
+      color: var(--chocolate-dark);
+    }
+
+    .footer-disclaimer {
+      font-size: 0.85rem;
+      opacity: 0.6;
+      line-height: 1.4;
+    }
+
+    /* ----------------------------------
+       FLIES INTERACTIVITY
+       ---------------------------------- */
+    .fly {
+      position: fixed;
+      font-size: 1.8rem;
+      z-index: 9999;
+      cursor: pointer;
+      user-select: none;
+      pointer-events: auto;
+      transition: left 1s ease, top 1s ease, transform 0.5s ease;
+    }
+
+    .splat-flash {
+      position: fixed;
+      font-size: 2.2rem;
+      z-index: 9998;
+      pointer-events: none;
+      animation: float 0.8s forwards ease-out;
+    }
+
+    /* ----------------------------------
+       RESPONSIVE DESIGN (STACk ON MOBILE)
+       ---------------------------------- */
+    @media (max-width: 900px) {
+      .grid-container {
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        gap: 2rem;
+      }
+
+      .gloopy-card {
+        transform: none !important;
+        margin: 0 !important;
+      }
+
+      .logo {
+        font-size: 1.4rem;
+      }
+
+      .nav-container {
+        padding: 0.8rem 1rem;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .nav-links a {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Swat-a-Fly Game Banner -->
+  <div class="game-banner" id="game-banner">
+    🪰 WARNING: Bathroom flies detected! Click them to swat! 
+    Score: <span id="fly-score">0</span>
+  </div>
+
+  <header>
+    <nav class="nav-container">
+      <a href="#" class="logo">
+        💩 <span>TurdBrain OS</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#tokenomics">Tokenomics</a>
+        <a href="#pricing">Pricing</a>
+        <button class="gloopy-btn" onclick="playBeep('plop')">Plunge In</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Ambient floating blobs behind grid -->
+  <div class="bg-blobs">
+    <div class="bg-blob blob-a"></div>
+    <div class="bg-blob blob-b"></div>
+    <div class="bg-blob blob-c"></div>
+  </div>
+
+  <main class="grid-container" id="features">
+
+    <!-- HERO CARD -->
+    <section class="gloopy-card shape-1 hero-card">
+      <div>
+        <h1>Stop Flushing Your <mark>Data</mark> Down the Drain.</h1>
+        <p>
+          Every deposit tells a story. Your lifestyle, your hydration, your cryptographic mining potential. 
+          <strong>TurdBrain OS™</strong> integrates rim-mounted AI cameras, acoustic resonance mapping, 
+          and biological emission parsing directly into your smart toilet. Turn your morning relief into actionable metrics.
+        </p>
+      </div>
+      <div class="card-footer">
+        <a href="#simulator" class="gloopy-btn" onclick="playBeep('fart')">Analyze Live Deposit</a>
+        <a href="#pricing" class="gloopy-btn btn-secondary" onclick="playBeep('plop')">Upgrade Throne</a>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE SIMULATOR (BOWEL AI) -->
+    <section class="gloopy-card shape-2 simulator-card" id="simulator">
+      <h2>Deposit Diagnostics™</h2>
+      <p>Simulate a bowel movement to check how TurdBrain OS™ processes real-time gastrointestinal telemetry.</p>
+      
+      <!-- Simulator Form -->
+      <div class="simulator-form" id="simulator-form">
+        
+        <!-- Consistency -->
+        <div class="sim-group">
+          <div class="sim-group-title">1. Stool Consistency</div>
+          <div class="radio-tiles">
+            <label class="radio-tile">
+              <input type="radio" name="texture" value="pellet" checked>
+              <span class="emoji">🌰</span>
+              <span>Pellets</span>
+            </label>
+            <label class="radio-tile">
+              <input type="radio" name="texture" value="smooth">
+              <span class="emoji">🍌</span>
+              <span>Smooth</span>
+            </label>
+            <label class="radio-tile">
+              <input type="radio" name="texture" value="sludge">
+              <span class="emoji">🌊</span>
+              <span>Sludge</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Color -->
+        <div class="sim-group">
+          <div class="sim-group-title">2. Color Spectrography</div>
+          <div class="radio-tiles">
+            <label class="radio-tile">
+              <input type="radio" name="color" value="mahogany" checked>
+              <span class="emoji">🟤</span>
+              <span>Mahogany</span>
+            </label>
+            <label class="radio-tile">
+              <input type="radio" name="color" value="kelp">
+              <span class="emoji">🟢</span>
+              <span>Kelp</span>
+            </label>
+            <label class="radio-tile">
+              <input type="radio" name="color" value="sunrise">
+              <span class="emoji">🟡</span>
+              <span>Sunrise</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Sound Profile -->
+        <div class="sim-group">
+          <div class="sim-group-title">3. Acoustic Impact Profile</div>
+          <div class="radio-tiles">
+            <label class="radio-tile">
+              <input type="radio" name="sound" value="charge" checked>
+              <span class="emoji">💥</span>
+              <span>Plop!</span>
+            </label>
+            <label class="radio-tile">
+              <input type="radio" name="sound" value="stealth">
+              <span class="emoji">🥷</span>
+              <span>Stealth</span>
+            </label>
+            <label class="radio-tile">
+              <input type="radio" name="sound" value="splatter">
+              <span class="emoji">⚡</span>
+              <span>Spray</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="button" class="gloopy-btn" id="analyze-btn" style="width: 100%;">COMMENCE DEPOSIT 💩</button>
+      </div>
+
+      <!-- Simulator Loading Screen -->
+      <div class="progress-container" id="progress-container">
+        <div class="toilet-spinner">🚽</div>
+        <div class="progress-text" id="progress-text">Warming up bowel-vision sensors...</div>
+      </div>
+
+      <!-- Simulator Results Screen -->
+      <div class="result-container" id="simulator-result">
+        <div class="result-header">
+          <span class="result-title" id="res-name">The Majestic Mahogany</span>
+          <span class="badge">AI Certified</span>
+        </div>
+        <div class="result-metric">
+          <strong>Stool Consistency Scan</strong>
+          <span id="res-texture">Checking viscosity...</span>
+        </div>
+        <div class="result-metric">
+          <strong>Spectral Color Analysis</strong>
+          <span id="res-color">Scanning pigments...</span>
+        </div>
+        <div class="result-metric">
+          <strong>Acoustic Decibel Splash Ratio</strong>
+          <span id="res-sound">Listening for splashback...</span>
+        </div>
+        <div class="reward-box">
+          💰 Methane Captured. Earned: <span id="res-dung">0.00 $DUNG</span>
+        </div>
+        <button class="gloopy-btn btn-secondary" onclick="resetSimulator()" style="width:100%; margin-top: 1rem;">Drop Another Log</button>
+      </div>
+    </section>
+
+    <!-- TOKENOMICS ($DUNG) -->
+    <section class="gloopy-card shape-3 token-card" id="tokenomics">
+      <div>
+        <h2>Liquid Assets: $DUNG</h2>
+        <p>Every flush generates gas fees—literal gas fees. Turn your flatulence emissions into raw cryptocurrency.</p>
+        
+        <div class="token-display">
+          <div class="token-price" id="token-price">$0.00004128</div>
+          <div class="token-stats">
+            <span>Vol: 142.4 Tons</span>
+            <span style="color: #6c8e32;">▲ 12.8%</span>
+          </div>
+        </div>
+
+        <div class="miner-interface">
+          <div class="gas-meter-container">
+            <div class="gas-meter-bar" id="gas-meter-bar"></div>
+            <div class="gas-meter-text">Toilet Gas Pressure: <span id="gas-percent">45</span>%</div>
+          </div>
+          <button class="gloopy-btn" onclick="triggerMethaneRelease()" style="width: 100%;">Vent & Mine Gas 💨</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURE 1: BristolScan -->
+    <section class="gloopy-card shape-4 feature-1">
+      <div>
+        <h3>🚽 FecalVision™ Neural Rim-Cam</h3>
+        <p>
+          Dual-lens high-speed under-rim camera captures high-definition captures of your deposits, instantly running structural categorization against the Bristol Stool Chart. No more guessing.
+        </p>
+      </div>
+    </section>
+
+    <!-- FEATURE 2: Active SplashGuard -->
+    <section class="gloopy-card shape-3 feature-2">
+      <div>
+        <h3>💦 SplashGuard™ Counter-Current</h3>
+        <p>
+          Acoustic laser measurement calculates drop speed and weight in fractions of a millisecond. It launches a counter-flow jet of water to intercept the impact, eliminating "Neptune's Kiss" forever.
+        </p>
+      </div>
+    </section>
+
+    <!-- FEATURE 3: NutriPoop Notifications -->
+    <section class="gloopy-card shape-1 feature-3">
+      <div>
+        <h3>📳 NutriPoop™ Push Notifications</h3>
+        <p>
+          Syncs directly to your smartwatch. Get friendly, slightly passive-aggressive push notifications like: 
+          <em>"Kevin, that's the third day without fiber. The pipes are crying. We have locked the snack cupboard."</em>
+        </p>
+      </div>
+    </section>
+
+    <!-- FEATURE 4: Auto-Plumber Dispatch -->
+    <section class="gloopy-card shape-2 feature-4">
+      <div>
+        <h3>🪠 Auto-Plumber Emergency Protocol</h3>
+        <p>
+          In the event of an absolute pipeline bottleneck, TurdBrain OS™ automatically calls a local plumber before you even reach for the plunger. Real-time GPS routing ensures the cavalry arrives before the flood.
+        </p>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS (SPLASH ZONE) -->
+    <section class="gloopy-card shape-1 testimonials-card">
+      <div>
+        <h2>The Splash Zone</h2>
+        
+        <div class="testimonial-slide">
+          <p>"I used to sit and scroll social media. Now my toilet holds me accountable for my diet and mines crypto while I struggle. 10/10."</p>
+          <div class="testimonial-author">— Arthur P., Heavy Dropper</div>
+        </div>
+
+        <div class="testimonial-slide">
+          <p>"The SplashGuard is worth every penny. Silent, dry, and clean. My toilet is smarter than my kids."</p>
+          <div class="testimonial-author">— Brenda K., Fiber Enthusiast</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING TABLE (SELECT THRONE) -->
+    <section class="gloopy-card shape-3 pricing-card" id="pricing">
+      <div>
+        <h2 style="text-align: center;">Choose Your Throne</h2>
+        <p style="text-align: center; max-width: 600px; margin: 0 auto 2rem;">
+          Whether you are a casual dropper or an enterprise-grade processing plant, we have the licensing tier for your plumbing.
+        </p>
+
+        <div class="pricing-grid">
+          
+          <!-- Tier 1 -->
+          <div class="pricing-tier">
+            <div class="tier-header">
+              <h3>Porcelain Pleb</h3>
+              <div class="tier-price">$0</div>
+              <p>Ad-Supported Pooping</p>
+            </div>
+            <ul class="tier-features">
+              <li>💩 Basic Bristol Scan</li>
+              <li>💩 Web ads on rim-screen</li>
+              <li>💩 No SplashGuard active defense</li>
+              <li>💩 1% gas mining efficiency</li>
+            </ul>
+            <button class="gloopy-btn btn-secondary" onclick="playBeep('plop')">Flush Free</button>
+          </div>
+
+          <!-- Tier 2 -->
+          <div class="pricing-tier" style="border-color: var(--swamp-green); transform: scale(1.03);">
+            <div class="tier-header">
+              <h3>Royal Flush Pro</h3>
+              <div class="tier-price">$199<span style="font-size:1rem;font-weight:normal;">/yr</span></div>
+              <p>For Serious Operators</p>
+            </div>
+            <ul class="tier-features">
+              <li>🟢 Premium Stool Tracking</li>
+              <li>🟢 4K rim-cam Fecal Scan</li>
+              <li>🟢 SplashGuard™ Active Defense</li>
+              <li>🟢 100% methane mining output</li>
+              <li>🟢 Gold-plated plunger included</li>
+            </ul>
+            <button class="gloopy-btn" onclick="playBeep('fart')">Buy Pro Throne</button>
+          </div>
+
+          <!-- Tier 3 -->
+          <div class="pricing-tier">
+            <div class="tier-header">
+              <h3>Sovereign Stall</h3>
+              <div class="tier-price">Custom</div>
+              <p>Industrial & Enterprise</p>
+            </div>
+            <ul class="tier-features">
+              <li>💩 24/7 direct plumber hotlink</li>
+              <li>💩 Liquid nitrogen rapid-cool</li>
+              <li>💩 Acoustic fart synthesizer</li>
+              <li>💩 Shared family ledger API</li>
+            </ul>
+            <button class="gloopy-btn btn-secondary" onclick="playBeep('plop')">Call Plumbing HQ</button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Ooze divider before footer -->
+  <div class="ooze-divider-container">
+    <svg class="ooze-divider" viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,0 C150,90 350,90 500,40 C650,-10 800,80 950,50 C1100,20 1250,90 1440,20 L1440,100 L0,100 Z"></path>
+    </svg>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <h2>Let It Flow.</h2>
+      <div class="footer-links">
+        <a href="#" onclick="playBeep('plop')">X / Toilet-Feed</a>
+        <a href="#" onclick="playBeep('fart')">Discord: The Sewer</a>
+        <a href="#" onclick="playBeep('plop')">Whitepaper.pdf 🧻</a>
+      </div>
+      <p class="footer-disclaimer">
+        Disclaimer: TurdBrain OS™ is not a medical device. If your output glows in the dark, glows green under uv light, or sings folk tunes, contact a licensed professional immediately. Do not attempt to mine $DUNG tokens using external canisters. Keep lid closed during system compilation.
+      </p>
+      <p style="margin-top: 1.5rem; font-size: 0.8rem; opacity: 0.5;">
+        &copy; 2026 TurdBrain Systems, Inc. All rights flushed.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Interactivity and Synth Engine -->
+  <script>
+    // ----------------------------------
+    // WEB AUDIO API SYNTHESIZER
+    // ----------------------------------
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function playBeep(type) {
+      initAudio();
+      if (!audioCtx) return;
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      const osc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      const now = audioCtx.currentTime;
+
+      if (type === 'plop') {
+        // Frequency sweep down representing a splash/plop
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(180, now);
+        osc.frequency.exponentialRampToValueAtTime(35, now + 0.35);
+        
+        gainNode.gain.setValueAtTime(0.4, now);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+        
+        osc.start(now);
+        osc.stop(now + 0.35);
+      } else if (type === 'fart') {
+        // Raw buzzing sawtooth fart sound
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(85, now);
+        osc.frequency.linearRampToValueAtTime(50, now + 0.1);
+        osc.frequency.linearRampToValueAtTime(75, now + 0.25);
+        osc.frequency.linearRampToValueAtTime(35, now + 0.45);
+        
+        // Add low-pass filter to make it sound muffled/inside a bowl
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(300, now);
+        
+        osc.disconnect(gainNode);
+        osc.connect(filter);
+        filter.connect(gainNode);
+
+        gainNode.gain.setValueAtTime(0.5, now);
+        gainNode.gain.linearRampToValueAtTime(0.4, now + 0.25);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.45);
+        
+        osc.start(now);
+        osc.stop(now + 0.45);
+      } else if (type === 'splat') {
+        // High frequency triangle decaying to sound like a wet splat
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.exponentialRampToValueAtTime(20, now + 0.15);
+        
+        gainNode.gain.setValueAtTime(0.6, now);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+        
+        osc.start(now);
+        osc.stop(now + 0.15);
+      }
+    }
+
+    // ----------------------------------
+    // BOWEL AI SIMULATOR
+    // ----------------------------------
+    const analyzeBtn = document.getElementById('analyze-btn');
+    const simulatorForm = document.getElementById('simulator-form');
+    const progressContainer = document.getElementById('progress-container');
+    const progressText = document.getElementById('progress-text');
+    const simulatorResult = document.getElementById('simulator-result');
+
+    analyzeBtn.addEventListener('click', () => {
+      // Initialize audio on button click to handle browser policies
+      initAudio();
+      playBeep('plop');
+
+      // Hide form, show progress loader
+      simulatorForm.style.display = 'none';
+      progressContainer.style.display = 'block';
+      simulatorResult.style.display = 'none';
+
+      const steps = [
+        { text: "🚽 Activating rim-mounted biological lenses...", sound: 'splat', delay: 700 },
+        { text: "🧻 Calibrating acoustic splash-back trajectory...", sound: 'fart', delay: 1400 },
+        { text: "📸 Running convolutional neural networks on deposits...", sound: 'splat', delay: 2100 },
+        { text: "🧪 Calculating dry matter ratio & fiber compliance...", sound: 'plop', delay: 2800 },
+        { text: "💎 Finalizing gas token extraction & health report...", sound: 'fart', delay: 3500 }
+      ];
+
+      steps.forEach((step) => {
+        setTimeout(() => {
+          progressText.innerText = step.text;
+          playBeep(step.sound);
+        }, step.delay);
+      });
+
+      // Show results
+      setTimeout(() => {
+        progressContainer.style.display = 'none';
+        generateReport();
+      }, 4200);
+    });
+
+    function generateReport() {
+      const texture = document.querySelector('input[name="texture"]:checked').value;
+      const color = document.querySelector('input[name="color"]:checked').value;
+      const sound = document.querySelector('input[name="sound"]:checked').value;
+
+      let name = "The Majestic Mahogany";
+      let textureDesc = "";
+      let colorDesc = "";
+      let soundDesc = "";
+      let yieldAmt = 0;
+
+      // Logic parsing consistency
+      if (texture === 'pellet') {
+        name = "Dry Pellet Storm";
+        textureDesc = "Viscosity: Extremely high. Dehydration detected. Stool is dry, spherical, and dense.";
+        yieldAmt += 0.15;
+      } else if (texture === 'smooth') {
+        name = "The Perfect Log";
+        textureDesc = "Viscosity: Ideal. Perfect smooth sausage structure. Excellent fiber saturation.";
+        yieldAmt += 1.80; // streak bonus
+      } else {
+        name = "Liquid Swamp Chaos";
+        textureDesc = "Viscosity: Non-existent. Severe pipeline liquefaction. Sensors triggered automatic ventilation.";
+        yieldAmt += 0.05;
+      }
+
+      // Logic parsing color
+      if (color === 'mahogany') {
+        colorDesc = "Spectrography: Forest mahogany. Standard bile breakdown. No anomalies.";
+      } else if (color === 'kelp') {
+        colorDesc = "Spectrography: Swamp Green. Did we ingest decorative food dye or raw lawn grass?";
+        yieldAmt += 0.20;
+      } else {
+        colorDesc = "Spectrography: Sickly Yellow. Stool contains high lipid content. Liver is pleading for rest.";
+      }
+
+      // Logic parsing sound
+      if (sound === 'charge') {
+        soundDesc = "Acoustics: Depth Charge (84dB). SplashGuard counter-jet deployed at 98% velocity.";
+      } else if (sound === 'stealth') {
+        soundDesc = "Acoustics: Stealth entry (12dB). Elegant drop. Minimal friction.";
+        yieldAmt += 0.50; // stealth bonus
+      } else {
+        soundDesc = "Acoustics: Rapid Splatter. High dispersion rate. Rim cameras are heavily blurred.";
+      }
+
+      // Display results
+      document.getElementById('res-name').innerText = name;
+      document.getElementById('res-texture').innerText = textureDesc;
+      document.getElementById('res-color').innerText = colorDesc;
+      document.getElementById('res-sound').innerText = soundDesc;
+      document.getElementById('res-dung').innerText = yieldAmt.toFixed(2) + " $DUNG";
+      
+      simulatorResult.style.display = 'block';
+      playBeep('plop');
+    }
+
+    function resetSimulator() {
+      simulatorResult.style.display = 'none';
+      simulatorForm.style.display = 'flex';
+      playBeep('splat');
+    }
+
+    // ----------------------------------
+    // $DUNG TOKEN ENGINE & MINER
+    // ----------------------------------
+    let balance = 0;
+    let gasPressure = 45;
+    let basePrice = 0.00004128;
+
+    // Price updates randomly every few seconds
+    setInterval(() => {
+      const shift = (Math.random() - 0.45) * 0.000005; // biased slightly up
+      basePrice += shift;
+      if (basePrice < 0.000001) basePrice = 0.000001;
+      document.getElementById('token-price').innerText = '$' + basePrice.toFixed(8);
+    }, 3000);
+
+    // Gas release action
+    function triggerMethaneRelease() {
+      initAudio();
+      if (gasPressure < 10) {
+        alert("Not enough biological pressure! Wait for your system to compile more gas.");
+        return;
+      }
+
+      playBeep('fart');
+      gasPressure -= 15;
+      updateGasMeter();
+
+      // Show floating gas puff emoji
+      const p = document.createElement('div');
+      p.className = 'splat-flash';
+      p.innerText = '💨';
+      p.style.left = '50%';
+      p.style.top = '50%';
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 800);
+    }
+
+    function updateGasMeter() {
+      document.getElementById('gas-meter-bar').style.width = gasPressure + '%';
+      document.getElementById('gas-percent').innerText = gasPressure;
+    }
+
+    // Gas accumulates slowly over time
+    setInterval(() => {
+      if (gasPressure < 100) {
+        gasPressure += 2;
+        if (gasPressure > 100) gasPressure = 100;
+        updateGasMeter();
+      }
+    }, 1500);
+
+    // ----------------------------------
+    // SWEEP-A-FLY GAME ENGINE
+    // ----------------------------------
+    let score = 0;
+    const flyScoreElement = document.getElementById('fly-score');
+
+    function spawnFly() {
+      const fly = document.createElement('div');
+      fly.className = 'fly';
+      fly.innerHTML = '🪰';
+      
+      // Random starting coordinates
+      const x = Math.random() * (window.innerWidth - 60);
+      const y = Math.random() * (window.innerHeight - 60);
+      fly.style.left = x + 'px';
+      fly.style.top = y + 'px';
+      document.body.appendChild(fly);
+
+      // Random movement intervals
+      const moveInterval = setInterval(() => {
+        const targetX = Math.random() * (window.innerWidth - 60);
+        const targetY = Math.random() * (window.innerHeight - 60);
+        fly.style.left = targetX + 'px';
+        fly.style.top = targetY + 'px';
+        // Random rotation angle
+        fly.style.transform = `rotate(${Math.random() * 360}deg)`;
+      }, 1500 + Math.random() * 1500);
+
+      // Swatting handler
+      fly.addEventListener('click', (e) => {
+        clearInterval(moveInterval);
+        playBeep('splat');
+        
+        // Transform fly into explosion
+        fly.innerHTML = '💥';
+        fly.style.pointerEvents = 'none';
+        
+        score++;
+        flyScoreElement.innerText = score;
+
+        // Visual splat markup flash
+        const flash = document.createElement('div');
+        flash.className = 'splat-flash';
+        flash.innerText = '💥 SPLAT!';
+        flash.style.left = e.clientX + 'px';
+        flash.style.top = e.clientY + 'px';
+        document.body.appendChild(flash);
+
+        setTimeout(() => {
+          flash.remove();
+        }, 1000);
+
+        setTimeout(() => {
+          fly.remove();
+          // Spawn replacements to keep the swarm active
+          setTimeout(spawnFly, Math.random() * 4000 + 2000);
+        }, 500);
+      });
+    }
+
+    // Initial swarm
+    window.addEventListener('load', () => {
+      for (let i = 0; i < 4; i++) {
+        setTimeout(spawnFly, i * 1200);
+      }
+    });
+
+  </script>
+</body>
+</html>

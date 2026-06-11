@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puter AI Gateway</title>
+    <script src="https://js.puter.com/v2/"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary: #10b981;
+            --dark-bg: #1e293b;
+            --dark-text: #f1f5f9;
+            --dark-card: #334155;
+            --light-bg: #f8fafc;
+            --light-text: #0f172a;
+            --light-card: #ffffff;
+            --border: #cbd5e1;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, 
+                         Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.light {
+            background-color: var(--light-bg);
+            color: var(--light-text);
+        }
+
+        body.dark {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+            background-image: linear-gradient(120deg, #1a1a1a 0%, #121212 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header h1 {
+            margin: 0;
+            color: var(--primary);
+        }
+
+        .header p {
+            color: var(--secondary);
+            margin: 10px 0;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .model-selector, .theme-toggle {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-size: 16px;
+        }
+
+        .theme-toggle {
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-dark);
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 70vh;
+        }
+
+        .chat-history {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .user-message {
+            background-color: #dbeafe;
+            margin-left: 20%;
+        }
+
+        .assistant-message {
+            background-color: #ede9fe;
+            margin-right: 20%;
+            margin-left: auto;
+            width: 80%;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-container textarea {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-size: 16px;
+            resize: none;
+        }
+
+        .input-container button {
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .input-container button:hover {
+            background: var(--primary-dark);
+        }
+
+        .info-panel {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .info-panel h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        .info-panel pre {
+            background: var(--light-card);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .dark .info-panel pre {
+            background: var(--dark-card);
+        }
+
+        .dark .user-message {
+            background-color: #1e3a8a;
+        }
+
+        .dark .assistant-message {
+            background-color: #5b21b6;
+        }
+
+        .dark .input-container textarea {
+            background: var(--dark-card);
+            border: 1px solid #4b5563;
+        }
+
+        .dark .chat-history {
+            border: 1px solid #4b5563;
+        }
+
+        .dark .input-container {
+            border: 1px solid #4b5563;
+        }
+
+        .dark .controls select {
+            background: var(--dark-card);
+            color: var(--dark-text);
+        }
+
+        .dark .info-panel {
+            border: 1px solid #4b5563;
+        }
+    </style>
+</head>
+<body class="light">
+    <div class="container">
+        <header class="header">
+            <h1>Puter AI Gateway</h1>
+            <p>Free, unlimited AI — no API keys needed</p>
+        </header>
+
+        <div class="controls">
+            <select class="model-selector" id="modelSelector">
+                <option value="">Select a model</option>
+            </select>
+            <button class="theme-toggle" id="themeToggle">🌓</button>
+        </div>
+
+        <div class="layout">
+            <div class="chat-section">
+                <div class="chat-container">
+                    <div class="chat-history" id="chatHistory"></div>
+                    <div class="input-container">
+                        <textarea id="messageInput" placeholder="Type your message here..."></textarea>
+                        <button id="sendButton">Send</button>
+                    </div>
+                </div>
+            </div>
+            <div class="info-section">
+                <div class="info-panel">
+                    <h3>API Information</h3>
+                    <p>Local API endpoint: <code>http://localhost:3141/v1</code></p>
+                    <h4>OpenCode CLI Configuration</h4>
+                    <pre>export OPENAI_API_KEY=puter-free
+export OPENAI_BASE_URL=http://localhost:3141/v1
+opencode</pre>
+                    <h4>Python/OpenAI SDK Usage</h4>
+                    <pre>from openai import OpenAI
+client = OpenAI(
+    api_key="puter-free",
+    base_url="http://localhost:3141/v1"
+)</pre>
+                    <button id="testApiButton">Test API</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM elements
+        const chatHistory = document.getElementById('chatHistory');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const themeToggle = document.getElementById('themeToggle');
+        const modelSelector = document.getElementById('modelSelector');
+        const testApiButton = document.getElementById('testApiButton');
+
+        // Theme toggle functionality
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            document.body.classList.toggle('light');
+        });
+
+        // Populate model selector
+        const models = {
+            // OpenAI models
+            'gpt-5.4-nano': 'gpt-5.4-nano',
+            'gpt-5.4': 'gpt-5.4',
+            'gpt-4o': 'gpt-4o',
+            'gpt-4o-mini': 'gpt-4o-mini',
+            'o3-mini': 'o3-mini',
+            // Anthropic models
+            'claude-sonnet-4-5': 'claude-sonnet-4-5',
+            'claude-3-5-sonnet': 'claude-3-5-sonnet',
+            'claude-3-haiku': 'claude-3-haiku',
+            // DeepSeek models
+            'deepseek/deepseek-r1': 'deepseek/deepseek-r1',
+            'deepseek/deepseek-chat': 'deepseek/deepseek-chat',
+            // Google models
+            'google/gemini-2.0-flash': 'google/gemini-2.0-flash',
+            'google/gemini-pro': 'google/gemini-pro',
+            // Meta models
+            'meta-llama/llama-3.1-8b-instruct': 'meta-llama/llama-3.1-8b-instruct',
+            'meta-llama/llama-3.3-70b-instruct': 'meta-llama/llama-3.3-70b-instruct',
+            // Mistral models
+            'mistralai/mistral-large-latest': 'mistralai/mistral-large-latest'
+        };
+
+        // Populate model selector dropdown
+        for (const [name, value] of Object.entries(models)) {
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = name;
+            modelSelector.appendChild(option);
+        }
+
+        // Set default model
+        modelSelector.value = 'gpt-5.4-nano';
+
+        // Function to add message to chat history
+        function addMessageToHistory(role, content) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}-message`;
+            messageDiv.textContent = content;
+            chatHistory.appendChild(messageDiv);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        // Function to send message
+        async function sendMessage() {
+            const message = messageInput.value;
+            if (!message.trim()) return;
+
+            // Add user message to chat
+            addMessageToHistory('user', message);
+
+            // Clear input
+            messageInput.value = '';
+
+            // Add loading indicator
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message assistant-message';
+            loadingDiv.textContent = 'Thinking...';
+            chatHistory.appendChild(loadingDiv);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            try {
+                // Remove loading indicator
+                loadingDiv.remove();
+
+                // Send request to our API
+                const response = await fetch('/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: modelSelector.value,
+                        messages: [{role: "user", content: message}],
+                        stream: false
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    addMessageToHistory('assistant', `Error: ${data.error.message}`);
+                    return;
+                }
+
+                addMessageToHistory('assistant', data.choices[0].message.content);
+            } catch (error) {
+                // Remove loading indicator on error
+                loadingDiv.remove();
+                addMessageToHistory('assistant', `Error: ${error.message}`);
+            }
+        }
+
+        // Event listeners
+        sendButton.addEventListener('click', sendMessage);
+
+        messageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Test API button functionality
+        testApiButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-5.4-nano',
+                        messages: [{role: "user", content: "Hello, world!"}],
+                        stream: false
+                    })
+                });
+
+                const data = await response.json();
+                alert(`API Test Response: ${JSON.stringify(data, null, 2)}`);
+            } catch (error) {
+                alert(`Error testing API: ${error.message}`);
+            }
+        });
+    </script>
+</body>
+</html>

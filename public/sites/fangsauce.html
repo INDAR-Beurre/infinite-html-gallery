@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>FANGSAUCE™ — Wake Up Screaming. Caffeinated Hot Sauce.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --acid:#d4ff00;
+    --magenta:#ff2bd6;
+    --cyan:#00e5ff;
+    --orange:#ff5b1f;
+    --ink:#0a0a0a;
+    --paper:#f5f1e6;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:var(--paper);color:var(--ink);overflow-x:hidden;}
+  body{
+    font-family:'Space Mono','Courier New',monospace;
+    font-size:16px;
+    line-height:1.4;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--magenta);color:#fff;}
+
+  h1,h2,h3,.scream{
+    font-family:'Archivo Black','Impact',sans-serif;
+    text-transform:uppercase;
+    letter-spacing:-0.02em;
+    line-height:.85;
+  }
+
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;}
+
+  /* paper grain overlay */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 3px 3px;
+    pointer-events:none;
+    z-index:1;
+    mix-blend-mode: multiply;
+  }
+
+  /* =================== MARQUEE =================== */
+  .marquee{
+    background:var(--ink);
+    color:var(--acid);
+    border-bottom:4px solid var(--ink);
+    overflow:hidden;
+    position:relative;
+    z-index:5;
+  }
+  .marquee-track{
+    display:flex;
+    width:max-content;
+    animation: scroll 22s linear infinite;
+    padding:10px 0;
+    font-family:'Archivo Black';
+    font-size:18px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .marquee-track span{ padding:0 28px; }
+  .marquee-track span::after{
+    content:"★";
+    margin-left:28px;
+    color:var(--magenta);
+  }
+  @keyframes scroll{
+    from{ transform: translateX(0); }
+    to  { transform: translateX(-50%); }
+  }
+
+  /* =================== NAV =================== */
+  nav{
+    position:relative;
+    z-index:10;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 28px;
+    background:var(--paper);
+    border-bottom:4px solid var(--ink);
+  }
+  .logo{
+    font-family:'Archivo Black';
+    font-size:28px;
+    letter-spacing:-0.04em;
+    text-transform:uppercase;
+    background:var(--ink);
+    color:var(--acid);
+    padding:6px 12px 4px;
+    box-shadow: 6px 6px 0 var(--magenta);
+    transform: rotate(-2deg);
+  }
+  .logo sup{font-size:11px;color:var(--cyan);vertical-align:super;}
+  .nav-links{ display:flex; gap:6px; align-items:center; }
+  .nav-links a{
+    font-family:'Archivo Black';
+    text-transform:uppercase;
+    font-size:14px;
+    padding:8px 14px;
+    border:3px solid var(--ink);
+    background:var(--paper);
+    box-shadow: 4px 4px 0 var(--ink);
+    transition: transform .08s, box-shadow .08s;
+  }
+  .nav-links a:hover{
+    transform: translate(2px,2px);
+    box-shadow: 2px 2px 0 var(--ink);
+    background:var(--acid);
+  }
+  .nav-links a.buy{
+    background:var(--magenta);
+    color:#fff;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .nav-links a.buy:hover{ background:var(--orange); }
+  .hamburger{display:none;}
+
+  /* =================== HERO =================== */
+  .hero{
+    position:relative;
+    padding: 60px 28px 80px;
+    background:
+      repeating-linear-gradient(45deg,
+        var(--paper) 0 22px,
+        #ece8db 22px 23px);
+    border-bottom:4px solid var(--ink);
+    overflow:hidden;
+  }
+  .hero-grid{
+    max-width:1280px; margin:0 auto;
+    display:grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap:40px;
+    align-items:center;
+    position:relative;
+  }
+  .stamp{
+    display:inline-block;
+    font-family:'Archivo Black';
+    font-size:13px;
+    text-transform:uppercase;
+    padding:8px 14px;
+    background:var(--cyan);
+    color:var(--ink);
+    border:3px solid var(--ink);
+    box-shadow: 5px 5px 0 var(--ink);
+    transform: rotate(-3deg);
+    margin-bottom:24px;
+  }
+  .hero h1{
+    font-size: clamp(56px, 11vw, 168px);
+    letter-spacing:-0.04em;
+  }
+  .hero h1 .row{display:block;}
+  .hero h1 .wake{ color:var(--ink); }
+  .hero h1 .up{
+    background:var(--magenta);
+    color:var(--paper);
+    padding:0 .12em;
+    display:inline-block;
+    transform: rotate(-1.5deg) translateY(-6px);
+    box-shadow: 10px 10px 0 var(--ink);
+    -webkit-text-stroke: 2px var(--ink);
+  }
+  .hero h1 .screaming{
+    color:var(--orange);
+    -webkit-text-stroke: 3px var(--ink);
+    text-shadow:
+       8px 8px 0 var(--ink);
+  }
+  .hero p.dek{
+    margin-top:28px;
+    max-width:560px;
+    font-size:18px;
+    line-height:1.45;
+    font-weight:700;
+  }
+  .hero p.dek strong{
+    background:var(--acid);
+    padding:0 4px;
+    border:2px solid var(--ink);
+  }
+  .cta-row{
+    margin-top:34px;
+    display:flex; gap:18px; flex-wrap:wrap; align-items:center;
+  }
+  .btn{
+    font-family:'Archivo Black';
+    text-transform:uppercase;
+    font-size:18px;
+    padding:18px 28px;
+    border:4px solid var(--ink);
+    box-shadow: 8px 8px 0 var(--ink);
+    transition: transform .08s, box-shadow .08s;
+    display:inline-flex; align-items:center; gap:10px;
+  }
+  .btn:hover{ transform: translate(4px,4px); box-shadow: 4px 4px 0 var(--ink); }
+  .btn.primary{ background:var(--acid); color:var(--ink); }
+  .btn.ghost{ background:var(--paper); color:var(--ink); }
+  .btn.danger{ background:var(--orange); color:#fff; }
+  .btn .arrow{ display:inline-block; }
+
+  /* hero bottle / can */
+  .bottle-wrap{
+    position:relative;
+    aspect-ratio: 4/5;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .bottle{
+    width:78%;
+    aspect-ratio: 1/2.1;
+    background: var(--ink);
+    border:4px solid var(--ink);
+    border-radius: 40% 40% 14px 14px / 18% 18% 14px 14px;
+    position:relative;
+    box-shadow: 14px 14px 0 var(--magenta);
+    transform: rotate(-6deg);
+    overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  .bottle .cap{
+    height:14%;
+    background: var(--acid);
+    border-bottom:4px solid var(--ink);
+    background-image:
+      repeating-linear-gradient(90deg,
+        var(--ink) 0 4px, transparent 4px 10px);
+  }
+  .bottle .neck{
+    height:6%;
+    background: var(--paper);
+    border-bottom:4px solid var(--ink);
+  }
+  .bottle .label{
+    flex:1;
+    background: var(--orange);
+    padding: 16px 12px;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:space-between;
+    text-align:center;
+    color:var(--ink);
+    border-top:0;
+    position:relative;
+  }
+  .bottle .label::before{
+    content:"";
+    position:absolute; inset:8px;
+    border:3px solid var(--ink);
+    pointer-events:none;
+  }
+  .bottle .label .top{
+    font-family:'Archivo Black';
+    font-size:12px;
+    background:var(--ink);
+    color:var(--acid);
+    padding:3px 8px;
+    border:2px solid var(--ink);
+  }
+  .bottle .label .name{
+    font-family:'Archivo Black';
+    font-size: clamp(22px, 3vw, 38px);
+    line-height:.85;
+    color:var(--ink);
+    -webkit-text-stroke: 1px var(--ink);
+  }
+  .bottle .label .scoville{
+    font-family:'Space Mono';
+    font-weight:700;
+    font-size:11px;
+    background:var(--ink);
+    color:var(--paper);
+    padding:4px 8px;
+    text-transform:uppercase;
+  }
+  .bottle .label .skull{
+    font-size:46px; line-height:1;
+  }
+
+  .splat{
+    position:absolute;
+    font-family:'Archivo Black';
+    text-transform:uppercase;
+    text-align:center;
+    border:4px solid var(--ink);
+    background:var(--acid);
+    padding:12px 14px;
+    box-shadow: 6px 6px 0 var(--ink);
+    line-height:.9;
+  }
+  .splat.s1{
+    top:6%; right:-4%;
+    transform: rotate(12deg);
+    background:var(--cyan);
+    font-size:14px;
+  }
+  .splat.s1 b{ font-size:22px; display:block; }
+  .splat.s2{
+    bottom:8%; left:-6%;
+    transform: rotate(-8deg);
+    background:var(--magenta);
+    color:#fff;
+    font-size:13px;
+  }
+  .splat.s2 b{ font-size:24px; display:block; color:var(--acid);}
+
+  /* =================== STATS BAR =================== */
+  .stats{
+    background:var(--ink);
+    color:var(--paper);
+    padding:28px;
+    border-bottom:4px solid var(--ink);
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap:24px;
+    text-align:center;
+  }
+  .stat .num{
+    font-family:'Archivo Black';
+    font-size: clamp(36px, 5vw, 64px);
+    line-height:1;
+    color:var(--acid);
+  }
+  .stat:nth-child(2) .num{ color:var(--magenta); }
+  .stat:nth-child(3) .num{ color:var(--cyan); }
+  .stat:nth-child(4) .num{ color:var(--orange); }
+  .stat .lbl{
+    margin-top:6px;
+    font-family:'Space Mono';
+    font-weight:700;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.1em;
+  }
+
+  /* =================== FEATURES =================== */
+  section{ position:relative; }
+  .section-tag{
+    display:inline-block;
+    font-family:'Archivo Black';
+    font-size:13px;
+    text-transform:uppercase;
+    padding:6px 12px;
+    background:var(--ink);
+    color:var(--acid);
+    border:3px solid var(--ink);
+    transform: rotate(-2deg);
+  }
+  .section-title{
+    font-size: clamp(42px, 7vw, 96px);
+    margin-top:14px;
+    max-width:14ch;
+    letter-spacing:-0.03em;
+  }
+  .section-title em{
+    font-style:normal;
+    background:var(--magenta);
+    color:#fff;
+    padding:0 .1em;
+    box-shadow: 8px 8px 0 var(--ink);
+    -webkit-text-stroke: 2px var(--ink);
+  }
+
+  .features{
+    padding: 80px 28px;
+    background: var(--paper);
+    border-bottom:4px solid var(--ink);
+  }
+  .features-inner{ max-width:1280px; margin:0 auto; }
+  .feature-grid{
+    margin-top:50px;
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:28px;
+  }
+  .card{
+    border:4px solid var(--ink);
+    padding:24px;
+    background: var(--paper);
+    box-shadow: 10px 10px 0 var(--ink);
+    position:relative;
+    display:flex; flex-direction:column; gap:16px;
+  }
+  .card:nth-child(1){ background: var(--acid); transform: rotate(-1deg); }
+  .card:nth-child(2){ background: var(--cyan); transform: rotate(1.2deg); margin-top:24px;}
+  .card:nth-child(3){ background: var(--orange); color:#fff; transform: rotate(-0.6deg);}
+  .card:nth-child(3) .badge{ background:var(--ink); color:var(--acid); }
+  .card .badge{
+    align-self:flex-start;
+    font-family:'Archivo Black';
+    font-size:13px;
+    text-transform:uppercase;
+    background:var(--ink);
+    color:var(--paper);
+    padding:6px 10px;
+    border:3px solid var(--ink);
+  }
+  .card .ico{
+    width:74px; height:74px;
+    background:var(--ink);
+    border:4px solid var(--ink);
+    color:var(--paper);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Archivo Black';
+    font-size:38px;
+    box-shadow: 6px 6px 0 var(--paper), 6px 6px 0 4px var(--ink);
+  }
+  .card:nth-child(3) .ico{ box-shadow: 6px 6px 0 var(--ink), 6px 6px 0 4px var(--paper); }
+  .card h3{
+    font-size:30px;
+    line-height:.9;
+  }
+  .card p{
+    font-size:15px;
+    line-height:1.45;
+    font-weight:700;
+  }
+
+  /* =================== HEAT SCALE =================== */
+  .heat{
+    padding: 80px 28px;
+    background: var(--ink);
+    color:var(--paper);
+    border-bottom:4px solid var(--ink);
+    position:relative;
+    overflow:hidden;
+  }
+  .heat-inner{ max-width:1280px; margin:0 auto; position:relative;}
+  .heat .section-tag{ background:var(--magenta); color:#fff; border-color:var(--paper);}
+  .heat .section-title{ color:var(--paper); }
+  .heat .section-title em{ background:var(--acid); color:var(--ink); -webkit-text-stroke: 0; box-shadow: 8px 8px 0 var(--magenta);}
+
+  .scale{
+    margin-top:48px;
+    display:grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap:0;
+    border:4px solid var(--paper);
+  }
+  .level{
+    padding:24px 18px;
+    border-right:4px solid var(--paper);
+    background:var(--ink);
+    color:var(--paper);
+    position:relative;
+    min-height:220px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    transition: background .15s, color .15s;
+    cursor:pointer;
+  }
+  .level:last-child{ border-right:none; }
+  .level .lv-num{
+    font-family:'Archivo Black';
+    font-size:64px; line-height:.9;
+    color:var(--acid);
+  }
+  .level:nth-child(2) .lv-num{ color:var(--cyan); }
+  .level:nth-child(3) .lv-num{ color:var(--orange); }
+  .level:nth-child(4) .lv-num{ color:var(--magenta); }
+  .level:nth-child(5) .lv-num{ color:#fff; }
+  .level .lv-name{
+    font-family:'Archivo Black';
+    font-size:22px;
+    text-transform:uppercase;
+    line-height:.95;
+    margin-top:8px;
+  }
+  .level .lv-desc{
+    font-family:'Space Mono';
+    font-size:13px;
+    font-weight:700;
+    margin-top:10px;
+    opacity:.85;
+  }
+  .level .lv-meter{
+    margin-top:16px;
+    height:14px;
+    background:#222;
+    border:2px solid var(--paper);
+    position:relative;
+  }
+  .level .lv-meter::after{
+    content:"";
+    position:absolute; inset:0;
+    background:var(--acid);
+    width: var(--w, 20%);
+  }
+  .level:nth-child(2) .lv-meter::after{ background:var(--cyan); width:40%;}
+  .level:nth-child(3) .lv-meter::after{ background:var(--orange); width:60%;}
+  .level:nth-child(4) .lv-meter::after{ background:var(--magenta); width:80%;}
+  .level:nth-child(5) .lv-meter::after{ background:#fff; width:100%;}
+  .level:hover{
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .level:hover .lv-meter{ border-color:var(--ink); }
+
+  /* =================== TESTIMONIALS as stickers =================== */
+  .voices{
+    padding: 90px 28px 110px;
+    background: var(--paper);
+    border-bottom:4px solid var(--ink);
+    position:relative;
+    overflow:hidden;
+  }
+  .voices-inner{ max-width:1280px; margin:0 auto; position:relative;}
+  .sticker-field{
+    margin-top: 40px;
+    position:relative;
+    min-height: 540px;
+  }
+  .sticker{
+    position:absolute;
+    border:4px solid var(--ink);
+    padding:16px 18px;
+    width: 320px;
+    box-shadow: 8px 8px 0 var(--ink);
+    font-weight:700;
+    font-size:15px;
+    line-height:1.4;
+  }
+  .sticker .who{
+    font-family:'Archivo Black';
+    text-transform:uppercase;
+    font-size:12px;
+    margin-top:10px;
+    padding-top:10px;
+    border-top:3px dashed var(--ink);
+    display:flex; justify-content:space-between;
+  }
+  .sticker.t1{ top:10px; left:2%; background:var(--acid); transform: rotate(-4deg); }
+  .sticker.t2{ top:60px; left:32%; background:var(--cyan); transform: rotate(3deg); }
+  .sticker.t3{ top:30px; right:2%; background:var(--magenta); color:#fff; transform: rotate(-2deg); }
+  .sticker.t3 .who{ border-top-color:#fff; }
+  .sticker.t4{ top:300px; left:10%; background:var(--orange); color:#fff; transform: rotate(2.5deg); width:340px;}
+  .sticker.t4 .who{ border-top-color:#fff; }
+  .sticker.t5{
+    top:320px; right:8%;
+    background:var(--paper);
+    transform: rotate(-2deg);
+    font-family:'Space Mono';
+    width:340px;
+  }
+  .sticker.t5 .forum-head{
+    background:var(--ink);
+    color:var(--acid);
+    padding:4px 8px;
+    font-family:'Archivo Black';
+    font-size:11px;
+    margin: -16px -18px 12px;
+    display:flex; justify-content:space-between;
+  }
+
+  /* =================== CTA =================== */
+  .cta{
+    padding: 90px 28px;
+    background: var(--magenta);
+    border-bottom:4px solid var(--ink);
+    position:relative;
+    overflow:hidden;
+    color:var(--ink);
+  }
+  .cta::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      repeating-linear-gradient(-15deg,
+        transparent 0 40px,
+        rgba(0,0,0,0.08) 40px 42px);
+    pointer-events:none;
+  }
+  .cta-inner{
+    max-width:1280px; margin:0 auto;
+    position:relative;
+    display:grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap:40px;
+    align-items:center;
+  }
+  .cta h2{
+    font-size: clamp(48px, 8vw, 124px);
+    line-height:.85;
+    color:var(--ink);
+  }
+  .cta h2 em{
+    font-style:normal;
+    color:var(--acid);
+    background:var(--ink);
+    padding:0 .1em;
+    box-shadow: 10px 10px 0 var(--paper);
+    display:inline-block;
+  }
+  .cta p{
+    margin-top:24px;
+    font-weight:700;
+    max-width: 520px;
+    font-size:17px;
+  }
+  .form{
+    background:var(--ink);
+    padding:22px;
+    border:4px solid var(--ink);
+    box-shadow: 12px 12px 0 var(--acid);
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .form label{
+    font-family:'Archivo Black';
+    color:var(--acid);
+    font-size:13px;
+    text-transform:uppercase;
+  }
+  .form input{
+    font-family:'Space Mono';
+    font-weight:700;
+    font-size:16px;
+    padding:14px 14px;
+    border:3px solid var(--acid);
+    background:var(--ink);
+    color:var(--paper);
+    outline:none;
+  }
+  .form input:focus{ background:var(--paper); color:var(--ink); border-color:var(--magenta);}
+  .form .btn{ width:100%; justify-content:center; background:var(--acid); color:var(--ink); box-shadow: 6px 6px 0 var(--paper); border-color:var(--paper);}
+  .form .small{
+    font-size:11px;
+    color:var(--paper);
+    font-family:'Space Mono';
+    opacity:.7;
+  }
+
+  /* =================== FOOTER =================== */
+  footer{
+    background:var(--ink);
+    color:var(--paper);
+    padding:32px 28px 20px;
+  }
+  .foot-grid{
+    max-width:1280px; margin:0 auto;
+    display:flex; justify-content:space-between; align-items:flex-start;
+    gap:32px; flex-wrap:wrap;
+  }
+  .foot-logo{
+    font-family:'Archivo Black';
+    font-size:34px;
+    color:var(--acid);
+    line-height:.9;
+  }
+  .foot-logo span{ color:var(--magenta); }
+  .foot-cols{ display:flex; gap:40px; flex-wrap:wrap; }
+  .foot-col h4{
+    font-family:'Archivo Black';
+    color:var(--cyan);
+    font-size:13px;
+    text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .foot-col a{
+    display:block;
+    font-size:14px;
+    padding:3px 0;
+    font-weight:700;
+  }
+  .foot-col a:hover{ color:var(--acid); text-decoration: line-through; }
+  .legal{
+    max-width:1280px; margin:30px auto 0;
+    padding-top:18px;
+    border-top:3px dashed var(--paper);
+    font-size:11px;
+    text-transform:uppercase;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    opacity:.75;
+  }
+
+  /* small decorative noise tag */
+  .tape{
+    position:absolute;
+    background: var(--acid);
+    border:2px solid var(--ink);
+    font-family:'Space Mono';
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    padding:3px 10px;
+    transform: rotate(-6deg);
+  }
+
+  /* =================== RESPONSIVE =================== */
+  @media (max-width: 960px){
+    .hero-grid, .cta-inner{ grid-template-columns: 1fr; }
+    .bottle-wrap{ aspect-ratio: 4/4; }
+    .feature-grid{ grid-template-columns: 1fr; }
+    .card:nth-child(2){ margin-top:0; }
+    .stats{ grid-template-columns: repeat(2,1fr); gap:18px; }
+    .scale{ grid-template-columns: 1fr 1fr; }
+    .level{ border-right:0; border-bottom:4px solid var(--paper);}
+    .sticker-field{ min-height: auto; display:flex; flex-direction:column; gap:24px; }
+    .sticker{ position:relative; top:auto !important; left:auto !important; right:auto !important; width:100% !important;}
+  }
+  @media (max-width: 620px){
+    .nav-links{ display:none; }
+    .hamburger{
+      display:inline-flex;
+      font-family:'Archivo Black';
+      padding:10px 14px;
+      border:3px solid var(--ink);
+      background:var(--acid);
+      box-shadow: 4px 4px 0 var(--ink);
+      font-size:14px;
+    }
+    .hero{ padding: 40px 18px 60px;}
+    .features, .heat, .voices, .cta{ padding: 60px 18px;}
+    .stats{ grid-template-columns: 1fr 1fr; }
+    .scale{ grid-template-columns: 1fr;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== TOP MARQUEE ========== -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>FREE SHIPPING OVER $40</span>
+    <span>200MG CAFFEINE PER BOTTLE</span>
+    <span>NOT FDA APPROVED — STILL LEGAL</span>
+    <span>BATCH 014 SOLD OUT IN 9 HRS</span>
+    <span>NEW DROP — JUNE 2026</span>
+    <span>FREE SHIPPING OVER $40</span>
+    <span>200MG CAFFEINE PER BOTTLE</span>
+    <span>NOT FDA APPROVED — STILL LEGAL</span>
+    <span>BATCH 014 SOLD OUT IN 9 HRS</span>
+    <span>NEW DROP — JUNE 2026</span>
+  </div>
+</div>
+
+<!-- ========== NAV ========== -->
+<nav>
+  <a href="#" class="logo">FANG<sup>SAUCE™</sup></a>
+  <div class="nav-links">
+    <a href="#what">WHAT IS THIS</a>
+    <a href="#heat">HEAT SCALE</a>
+    <a href="#mouths">RECEIPTS</a>
+    <a href="#buy" class="buy">BUY → $19</a>
+  </div>
+  <button class="hamburger" aria-label="menu">MENU ≡</button>
+</nav>
+
+<!-- ========== HERO ========== -->
+<header class="hero">
+  <div class="hero-grid">
+    <div>
+      <span class="stamp">★ BATCH 015 / JUNE 2026 ★</span>
+      <h1>
+        <span class="row wake">WAKE</span>
+        <span class="row"><span class="up">UP</span></span>
+        <span class="row screaming">SCREAMING.</span>
+      </h1>
+      <p class="dek">
+        FANGSAUCE™ is a <strong>caffeinated habanero hot sauce</strong> brewed in a defunct fireworks warehouse in Oakland. Coffee is for cowards. Pour this on eggs and watch the sun rise three hours early.
+      </p>
+      <div class="cta-row">
+        <a href="#buy" class="btn primary">GRAB A BOTTLE <span class="arrow">→</span></a>
+        <a href="#heat" class="btn ghost">SEE THE DAMAGE</a>
+      </div>
+    </div>
+
+    <div class="bottle-wrap" aria-hidden="true">
+      <div class="bottle">
+        <div class="cap"></div>
+        <div class="neck"></div>
+        <div class="label">
+          <div class="top">200MG CAFFEINE · 8 FL OZ</div>
+          <div class="skull">☠</div>
+          <div class="name">FANG<br>SAUCE</div>
+          <div class="scoville">SCOVILLE: 247,000 SHU</div>
+        </div>
+      </div>
+      <div class="splat s1">
+        ONLY<br><b>$19</b><br>A BOTTLE
+      </div>
+      <div class="splat s2">
+        AS SEEN ON<br><b>NOBODY</b><br>THANK GOD
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ========== STATS ========== -->
+<section class="stats" aria-label="stats">
+  <div class="stat"><div class="num">247K</div><div class="lbl">Scoville Units</div></div>
+  <div class="stat"><div class="num">200MG</div><div class="lbl">Caffeine / Bottle</div></div>
+  <div class="stat"><div class="num">3</div><div class="lbl">Lawsuits Pending</div></div>
+  <div class="stat"><div class="num">17,402</div><div class="lbl">Mouths Ruined</div></div>
+</section>
+
+<!-- ========== FEATURES ========== -->
+<section class="features" id="what">
+  <div class="features-inner">
+    <span class="section-tag">// WHAT'S IN THE BOTTLE</span>
+    <h2 class="section-title">A condiment with a <em>caffeine problem</em>.</h2>
+
+    <div class="feature-grid">
+      <article class="card">
+        <span class="badge">01 · HEAT</span>
+        <div class="ico">🔥</div>
+        <h3>Habaneros from people who hate you.</h3>
+        <p>We fire-roast Yucatán habaneros until they file a missing person's report. No filler. No mango. No apology. Just a clean 247,000 SHU haymaker delivered straight to your sinuses.</p>
+      </article>
+
+      <article class="card">
+        <span class="badge">02 · FUEL</span>
+        <div class="ico">⚡</div>
+        <h3>200mg of green coffee caffeine per bottle.</h3>
+        <p>Cold-extracted from unroasted Robusta beans. Dosed into every bottle. You don't drink your coffee anymore. You season your eggs with it. Welcome to the future, dummy.</p>
+      </article>
+
+      <article class="card">
+        <span class="badge">03 · ATTITUDE</span>
+        <div class="ico">☠</div>
+        <h3>Made by 4 people in a warehouse. On purpose.</h3>
+        <p>No VC money. No Shark Tank. No "founder story" PDF. We hand-bottle every batch in Oakland and ship it Tuesdays. If you want artisanal, go to the farmer's market. We're busy.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ========== HEAT SCALE ========== -->
+<section class="heat" id="heat">
+  <div class="heat-inner">
+    <span class="section-tag">// THE FANG SCALE™</span>
+    <h2 class="section-title">Five ways to <em>ruin brunch.</em></h2>
+
+    <div class="scale" role="list">
+      <div class="level" role="listitem">
+        <div>
+          <div class="lv-num">01</div>
+          <div class="lv-name">Wake-Up Call</div>
+          <div class="lv-desc">Habanero · 80,000 SHU. Polite. Almost nostalgic. A whisper.</div>
+        </div>
+        <div class="lv-meter"></div>
+      </div>
+      <div class="level" role="listitem">
+        <div>
+          <div class="lv-num">02</div>
+          <div class="lv-name">Cold Shower</div>
+          <div class="lv-desc">Habanero+Ghost · 140,000 SHU. You start to make decisions.</div>
+        </div>
+        <div class="lv-meter"></div>
+      </div>
+      <div class="level" role="listitem">
+        <div>
+          <div class="lv-num">03</div>
+          <div class="lv-name">Civil Unrest</div>
+          <div class="lv-desc">Ghost+Reaper · 247,000 SHU. The FANGSAUCE™ classic.</div>
+        </div>
+        <div class="lv-meter"></div>
+      </div>
+      <div class="level" role="listitem">
+        <div>
+          <div class="lv-num">04</div>
+          <div class="lv-name">Last Words</div>
+          <div class="lv-desc">Reaper · 1.1M SHU. Comes with a waiver. We're not joking.</div>
+        </div>
+        <div class="lv-meter"></div>
+      </div>
+      <div class="level" role="listitem">
+        <div>
+          <div class="lv-num">05</div>
+          <div class="lv-name">Pepper X</div>
+          <div class="lv-desc">2.6M SHU + 400mg caffeine. Sold under the counter. ID required.</div>
+        </div>
+        <div class="lv-meter"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TESTIMONIALS (stickers) ========== -->
+<section class="voices" id="mouths">
+  <div class="voices-inner">
+    <span class="section-tag">// UNFILTERED RECEIPTS</span>
+    <h2 class="section-title">What survivors are <em>screaming.</em></h2>
+
+    <div class="sticker-field">
+      <div class="sticker t1">
+        "I poured this on a breakfast burrito and finished a tax return in 11 minutes. My accountant cried."
+        <div class="who"><span>— MARLA D., PORTLAND</span><span>★★★★★</span></div>
+      </div>
+      <div class="sticker t2">
+        "Replaced my Adderall prescription. My therapist is concerned but the eggs are incredible."
+        <div class="who"><span>— DEV K., AUSTIN</span><span>★★★★★</span></div>
+      </div>
+      <div class="sticker t3">
+        "I no longer drink coffee. I no longer sleep. I am free."
+        <div class="who"><span>— ANONYMOUS, BROOKLYN</span><span>★★★★★</span></div>
+      </div>
+      <div class="sticker t4">
+        "Bought a bottle as a joke. Now my entire CrossFit gym is on it. The 5am class is feral."
+        <div class="who"><span>— CHAD T., DENVER</span><span>★★★★★</span></div>
+      </div>
+      <div class="sticker t5">
+        <div class="forum-head"><span>r/spicy · u/burntongue99</span><span>4.2k ▲</span></div>
+        ok so i tried fangsauce at a friend's bbq and now i can see through time. is this normal. asking for my wife. (she also tried it.) (she's not my wife anymore.)
+        <div class="who"><span>— POSTED 2H AGO</span><span>↳ 847 REPLIES</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CTA ========== -->
+<section class="cta" id="buy">
+  <div class="cta-inner">
+    <div>
+      <h2>QUIT YOUR <em>COFFEE.</em><br>COMMIT TO THE SAUCE.</h2>
+      <p>One bottle, $19. Three-pack, $48. Subscription nobody asked for, $15/mo and we ship until you beg us to stop. Free shipping over $40. No returns — you knew what you were doing.</p>
+      <div class="cta-row">
+        <a href="#" class="btn danger">SHIP ME ONE NOW <span class="arrow">→</span></a>
+        <a href="#" class="btn primary">SHIP ME THREE</a>
+      </div>
+    </div>
+
+    <form class="form" onsubmit="event.preventDefault(); this.querySelector('.btn').textContent='OK. WATCH YOUR INBOX.';">
+      <label for="em">JOIN THE DROP LIST →</label>
+      <input id="em" type="email" placeholder="your@email.com" required>
+      <button class="btn" type="submit">PUT ME ON THE LIST</button>
+      <span class="small">We send one email per batch. Unsubscribe by ignoring it like everyone else.</span>
+    </form>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="foot-grid">
+    <div>
+      <div class="foot-logo">FANG<span>SAUCE™</span></div>
+      <p style="margin-top:10px;max-width:300px;font-size:13px;opacity:.8;">
+        Bottled in Oakland, CA. Shipped on Tuesdays. Regretted on Wednesdays.
+      </p>
+    </div>
+    <div class="foot-cols">
+      <div class="foot-col">
+        <h4>Shop</h4>
+        <a href="#">Original 247K</a>
+        <a href="#">Last Words</a>
+        <a href="#">Pepper X (gated)</a>
+        <a href="#">Merch</a>
+      </div>
+      <div class="foot-col">
+        <h4>The Cult</h4>
+        <a href="#">Drop List</a>
+        <a href="#">Wholesale</a>
+        <a href="#">Press (don't)</a>
+        <a href="#">Hot Sauce Club</a>
+      </div>
+      <div class="foot-col">
+        <h4>Boring</h4>
+        <a href="#">Ingredients</a>
+        <a href="#">Shipping</a>
+        <a href="#">Refunds (LOL)</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </div>
+  <div class="legal">
+    <span>© 2026 FANGSAUCE WORKS LLC — NOT FDA APPROVED — KEEP AWAY FROM IDIOTS</span>
+    <span>★ MADE IN OAKLAND ★ SHIPPED WORLDWIDE ★ DRINK WATER ★</span>
+  </div>
+</footer>
+
+<script>
+  // simple hamburger toggle
+  document.querySelector('.hamburger')?.addEventListener('click', () => {
+    const links = document.querySelector('.nav-links');
+    links.style.display = (getComputedStyle(links).display === 'none') ? 'flex' : 'none';
+    if (window.innerWidth < 620 && links.style.display === 'flex'){
+      links.style.position = 'absolute';
+      links.style.top = '70px';
+      links.style.right = '18px';
+      links.style.flexDirection = 'column';
+      links.style.background = 'var(--paper)';
+      links.style.border = '4px solid var(--ink)';
+      links.style.padding = '12px';
+      links.style.boxShadow = '8px 8px 0 var(--ink)';
+      links.style.zIndex = '50';
+    }
+  });
+
+  // stat counter on scroll-in
+  const stats = document.querySelectorAll('.stat .num');
+  const targets = [247, 200, 3, 17402];
+  const suffix = ['K', 'MG', '', ''];
+  let played = false;
+  function runCount(){
+    if (played) return;
+    const r = stats[0].getBoundingClientRect();
+    if (r.top > window.innerHeight || r.bottom < 0) return;
+    played = true;
+    stats.forEach((el, i) => {
+      const t = targets[i];
+      const dur = 900;
+      const t0 = performance.now();
+      function step(now){
+        const p = Math.min(1, (now - t0) / dur);
+        const eased = 1 - Math.pow(1-p, 3);
+        const val = Math.floor(eased * t);
+        el.textContent = (val).toLocaleString() + suffix[i];
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = t.toLocaleString() + suffix[i];
+      }
+      requestAnimationFrame(step);
+    });
+  }
+  window.addEventListener('scroll', runCount, {passive:true});
+  runCount();
+
+  // micro-rotation on cards on hover (kept subtle)
+  document.querySelectorAll('.card').forEach(c => {
+    const base = c.style.transform;
+    c.addEventListener('mouseenter', () => { c.style.transform = 'rotate(0deg) translate(-2px,-2px)'; c.style.boxShadow = '14px 14px 0 var(--ink)'; });
+    c.addEventListener('mouseleave', () => { c.style.transform = base; c.style.boxShadow = '10px 10px 0 var(--ink)'; });
+  });
+</script>
+</body>
+</html>

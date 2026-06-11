@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio — Designer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,opsz,wght@0,5..1200,400;0,5..1200,700;0,5..1200,900;1,5..1200,400&family=General+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+/* ========================================
+   TOKENS
+   ======================================== */
+:root {
+  --hue: 22;
+  --brand: oklch(65% 0.26 var(--hue));
+  --brand-dim: oklch(55% 0.18 var(--hue));
+  --brand-glow: oklch(65% 0.26 var(--hue) / 0.3);
+
+  --bg: oklch(10% 0.008 var(--hue));
+  --bg-raised: oklch(15% 0.012 var(--hue));
+  --bg-surface: oklch(20% 0.015 var(--hue));
+
+  --fg: oklch(94% 0.01 var(--hue));
+  --fg-dim: oklch(65% 0.015 var(--hue));
+  --fg-muted: oklch(45% 0.012 var(--hue));
+
+  --border: oklch(25% 0.015 var(--hue));
+
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'General Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo:  cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ========================================
+   RESET
+   ======================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+img, picture, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+
+/* ========================================
+   BASE
+   ======================================== */
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.55;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+@media (pointer: coarse) {
+  body { cursor: auto; }
+}
+
+/* ========================================
+   CUSTOM CURSOR
+   ======================================== */
+.cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 12px; height: 12px;
+  background: var(--brand);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transition: transform 0.15s var(--ease-out-expo), width 0.3s, height 0.3s;
+  transform: translate(-50%, -50%);
+}
+
+.cursor.is-hovering {
+  width: 48px;
+  height: 48px;
+  opacity: 0.6;
+}
+
+.cursor-trail {
+  position: fixed;
+  top: 0; left: 0;
+  width: 40px; height: 40px;
+  border: 1px solid var(--fg-dim);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.15;
+  transition: transform 0.6s var(--ease-out-expo), width 0.4s, height 0.4s;
+  transform: translate(-50%, -50%);
+}
+
+@media (pointer: coarse) {
+  .cursor, .cursor-trail { display: none; }
+}
+
+/* ========================================
+   NOISE TEXTURE
+   ======================================== */
+.noise {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px;
+}
+
+/* ========================================
+   SKIP LINK
+   ======================================== */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1.5rem;
+  z-index: 1000;
+  background: var(--brand);
+  color: var(--bg);
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: top 0.2s;
+}
+.skip-link:focus { top: 1.5rem; }
+
+/* ========================================
+   NAVIGATION
+   ======================================== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2.5rem;
+  mix-blend-mode: difference;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.6s var(--ease-out-quart), transform 0.6s var(--ease-out-quart);
+  pointer-events: none;
+}
+
+.nav.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.nav__mark {
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--fg);
+  letter-spacing: -0.02em;
+}
+
+.nav__progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: var(--fg);
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+/* ========================================
+   HERO
+   ======================================== */
+.hero {
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  align-items: end;
+  padding: 0 2.5rem 8vh;
+  overflow: hidden;
+}
+
+.hero__parallax {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+}
+
+.hero__orb--1 {
+  width: 60vw; height: 60vw;
+  max-width: 800px; max-height: 800px;
+  background: var(--brand);
+  top: -10%; right: -15%;
+  animation: orbFloat 12s ease-in-out infinite;
+}
+
+.hero__orb--2 {
+  width: 40vw; height: 40vw;
+  max-width: 500px; max-height: 500px;
+  background: var(--brand-dim);
+  bottom: -10%; left: -10%;
+  animation: orbFloat 15s ease-in-out infinite reverse;
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(20px, -30px) rotate(2deg); }
+  66% { transform: translate(-15px, 20px) rotate(-1deg); }
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero__kicker {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--fg-dim);
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s var(--ease-out-expo) 1.8s forwards;
+}
+
+.hero__title {
+  font-family: var(--font-serif);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+}
+
+.hero__line {
+  display: block;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(100%) rotate(2deg);
+  animation: lineUp 1s var(--ease-out-expo) forwards;
+}
+
+.hero__line--1 { animation-delay: 0.3s; font-size: clamp(3.5rem, 10vw, 9rem); }
+.hero__line--2 { animation-delay: 0.5s; font-size: clamp(2.5rem, 7vw, 6rem); color: var(--brand); font-style: italic; }
+.hero__line--3 { animation-delay: 0.7s; font-size: clamp(3.5rem, 10vw, 9rem); }
+
+@keyframes lineUp {
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+.hero__body {
+  font-family: var(--font-sans);
+  font-size: clamp(0.9375rem, 1.4vw, 1.125rem);
+  color: var(--fg-dim);
+  max-width: 40ch;
+  margin-top: 2.5rem;
+  line-height: 1.65;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s var(--ease-out-expo) 1.4s forwards;
+}
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero__scroll {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 2s forwards;
+}
+
+.hero__scroll span {
+  display: block;
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, var(--fg-dim), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(8px); }
+}
+
+/* ========================================
+   WORK
+   ======================================== */
+.work {
+  padding: clamp(6rem, 15vh, 12rem) 2.5rem;
+  position: relative;
+}
+
+.work__header {
+  max-width: 1200px;
+  margin: 0 auto 4rem;
+}
+
+.work__eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--fg-muted);
+}
+
+.work__grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: minmax(280px, auto);
+  gap: 1px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+/* Asymmetric bento sizing */
+.project--tall { grid-column: span 3; grid-row: span 2; }
+.project--wide { grid-column: span 6; grid-row: span 1; }
+.project--square { grid-column: span 3; grid-row: span 1; }
+
+.project {
+  position: relative;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.project__link {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+}
+
+.project__image {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.8s var(--ease-out-expo), filter 0.6s;
+  filter: saturate(0.7) contrast(1.05);
+}
+
+.project__link:hover .project__image,
+.project__link:focus .project__image {
+  transform: scale(1.05);
+  filter: saturate(1) contrast(1.1);
+}
+
+.project__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem;
+  background: linear-gradient(180deg, oklch(0% 0 0 / 0.3) 0%, oklch(0% 0 0 / 0.7) 100%);
+  transition: background 0.4s;
+}
+
+.project__eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--fg-dim);
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.4s var(--ease-out-quart), transform 0.4s var(--ease-out-quart);
+}
+
+.project__link:hover .project__eyebrow,
+.project__link:focus .project__eyebrow {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.project__meta {
+  transform: translateY(8px);
+  opacity: 0.9;
+  transition: transform 0.4s var(--ease-out-quart), opacity 0.4s;
+}
+
+.project__link:hover .project__meta,
+.project__link:focus .project__meta {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.project__title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  margin-bottom: 0.25rem;
+}
+
+.project__category {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ========================================
+   ABOUT
+   ======================================== */
+.about {
+  padding: clamp(6rem, 15vh, 12rem) 2.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.about__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 4rem;
+}
+
+.about__eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--fg-muted);
+  position: sticky;
+  top: 8rem;
+  align-self: start;
+}
+
+.about__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.about__lead {
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  max-width: 45ch;
+}
+
+.about__body {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--fg-dim);
+  max-width: 55ch;
+}
+
+.about__body p + p {
+  margin-top: 1.25rem;
+}
+
+.highlight {
+  color: var(--brand);
+  font-weight: 500;
+}
+
+/* ========================================
+   CONTACT
+   ======================================== */
+.contact {
+  padding: clamp(6rem, 15vh, 12rem) 2.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.contact__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.contact__eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--fg-muted);
+  margin-bottom: 1.5rem;
+}
+
+.contact__title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  margin-bottom: 2rem;
+}
+
+.contact__title span {
+  display: block;
+}
+
+.contact__accent {
+  color: var(--brand);
+  font-style: italic;
+}
+
+.contact__link {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: clamp(0.9375rem, 1.4vw, 1.125rem);
+  font-weight: 500;
+  color: var(--fg);
+  position: relative;
+  padding-bottom: 0.25rem;
+}
+
+.contact__link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--brand);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease-out-expo);
+}
+
+.contact__link:hover::after,
+.contact__link:focus::after {
+  transform: scaleX(1);
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+.footer {
+  padding: 2rem 2.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.footer__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.footer__social {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.footer__social a {
+  position: relative;
+  padding-bottom: 0.125rem;
+  transition: color 0.3s;
+}
+
+.footer__social a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--brand);
+  transition: width 0.3s var(--ease-out-quart);
+}
+
+.footer__social a:hover,
+.footer__social a:focus {
+  color: var(--fg);
+}
+
+.footer__social a:hover::after,
+.footer__social a:focus::after {
+  width: 100%;
+}
+
+/* ========================================
+   SCROLL REVEAL
+   ======================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal--stagger .reveal-item {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+}
+
+.reveal--stagger.is-visible .reveal-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+  .nav { padding: 1rem 1.5rem; }
+  .hero { padding: 0 1.5rem 6vh; }
+  .work { padding: 4rem 1.5rem; }
+  .about { padding: 4rem 1.5rem; }
+  .contact { padding: 4rem 1.5rem; }
+  .footer { padding: 1.5rem; }
+
+  .about__inner {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .about__eyebrow {
+    position: relative;
+    top: 0;
+  }
+
+  .work__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project--tall, .project--wide, .project--square {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .project__link { min-height: 240px; }
+
+  .hero__orb--1 { width: 80vw; height: 80vw; top: -20%; right: -30%; }
+  .hero__orb--2 { width: 60vw; height: 60vw; bottom: -20%; left: -20%; }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .reveal, .reveal-item {
+    opacity: 1;
+    transform: none;
+  }
+  html { scroll-behavior: auto; }
+}
+
+a:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 4px;
+}
+
+</style>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" aria-hidden="true"></div>
+    <div class="cursor-trail" aria-hidden="true"></div>
+
+    <!-- Noise overlay -->
+    <div class="noise" aria-hidden="true"></div>
+
+    <!-- Navigation (scroll-aware) -->
+    <nav class="nav" aria-label="Main">
+        <a class="nav__mark" href="#" aria-label="Home">—</a>
+        <div class="nav__progress" aria-hidden="true"></div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero">
+        <div class="hero__parallax" aria-hidden="true">
+            <div class="hero__orb hero__orb--1"></div>
+            <div class="hero__orb hero__orb--2"></div>
+        </div>
+        <div class="hero__inner">
+            <div class="hero__kicker"></div>
+            <h1 class="hero__title" aria-label="Design that demands attention">
+                <span class="hero__line hero__line--1" data-split>Design</span>
+                <span class="hero__line hero__line--2" data-split>that demands</span>
+                <span class="hero__line hero__line--3" data-split>attention.</span>
+            </h1>
+            <p class="hero__body">
+                Ten years of making interfaces that refuse to be ignored.
+                No templates. No safe choices. Only work that earns its place.
+            </p>
+            <div class="hero__scroll">
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <main id="main">
+        <!-- Work -->
+        <section id="work" class="work" aria-label="Selected work">
+            <header class="work__header">
+                <p class="work__eyebrow">Selected Work</p>
+            </header>
+            <div class="work__grid">
+                <article class="project project--tall">
+                    <a class="project__link" href="#" aria-label="Meridian — Product Design">
+                        <div class="project__image" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57f68?w=800&q=80')"></div>
+                        <div class="project__overlay">
+                            <span class="project__eyebrow">01</span>
+                            <div class="project__meta">
+                                <h2 class="project__title">Meridian</h2>
+                                <p class="project__category">Product Design</p>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <article class="project project--wide">
+                    <a class="project__link" href="#" aria-label="Fathom — Brand &amp; Web">
+                        <div class="project__image" style="background-image: url('https://images.unsplash.com/photo-1604079629278-6d4f6c3c995e?w=800&q=80')"></div>
+                        <div class="project__overlay">
+                            <span class="project__eyebrow">02</span>
+                            <div class="project__meta">
+                                <h2 class="project__title">Fathom</h2>
+                                <p class="project__category">Brand &amp; Web</p>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <article class="project project--square">
+                    <a class="project__link" href="#" aria-label="Rift — Dashboard">
+                        <div class="project__image" style="background-image: url('https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&q=80')"></div>
+                        <div class="project__overlay">
+                            <span class="project__eyebrow">03</span>
+                            <div class="project__meta">
+                                <h2 class="project__title">Rift</h2>
+                                <p class="project__category">Dashboard</p>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <article class="project project--wide">
+                    <a class="project__link" href="#" aria-label="Solstice — Mobile App">
+                        <div class="project__image" style="background-image: url('https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=800&q=80')"></div>
+                        <div class="project__overlay">
+                            <span class="project__eyebrow">04</span>
+                            <div class="project__meta">
+                                <h2 class="project__title">Solstice</h2>
+                                <p class="project__category">Mobile App</p>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <article class="project project--tall">
+                    <a class="project__link" href="#" aria-label="Vanta — Design System">
+                        <div class="project__image" style="background-image: url('https://images.unsplash.com/photo-1526401281329-561f123c715d?w=800&q=80')"></div>
+                        <div class="project__overlay">
+                            <span class="project__eyebrow">05</span>
+                            <div class="project__meta">
+                                <h2 class="project__title">Vanta</h2>
+                                <p class="project__category">Design System</p>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <article class="project project--square">
+                    <a class="project__link" href="#" aria-label="Aura — Website">
+                        <div class="project__image" style="background-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800&q=80')"></div>
+                        <div class="project__overlay">
+                            <span class="project__eyebrow">06</span>
+                            <div class="project__meta">
+                                <h2 class="project__title">Aura</h2>
+                                <p class="project__category">Website</p>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+            </div>
+        </section>
+
+        <!-- About -->
+        <section id="about" class="about" aria-label="About">
+            <div class="about__inner">
+                <p class="about__eyebrow">About</p>
+                <div class="about__content">
+                    <p class="about__lead">
+                        I design interfaces that make people pause. The kind that don't
+                        blend into the feed.
+                    </p>
+                    <div class="about__body">
+                        <p>
+                            Ten years shipping products. No interest in playing it safe. Every
+                            pixel is intentional. Every interaction is considered. If it doesn't
+                            add something, it gets cut.
+                        </p>
+                        <p>
+                            Currently shaping design at <span class="highlight">North</span>.
+                            Previously led product at <span class="highlight">Shift</span> and
+                            <span class="highlight">Field</span>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section id="contact" class="contact" aria-label="Contact">
+            <div class="contact__inner">
+                <p class="contact__eyebrow">Contact</p>
+                <h2 class="contact__title">
+                    <span>Have a project</span>
+                    <span that needs</span>
+                    <span class="contact__accent">teeth?</span>
+                </h2>
+                <a class="contact__link" href="mailto:hello@designer.com">hello@designer.com</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__inner">
+            <p class="footer__year">— 2026</p>
+            <nav class="footer__social" aria-label="Social">
+                <a href="#">TW</a>
+                <a href="#">LI</a>
+                <a href="#">DR</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script>
+/**
+ * Portfolio Interactions
+ * - Custom cursor with trail
+ * - Scroll-triggered reveals (IntersectionObserver)
+ * - Scroll-aware nav with progress bar
+ * - Parallax orbs in hero
+ * - Keyboard accessibility
+ */
+(function () {
+  'use strict';
+
+  // ========================================
+  // CUSTOM CURSOR
+  // ========================================
+  const cursor = document.querySelector('.cursor');
+  const cursorTrail = document.querySelector('.cursor-trail');
+  let mouseX = 0, mouseY = 0;
+  let trailX = 0, trailY = 0;
+  let isTouch = window.matchMedia('(pointer: coarse)').matches;
+
+  if (!isTouch && cursor && cursorTrail) {
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursor.style.left = mouseX + 'px';
+      cursor.style.top = mouseY + 'px';
+    }, { passive: true });
+
+    // Trail lags behind
+    function animateTrail() {
+      trailX += (mouseX - trailX) * 0.12;
+      trailY += (mouseY - trailY) * 0.12;
+      cursorTrail.style.left = trailX + 'px';
+      cursorTrail.style.top = trailY + 'px';
+      requestAnimationFrame(animateTrail);
+    }
+    animateTrail();
+
+    // Hover detection for interactive elements
+    const interactives = document.querySelectorAll('a, button, .project__link');
+    interactives.forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('is-hovering'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('is-hovering'));
+    });
+  }
+
+  // ========================================
+  // SCROLL-TRIGGERED REVEALS
+  // ========================================
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.08,
+    rootMargin: '0px 0px -60px 0px'
+  });
+
+  // Reveal work grid with staggered delays
+  document.querySelectorAll('.project').forEach((el, i) => {
+    el.classList.add('reveal');
+    el.style.transitionDelay = (i * 0.1) + 's';
+    revealObserver.observe(el);
+  });
+
+  // Reveal other sections
+  ['.about__inner', '.contact__inner', '.work__header'].forEach(selector => {
+    document.querySelectorAll(selector).forEach(el => {
+      el.classList.add('reveal');
+      revealObserver.observe(el);
+    });
+  });
+
+  // ========================================
+  // SCROLL-AWARE NAVIGATION
+  // ========================================
+  const nav = document.querySelector('.nav');
+  const navProgress = document.querySelector('.nav__progress');
+  let navVisible = false;
+
+  function updateNav() {
+    const scrollY = window.scrollY;
+    const vh = window.innerHeight;
+
+    // Show nav after scrolling past 60% of viewport
+    if (scrollY > vh * 0.6) {
+      if (!navVisible) {
+        nav.classList.add('is-visible');
+        navVisible = true;
+      }
+    } else {
+      if (navVisible) {
+        nav.classList.remove('is-visible');
+        navVisible = false;
+      }
+    }
+
+    // Progress bar
+    if (navProgress) {
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
+      navProgress.style.width = progress + '%';
+    }
+  }
+
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav(); // Initial check
+
+  // ========================================
+  // SMOOTH SCROLL FOR ANCHORS
+  // ========================================
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', (e) => {
+      const href = anchor.getAttribute('href');
+      if (href === '#') return;
+      const target = document.querySelector(href);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // ========================================
+  // HERO PARALLAX (mouse-based)
+  // ========================================
+  const heroOrbs = document.querySelectorAll('.hero__orb');
+  if (!isTouch && heroOrbs.length) {
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+
+      heroOrbs[0].style.transform = `translate(${x * 15}px, ${y * 15}px)`;
+      heroOrbs[1].style.transform = `translate(${x * -20}px, ${y * -20}px)`;
+    }, { passive: true });
+  }
+
+  // ========================================
+  // PROJECT CARD KEYBOARD NAV
+  // ========================================
+  document.querySelectorAll('.project__link').forEach(link => {
+    link.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        link.click();
+      }
+    });
+  });
+
+})();
+
+</script></script>
+</body>
+</html>

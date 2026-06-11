@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NØVA — Creative Agency</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       VISUAL IDENTITY (locked — never change these tokens)
+       ============================================================ */
+    :root {
+      --bg:        #222222;
+      --accent:    #0052FF;
+      --white:     #FFFFFF;
+      --white-dim: rgba(255,255,255,.08);
+      --white-mid: rgba(255,255,255,.45);
+      --font:      'Inter', system-ui, -apple-system, sans-serif;
+
+      /* font-weight scale */
+      --fw-light:   300;
+      --fw-regular: 400;
+      --fw-medium:  500;
+      --fw-semi:    600;
+      --fw-bold:    700;
+      --fw-black:   900;
+
+      /* line-height scale */
+      --lh-tight:   0.92;
+      --lh-heading: 1.05;
+      --lh-body:    1.6;
+      --lh-relaxed: 1.8;
+    }
+
+    /* ============================================================
+       RESET
+       ============================================================ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--white);
+      font-weight: var(--fw-regular);
+      line-height: var(--lh-body);
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* focus styles for keyboard navigation */
+    a:focus-visible,
+    button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    /* ============================================================
+       NAVIGATION
+       ============================================================ */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 3rem;
+      mix-blend-mode: difference;
+    }
+    .nav__logo {
+      font-weight: var(--fw-black);
+      font-size: 1.4rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .nav__links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav__links a {
+      font-weight: var(--fw-medium);
+      font-size: .85rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      position: relative;
+    }
+    .nav__links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 2px;
+      background: var(--accent);
+      transition: width .3s cubic-bezier(.22,1,.36,1);
+    }
+    .nav__links a:hover::after { width: 100%; }
+
+    /* ============================================================
+       HERO — oversized brutalist type
+       ============================================================ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 6rem 3rem 4rem;
+      overflow: hidden;
+    }
+    .hero__bg-text {
+      position: absolute;
+      top: -6%;
+      left: -3%;
+      font-size: clamp(12rem, 22vw, 28rem);
+      font-weight: var(--fw-black);
+      line-height: var(--lh-tight);
+      color: var(--white-dim);
+      pointer-events: none;
+      user-select: none;
+      letter-spacing: -.04em;
+    }
+    .hero__heading {
+      font-size: clamp(3.5rem, 9vw, 10rem);
+      font-weight: var(--fw-black);
+      line-height: var(--lh-tight);
+      letter-spacing: -.03em;
+      max-width: 14ch;
+      position: relative;
+    }
+    .hero__heading em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .hero__sub {
+      margin-top: 2rem;
+      font-size: clamp(1rem, 1.4vw, 1.25rem);
+      font-weight: var(--fw-light);
+      line-height: var(--lh-relaxed);
+      color: var(--white-mid);
+      max-width: 52ch;
+    }
+    .hero__scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      right: 3rem;
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      font-size: .75rem;
+      font-weight: var(--fw-medium);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--white-mid);
+    }
+    .hero__scroll-hint .line {
+      width: 48px;
+      height: 2px;
+      background: var(--accent);
+      animation: pulse-line 2s ease-in-out infinite;
+    }
+    @keyframes pulse-line {
+      0%, 100% { transform: scaleX(1); }
+      50% { transform: scaleX(.5); }
+    }
+
+    /* ============================================================
+       SECTION — diagonal clip divider
+       ============================================================ */
+    .diagonal-divider {
+      width: 100%;
+      height: 120px;
+      background: var(--accent);
+      clip-path: polygon(0 60%, 100% 0, 100% 100%, 0 100%);
+    }
+
+    /* ============================================================
+       WORK GRID — asymmetric bento
+       ============================================================ */
+    .work {
+      padding: 6rem 3rem;
+    }
+    .work__label {
+      font-size: .75rem;
+      font-weight: var(--fw-semi);
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .work__title {
+      font-size: clamp(2rem, 5vw, 4.5rem);
+      font-weight: var(--fw-black);
+      line-height: var(--lh-heading);
+      letter-spacing: -.02em;
+      margin-bottom: 3rem;
+    }
+
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: minmax(180px, auto);
+      gap: 1.25rem;
+    }
+    .bento__item {
+      position: relative;
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--white-dim);
+      display: flex;
+      align-items: flex-end;
+      padding: 1.75rem;
+      transition: transform .45s cubic-bezier(.22,1,.36,1);
+    }
+    .bento__item:hover { transform: translateY(-6px); }
+
+    /* each card gets a unique grid placement */
+    .bento__item:nth-child(1) { grid-column: 1 / 8;   grid-row: 1 / 3; }
+    .bento__item:nth-child(2) { grid-column: 8 / 13;  grid-row: 1 / 2; }
+    .bento__item:nth-child(3) { grid-column: 8 / 13;  grid-row: 2 / 4; }
+    .bento__item:nth-child(4) { grid-column: 1 / 5;   grid-row: 3 / 4; }
+    .bento__item:nth-child(5) { grid-column: 5 / 8;   grid-row: 3 / 5; }
+    .bento__item:nth-child(6) { grid-column: 8 / 13;  grid-row: 4 / 6; }
+    .bento__item:nth-child(7) { grid-column: 1 / 8;   grid-row: 5 / 7; }
+
+    /* colored overlays */
+    .bento__item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,.65) 100%);
+      z-index: 1;
+    }
+    .bento__item:nth-child(odd)::before {
+      background: linear-gradient(180deg, transparent 30%, rgba(0,82,255,.55) 100%);
+    }
+
+    /* placeholder visuals inside cards */
+    .bento__item .visual {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .bento__item:nth-child(1) .visual {
+      background:
+        radial-gradient(circle at 30% 40%, var(--accent) 0%, transparent 55%),
+        linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    }
+    .bento__item:nth-child(2) .visual {
+      background:
+        repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,.03) 20px, rgba(255,255,255,.03) 22px),
+        linear-gradient(180deg, #2a2a2a, #1a1a1a);
+    }
+    .bento__item:nth-child(3) .visual {
+      background:
+        radial-gradient(ellipse at 70% 30%, rgba(0,82,255,.35), transparent 60%),
+        #1e1e1e;
+    }
+    .bento__item:nth-child(4) .visual {
+      background:
+        conic-gradient(from 180deg at 50% 50%, #222 0deg, #2a2a2a 90deg, #1a1a1a 180deg, #222 360deg);
+    }
+    .bento__item:nth-child(5) .visual {
+      background:
+        linear-gradient(45deg, rgba(0,82,255,.2) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(0,82,255,.2) 25%, transparent 25%),
+        linear-gradient(135deg, rgba(0,82,255,.15) 25%, transparent 25%),
+        linear-gradient(-135deg, rgba(0,82,255,.15) 25%, transparent 25%),
+        #1c1c1c;
+      background-size: 60px 60px;
+    }
+    .bento__item:nth-child(6) .visual {
+      background:
+        radial-gradient(circle at 80% 80%, var(--accent) 0%, transparent 40%),
+        linear-gradient(200deg, #262626, #181818);
+    }
+    .bento__item:nth-child(7) .visual {
+      background:
+        repeating-radial-gradient(circle at 0 0, transparent, transparent 14px, rgba(255,255,255,.02) 14px, rgba(255,255,255,.02) 16px),
+        linear-gradient(160deg, #1a1a1a, #222);
+    }
+
+    .bento__meta {
+      position: relative;
+      z-index: 2;
+    }
+    .bento__meta h3 {
+      font-size: clamp(1.1rem, 2vw, 1.6rem);
+      font-weight: var(--fw-bold);
+      line-height: var(--lh-heading);
+      margin-bottom: .35rem;
+    }
+    .bento__meta span {
+      font-size: .8rem;
+      font-weight: var(--fw-medium);
+      color: var(--white-mid);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+       MARQUEE STRIP
+       ============================================================ */
+    .marquee {
+      overflow: hidden;
+      white-space: nowrap;
+      background: var(--accent);
+      padding: 1rem 0;
+    }
+    .marquee__inner {
+      display: inline-flex;
+      gap: 4rem;
+      animation: marquee-scroll 18s linear infinite;
+    }
+    .marquee__inner span {
+      font-size: 1rem;
+      font-weight: var(--fw-bold);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+    @keyframes marquee-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ============================================================
+       ABOUT — split layout with skewed block
+       ============================================================ */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 80vh;
+      position: relative;
+    }
+    .about__text {
+      padding: 8rem 4rem 6rem 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .about__text .label {
+      font-size: .75rem;
+      font-weight: var(--fw-semi);
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+    .about__text h2 {
+      font-size: clamp(2.2rem, 4vw, 3.8rem);
+      font-weight: var(--fw-black);
+      line-height: var(--lh-heading);
+      letter-spacing: -.02em;
+      margin-bottom: 1.5rem;
+    }
+    .about__text p {
+      font-size: 1.05rem;
+      font-weight: var(--fw-light);
+      line-height: var(--lh-relaxed);
+      color: var(--white-mid);
+      max-width: 48ch;
+      margin-bottom: 1rem;
+    }
+
+    .about__visual {
+      position: relative;
+      background:
+        linear-gradient(160deg, rgba(0,82,255,.25), transparent 60%),
+        linear-gradient(200deg, #1a1a1a, #262626);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .about__visual::before {
+      content: '';
+      position: absolute;
+      top: -10%;
+      right: -10%;
+      width: 70%;
+      height: 120%;
+      background: var(--accent);
+      transform: skewX(-8deg);
+      opacity: .12;
+    }
+    .about__big-number {
+      font-size: clamp(8rem, 14vw, 16rem);
+      font-weight: var(--fw-black);
+      line-height: var(--lh-tight);
+      color: var(--white-dim);
+      position: relative;
+      z-index: 1;
+    }
+    .about__big-label {
+      position: absolute;
+      bottom: 20%;
+      right: 12%;
+      font-size: .85rem;
+      font-weight: var(--fw-semi);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      z-index: 2;
+    }
+
+    /* ============================================================
+       SERVICES — vertical stacked cards
+       ============================================================ */
+    .services {
+      padding: 6rem 3rem;
+    }
+    .services__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 4rem;
+    }
+    .services__header .label {
+      font-size: .75rem;
+      font-weight: var(--fw-semi);
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .75rem;
+    }
+    .services__header h2 {
+      font-size: clamp(2rem, 4.5vw, 4rem);
+      font-weight: var(--fw-black);
+      line-height: var(--lh-heading);
+      letter-spacing: -.02em;
+    }
+    .services__header p {
+      max-width: 36ch;
+      font-size: .95rem;
+      font-weight: var(--fw-light);
+      line-height: var(--lh-relaxed);
+      color: var(--white-mid);
+      text-align: right;
+    }
+
+    .service-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .service-row {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      align-items: center;
+      gap: 2.5rem;
+      padding: 2.25rem 2rem;
+      background: var(--white-dim);
+      transition: background .35s ease, transform .35s ease;
+      cursor: default;
+    }
+    .service-row:hover {
+      background: rgba(0,82,255,.12);
+      transform: translateX(1rem);
+    }
+    .service-row__num {
+      font-size: .85rem;
+      font-weight: var(--fw-bold);
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+    }
+    .service-row__name {
+      font-size: clamp(1.1rem, 2vw, 1.7rem);
+      font-weight: var(--fw-bold);
+      line-height: var(--lh-heading);
+    }
+    .service-row__desc {
+      font-size: .85rem;
+      font-weight: var(--fw-light);
+      color: var(--white-mid);
+      max-width: 28ch;
+      text-align: right;
+    }
+
+    /* ============================================================
+       TESTIMONIAL — big quote
+       ============================================================ */
+    .testimonial {
+      position: relative;
+      padding: 8rem 3rem;
+      text-align: center;
+      overflow: hidden;
+    }
+    .testimonial::before {
+      content: '\201C';
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 20rem;
+      font-weight: var(--fw-black);
+      line-height: 1;
+      color: var(--white-dim);
+      pointer-events: none;
+    }
+    .testimonial blockquote {
+      font-size: clamp(1.4rem, 3vw, 2.4rem);
+      font-weight: var(--fw-light);
+      line-height: var(--lh-relaxed);
+      max-width: 56ch;
+      margin: 0 auto 2.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    .testimonial cite {
+      font-style: normal;
+      font-size: .85rem;
+      font-weight: var(--fw-semi);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* ============================================================
+       CONTACT — asymmetric CTA
+       ============================================================ */
+    .contact {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      min-height: 60vh;
+      position: relative;
+    }
+    .contact__info {
+      padding: 6rem 4rem 6rem 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--accent);
+      clip-path: polygon(0 0, 100% 0, 92% 100%, 0 100%);
+    }
+    .contact__info h2 {
+      font-size: clamp(2.5rem, 6vw, 5.5rem);
+      font-weight: var(--fw-black);
+      line-height: var(--lh-tight);
+      letter-spacing: -.03em;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+    .contact__info p {
+      font-size: 1.05rem;
+      font-weight: var(--fw-light);
+      line-height: var(--lh-relaxed);
+      color: rgba(255,255,255,.75);
+      max-width: 36ch;
+      margin-bottom: 2.5rem;
+    }
+    .contact__info a.btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .75rem;
+      background: var(--white);
+      color: var(--accent);
+      font-weight: var(--fw-bold);
+      font-size: .95rem;
+      letter-spacing: .04em;
+      padding: 1rem 2.25rem;
+      border-radius: 4px;
+      width: fit-content;
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+    .contact__info a.btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,.25);
+    }
+    .contact__info a.btn .arrow {
+      font-size: 1.2rem;
+      transition: transform .3s ease;
+    }
+    .contact__info a.btn:hover .arrow {
+      transform: translateX(4px);
+    }
+
+    .contact__details {
+      padding: 6rem 3rem 6rem 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+    .contact__detail h4 {
+      font-size: .75rem;
+      font-weight: var(--fw-semi);
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .5rem;
+    }
+    .contact__detail p,
+    .contact__detail a {
+      font-size: 1.1rem;
+      font-weight: var(--fw-medium);
+      line-height: var(--lh-body);
+    }
+    .contact__detail a:hover { color: var(--accent); }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .footer {
+      border-top: 1px solid var(--white-dim);
+      padding: 2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer__copy {
+      font-size: .8rem;
+      font-weight: var(--fw-regular);
+      color: var(--white-mid);
+    }
+    .footer__socials {
+      display: flex;
+      gap: 1.75rem;
+    }
+    .footer__socials a {
+      font-size: .8rem;
+      font-weight: var(--fw-medium);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--white-mid);
+      transition: color .25s ease;
+    }
+    .footer__socials a:hover { color: var(--accent); }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 900px) {
+      .nav { padding: 1rem 1.5rem; }
+      .hero { padding: 5rem 1.5rem 3rem; }
+      .hero__scroll-hint { right: 1.5rem; bottom: 1.5rem; }
+      .work { padding: 4rem 1.5rem; }
+      .bento { grid-template-columns: 1fr 1fr; grid-auto-rows: minmax(160px, auto); }
+      .bento__item:nth-child(1) { grid-column: 1 / 3; grid-row: auto; }
+      .bento__item:nth-child(2) { grid-column: auto; grid-row: auto; }
+      .bento__item:nth-child(3) { grid-column: auto; grid-row: auto; }
+      .bento__item:nth-child(4) { grid-column: 1 / 3; grid-row: auto; }
+      .bento__item:nth-child(5) { grid-column: auto; grid-row: auto; }
+      .bento__item:nth-child(6) { grid-column: auto; grid-row: auto; }
+      .bento__item:nth-child(7) { grid-column: 1 / 3; grid-row: auto; }
+      .about { grid-template-columns: 1fr; }
+      .about__visual { min-height: 50vh; }
+      .services { padding: 4rem 1.5rem; }
+      .services__header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .services__header p { text-align: left; }
+      .service-row { grid-template-columns: 50px 1fr; gap: 1rem; padding: 1.5rem; }
+      .service-row__desc { display: none; }
+      .testimonial { padding: 5rem 1.5rem; }
+      .contact { grid-template-columns: 1fr; }
+      .contact__info { clip-path: none; padding: 4rem 1.5rem; }
+      .contact__details { padding: 3rem 1.5rem; }
+      .footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+
+    /* reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .marquee__inner { animation: none; }
+      .hero__scroll-hint .line { animation: none; }
+      .bento__item { transition: none; }
+      .service-row { transition: none; }
+    }
+
+    @media (max-width: 540px) {
+      .nav__links { gap: 1.25rem; }
+      .nav__links a { font-size: .7rem; }
+      .bento { grid-template-columns: 1fr; }
+      .bento__item:nth-child(n) { grid-column: 1 / -1; grid-row: auto; min-height: 200px; }
+      .hero__bg-text { font-size: 10rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== NAV ========== -->
+  <nav class="nav">
+    <div class="nav__logo">NØVA</div>
+    <ul class="nav__links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero">
+    <div class="hero__bg-text" aria-hidden="true">NOVA</div>
+    <h1 class="hero__heading">We craft <em>digital</em> experiences</h1>
+    <p class="hero__sub">
+      A multidisciplinary creative studio at the intersection of design,
+      technology, and storytelling. We help brands stand out in a world of noise.
+    </p>
+    <div class="hero__scroll-hint">
+      <span class="line"></span>
+      Scroll
+    </div>
+  </section>
+
+  <!-- ========== DIAGONAL DIVIDER ========== -->
+  <div class="diagonal-divider" aria-hidden="true"></div>
+
+  <!-- ========== WORK / BENTO GRID ========== -->
+  <section class="work" id="work">
+    <div class="work__label">Selected Work</div>
+    <h2 class="work__title">Projects that move people</h2>
+    <div class="bento">
+      <div class="bento__item">
+        <div class="visual"></div>
+        <div class="bento__meta">
+          <h3>Aurora Branding</h3>
+          <span>Identity · 2025</span>
+        </div>
+      </div>
+      <div class="bento__item">
+        <div class="visual"></div>
+        <div class="bento__meta">
+          <h3>Drift App</h3>
+          <span>Product · 2025</span>
+        </div>
+      </div>
+      <div class="bento__item">
+        <div class="visual"></div>
+        <div class="bento__meta">
+          <h3>Volta Campaign</h3>
+          <span>Campaign · 2024</span>
+        </div>
+      </div>
+      <div class="bento__item">
+        <div class="visual"></div>
+        <div class="bento__meta">
+          <h3>Synthwave</h3>
+          <span>Web · 2024</span>
+        </div>
+      </div>
+      <div class="bento__item">
+        <div class="visual"></div>
+        <div class="bento__meta">
+          <h3>Meridian</h3>
+          <span>Identity · 2024</span>
+        </div>
+      </div>
+      <div class="bento__item">
+        <div class="visual"></div>
+        <div class="bento__meta">
+          <h3>Zenith VR</h3>
+          <span>Product · 2023</span>
+        </div>
+      </div>
+      <div class="bento__item">
+        <div class="visual"></div>
+        <div class="bento__meta">
+          <h3>Orbital Festival</h3>
+          <span>Event · 2023</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== MARQUEE ========== -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__inner">
+      <span>Branding</span><span>×</span>
+      <span>Digital Design</span><span>×</span>
+      <span>Motion</span><span>×</span>
+      <span>Strategy</span><span>×</span>
+      <span>Development</span><span>×</span>
+      <span>Branding</span><span>×</span>
+      <span>Digital Design</span><span>×</span>
+      <span>Motion</span><span>×</span>
+      <span>Strategy</span><span>×</span>
+      <span>Development</span><span>×</span>
+    </div>
+  </div>
+
+  <!-- ========== ABOUT ========== -->
+  <section class="about" id="about">
+    <div class="about__text">
+      <div class="label">About Us</div>
+      <h2>A small team with outsized ambition</h2>
+      <p>
+        Founded in 2019, NØVA is a collective of designers, engineers, and
+        strategists who believe that great work happens when craft meets courage.
+      </p>
+      <p>
+        We partner with forward-thinking brands to build identities, products,
+        and campaigns that resonate — and endure.
+      </p>
+    </div>
+    <div class="about__visual">
+      <div class="about__big-number">47</div>
+      <div class="about__big-label">Projects Delivered</div>
+    </div>
+  </section>
+
+  <!-- ========== SERVICES ========== -->
+  <section class="services" id="services">
+    <div class="services__header">
+      <div>
+        <div class="label">What We Do</div>
+        <h2>Services</h2>
+      </div>
+      <p>
+        From zero-to-one brand creation to full-stack product launches,
+        we cover the entire creative spectrum.
+      </p>
+    </div>
+    <div class="service-stack">
+      <div class="service-row">
+        <span class="service-row__num">01</span>
+        <span class="service-row__name">Brand Identity</span>
+        <span class="service-row__desc">Logos, guidelines, and visual systems</span>
+      </div>
+      <div class="service-row">
+        <span class="service-row__num">02</span>
+        <span class="service-row__name">Digital Design</span>
+        <span class="service-row__desc">Web, app, and interface design</span>
+      </div>
+      <div class="service-row">
+        <span class="service-row__num">03</span>
+        <span class="service-row__name">Motion &amp; 3D</span>
+        <span class="service-row__desc">Animation, video, and spatial design</span>
+      </div>
+      <div class="service-row">
+        <span class="service-row__num">04</span>
+        <span class="service-row__name">Development</span>
+        <span class="service-row__desc">Frontend, backend, and CMS integration</span>
+      </div>
+      <div class="service-row">
+        <span class="service-row__num">05</span>
+        <span class="service-row__name">Creative Strategy</span>
+        <span class="service-row__desc">Research, positioning, and campaigns</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TESTIMONIAL ========== -->
+  <section class="testimonial">
+    <blockquote>
+      NØVA didn't just redesign our brand — they redefined how we think about
+      ourselves. The work speaks louder than any metric could.
+    </blockquote>
+    <cite>— Lena Voss, CEO at Meridian Labs</cite>
+  </section>
+
+  <!-- ========== CONTACT ========== -->
+  <section class="contact" id="contact">
+    <div class="contact__info">
+      <h2>Let's build something remarkable</h2>
+      <p>
+        Whether you have a clear brief or just a spark of an idea,
+        we'd love to hear from you.
+      </p>
+      <a href="mailto:hello@nova.studio" class="btn">
+        Start a project <span class="arrow">→</span>
+      </a>
+    </div>
+    <div class="contact__details">
+      <div class="contact__detail">
+        <h4>Email</h4>
+        <a href="mailto:hello@nova.studio">hello@nova.studio</a>
+      </div>
+      <div class="contact__detail">
+        <h4>Phone</h4>
+        <a href="tel:+33142681900">+33 1 42 68 19 00</a>
+      </div>
+      <div class="contact__detail">
+        <h4>Studio</h4>
+        <p>42 Rue de la République<br>75003 Paris, France</p>
+      </div>
+      <div class="contact__detail">
+        <h4>Follow</h4>
+        <p>
+          <a href="#">Instagram</a> · <a href="#">Dribbble</a> · <a href="#">LinkedIn</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="footer__copy">© 2025 NØVA Studio. All rights reserved.</div>
+    <div class="footer__socials">
+      <a href="#">Instagram</a>
+      <a href="#">Dribbble</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">Behance</a>
+    </div>
+  </footer>
+
+</body>
+</html>

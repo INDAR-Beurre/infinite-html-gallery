@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LOGOS 💩 — The AI-Powered Toilet Operating System</title>
+<meta name="description" content="Drop a log. Get a diagnosis. The world's first AI-powered toilet operating system. Flush your worries. Live your best gut life." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sour+Gummy:wght@400;500;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============== THE GLOOP PALETTE ============== */
+  :root {
+    --mud-deep: #1a0e05;
+    --choco-dark: #2d1810;
+    --mud-mid: #3d2817;
+    --cocoa: #5c3a1e;
+    --cocoa-light: #7a4f2a;
+    --taupe: #8b6f47;
+    --beige-sick: #c4a373;
+    --ochre: #b8860b;
+    --swamp: #4a5c2a;
+    --swamp-light: #6c7e3f;
+    --cream-bog: #d4b896;
+    --rust: #8b3a1f;
+    --shit-yellow: #c9a23a;
+    --puke-green: #5a6c34;
+    --blood-clot: #6e1f0e;
+    
+    --text-cream: #f4e4c1;
+    --text-mid: #d4b896;
+    --text-dim: #a08862;
+    --text-faint: #6b5436;
+
+    --liquid-grad-1: radial-gradient(ellipse at 30% 20%, #5c3a1e 0%, transparent 60%),
+                     radial-gradient(ellipse at 80% 80%, #2d1810 0%, transparent 60%),
+                     linear-gradient(135deg, #1a0e05 0%, #3d2817 100%);
+
+    --gloop-shadow: 
+      0 25px 60px -15px rgba(0, 0, 0, 0.7),
+      inset 0 -12px 30px rgba(0, 0, 0, 0.5),
+      inset 0 6px 18px rgba(244, 228, 193, 0.08);
+    
+    --sticky-shadow: 
+      0 35px 90px -20px rgba(0, 0, 0, 0.8),
+      inset 0 -18px 45px rgba(0, 0, 0, 0.6),
+      inset 0 10px 25px rgba(244, 228, 193, 0.12);
+
+    --wet-highlight: inset 4px 4px 12px rgba(244, 228, 193, 0.2);
+  }
+
+  /* ============== RESET ============== */
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Sour Gummy', cursive;
+    background: var(--mud-deep);
+    color: var(--text-cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    line-height: 1.4;
+    /* Slow oozing background */
+    background-image: 
+      radial-gradient(ellipse 80% 50% at 20% 10%, rgba(92, 58, 30, 0.4) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 80% at 90% 90%, rgba(45, 24, 16, 0.6) 0%, transparent 50%),
+      radial-gradient(ellipse 100% 60% at 50% 50%, rgba(74, 92, 42, 0.15) 0%, transparent 60%);
+    background-attachment: fixed;
+  }
+
+  /* Slimey noise overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background-image: 
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.2  0 0 0 0 0.13  0 0 0 0 0.05  0 0 0 0.18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+    opacity: 0.5;
+  }
+
+  /* Floating fly */
+  .fly {
+    position: fixed;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    z-index: 1000;
+    pointer-events: none;
+    filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.5));
+    animation: flyBuzz 14s linear infinite;
+    user-select: none;
+  }
+  .fly-1 { animation-delay: 0s; }
+  .fly-2 { animation-delay: -5s; font-size: 1.2rem; }
+  .fly-3 { animation-delay: -9s; font-size: 1.8rem; }
+
+  @keyframes flyBuzz {
+    0%   { transform: translate(0vw, 0vh) rotate(0deg); }
+    10%  { transform: translate(20vw, 5vh) rotate(45deg); }
+    20%  { transform: translate(45vw, 18vh) rotate(-30deg); }
+    30%  { transform: translate(70vw, 8vh) rotate(80deg); }
+    40%  { transform: translate(85vw, 30vh) rotate(-60deg); }
+    50%  { transform: translate(60vw, 55vh) rotate(120deg); }
+    60%  { transform: translate(30vw, 70vh) rotate(-100deg); }
+    70%  { transform: translate(10vw, 50vh) rotate(60deg); }
+    80%  { transform: translate(25vw, 25vh) rotate(-40deg); }
+    90%  { transform: translate(50vw, 12vh) rotate(90deg); }
+    100% { transform: translate(0vw, 0vh) rotate(0deg); }
+  }
+
+  /* ============== TYPOGRAPHY ============== */
+  h1, h2, h3, h4 {
+    font-family: 'Sour Gummy', cursive;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--text-cream);
+    letter-spacing: -0.02em;
+  }
+
+  h1 { font-size: clamp(3rem, 8vw, 6.5rem); }
+  h2 { font-size: clamp(2rem, 5vw, 3.5rem); }
+  h3 { font-size: clamp(1.4rem, 2.5vw, 2rem); }
+  p  { font-size: clamp(0.95rem, 1.3vw, 1.15rem); color: var(--text-mid); }
+
+  .accent-yellow { color: var(--shit-yellow); }
+  .accent-rust   { color: var(--rust); }
+  .accent-swamp  { color: var(--swamp-light); }
+  .accent-cream  { color: var(--cream-bog); }
+
+  /* ============== NAV BAR (top blob) ============== */
+  .nav-glob {
+    position: sticky;
+    top: 1.25rem;
+    z-index: 100;
+    margin: 1.25rem auto 0;
+    padding: 0.75rem 1.25rem 0.75rem 1.5rem;
+    max-width: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    background: linear-gradient(135deg, var(--cocoa) 0%, var(--mud-mid) 100%);
+    border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+    box-shadow: var(--gloop-shadow);
+    border: 3px solid rgba(212, 184, 150, 0.15);
+  }
+
+  .logo {
+    font-size: clamp(1.2rem, 2vw, 1.6rem);
+    font-weight: 900;
+    color: var(--text-cream);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+  .logo-emoji {
+    font-size: 1.4em;
+    display: inline-block;
+    animation: logoWobble 4s ease-in-out infinite;
+  }
+  @keyframes logoWobble {
+    0%, 100% { transform: rotate(-5deg) scale(1); }
+    50%      { transform: rotate(8deg) scale(1.08); }
+  }
+
+  .nav-links {
+    display: flex;
+    gap: clamp(0.75rem, 2vw, 1.75rem);
+    align-items: center;
+  }
+  .nav-links a {
+    color: var(--text-mid);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: clamp(0.85rem, 1.1vw, 1rem);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    padding: 0.4rem 0.8rem;
+    border-radius: 40% 60% 50% 50% / 50% 50% 60% 40%;
+  }
+  .nav-links a:hover {
+    color: var(--shit-yellow);
+    background: rgba(201, 162, 58, 0.15);
+    transform: scale(1.08) rotate(-2deg);
+  }
+
+  .nav-cta {
+    background: linear-gradient(135deg, var(--rust) 0%, var(--blood-clot) 100%);
+    color: var(--text-cream);
+    border: none;
+    padding: 0.65rem 1.3rem;
+    font-family: inherit;
+    font-weight: 800;
+    font-size: clamp(0.85rem, 1.1vw, 1rem);
+    cursor: pointer;
+    border-radius: 50% 40% 60% 50% / 50% 60% 40% 50%;
+    box-shadow: 
+      0 8px 20px rgba(110, 31, 14, 0.6),
+      inset 0 -3px 8px rgba(0, 0, 0, 0.4),
+      inset 0 2px 5px rgba(244, 228, 193, 0.2);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .nav-cta:hover {
+    transform: scale(1.1) rotate(-3deg);
+    box-shadow: 
+      0 12px 30px rgba(110, 31, 14, 0.8),
+      inset 0 -4px 12px rgba(0, 0, 0, 0.5),
+      inset 0 3px 8px rgba(244, 228, 193, 0.3);
+  }
+
+  /* ============== THE MASONRY OF GLOBS ============== */
+  .masonry-globs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 220px;
+    grid-auto-flow: dense;
+    gap: clamp(0.9rem, 1.8vw, 1.5rem);
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    max-width: 1700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  .glob {
+    position: relative;
+    border-radius: var(--r, 50% 50% 50% 50% / 50% 50% 50% 50%);
+    background: var(--bg, var(--cocoa));
+    box-shadow: var(--gloop-shadow);
+    border: 3px solid rgba(212, 184, 150, 0.1);
+    padding: clamp(1rem, 2vw, 1.75rem);
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                box-shadow 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    animation: globIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  }
+  
+  .glob::before {
+    content: "";
+    position: absolute;
+    top: 8%;
+    left: 12%;
+    width: 30%;
+    height: 25%;
+    background: radial-gradient(ellipse, rgba(244, 228, 193, 0.18) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .glob:hover {
+    transform: scale(1.025) rotate(-0.4deg);
+    box-shadow: var(--sticky-shadow);
+    z-index: 5;
+  }
+
+  @keyframes globIn {
+    0%   { transform: scale(0.4) rotate(-12deg); opacity: 0; }
+    60%  { transform: scale(1.05) rotate(2deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+  }
+
+  /* Specific blob sizes */
+  .span-1x1 { grid-column: span 1; grid-row: span 1; }
+  .span-2x1 { grid-column: span 2; grid-row: span 1; }
+  .span-3x1 { grid-column: span 3; grid-row: span 1; }
+  .span-1x2 { grid-column: span 1; grid-row: span 2; }
+  .span-2x2 { grid-column: span 2; grid-row: span 2; }
+  .span-3x2 { grid-column: span 3; grid-row: span 2; }
+  .span-4x1 { grid-column: span 4; grid-row: span 1; }
+
+  /* Background variants */
+  .bg-choco     { background: linear-gradient(135deg, #5c3a1e 0%, #3d2817 100%); }
+  .bg-mud       { background: linear-gradient(135deg, #3d2817 0%, #1a0e05 100%); }
+  .bg-taupe     { background: linear-gradient(135deg, #7a4f2a 0%, #5c3a1e 100%); }
+  .bg-ochre     { background: linear-gradient(135deg, #b8860b 0%, #8b6f47 100%); }
+  .bg-swamp     { background: linear-gradient(135deg, #5a6c34 0%, #3a4818 100%); }
+  .bg-rust      { background: linear-gradient(135deg, #8b3a1f 0%, #6e1f0e 100%); }
+  .bg-cream     { background: linear-gradient(135deg, #c4a373 0%, #8b6f47 100%); color: var(--mud-deep); }
+  .bg-yellow    { background: linear-gradient(135deg, #c9a23a 0%, #8a6a18 100%); color: var(--mud-deep); }
+
+  /* Glob inner content */
+  .glob-emoji {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    display: inline-block;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    filter: drop-shadow(2px 3px 0 rgba(0,0,0,0.4));
+  }
+
+  .glob h3 {
+    margin-bottom: 0.4rem;
+  }
+  .glob p {
+    line-height: 1.45;
+  }
+  
+  .bg-cream p, .bg-yellow p { color: var(--choco-dark); }
+  .bg-cream h3, .bg-yellow h3 { color: var(--mud-deep); }
+
+  /* ============== HERO GLOB ============== */
+  .hero-glob {
+    background: 
+      radial-gradient(circle at 30% 20%, rgba(212, 184, 150, 0.15) 0%, transparent 40%),
+      linear-gradient(135deg, #5c3a1e 0%, #2d1810 100%);
+    position: relative;
+  }
+  .hero-glob h1 {
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+    line-height: 0.95;
+    margin-bottom: 0.5rem;
+  }
+  .hero-glob h1 .strike {
+    display: inline-block;
+    position: relative;
+    color: var(--shit-yellow);
+    transform: rotate(-3deg);
+  }
+  .hero-glob h1 .strike::after {
+    content: "";
+    position: absolute;
+    left: -5%;
+    right: -5%;
+    top: 55%;
+    height: 14%;
+    background: var(--rust);
+    border-radius: 40% 60% 50% 50% / 60% 40% 60% 40%;
+    z-index: -1;
+    transform: rotate(2deg);
+  }
+  .hero-glob .tagline {
+    font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+    color: var(--cream-bog);
+    margin: 0.75rem 0 1.25rem;
+    max-width: 30ch;
+  }
+
+  /* ============== BUTTONS (squishy) ============== */
+  .squish-btn {
+    background: linear-gradient(135deg, var(--shit-yellow) 0%, var(--rust) 100%);
+    color: var(--mud-deep);
+    border: none;
+    padding: 0.85rem 1.5rem;
+    font-family: 'Sour Gummy', cursive;
+    font-weight: 800;
+    font-size: clamp(1rem, 1.4vw, 1.2rem);
+    cursor: pointer;
+    border-radius: 50% 40% 60% 50% / 50% 60% 40% 50%;
+    box-shadow: 
+      0 12px 30px rgba(110, 31, 14, 0.5),
+      inset 0 -5px 15px rgba(0, 0, 0, 0.3),
+      inset 0 3px 8px rgba(255, 255, 255, 0.2);
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+    align-self: flex-start;
+  }
+  .squish-btn::before {
+    content: "";
+    position: absolute;
+    top: 15%;
+    left: 20%;
+    width: 25%;
+    height: 25%;
+    background: radial-gradient(ellipse, rgba(255, 255, 255, 0.5) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .squish-btn:hover {
+    transform: scale(1.08) rotate(-2deg);
+    box-shadow: 
+      0 18px 40px rgba(110, 31, 14, 0.7),
+      inset 0 -7px 20px rgba(0, 0, 0, 0.4),
+      inset 0 4px 12px rgba(255, 255, 255, 0.3);
+  }
+  .squish-btn:active {
+    transform: scale(0.95) rotate(0);
+  }
+
+  .squish-btn-alt {
+    background: linear-gradient(135deg, var(--swamp-light) 0%, var(--swamp) 100%);
+    color: var(--text-cream);
+  }
+
+  /* ============== COUNTER ============== */
+  .counter-num {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 900;
+    color: var(--shit-yellow);
+    line-height: 1;
+    text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.4);
+    font-variant-numeric: tabular-nums;
+    display: block;
+    margin: 0.4rem 0;
+  }
+  .counter-label {
+    font-size: clamp(0.75rem, 1vw, 0.95rem);
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* ============== SLIDER ============== */
+  .slider-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    flex: 1;
+    justify-content: center;
+  }
+  .slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 18px;
+    background: linear-gradient(90deg, var(--swamp) 0%, var(--taupe) 50%, var(--rust) 100%);
+    border-radius: 40% 60% 50% 50% / 60% 40% 60% 40%;
+    outline: none;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+  }
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50% 40% 60% 50% / 50% 60% 40% 50%;
+    background: linear-gradient(135deg, var(--shit-yellow) 0%, var(--rust) 100%);
+    cursor: grab;
+    box-shadow: 
+      0 4px 10px rgba(0, 0, 0, 0.5),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+      inset 0 2px 3px rgba(255, 255, 255, 0.3);
+    border: 2px solid var(--mud-deep);
+  }
+  .slider::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 50% 40% 60% 50% / 50% 60% 40% 50%;
+    background: linear-gradient(135deg, var(--shit-yellow) 0%, var(--rust) 100%);
+    cursor: grab;
+    box-shadow: 
+      0 4px 10px rgba(0, 0, 0, 0.5),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+      inset 0 2px 3px rgba(255, 255, 255, 0.3);
+    border: 2px solid var(--mud-deep);
+  }
+  .stool-preview {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  .stool-blob {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    transition: all 0.3s;
+    filter: drop-shadow(2px 3px 0 rgba(0,0,0,0.3));
+  }
+  .stool-name {
+    color: var(--cream-bog);
+    font-size: clamp(0.85rem, 1.1vw, 1rem);
+    font-weight: 600;
+  }
+
+  /* ============== TESTIMONIAL ============== */
+  .testimonial {
+    font-style: normal;
+  }
+  .testimonial-quote {
+    font-size: clamp(1rem, 1.3vw, 1.2rem);
+    color: var(--cream-bog);
+    line-height: 1.4;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+  }
+  .testimonial-quote::before { content: "“"; font-size: 2em; color: var(--shit-yellow); line-height: 0; vertical-align: -0.4em; margin-right: 0.1em; }
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .avatar-blob {
+    width: 38px;
+    height: 38px;
+    border-radius: 50% 40% 60% 50% / 50% 60% 40% 50%;
+    background: linear-gradient(135deg, var(--ochre), var(--cocoa));
+    display: grid;
+    place-items: center;
+    font-size: 1.3rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  }
+  .author-name {
+    color: var(--text-cream);
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+  .author-role {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+  }
+
+  /* ============== PRICING CARDS ============== */
+  .price-amount {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900;
+    color: var(--text-cream);
+    line-height: 1;
+    margin: 0.3rem 0;
+  }
+  .price-amount .small {
+    font-size: 0.4em;
+    color: var(--text-mid);
+  }
+  .price-tag {
+    background: var(--shit-yellow);
+    color: var(--mud-deep);
+    padding: 0.25rem 0.75rem;
+    border-radius: 40% 60% 50% 50% / 50% 60% 40% 50%;
+    font-size: 0.8rem;
+    font-weight: 800;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  }
+  .price-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: clamp(0.85rem, 1.1vw, 1rem);
+    color: var(--cream-bog);
+  }
+  .price-features li::before {
+    content: "💩";
+    margin-right: 0.4rem;
+    font-size: 0.9em;
+  }
+
+  /* ============== HEALTH SCORE ============== */
+  .health-ring {
+    width: clamp(80px, 12vw, 130px);
+    height: clamp(80px, 12vw, 130px);
+    margin: 0 auto;
+    position: relative;
+  }
+  .health-ring svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+  .health-ring circle {
+    fill: none;
+    stroke-width: 14;
+    stroke-linecap: round;
+  }
+  .health-ring .ring-bg { stroke: rgba(0,0,0,0.3); }
+  .health-ring .ring-fg { 
+    stroke: var(--shit-yellow); 
+    stroke-dasharray: 314;
+    stroke-dashoffset: 80;
+    transition: stroke-dashoffset 1s ease;
+    filter: drop-shadow(0 0 8px rgba(201, 162, 58, 0.5));
+  }
+  .health-ring .ring-num {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: clamp(1.5rem, 3vw, 2.4rem);
+    font-weight: 900;
+    color: var(--text-cream);
+  }
+
+  /* ============== TERMINAL ============== */
+  .terminal {
+    background: var(--mud-deep);
+    border: 2px solid rgba(212, 184, 150, 0.2);
+    border-radius: 30px;
+    padding: 1rem;
+    font-family: 'Courier New', monospace;
+    font-size: clamp(0.7rem, 0.95vw, 0.85rem);
+    color: var(--swamp-light);
+    box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.6);
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .terminal-line {
+    color: var(--swamp-light);
+    opacity: 0;
+    animation: termFade 0.5s ease forwards;
+  }
+  .terminal-line.cmd { color: var(--shit-yellow); }
+  .terminal-line.resp { color: var(--cream-bog); }
+  .terminal-line.warn { color: var(--rust); }
+  .terminal-prompt { color: var(--shit-yellow); }
+  @keyframes termFade { to { opacity: 1; } }
+
+  /* ============== DROP LOG ============== */
+  .toilet-zone {
+    position: relative;
+    min-height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+  }
+  .toilet {
+    font-size: clamp(4rem, 8vw, 6rem);
+    filter: drop-shadow(0 8px 12px rgba(0,0,0,0.5));
+    position: relative;
+    z-index: 2;
+  }
+  .dropping-log {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2.5rem;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0;
+  }
+  .dropping-log.go {
+    animation: dropLog 1.2s ease-in forwards;
+  }
+  @keyframes dropLog {
+    0% { transform: translateX(-50%) translateY(0) scale(1) rotate(0); opacity: 1; }
+    70% { transform: translateX(-50%) translateY(80px) scale(0.9) rotate(180deg); opacity: 1; }
+    85% { transform: translateX(-50%) translateY(95px) scale(1.1, 0.6) rotate(220deg); opacity: 0.8; }
+    100% { transform: translateX(-50%) translateY(110px) scale(1.4, 0.4) rotate(270deg); opacity: 0; }
+  }
+  .splash-droplets {
+    position: absolute;
+    bottom: 35%;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+  .splash-drop {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--cocoa);
+    border-radius: 50% 40% 60% 50%;
+    opacity: 0;
+  }
+  .splash-drop.go { animation: splashDrop 0.6s ease-out forwards; }
+  @keyframes splashDrop {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(0.3); opacity: 0; }
+  }
+
+  /* ============== FAQ ============== */
+  .faq-item {
+    border-bottom: 2px dashed rgba(212, 184, 150, 0.2);
+    padding: 0.6rem 0;
+  }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    color: var(--shit-yellow);
+    font-weight: 700;
+    font-size: clamp(0.9rem, 1.1vw, 1.05rem);
+    margin-bottom: 0.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .faq-q::before {
+    content: "💩";
+    font-size: 1em;
+  }
+  .faq-a {
+    color: var(--cream-bog);
+    font-size: clamp(0.85rem, 1vw, 0.95rem);
+    line-height: 1.4;
+  }
+
+  /* ============== COIN TICKER ============== */
+  .ticker {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 800;
+  }
+  .ticker-up { color: var(--swamp-light); }
+  .ticker-down { color: var(--rust); }
+  .ticker-arrow {
+    display: inline-block;
+    font-size: 0.9em;
+  }
+
+  /* ============== FINAL CTA ============== */
+  .final-cta {
+    text-align: center;
+    align-items: center;
+  }
+  .final-cta h2 {
+    color: var(--shit-yellow);
+    text-shadow: 3px 4px 0 rgba(0,0,0,0.4);
+  }
+  .final-cta p {
+    color: var(--cream-bog);
+    max-width: 40ch;
+  }
+  .cta-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  /* ============== FOOTER ============== */
+  .footer-glob {
+    margin: 2rem auto;
+    max-width: 95%;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--mud-mid), var(--choco-dark));
+    border-radius: 50% 50% 40% 60% / 30% 60% 40% 70%;
+    box-shadow: var(--gloop-shadow);
+    border: 3px solid rgba(212, 184, 150, 0.1);
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 2;
+  }
+  .footer-glob .logo {
+    justify-content: center;
+    margin-bottom: 0.75rem;
+  }
+  .footer-glob .legal {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+
+  /* ============== SVG BLOB DIVIDERS ============== */
+  .blob-divider {
+    width: 100%;
+    height: 80px;
+    margin: 0;
+    display: block;
+    position: relative;
+    z-index: 2;
+  }
+  .blob-divider.flip { transform: scaleY(-1); }
+
+  /* ============== STICKY NOTE ============== */
+  .sticky-note {
+    transform: rotate(-3deg);
+    background: var(--shit-yellow);
+    color: var(--mud-deep);
+    padding: 0.75rem 1rem;
+    border-radius: 30% 70% 40% 60% / 50% 50% 60% 40%;
+    font-weight: 800;
+    font-size: clamp(0.85rem, 1.1vw, 1rem);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    align-self: flex-start;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+
+  /* ============== RESPONSIVE ============== */
+  @media (max-width: 1100px) {
+    .masonry-globs {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .span-3x1, .span-3x2, .span-4x1 { grid-column: span 3; }
+  }
+  @media (max-width: 768px) {
+    .masonry-globs {
+      grid-template-columns: repeat(2, 1fr);
+      grid-auto-rows: 200px;
+    }
+    .span-2x1, .span-2x2, .span-3x1, .span-3x2, .span-4x1 { grid-column: span 2; }
+    .span-1x2 { grid-row: span 1; }
+    .nav-glob {
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+    }
+    .nav-links { gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
+  }
+  @media (max-width: 480px) {
+    .masonry-globs {
+      grid-template-columns: 1fr;
+      grid-auto-rows: auto;
+    }
+    .span-1x1, .span-2x1, .span-2x2, .span-3x1, .span-3x2, .span-4x1 { 
+      grid-column: span 1; 
+      grid-row: span 1;
+      min-height: 200px;
+    }
+    .hero-glob h1 { font-size: clamp(2.2rem, 9vw, 3.5rem); }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- THE BUZZING FLIES -->
+<div class="fly fly-1" aria-hidden="true">🪰</div>
+<div class="fly fly-2" aria-hidden="true">🪰</div>
+<div class="fly fly-3" aria-hidden="true">🪰</div>
+
+<!-- NAV BAR -->
+<header class="nav-glob" role="banner">
+  <a href="#" class="logo" aria-label="LOGOS Home">
+    <span class="logo-emoji" aria-hidden="true">💩</span>
+    <span>LOGOS</span>
+  </a>
+  <nav class="nav-links" aria-label="Main navigation">
+    <a href="#features">Features</a>
+    <a href="#live">Live</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
+    <a href="#api">API</a>
+  </nav>
+  <button class="nav-cta" onclick="document.getElementById('drop-zone').scrollIntoView({behavior:'smooth'})">Flush In 🚽</button>
+</header>
+
+<!-- BLOB DIVIDER (top) -->
+<svg class="blob-divider" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+  <path fill="#5c3a1e" d="M0,32 C120,12 240,68 360,52 C480,36 600,8 720,28 C840,48 960,72 1080,56 C1200,40 1320,12 1440,32 L1440,80 L0,80 Z"></path>
+  <path fill="#3d2817" opacity="0.6" d="M0,52 C160,32 320,72 480,52 C640,32 800,68 960,52 C1120,36 1280,68 1440,52 L1440,80 L0,80 Z"></path>
+</svg>
+
+<!-- THE GLOOPY MASONRY -->
+<main class="masonry-globs" id="features">
+
+  <!-- HERO -->
+  <article class="glob hero-glob span-2x2" style="--r: 55% 45% 50% 50% / 50% 60% 40% 50%; animation-delay: 0.05s;">
+    <div>
+      <h1>Drop a <span class="strike">log</span>.<br>Get a <span class="accent-yellow">diagnosis</span>.</h1>
+      <p class="tagline">The world's first AI-powered toilet operating system. Flush your worries. Live your best gut life.</p>
+    </div>
+    <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;">
+      <button class="squish-btn" onclick="document.getElementById('drop-zone').scrollIntoView({behavior:'smooth'})">Start Pooping →</button>
+      <span class="sticky-note">No toilet required.</span>
+    </div>
+  </article>
+
+  <!-- LIVE COUNTER -->
+  <article class="glob bg-taupe span-2x1" style="--r: 60% 40% 55% 45% / 45% 55% 45% 55%; animation-delay: 0.1s;" id="live">
+    <div>
+      <span class="counter-label">Logs Dropped Today</span>
+      <span class="counter-num" id="bigCounter">0</span>
+      <p style="color: var(--choco-dark);">Globally. In real-time. Mostly at work, between 1-3pm.</p>
+    </div>
+    <div style="display:flex; gap:0.5rem; align-items:center; font-size:0.85rem; color: var(--choco-dark); font-weight:700;">
+      <span style="display:inline-block; width:10px; height:10px; background:var(--rust); border-radius:50%; animation: pulse 1.5s infinite;"></span>
+      <span>LIVE</span>
+    </div>
+  </article>
+
+  <!-- AI BUTT SCAN -->
+  <article class="glob bg-choco span-1x2" style="--r: 45% 55% 60% 40% / 55% 45% 55% 45%; animation-delay: 0.15s;">
+    <div>
+      <span class="glob-emoji">🤖</span>
+      <h3>AI Butt-Scan™</h3>
+      <p>12-megapixel bowl camera analyzes consistency, color, and — frankly — commitment. Trained on 4.2M dumps.</p>
+    </div>
+    <div style="font-size:0.85rem; color: var(--shit-yellow); font-weight:700;">Powered by ToiletGPT-7 💩</div>
+  </article>
+
+  <!-- STOOL SLIDER -->
+  <article class="glob bg-swamp span-2x1" style="--r: 50% 50% 40% 60% / 60% 40% 60% 40%; animation-delay: 0.2s;">
+    <div>
+      <h3 style="color:var(--cream-bog);">Bristol Stool Selector</h3>
+      <p style="color: var(--cream-bog); opacity:0.9;">Slide to rate your last drop.</p>
+    </div>
+    <div class="slider-wrap">
+      <input type="range" min="1" max="7" value="4" class="slider" id="stoolSlider" aria-label="Bristol Stool Scale">
+      <div class="stool-preview">
+        <span class="stool-blob" id="stoolEmoji">🌭</span>
+        <span class="stool-name" id="stoolName">Type 4: Smooth Sausage</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- TERMINAL -->
+  <article class="glob bg-mud span-2x1" style="--r: 40% 60% 55% 45% / 50% 45% 55% 50%; animation-delay: 0.25s;">
+    <div class="terminal" id="terminal">
+      <div class="terminal-line cmd"><span class="terminal-prompt">$</span> flush --analyze</div>
+      <div class="terminal-line resp">→ Sample acquired. Viscosity: optimal.</div>
+      <div class="terminal-line warn">→ WARNING: Contains traces of Tuesday's burrito.</div>
+      <div class="terminal-line resp">→ Gut microbiome: 87% thriving.</div>
+      <div class="terminal-line resp">→ Prediction: 4.2 star drop incoming.</div>
+    </div>
+  </article>
+
+  <!-- DROP LOG ZONE -->
+  <article class="glob bg-rust span-1x1" id="drop-zone" style="--r: 50% 50% 50% 50% / 60% 40% 50% 50%; animation-delay: 0.3s;">
+    <h3>Try a Drop</h3>
+    <div class="toilet-zone">
+      <div class="dropping-log" id="droppingLog">💩</div>
+      <div class="toilet" aria-hidden="true">🚽</div>
+      <div class="splash-droplets" id="splash" aria-hidden="true"></div>
+    </div>
+    <button class="squish-btn squish-btn-alt" id="dropBtn" style="width:100%; text-align:center; padding: 0.65rem;">💩 Drop a Log</button>
+  </article>
+
+  <!-- TESTIMONIAL -->
+  <article class="glob bg-cream span-2x1 testimonial" style="--r: 55% 45% 60% 40% / 50% 50% 50% 50%; animation-delay: 0.35s;">
+    <p class="testimonial-quote">I haven't thought about my poop this much since I was five. LOGOS turned my morning routine into a personal growth journey. My gastroenterologist is FURIOUS about the competition.</p>
+    <div class="testimonial-author">
+      <div class="avatar-blob">🦄</div>
+      <div>
+        <div class="author-name">Bradley Plumberston</div>
+        <div class="author-role">VP of Discharge, Fartnacht LLC</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- HEALTH SCORE -->
+  <article class="glob bg-ochre span-1x1" style="--r: 60% 40% 50% 50% / 50% 50% 50% 50%; animation-delay: 0.4s;">
+    <h3 style="color: var(--mud-deep);">Gut Score</h3>
+    <div class="health-ring">
+      <svg viewBox="0 0 120 120">
+        <circle class="ring-bg" cx="60" cy="60" r="50"></circle>
+        <circle class="ring-fg" id="healthRing" cx="60" cy="60" r="50"></circle>
+      </svg>
+      <div class="ring-num" id="healthNum">74</div>
+    </div>
+    <p style="color: var(--choco-dark); text-align:center; font-size:0.85rem;">Suboptimal. More fiber.</p>
+  </article>
+
+  <!-- POOPCOIN -->
+  <article class="glob bg-yellow span-1x1" style="--r: 40% 60% 60% 40% / 40% 60% 40% 60%; animation-delay: 0.45s;">
+    <h3>POOPCOIN</h3>
+    <div class="ticker ticker-up">
+      <span style="font-size:1.8rem;">📈</span>
+      <span style="font-size:1.6rem;">$DUNG</span>
+    </div>
+    <p style="color: var(--choco-dark); font-weight:700;">+12,847% <span class="ticker-arrow">🚀</span></p>
+    <p style="color: var(--choco-dark); font-size:0.8rem; opacity:0.8;">Mine while you recline.</p>
+  </article>
+
+  <!-- PRICING: NUMBER 1 -->
+  <article class="glob bg-mud span-1x1" style="--r: 50% 50% 60% 40% / 60% 40% 60% 40%; animation-delay: 0.5s;" id="pricing">
+    <span class="price-tag">Number 1</span>
+    <div class="price-amount">FREE<span class="small">/lifetime</span></div>
+    <ul class="price-features">
+      <li>3 scans / day</li>
+      <li>Generic advice</li>
+      <li>1 ad in the bowl</li>
+    </ul>
+  </article>
+
+  <!-- PRICING: NUMBER 2 -->
+  <article class="glob bg-rust span-2x1" style="--r: 50% 50% 50% 50% / 50% 50% 50% 50%; animation-delay: 0.55s;">
+    <div style="display:flex; justify-content:space-between; align-items:start; gap:1rem;">
+      <div>
+        <span class="price-tag" style="background: var(--shit-yellow);">Number 2</span>
+        <div class="price-amount">$9.99<span class="small">/month</span></div>
+      </div>
+      <span style="font-size:2.5rem;">👑</span>
+    </div>
+    <ul class="price-features">
+      <li>Unlimited scans</li>
+      <li>FlushGPT consultation</li>
+      <li>PoopCoin earnings</li>
+      <li>Zero ads (they're in the water)</li>
+    </ul>
+  </article>
+
+  <!-- PRICING: ROYAL FLUSH -->
+  <article class="glob bg-choco span-1x1" style="--r: 60% 40% 50% 50% / 50% 50% 50% 50%; animation-delay: 0.6s;">
+    <span class="price-tag" style="background: var(--swamp-light); color: var(--mud-deep);">Royal Flush</span>
+    <div class="price-amount" style="font-size: 1.8rem;">$∞</div>
+    <ul class="price-features" style="font-size:0.85rem;">
+      <li>Whole-house plumbing</li>
+      <li>Plumber on retainer</li>
+      <li>Your face on a toilet</li>
+    </ul>
+  </article>
+
+  <!-- FLUSHGPT -->
+  <article class="glob bg-cream span-1x1" style="--r: 55% 45% 50% 50% / 50% 50% 50% 50%; animation-delay: 0.65s;">
+    <span class="glob-emoji">💬</span>
+    <h3>FlushGPT</h3>
+    <p style="color: var(--choco-dark);">"Why does my poop float?" — A question you can finally ask a machine.</p>
+  </article>
+
+  <!-- GUTFEEL AI -->
+  <article class="glob bg-taupe span-2x1" style="--r: 50% 50% 50% 50% / 50% 50% 50% 50%; animation-delay: 0.7s;">
+    <div>
+      <span class="glob-emoji">🔮</span>
+      <h3 style="color: var(--choco-dark);">GutFeel AI</h3>
+      <p style="color: var(--choco-dark);">Predicts your next bathroom emergency <strong>14 minutes before you feel it</strong>. Wakes you up at 3am. Knows your soul.</p>
+    </div>
+    <div style="display:flex; gap:0.5rem; flex-wrap:wrap; font-size:0.85rem; font-weight:700; color: var(--choco-dark);">
+      <span style="background: var(--shit-yellow); padding: 0.25rem 0.65rem; border-radius: 30% 70% 40% 60% / 50% 50% 60% 40%;">14 min early</span>
+      <span style="background: var(--rust); color: var(--cream-bog); padding: 0.25rem 0.65rem; border-radius: 30% 70% 40% 60% / 50% 50% 60% 40%;">Tingly</span>
+    </div>
+  </article>
+
+  <!-- STATS -->
+  <article class="glob bg-choco span-1x1" style="--r: 50% 50% 50% 50% / 50% 50% 50% 50%; animation-delay: 0.75s;">
+    <span class="counter-label">Toilets LOGOSed</span>
+    <span class="counter-num" style="color: var(--swamp-light);">847K</span>
+    <p>From outhouses to oval offices.</p>
+  </article>
+
+  <!-- SWAT FLY -->
+  <article class="glob bg-mud span-1x1" style="--r: 50% 50% 50% 50% / 50% 50% 50% 50%; animation-delay: 0.8s;">
+    <span class="glob-emoji">🪰</span>
+    <h3>Swat the Fly</h3>
+    <p>It's been annoying you all day. Let it out.</p>
+    <button class="squish-btn" id="swatBtn" style="align-self:flex-start; padding: 0.5rem 1rem; font-size: 0.9rem;">🪰 Swat</button>
+  </article>
+
+  <!-- API -->
+  <article class="glob bg-swamp span-2x1" id="api" style="--r: 50% 50% 50% 50% / 50% 50% 50% 50%; animation-delay: 0.85s;">
+    <div>
+      <h3 style="color: var(--cream-bog);">REST API for the Analytically Inclined</h3>
+      <p style="color: var(--cream-bog); opacity:0.9;">Integrate gut data with your smart home, your fridge, your therapist, and your enemies.</p>
+    </div>
+    <pre style="background: var(--mud-deep); padding: 0.75rem; border-radius: 20% 80% 30% 70% / 50% 50% 50% 50%; font-size: 0.75rem; color: var(--swamp-light); overflow-x: auto; border: 1px solid rgba(212, 184, 150, 0.15);"><code>POST /api/v2/logs
+{
+  "user": "poop_lover_42",
+  "weight_g": 234,
+  "bristol": 4,
+  "mood": "regal"
+}</code></pre>
+  </article>
+
+  <!-- TESTIMONIAL 2 -->
+  <article class="glob bg-cream span-1x1 testimonial" style="--r: 50% 50% 50% 50% / 50% 50% 50% 50%; animation-delay: 0.9s;">
+    <p class="testimonial-quote" style="font-size: 0.95rem;">My poop now has a public API. This is the future I was promised.</p>
+    <div class="testimonial-author">
+      <div class="avatar-blob">🧑‍💻</div>
+      <div>
+        <div class="author-name">dev_doodie</div>
+        <div class="author-role">@ycombinator W2026</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- FAQ -->
+  <article class="glob bg-taupe span-2x1" id="faq" style="--r: 50% 50% 50% 50% / 50% 50% 50% 50%; animation-delay: 0.95s;">
+    <h3 style="color: var(--choco-dark); margin-bottom: 0.5rem;">Frequently Asked Questions</h3>
+    <div class="faq-item">
+      <div class="faq-q" style="color: var(--choco-dark);">Is this a joke?</div>
+      <div class="faq-a" style="color: var(--choco-dark);">Only in the way that all good ideas are. (Yes. Mostly yes.)</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" style="color: var(--choco-dark);">Do I need a smart toilet?</div>
+      <div class="faq-a" style="color: var(--choco-dark);">No. We accept photos. We accept paintings. We accept haikus.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" style="color: var(--choco-dark);">Is my data private?</div>
+      <div class="faq-a" style="color: var(--choco-dark);">We pinky-promise to anonymize. (We will not. We sell to advertisers.)</div>
+    </div>
+  </article>
+
+  <!-- STATS 2 -->
+  <article class="glob bg-rust span-1x1" style="--r: 50% 50% 50% 50% / 50% 50% 50% 50%; animation-delay: 1s;">
+    <span class="counter-label">Avg Session</span>
+    <span class="counter-num">11<span style="font-size:0.5em;">min</span></span>
+    <p>Same as before. Just more enlightened.</p>
+  </article>
+
+  <!-- FINAL CTA -->
+  <article class="glob bg-mud span-4x1 final-cta" style="--r: 50% 50% 50% 50% / 50% 50% 50% 50%; animation-delay: 1.05s;">
+    <span class="glob-emoji">🪠</span>
+    <h2>The future is <span class="accent-yellow">brown</span>.</h2>
+    <p>Join 847,000 toilets in the world's most aggressive wellness cult. Free to start. Impossible to unsee.</p>
+    <div class="cta-row">
+      <button class="squish-btn" onclick="document.getElementById('drop-zone').scrollIntoView({behavior:'smooth'})">💩 Start Pooping</button>
+      <button class="squish-btn squish-btn-alt" onclick="document.getElementById('api').scrollIntoView({behavior:'smooth'})">Read the API Docs 📖</button>
+    </div>
+  </article>
+
+</main>
+
+<!-- BLOB DIVIDER (bottom) -->
+<svg class="blob-divider flip" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+  <path fill="#3d2817" d="M0,48 C160,28 320,68 480,48 C640,28 800,64 960,48 C1120,32 1280,64 1440,48 L1440,0 L0,0 Z"></path>
+  <path fill="#1a0e05" opacity="0.7" d="M0,60 C160,40 320,76 480,60 C640,44 800,72 960,60 C1120,48 1280,72 1440,60 L1440,0 L0,0 Z"></path>
+</svg>
+
+<!-- FOOTER -->
+<footer class="footer-glob" role="contentinfo">
+  <a href="#" class="logo">
+    <span class="logo-emoji" aria-hidden="true">💩</span>
+    <span>LOGOS</span>
+  </a>
+  <p>© 2026 LOGOS Industries. A brown-flag-certified B-Corp.™</p>
+  <p>Made with 💩 in San Francisco, Berlin, and a single bathroom in Buenos Aires.</p>
+  <p class="legal">Not a medical device. Not a not-medical device. Consult a gastroenterologist. Or a plumber. Or your cat.</p>
+</footer>
+
+<style>
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.6; }
+  }
+</style>
+
+<script>
+  // ============== LIVE COUNTER ==============
+  (function() {
+    const counter = document.getElementById('bigCounter');
+    let count = 1247382;
+    const target = 9000000;
+    function tick() {
+      const inc = Math.floor(Math.random() * 7) + 1;
+      count += inc;
+      counter.textContent = count.toLocaleString('en-US');
+    }
+    setInterval(tick, 800);
+    counter.textContent = count.toLocaleString('en-US');
+  })();
+
+  // ============== STOOL SLIDER ==============
+  (function() {
+    const slider = document.getElementById('stoolSlider');
+    const emoji = document.getElementById('stoolEmoji');
+    const name = document.getElementById('stoolName');
+    const data = {
+      1: ['🪨', 'Type 1: Hard Lumps (Marbles of Shame)'],
+      2: ['🥨', 'Type 2: Lumpy Sausage (Lumpy & Clumpy)'],
+      3: ['🌽', 'Type 3: Cracked Sausage (Crackled)'],
+      4: ['🌭', 'Type 4: Smooth Sausage (Goldilocks)'],
+      5: ['🥔', 'Type 5: Soft Blobs (Blob Mode)'],
+      6: ['🥞', 'Type 6: Mushy (Fluffy Fury)'],
+      7: ['🍲', 'Type 7: Liquid (The Big One)']
+    };
+    function update() {
+      const v = parseInt(slider.value);
+      emoji.textContent = data[v][0];
+      name.textContent = data[v][1];
+    }
+    slider.addEventListener('input', update);
+    update();
+  })();
+
+  // ============== DROP LOG ==============
+  (function() {
+    const btn = document.getElementById('dropBtn');
+    const log = document.getElementById('droppingLog');
+    const splash = document.getElementById('splash');
+    btn.addEventListener('click', function() {
+      // Reset
+      log.classList.remove('go');
+      splash.innerHTML = '';
+      // Force reflow
+      void log.offsetWidth;
+      // Drop
+      log.classList.add('go');
+      // Splash droplets
+      setTimeout(() => {
+        const drops = 8;
+        for (let i = 0; i < drops; i++) {
+          const d = document.createElement('div');
+          d.className = 'splash-drop';
+          const angle = (i / drops) * Math.PI * 2;
+          const dist = 25 + Math.random() * 18;
+          d.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+          d.style.setProperty('--ty', Math.sin(angle) * dist - 5 + 'px');
+          d.style.left = '50%';
+          d.style.top = '50%';
+          d.style.transform = 'translate(-50%, -50%)';
+          d.style.background = ['#5c3a1e', '#7a4f2a', '#3d2817', '#8b6f47'][i % 4];
+          d.style.animationDelay = (i * 0.04) + 's';
+          splash.appendChild(d);
+          // Trigger
+          requestAnimationFrame(() => d.classList.add('go'));
+        }
+      }, 900);
+    });
+  })();
+
+  // ============== SWAT FLY ==============
+  (function() {
+    const btn = document.getElementById('swatBtn');
+    const flies = document.querySelectorAll('.fly');
+    btn.addEventListener('click', function() {
+      // Pick a random fly and "kill" it briefly
+      const fly = flies[Math.floor(Math.random() * flies.length)];
+      const original = fly.style.animationPlayState;
+      fly.style.animationPlayState = 'paused';
+      fly.style.transition = 'transform 0.4s, opacity 0.4s';
+      fly.style.transform += ' scale(0.2) rotate(720deg)';
+      fly.style.opacity = '0.3';
+      const orig = btn.textContent;
+      btn.textContent = '💀 Got it!';
+      btn.style.background = 'linear-gradient(135deg, var(--rust), var(--blood-clot))';
+      setTimeout(() => {
+        fly.style.animationPlayState = original || 'running';
+        fly.style.opacity = '1';
+        fly.style.transform = '';
+        btn.textContent = orig;
+        btn.style.background = '';
+      }, 1500);
+    });
+  })();
+
+  // ============== HEALTH RING ==============
+  (function() {
+    const ring = document.getElementById('healthRing');
+    const num = document.getElementById('healthNum');
+    const circumference = 2 * Math.PI * 50;
+    ring.style.strokeDasharray = circumference;
+    function setHealth(value) {
+      const offset = circumference - (value / 100) * circumference;
+      ring.style.strokeDashoffset = offset;
+      num.textContent = value;
+    }
+    setHealth(74);
+    // Animate gently
+    let v = 74;
+    setInterval(() => {
+      v += Math.round((Math.random() - 0.5) * 2);
+      v = Math.max(60, Math.min(89, v));
+      setHealth(v);
+    }, 2500);
+  })();
+
+  // ============== TERMINAL AUTO-CYCLE ==============
+  (function() {
+    const messages = [
+      { type: 'cmd', text: '$ flush --analyze --deep' },
+      { type: 'resp', text: '→ Reading bowl telemetry...' },
+      { type: 'resp', text: '→ Color: terracotta. Vibe: autumnal.' },
+      { type: 'warn', text: '→ Hydration: 23%. Drink water, coward.' },
+      { type: 'resp', text: '→ Microbiome diversity: HIGH (jealous).' },
+      { type: 'resp', text: '→ Star rating: 4.7 ⭐' },
+      { type: 'cmd', text: '$ flush --history --last 5' },
+      { type: 'resp', text: '→ Mon: 7:14am  · Tue: 8:02am · Wed: 6:58am (early!)' },
+      { type: 'cmd', text: '$ logos predict' },
+      { type: 'warn', text: '→ Next event: 3:47am Tuesday. Brace.' }
+    ];
+    const term = document.getElementById('terminal');
+    if (!term) return;
+    let i = 0;
+    function addLine() {
+      const m = messages[i % messages.length];
+      const div = document.createElement('div');
+      div.className = 'terminal-line ' + m.type;
+      if (m.type === 'cmd') {
+        div.innerHTML = '<span class="terminal-prompt">$</span> ' + escapeHtml(m.text.replace('$ ',''));
+      } else {
+        div.textContent = m.text;
+      }
+      term.appendChild(div);
+      // Cap at 7 lines
+      while (term.children.length > 7) {
+        term.removeChild(term.firstChild);
+      }
+      i++;
+    }
+    function escapeHtml(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    setInterval(addLine, 2200);
+  })();
+
+  // ============== STAGGERED CARD ENTRANCE ==============
+  document.addEventListener('DOMContentLoaded', () => {
+    // Cards already have staggered animation-delay set inline
+  });
+</script>
+</body>
+</html>

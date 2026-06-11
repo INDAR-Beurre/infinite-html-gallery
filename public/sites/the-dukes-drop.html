@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Duke's Drop — Heritage Artisanal Compost Delivery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Fredoka+One&family=Sniglet:wght@400;800&display=swap" rel="stylesheet">
+<style>
+  /* ===== RESET ===== */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --chocolate: #4A2C17;
+    --mud: #6B4226;
+    --taupe: #8B6914;
+    --beige: #D4A853;
+    --stained-cream: #F5E6C8;
+    --ochre: #C4912E;
+    --corn-yellow: #F0C929;
+    --swamp-green: #5A7D2E;
+    --deep-brown: #2E1A0E;
+    --wet-brown: #3D2010;
+    --shadow-brown: rgba(46, 26, 14, 0.55);
+    --font-display: 'Fredoka One', 'Baloo 2', cursive;
+    --font-body: 'Sniglet', 'Baloo 2', cursive;
+    --font-heavy: 'Baloo 2', cursive;
+  }
+
+  html { font-size: 16px; scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--stained-cream);
+    color: var(--deep-brown);
+    line-height: 1.6;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse at 20% 10%, rgba(139,105,20,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 90%, rgba(106,66,38,0.06) 0%, transparent 60%),
+      url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  }
+
+  /* ===== WAVE DIVIDERS ===== */
+  .wave-divider { width: 100%; display: block; line-height: 0; }
+  .wave-divider svg { width: 100%; height: auto; }
+
+  /* ===== NAV ===== */
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 2rem;
+    background: var(--chocolate);
+    border-radius: 0 0 35% 65% / 0 0 30% 40%;
+    box-shadow: 0 8px 32px var(--shadow-brown);
+    position: relative;
+    z-index: 10;
+  }
+
+  .nav__logo {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--corn-yellow);
+    letter-spacing: -0.5px;
+  }
+
+  .nav__links {
+    display: flex;
+    gap: 1.8rem;
+    list-style: none;
+  }
+
+  .nav__links a {
+    font-family: var(--font-heavy);
+    font-weight: 700;
+    color: var(--beige);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.15s;
+  }
+
+  .nav__links a:hover { color: var(--corn-yellow); }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    padding: 4rem 2rem 6rem;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 65% 40%, rgba(212,168,83,0.25) 0%, transparent 70%),
+      radial-gradient(ellipse at 30% 80%, rgba(74,44,23,0.3) 0%, transparent 60%),
+      radial-gradient(circle at 15% 55%, rgba(139,105,20,0.1) 0%, transparent 35%),
+      radial-gradient(circle at 85% 20%, rgba(106,66,38,0.08) 0%, transparent 30%),
+      var(--stained-cream);
+  }
+
+  .hero__floater {
+    position: absolute;
+    font-size: 8rem;
+    opacity: 0.12;
+    pointer-events: none;
+    animation: floatBlob 12s ease-in-out infinite;
+  }
+
+  .hero__floater--1 { top: 10%; right: 8%; font-size: 9rem; animation-delay: 0s; }
+  .hero__floater--2 { top: 55%; left: 5%; font-size: 6rem; animation-delay: -4s; }
+  .hero__floater--3 { bottom: 12%; right: 20%; font-size: 7rem; animation-delay: -8s; }
+
+  @keyframes floatBlob {
+    0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    25% { transform: translate(30px, -20px) rotate(5deg) scale(1.08); }
+    50% { transform: translate(-15px, -40px) rotate(-3deg) scale(0.95); }
+    75% { transform: translate(-25px, -10px) rotate(4deg) scale(1.05); }
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hero__badge {
+    display: inline-block;
+    font-family: var(--font-heavy);
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: var(--swamp-green);
+    color: var(--corn-yellow);
+    padding: 0.5rem 1.5rem;
+    border-radius: 35% 65% 60% 40% / 45% 40% 60% 55%;
+    box-shadow: 0 6px 20px rgba(46,26,14,0.35);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    color: var(--chocolate);
+    line-height: 1.05;
+    margin-bottom: 0.6rem;
+  }
+
+  .hero__title em {
+    font-style: normal;
+    color: var(--swamp-green);
+    text-shadow: 3px 3px 0 rgba(90,125,46,0.2);
+  }
+
+  .hero__subtitle {
+    font-family: var(--font-heavy);
+    font-weight: 700;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    color: var(--mud);
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero__cta {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--deep-brown);
+    background: var(--corn-yellow);
+    text-decoration: none;
+    padding: 1rem 2.8rem;
+    border-radius: 40% 60% 55% 45% / 45% 55% 40% 60%;
+    box-shadow: 0 10px 35px rgba(46,26,14,0.4), inset 0 -4px 8px rgba(74,44,23,0.2);
+    transition: transform 0.12s, box-shadow 0.12s;
+  }
+
+  .hero__cta:hover {
+    transform: scale(1.06) rotate(-1deg);
+    box-shadow: 0 14px 45px rgba(46,26,14,0.5), inset 0 -4px 8px rgba(74,44,23,0.25);
+  }
+
+  /* ===== FEATURES ===== */
+  .features {
+    background: var(--mud);
+    padding: 5rem 2rem 3rem;
+    position: relative;
+    color: var(--stained-cream);
+  }
+
+  .features__header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+
+  .features__icon-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    font-size: 2.5rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .features__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    color: var(--corn-yellow);
+    margin-bottom: 0.4rem;
+  }
+
+  .features__subtitle {
+    font-family: var(--font-heavy);
+    color: var(--beige);
+    font-size: 1rem;
+    opacity: 0.85;
+  }
+
+  .features__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .feature-card {
+    background: rgba(245,230,200,0.08);
+    border: 2px solid rgba(212,168,83,0.2);
+    padding: 2rem 1.8rem;
+    border-radius: 35% 65% 60% 40% / 40% 55% 45% 60%;
+    box-shadow: 0 12px 30px rgba(30,15,5,0.35), inset 0 2px 12px rgba(212,168,83,0.06);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 18px 40px rgba(30,15,5,0.45), inset 0 2px 12px rgba(212,168,83,0.1);
+  }
+
+  .feature-card__blob {
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 120px;
+    height: 120px;
+    background: rgba(240,201,41,0.06);
+    border-radius: 45% 55% 65% 35% / 55% 40% 60% 45%;
+  }
+
+  .feature-card__emoji {
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .feature-card__title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    color: var(--corn-yellow);
+    margin-bottom: 0.6rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .feature-card__text {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--beige);
+    line-height: 1.65;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== TESTIMONIAL ===== */
+  .testimonial {
+    background: var(--chocolate);
+    padding: 4rem 2rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .testimonial__quote {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2.8vw, 1.8rem);
+    color: var(--corn-yellow);
+    max-width: 750px;
+    margin: 0 auto 1.2rem;
+    line-height: 1.45;
+  }
+
+  .testimonial__attr {
+    font-family: var(--font-heavy);
+    color: var(--beige);
+    font-size: 0.95rem;
+    opacity: 0.75;
+  }
+
+  .testimonial__pile {
+    font-size: 3rem;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    opacity: 0.5;
+  }
+
+  /* ===== PRICING ===== */
+  .pricing {
+    background: var(--stained-cream);
+    padding: 5rem 2rem;
+  }
+
+  .pricing__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .pricing__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    color: var(--chocolate);
+    margin-bottom: 0.3rem;
+  }
+
+  .pricing__subtitle {
+    font-family: var(--font-heavy);
+    color: var(--mud);
+    font-size: 1rem;
+  }
+
+  .pricing__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .pricing-card {
+    background: var(--stained-cream);
+    border: 3px solid var(--beige);
+    padding: 2.5rem 2rem;
+    border-radius: 30% 70% 55% 45% / 40% 50% 60% 50%;
+    text-align: center;
+    box-shadow: 0 14px 35px rgba(74,44,23,0.25), inset 0 3px 15px rgba(212,168,83,0.15);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+
+  .pricing-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 20px 50px rgba(74,44,23,0.35), inset 0 3px 15px rgba(212,168,83,0.2);
+  }
+
+  .pricing-card--featured {
+    border-color: var(--swamp-green);
+    background: rgba(90,125,46,0.06);
+    transform: scale(1.05);
+  }
+
+  .pricing-card--featured:hover { transform: scale(1.08) translateY(-8px); }
+
+  .pricing-card__emoji {
+    font-size: 3.5rem;
+    margin-bottom: 0.8rem;
+    display: block;
+  }
+
+  .pricing-card__tier {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    color: var(--chocolate);
+    margin-bottom: 0.3rem;
+  }
+
+  .pricing-card__price {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    color: var(--swamp-green);
+    margin-bottom: 1rem;
+  }
+
+  .pricing-card__price span {
+    font-size: 1rem;
+    font-family: var(--font-heavy);
+    color: var(--mud);
+    display: block;
+  }
+
+  .pricing-card__features {
+    list-style: none;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--mud);
+    line-height: 2.2;
+    margin-bottom: 1.5rem;
+  }
+
+  .pricing-card__btn {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--deep-brown);
+    background: var(--corn-yellow);
+    text-decoration: none;
+    padding: 0.75rem 2rem;
+    border-radius: 40% 60% 50% 50% / 50% 45% 55% 50%;
+    box-shadow: 0 8px 25px rgba(46,26,14,0.3), inset 0 -3px 6px rgba(74,44,23,0.15);
+    transition: transform 0.12s;
+  }
+
+  .pricing-card__btn:hover { transform: scale(1.07) rotate(1deg); }
+
+  /* ===== PROCESS ===== */
+  .process {
+    background: var(--mud);
+    padding: 5rem 2rem;
+    color: var(--stained-cream);
+  }
+
+  .process__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    color: var(--corn-yellow);
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .process__steps {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .process-step {
+    flex: 1 1 200px;
+    max-width: 240px;
+    text-align: center;
+    position: relative;
+  }
+
+  .process-step__blob {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 1rem;
+    background: rgba(240,201,41,0.1);
+    border: 2px solid rgba(212,168,83,0.3);
+    border-radius: 45% 55% 60% 40% / 50% 40% 55% 45%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.4rem;
+    box-shadow: 0 10px 30px rgba(30,15,5,0.3), inset 0 2px 8px rgba(212,168,83,0.08);
+  }
+
+  .process-step__num {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--corn-yellow);
+    margin-bottom: 0.3rem;
+  }
+
+  .process-step__label {
+    font-family: var(--font-heavy);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--beige);
+  }
+
+  /* ===== CTA FOOTER ===== */
+  .cta-footer {
+    background: var(--chocolate);
+    padding: 4rem 2rem;
+    text-align: center;
+    position: relative;
+    border-radius: 70% 30% 0 0 / 20% 15% 0 0;
+  }
+
+  .cta-footer__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: var(--corn-yellow);
+    margin-bottom: 0.8rem;
+  }
+
+  .cta-footer__text {
+    font-family: var(--font-heavy);
+    font-size: 1.05rem;
+    color: var(--beige);
+    max-width: 550px;
+    margin: 0 auto 2rem;
+    opacity: 0.85;
+  }
+
+  .cta-footer__btn {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    color: var(--deep-brown);
+    background: var(--corn-yellow);
+    text-decoration: none;
+    padding: 1.1rem 3.2rem;
+    border-radius: 40% 60% 55% 45% / 45% 50% 45% 55%;
+    box-shadow: 0 14px 40px rgba(30,15,5,0.5), inset 0 -5px 10px rgba(74,44,23,0.2);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .cta-footer__btn:hover {
+    transform: scale(1.08) rotate(-2deg);
+    box-shadow: 0 18px 50px rgba(30,15,5,0.6), inset 0 -5px 10px rgba(74,44,23,0.25);
+  }
+
+  /* ===== FOOTER ===== */
+  .page-footer {
+    background: var(--deep-brown);
+    color: var(--beige);
+    padding: 2.5rem 2rem 1.5rem;
+    font-family: var(--font-heavy);
+    font-size: 0.85rem;
+    text-align: center;
+    border-radius: 60% 40% 0 0 / 10% 12% 0 0;
+    margin-top: -1px;
+  }
+
+  .page-footer__cols {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2.5rem;
+    margin-bottom: 2rem;
+    opacity: 0.7;
+  }
+
+  .page-footer__col p { margin-bottom: 0.2rem; }
+
+  .page-footer__bottom {
+    border-top: 1px solid rgba(212,168,83,0.2);
+    padding-top: 1.2rem;
+    font-size: 0.75rem;
+    opacity: 0.5;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 700px) {
+    .nav {
+      flex-direction: column;
+      gap: 0.8rem;
+      padding: 1rem 1.2rem;
+      border-radius: 0 0 40% 60% / 0 0 25% 30%;
+    }
+
+    .nav__links { gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+    .hero {
+      padding: 2.5rem 1.2rem 4rem;
+    }
+
+    .hero__floater { font-size: 5rem !important; }
+
+    .features, .process, .pricing, .cta-footer { padding: 3rem 1.2rem; }
+
+    .features__grid, .pricing__grid { grid-template-columns: 1fr; gap: 1.5rem; }
+
+    .pricing-card--featured { transform: scale(1); }
+    .pricing-card--featured:hover { transform: scale(1.03) translateY(-6px); }
+
+    .process__steps { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="nav">
+    <div class="nav__logo">💩 The Duke's Drop</div>
+    <ul class="nav__links">
+      <li><a href="#features">The Goods</a></li>
+      <li><a href="#process">The Process</a></li>
+      <li><a href="#pricing">Drop Plans</a></li>
+      <li><a href="#cta">Make a Deposit</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <span class="hero__floater hero__floater--1">💩</span>
+    <span class="hero__floater hero__floater--2">🧻</span>
+    <span class="hero__floater hero__floater--3">🪰</span>
+    <div class="hero__content">
+      <span class="hero__badge">🌿 Heritage Since 1874</span>
+      <h1 class="hero__title">
+        Finally, a compost that truly <em>gets</em> its sh*t together.
+      </h1>
+      <p class="hero__subtitle">
+        Hand-crafted, small-batch, heritage compost delivered fresh to your garden bed. Because your roses deserve the bottom line.
+      </p>
+      <a href="#pricing" class="hero__cta">DROP IN →</a>
+    </div>
+  </section>
+
+  <!-- ===== WAVE DIVIDER (DRIP) ===== -->
+  <div class="wave-divider">
+    <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,50 C80,20 140,90 240,45 C340,0 400,80 500,35 C580,0 620,85 700,30 C780,0 820,90 900,25 C980,0 1020,80 1100,40 C1200,0 1280,95 1380,20 C1420,0 1440,50 1440,50 L1440,100 L0,100 Z" fill="#6B4226"/>
+      <ellipse cx="180" cy="82" rx="30" ry="16" fill="#6B4226"/>
+      <ellipse cx="650" cy="80" rx="18" ry="10" fill="#6B4226"/>
+      <ellipse cx="1050" cy="85" rx="24" ry="13" fill="#6B4226"/>
+    </svg>
+  </div>
+
+  <!-- ===== FEATURES ===== -->
+  <section class="features" id="features">
+    <div class="features__header">
+      <div class="features__icon-row">🧻 💩 🪰</div>
+      <h2 class="features__title">A Solid Movement in Compost</h2>
+      <p class="features__subtitle">We don't sell dirt. We sell the byproduct of a deeply personal relationship with nature.</p>
+    </div>
+    <div class="features__grid">
+      <article class="feature-card">
+        <div class="feature-card__blob"></div>
+        <span class="feature-card__emoji">🧑‍🌾</span>
+        <h3 class="feature-card__title">Seed-to-Soil Provenance</h3>
+        <p class="feature-card__text">Every batch traces back to a single heritage livestock lineage. We know exactly which animal contributed what, and we're not afraid to name names. Full farm-to-funk traceability.</p>
+      </article>
+      <article class="feature-card">
+        <div class="feature-card__blob"></div>
+        <span class="feature-card__emoji">🫙</span>
+        <h3 class="feature-card__title">Small-Batch Aging</h3>
+        <p class="feature-card__text">Our compost is aged a minimum of 16 months in reclaimed oak barrels. Yes, barrels. We treat every heap with the reverence usually reserved for single-malt scotch.</p>
+      </article>
+      <article class="feature-card">
+        <div class="feature-card__blob"></div>
+        <span class="feature-card__emoji">📦</span>
+        <h3 class="feature-card__title">Curated Monthly Drops</h3>
+        <p class="feature-card__text">You don't find us — we find you. Each month we curate a new blend and ship it in a burlap sack with a handwritten note. Subscribers report their tomatoes have never been more smug.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== WAVE DIVIDER (DRIP) ===== -->
+  <div class="wave-divider">
+    <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,30 C100,70 200,10 320,40 C450,80 580,5 700,35 C820,65 950,15 1060,45 C1160,75 1280,8 1360,35 C1400,50 1440,30 1440,30 L1440,0 L0,0 Z" fill="#4A2C17"/>
+      <ellipse cx="280" cy="18" rx="16" ry="8" fill="#4A2C17"/>
+      <ellipse cx="750" cy="20" rx="22" ry="11" fill="#4A2C17"/>
+      <ellipse cx="1200" cy="14" rx="14" ry="7" fill="#4A2C17"/>
+    </svg>
+  </div>
+
+  <!-- ===== TESTIMONIAL ===== -->
+  <section class="testimonial">
+    <p class="testimonial__quote">"I used to buy regular compost. Then I discovered The Duke's Drop. Now my dahlias are insufferable and my neighbors won't speak to me. Five stars. Would fertilize again."</p>
+    <p class="testimonial__attr">— Lady Marguerite H., Chelsea Flower Show Gold Medalist</p>
+    <div class="testimonial__pile">💩 💩 💩 💩 💩</div>
+  </section>
+
+  <!-- ===== WAVE DIVIDER (DRIP) ===== -->
+  <div class="wave-divider">
+    <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,30 C120,75 280,8 400,40 C540,78 680,5 800,35 C920,68 1040,10 1160,42 C1280,72 1380,8 1440,30 L1440,0 L0,0 Z" fill="#F5E6C8"/>
+      <ellipse cx="350" cy="18" rx="20" ry="9" fill="#F5E6C8"/>
+      <ellipse cx="850" cy="22" rx="16" ry="7" fill="#F5E6C8"/>
+      <ellipse cx="1250" cy="12" rx="12" ry="6" fill="#F5E6C8"/>
+    </svg>
+  </div>
+
+  <!-- ===== PROCESS ===== -->
+  <section class="process" id="process">
+    <h2 class="process__title">The Pipeline (Not That One)</h2>
+    <div class="process__steps">
+      <div class="process-step">
+        <div class="process-step__blob">🐄</div>
+        <div class="process-step__num">Step 1</div>
+        <div class="process-step__label">Source Collection</div>
+      </div>
+      <div class="process-step">
+        <div class="process-step__blob">🫙</div>
+        <div class="process-step__num">Step 2</div>
+        <div class="process-step__label">Barrel Aging</div>
+      </div>
+      <div class="process-step">
+        <div class="process-step__blob">🧪</div>
+        <div class="process-step__num">Step 3</div>
+        <div class="process-step__label">Quality Inspection</div>
+      </div>
+      <div class="process-step">
+        <div class="process-step__blob">📦</div>
+        <div class="process-step__num">Step 4</div>
+        <div class="process-step__label">Flush Delivery</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WAVE DIVIDER (DRIP) ===== -->
+  <div class="wave-divider">
+    <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,20 C160,65 260,10 380,38 C520,72 640,5 760,35 C900,68 1020,12 1140,42 C1260,70 1380,8 1440,25 L1440,0 L0,0 Z" fill="#F5E6C8"/>
+      <ellipse cx="310" cy="16" rx="14" ry="7" fill="#F5E6C8"/>
+      <ellipse cx="800" cy="20" rx="18" ry="9" fill="#F5E6C8"/>
+      <ellipse cx="1180" cy="14" rx="10" ry="6" fill="#F5E6C8"/>
+    </svg>
+  </div>
+
+  <!-- ===== PRICING ===== -->
+  <section class="pricing" id="pricing">
+    <div class="pricing__header">
+      <h2 class="pricing__title">Choose Your Load</h2>
+      <p class="pricing__subtitle">Every plan comes with a free pair of disposable gloves. You're welcome.</p>
+    </div>
+    <div class="pricing__grid">
+      <article class="pricing-card">
+        <span class="pricing-card__emoji">💩</span>
+        <h3 class="pricing-card__tier">The Chip</h3>
+        <div class="pricing-card__price">£29<span>per month</span></div>
+        <ul class="pricing-card__features">
+          <li>2 kg monthly drop</li>
+          <li>Standard provenance card</li>
+          <li>Burlap sack included</li>
+          <li>Email support (weekdays)</li>
+        </ul>
+        <a href="#" class="pricing-card__btn">Drop It →</a>
+      </article>
+      <article class="pricing-card pricing-card--featured">
+        <span class="pricing-card__emoji">💩💩</span>
+        <h3 class="pricing-card__tier">The Log</h3>
+        <div class="pricing-card__price">£54<span>per month</span></div>
+        <ul class="pricing-card__features">
+          <li>5 kg monthly drop</li>
+          <li>Embossed provenance card</li>
+          <li>Reclaimed oak display crate</li>
+          <li>Priority support (even poop sessions)</li>
+        </ul>
+        <a href="#" class="pricing-card__btn">Drop It Big →</a>
+      </article>
+      <article class="pricing-card">
+        <span class="pricing-card__emoji">🐘</span>
+        <h3 class="pricing-card__tier">The Full Load</h3>
+        <div class="pricing-card__price">£99<span>per month</span></div>
+        <ul class="pricing-card__features">
+          <li>12 kg monthly drop</li>
+          <li>Gold-foil provenance certificate</li>
+          <li>Hand-delivered by a person in tweed</li>
+          <li>24/7 concierge (no questions asked)</li>
+        </ul>
+        <a href="#" class="pricing-card__btn">Go Big →</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== CTA FOOTER ===== -->
+  <section class="cta-footer" id="cta">
+    <h2 class="cta-footer__title">Flush Your Worries Away</h2>
+    <p class="cta-footer__text">
+      Still using generic, mass-produced compost like some kind of peasant? That's a hard pass. Join the movement — literally.
+    </p>
+    <a href="#" class="cta-footer__btn" id="finalCta">ACKNOWLEDGE THE LOAD 💩</a>
+  </section>
+
+  <!-- ===== PAGE FOOTER ===== -->
+  <footer class="page-footer">
+    <div class="page-footer__cols">
+      <div class="page-footer__col">
+        <p><strong>The Duke's Drop Ltd.</strong></p>
+        <p>Registered at the Ministry of Fertilization</p>
+        <p>Compost Licence No. 💩-1874-UK</p>
+      </div>
+      <div class="page-footer__col">
+        <p><strong>Contact</strong></p>
+        <p>drop@thedukesdrop.co.uk</p>
+        <p>0800-BOTTOMS-UP</p>
+      </div>
+    </div>
+    <div class="page-footer__bottom">
+      © 2026 The Duke's Drop. All droppings reserved. Not suitable for human consumption. Probably.
+    </div>
+  </footer>
+
+  <script>
+    /* ===== CHEEKY BUTTON INTERACTION ===== */
+    document.querySelectorAll('.pricing-card__btn, .hero__cta, .cta-footer__btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var messages = [
+          '💩 We\'re on it.',
+          '🧻 Consider it dropped.',
+          '🪰 The load is in motion.',
+          '🚽 Flush with anticipation.',
+          '💩 Logged with love.',
+          '🐘 A massive undertaking. Underway.',
+        ];
+        var msg = messages[Math.floor(Math.random() * messages.length)];
+        var original = this.textContent;
+        this.textContent = msg;
+        this.style.pointerEvents = 'none';
+        this.style.opacity = '0.8';
+        setTimeout(function(btn) {
+          btn.textContent = original.split('→')[0].trim() + ' →';
+          btn.style.pointerEvents = 'auto';
+          btn.style.opacity = '1';
+        }, 1800, this);
+      });
+    });
+
+    /* ===== PARALLAX SMOOSH ON SCROLL ===== */
+    var heroFloaters = document.querySelectorAll('.hero__floater');
+    window.addEventListener('scroll', function() {
+      var offset = window.pageYOffset;
+      heroFloaters.forEach(function(el, i) {
+        el.style.transform = 'translateY(' + (offset * (0.03 + i * 0.02)) + 'px)';
+      });
+    });
+  </script>
+
+</body>
+</html>

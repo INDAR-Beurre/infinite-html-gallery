@@ -1,0 +1,1172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BIOLUM™ — Drink the Glow · Bioluminescent Algae Energy</title>
+<meta name="description" content="BIOLUM. A glowing energy drink brewed from synthetic bioluminescent algae. Drink it at midnight. Glow till sunrise." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ============== TOKENS ============== */
+:root{
+  --magenta:#ff2bd6;
+  --cyan:#22e7ff;
+  --lime:#c6ff3d;
+  --violet:#8a3dff;
+  --orange:#ff7a1a;
+  --sun:#ffd23d;
+  --pink:#ff7ab8;
+  --ink:#0a0414;
+  --ink-2:#170826;
+  --paper:#fff7fb;
+  --cream:#fff0d6;
+  --glass: rgba(255,255,255,0.28);
+  --glass-stroke: rgba(255,255,255,0.55);
+  --bezier: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Outfit', system-ui, sans-serif;
+  color:var(--ink);
+  background: var(--ink);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  min-height:100vh;
+}
+
+/* ============== ANIMATED MESH BACKGROUND ============== */
+.mesh{
+  position:fixed; inset:0; z-index:-3;
+  background:
+    radial-gradient(at 12% 8%, rgba(255,43,214,0.85) 0px, transparent 42%),
+    radial-gradient(at 88% 14%, rgba(34,231,255,0.85) 0px, transparent 45%),
+    radial-gradient(at 76% 86%, rgba(198,255,61,0.78) 0px, transparent 48%),
+    radial-gradient(at 18% 88%, rgba(138,61,255,0.82) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(255,122,26,0.55) 0px, transparent 60%),
+    linear-gradient(135deg, #1b0535 0%, #320652 50%, #061a3a 100%);
+  filter:saturate(1.15) blur(0px);
+  animation: meshDrift 22s ease-in-out infinite alternate;
+}
+@keyframes meshDrift{
+  0%{
+    background-position: 0% 0%, 100% 0%, 100% 100%, 0% 100%, 50% 50%, 0 0;
+  }
+  100%{
+    background-position: 8% 12%, 92% 8%, 92% 92%, 8% 92%, 50% 50%, 0 0;
+  }
+}
+.grain{
+  position:fixed; inset:0; z-index:-2; pointer-events:none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  opacity:0.18; mix-blend-mode:overlay;
+}
+
+/* floating blobs in the background */
+.floaters{position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden}
+.floater{
+  position:absolute; width:280px; height:280px; border-radius: 50% 30% 60% 40% / 40% 50% 50% 60%;
+  filter: blur(40px); opacity:0.55;
+  animation: floaty 18s ease-in-out infinite alternate;
+}
+.floater.a{background:radial-gradient(circle, var(--magenta), transparent 70%); top:-80px; left:-60px; animation-duration:14s}
+.floater.b{background:radial-gradient(circle, var(--cyan), transparent 70%); top:40%; right:-120px; width:380px; height:380px; animation-duration:19s; animation-delay:-3s}
+.floater.c{background:radial-gradient(circle, var(--lime), transparent 70%); bottom:-100px; left:30%; width:420px; height:420px; animation-duration:22s; animation-delay:-7s}
+.floater.d{background:radial-gradient(circle, var(--violet), transparent 70%); top:60%; left:-80px; width:320px; height:320px; animation-duration:17s; animation-delay:-2s}
+.floater.e{background:radial-gradient(circle, var(--orange), transparent 70%); top:20%; left:55%; width:260px; height:260px; animation-duration:15s; animation-delay:-9s}
+@keyframes floaty{
+  0%{transform: translate(0,0) rotate(0deg) scale(1)}
+  50%{transform: translate(40px, -30px) rotate(40deg) scale(1.1)}
+  100%{transform: translate(-30px, 50px) rotate(-30deg) scale(0.95)}
+}
+
+/* ============== CONTAINER & SHELL ============== */
+.shell{ width: min(1240px, calc(100% - 40px)); margin: 0 auto; }
+.section-pad{ padding: clamp(72px, 11vw, 156px) 0; }
+
+/* ============== NAV ============== */
+.nav{
+  position:fixed; top:18px; left:0; right:0; z-index:60;
+  display:flex; justify-content:center; pointer-events:none;
+}
+.nav-inner{
+  pointer-events:auto;
+  display:flex; align-items:center; gap:18px;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  border:1.5px solid rgba(255,255,255,0.4);
+  padding: 10px 14px 10px 18px;
+  border-radius: 999px;
+  box-shadow: 0 18px 50px -10px rgba(255,43,214,0.45),
+              0 8px 30px -8px rgba(34,231,255,0.35),
+              inset 0 1px 0 rgba(255,255,255,0.6);
+  animation: navPulse 6s ease-in-out infinite;
+}
+@keyframes navPulse{
+  0%,100%{box-shadow: 0 18px 50px -10px rgba(255,43,214,0.45), 0 8px 30px -8px rgba(34,231,255,0.35), inset 0 1px 0 rgba(255,255,255,0.6)}
+  50%{box-shadow: 0 22px 60px -10px rgba(138,61,255,0.55), 0 8px 30px -8px rgba(198,255,61,0.4), inset 0 1px 0 rgba(255,255,255,0.6)}
+}
+.brand{
+  font-family:'Bricolage Grotesque', sans-serif;
+  font-weight:800;
+  font-size:20px; letter-spacing:-0.04em;
+  display:flex; align-items:center; gap:8px;
+  background: linear-gradient(120deg, var(--magenta), var(--cyan));
+  -webkit-background-clip:text; background-clip:text;
+  color:transparent;
+  padding-right:14px;
+  border-right:1.5px dashed rgba(255,255,255,0.5);
+}
+.brand-dot{
+  width:14px; height:14px; border-radius:50%;
+  background:radial-gradient(circle, #fff, var(--lime) 60%, var(--magenta));
+  box-shadow:0 0 18px var(--lime), 0 0 30px var(--magenta);
+  animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink{
+  0%,100%{transform: scale(1); filter: brightness(1)}
+  50%{transform: scale(1.35); filter: brightness(1.6)}
+}
+.nav-links{ display:flex; gap:4px; }
+.nav-links a{
+  text-decoration:none; color:var(--ink);
+  font-weight:600; font-size:14px;
+  padding:8px 14px; border-radius:999px;
+  transition: all 0.4s var(--bezier);
+}
+.nav-links a:hover{ background: var(--ink); color:var(--lime); transform: translateY(-2px) rotate(-2deg); }
+.nav-cta{
+  background: var(--ink); color: var(--lime);
+  padding: 10px 16px 10px 18px; border-radius:999px;
+  font-weight:700; font-size:14px; text-decoration:none;
+  display:inline-flex; align-items:center; gap:8px;
+  box-shadow: 0 8px 20px rgba(10,4,20,0.5);
+  transition: all 0.4s var(--bezier);
+}
+.nav-cta:hover{ transform: scale(1.05) rotate(1deg); }
+.nav-cta .arrow{
+  width:22px; height:22px; border-radius:50%;
+  background: var(--lime); color: var(--ink);
+  display:grid; place-items:center; font-size:12px; font-weight:900;
+  transition: transform 0.5s var(--bezier);
+}
+.nav-cta:hover .arrow{ transform: translate(3px, -3px) rotate(20deg); }
+
+.menu-btn{ display:none; background: var(--ink); color: var(--cyan); border:none; width:42px; height:42px; border-radius:50%; font-size:20px; cursor:pointer;}
+
+/* mobile overlay */
+.overlay{
+  position:fixed; inset:0; z-index:80;
+  background: radial-gradient(circle at 30% 20%, rgba(255,43,214,0.95), transparent 60%),
+              radial-gradient(circle at 80% 80%, rgba(34,231,255,0.95), transparent 60%),
+              var(--ink);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px;
+  transform: translateY(-100%); transition: transform 0.6s var(--ease);
+}
+.overlay.open{ transform: translateY(0); }
+.overlay a{
+  color:#fff; text-decoration:none;
+  font-family:'Bricolage Grotesque', sans-serif; font-weight:800;
+  font-size: clamp(36px, 9vw, 64px); letter-spacing:-0.04em;
+}
+.overlay a:hover{ color: var(--lime); }
+.overlay-close{ position:absolute; top:22px; right:22px; width:48px; height:48px; border-radius:50%; background:#fff; color: var(--ink); border:none; font-size:22px; cursor:pointer; }
+
+@media (max-width: 860px){
+  .nav-links, .nav-cta { display:none; }
+  .menu-btn{ display:grid; place-items:center; }
+}
+
+/* ============== HERO ============== */
+.hero{
+  position:relative;
+  padding-top: 140px;
+  padding-bottom: 60px;
+  min-height: 100vh;
+  display:flex; align-items:center;
+}
+.hero-grid{
+  display:grid; grid-template-columns: 1.15fr 1fr; gap: 40px; align-items:center;
+}
+@media (max-width: 920px){ .hero-grid{ grid-template-columns: 1fr; gap: 30px; } }
+
+.eyebrow{
+  display:inline-flex; align-items:center; gap:10px;
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(14px);
+  border:1.5px solid rgba(255,255,255,0.45);
+  padding: 8px 16px 8px 8px;
+  border-radius: 999px;
+  font-size: 13px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;
+  color: var(--ink);
+  box-shadow: 0 6px 20px rgba(138,61,255,0.35);
+}
+.eyebrow .dot{ width:22px; height:22px; border-radius:50%; background: linear-gradient(135deg, var(--lime), var(--magenta)); display:grid; place-items:center; font-size:12px; box-shadow: 0 0 18px var(--lime); animation: blink 2.4s ease-in-out infinite;}
+
+.hero h1{
+  font-family:'Bricolage Grotesque', sans-serif;
+  font-weight: 800;
+  font-size: clamp(56px, 9.5vw, 152px);
+  line-height: 0.88;
+  letter-spacing: -0.055em;
+  margin: 18px 0 22px;
+  color: #fff;
+  text-shadow: 0 0 40px rgba(255,43,214,0.6), 0 0 80px rgba(34,231,255,0.4);
+}
+.hero h1 .word{
+  display:inline-block;
+  background: linear-gradient(110deg, #fff 0%, #fff 30%, var(--magenta) 50%, var(--cyan) 70%, #fff 90%);
+  background-size: 200% 100%;
+  -webkit-background-clip:text; background-clip:text; color: transparent;
+  animation: shimmer 6s linear infinite;
+}
+.hero h1 .word.alt{
+  background: linear-gradient(110deg, #fff 0%, var(--lime) 40%, var(--magenta) 70%, #fff 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip:text; background-clip:text; color: transparent;
+  animation: shimmer 7s linear infinite reverse;
+}
+@keyframes shimmer{ 0%{background-position: 0% 0;} 100%{background-position: 200% 0;} }
+
+.hero h1 .star{
+  display:inline-block; vertical-align: super; font-size: 0.4em; color: var(--lime);
+  text-shadow: 0 0 24px var(--lime);
+  animation: spin 8s linear infinite;
+}
+@keyframes spin{ to{ transform: rotate(360deg);} }
+
+.hero p.lede{
+  color: #fff;
+  font-size: clamp(17px, 1.7vw, 22px);
+  line-height: 1.4;
+  font-weight: 500;
+  max-width: 520px;
+  margin-bottom: 30px;
+  text-shadow: 0 2px 18px rgba(10,4,20,0.6);
+}
+
+.hero-ctas{ display:flex; gap:16px; flex-wrap:wrap; align-items:center;}
+
+.btn{
+  display:inline-flex; align-items:center; gap:12px;
+  padding: 18px 26px 18px 30px;
+  font-family:'Bricolage Grotesque', sans-serif; font-weight:800; font-size:17px;
+  text-decoration:none; color: var(--ink);
+  border-radius: 999px; border: none; cursor:pointer;
+  transition: all 0.5s var(--bezier);
+  background: linear-gradient(135deg, #fff, var(--cream));
+  box-shadow: 0 14px 30px -8px rgba(255,43,214,0.55), 0 8px 20px -6px rgba(34,231,255,0.4), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.btn:hover{ transform: translateY(-4px) scale(1.04) rotate(-1deg); box-shadow: 0 22px 50px -10px rgba(138,61,255,0.65), 0 12px 30px -8px rgba(198,255,61,0.45), inset 0 1px 0 rgba(255,255,255,0.9);}
+.btn .chip{
+  width:32px; height:32px; border-radius:50%;
+  background: var(--ink); color: var(--lime);
+  display:grid; place-items:center; font-size:14px;
+  transition: transform 0.5s var(--bezier);
+}
+.btn:hover .chip{ transform: translate(4px,-4px) rotate(25deg); background: var(--magenta); color:#fff;}
+
+.btn-ghost{
+  background: transparent;
+  color: #fff;
+  border: 2px solid rgba(255,255,255,0.55);
+  box-shadow: 0 6px 18px rgba(10,4,20,0.4);
+}
+.btn-ghost:hover{ background: rgba(255,255,255,0.15); color: var(--lime); border-color: var(--lime);}
+
+.hero-meta{ display:flex; gap:26px; flex-wrap:wrap; margin-top: 36px; }
+.meta-pill{
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(14px);
+  border:1.5px solid rgba(255,255,255,0.4);
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 13px; color: #fff; font-weight:600;
+  display:flex; align-items:center; gap:8px;
+}
+.meta-pill .e{ font-size:18px; filter: drop-shadow(0 0 6px rgba(255,255,255,0.4));}
+
+/* HERO VISUAL — the bottle */
+.hero-visual{
+  position:relative; aspect-ratio: 1/1.05;
+  display:grid; place-items:center;
+}
+.orbit{
+  position:absolute; inset:0;
+  display:grid; place-items:center;
+  pointer-events:none;
+}
+.orbit-ring{
+  position:absolute;
+  border: 2px dashed rgba(255,255,255,0.35);
+  border-radius: 50%;
+  animation: spinSlow 30s linear infinite;
+}
+.orbit-ring.r1{ width: 78%; height: 78%; border-color: rgba(255,43,214,0.45);}
+.orbit-ring.r2{ width: 60%; height: 60%; border-color: rgba(34,231,255,0.5); animation-direction: reverse; animation-duration: 22s;}
+.orbit-ring.r3{ width: 96%; height: 96%; border-color: rgba(198,255,61,0.3); animation-duration: 50s;}
+@keyframes spinSlow{ to{ transform: rotate(360deg);} }
+
+.blob-satelite{
+  position:absolute;
+  width: 60px; height: 60px;
+  border-radius: 50% 30% 60% 40% / 40% 50% 50% 60%;
+  display:grid; place-items:center;
+  font-size: 26px;
+  font-weight: 900;
+  color: #fff;
+  box-shadow: 0 14px 30px rgba(0,0,0,0.35);
+  animation: spinSlow 30s linear infinite;
+}
+.blob-satelite.s1{ background: linear-gradient(135deg, var(--magenta), var(--violet)); top: 4%; left: 50%; transform: translateX(-50%);}
+.blob-satelite.s2{ background: linear-gradient(135deg, var(--cyan), var(--lime)); top: 50%; right: -2%; transform: translateY(-50%); animation: spinSlow 22s linear infinite reverse;}
+.blob-satelite.s3{ background: linear-gradient(135deg, var(--orange), var(--sun)); bottom: 5%; left: 12%;}
+.blob-satelite.s4{ background: linear-gradient(135deg, var(--violet), var(--pink)); top: 22%; left: 0%;}
+
+.bottle-stage{
+  position:relative; width: 70%; aspect-ratio: 0.55/1;
+  display:grid; place-items:center;
+  filter: drop-shadow(0 40px 60px rgba(255,43,214,0.55)) drop-shadow(0 20px 30px rgba(34,231,255,0.4));
+  animation: floaty 7s ease-in-out infinite;
+}
+.bottle{
+  position:relative; width: 100%; height: 100%;
+  border-radius: 44% 44% 28% 28% / 14% 14% 30% 30%;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,0.9) 0%, transparent 18%),
+    linear-gradient(160deg, #2a0a3a 0%, #5e147a 30%, #1b0540 60%, #0a0414 100%);
+  box-shadow: inset 0 0 80px rgba(255,43,214,0.45), inset 0 -30px 60px rgba(34,231,255,0.4);
+  overflow:hidden;
+}
+.bottle::before{
+  content:''; position:absolute; left:8%; top:0; width:18%; height:100%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.6), transparent 30%, transparent 70%, rgba(255,255,255,0.15));
+  border-radius: 50%;
+  filter: blur(2px);
+}
+.bottle::after{
+  content:''; position:absolute; right:6%; top:14%; width:30%; height:30%;
+  background: radial-gradient(circle, rgba(255,255,255,0.4), transparent 60%);
+  border-radius: 50%;
+  filter: blur(4px);
+}
+.bottle-cap{
+  position:absolute; top:-8%; left:50%; transform:translateX(-50%);
+  width: 36%; height: 14%;
+  background: linear-gradient(180deg, #ff5dd0, #b51d8a);
+  border-radius: 40% 40% 18% 18% / 60% 60% 30% 30%;
+  box-shadow: inset 0 -6px 12px rgba(0,0,0,0.4), 0 8px 14px rgba(255,43,214,0.6);
+}
+.glow-liquid{
+  position:absolute; left:8%; right:8%; bottom:0; top:30%;
+  background: linear-gradient(180deg, var(--cyan), var(--magenta) 50%, var(--violet));
+  border-radius: 50% 50% 25% 25% / 30% 30% 25% 25%;
+  filter: blur(0px);
+  animation: liquidMove 5s ease-in-out infinite;
+}
+@keyframes liquidMove{
+  0%,100%{ transform: translateY(0) scaleY(1); border-radius: 50% 50% 25% 25% / 30% 30% 25% 25%;}
+  50%{ transform: translateY(-3%) scaleY(1.04); border-radius: 50% 50% 30% 30% / 26% 26% 30% 30%;}
+}
+.glow-liquid::after{
+  content:''; position:absolute; left:10%; top:10%; width:30%; height:20%;
+  background: radial-gradient(circle, rgba(255,255,255,0.6), transparent 70%);
+  border-radius: 50%; filter: blur(2px);
+}
+.bubbles{ position:absolute; inset:0; pointer-events:none; }
+.bubble{
+  position:absolute; bottom:-10px; width: 8px; height: 8px; border-radius:50%;
+  background: radial-gradient(circle, #fff, var(--cyan));
+  box-shadow: 0 0 8px var(--cyan);
+  animation: rise 4s ease-in infinite;
+}
+.bubble:nth-child(1){ left:18%; animation-delay: 0s; }
+.bubble:nth-child(2){ left:30%; animation-delay: 1.2s; width: 12px; height:12px;}
+.bubble:nth-child(3){ left:55%; animation-delay: 0.6s; background: radial-gradient(circle, #fff, var(--magenta)); box-shadow: 0 0 10px var(--magenta);}
+.bubble:nth-child(4){ left:75%; animation-delay: 1.8s; width: 10px; height:10px;}
+.bubble:nth-child(5){ left:42%; animation-delay: 2.4s; background: radial-gradient(circle, #fff, var(--lime)); box-shadow: 0 0 10px var(--lime);}
+.bubble:nth-child(6){ left:65%; animation-delay: 3s; width: 6px; height:6px;}
+@keyframes rise{
+  0%{ transform: translateY(0) scale(0.6); opacity:0;}
+  20%{ opacity:1;}
+  100%{ transform: translateY(-280px) scale(1.2); opacity:0;}
+}
+
+.bottle-label{
+  position:absolute; left:50%; top:55%; transform: translate(-50%, -50%);
+  background: rgba(255,255,255,0.92);
+  border-radius: 40% 60% 60% 40% / 50% 50% 50% 50%;
+  padding: 14px 20px;
+  font-family:'Bricolage Grotesque', sans-serif; font-weight:900;
+  font-size: clamp(20px, 2vw, 30px);
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.4);
+  white-space: nowrap;
+}
+.bottle-label small{ display:block; font-size: 9px; font-weight:700; letter-spacing: 0.3em; color: var(--magenta); text-transform:uppercase; margin-bottom:2px;}
+
+/* floating stat cards around the bottle */
+.float-card{
+  position:absolute;
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(18px) saturate(180%);
+  border:1.5px solid rgba(255,255,255,0.5);
+  padding: 14px 18px;
+  border-radius: 22px 28px 22px 28px / 22px 28px 22px 28px;
+  box-shadow: 0 16px 36px rgba(0,0,0,0.35);
+  color: #fff;
+  display:flex; align-items:center; gap:10px;
+  animation: floaty 6s ease-in-out infinite;
+}
+.float-card.fc1{ top: 14%; right: -6%; }
+.float-card.fc2{ bottom: 12%; left: -2%; animation-delay: -2s; }
+.float-card .ic{ font-size: 24px; }
+.float-card .v{ font-family:'Bricolage Grotesque', sans-serif; font-weight:800; font-size: 18px; line-height:1;}
+.float-card .l{ font-size: 11px; opacity:0.85; margin-top:2px; letter-spacing: 0.05em; text-transform:uppercase;}
+
+@media (max-width: 920px){
+  .float-card.fc1{ right: 0%; }
+  .float-card.fc2{ left: 0%; }
+}
+
+/* ============== TICKER ============== */
+.ticker{
+  background: var(--ink);
+  color: #fff;
+  padding: 22px 0;
+  border-top: 2px solid rgba(255,255,255,0.1);
+  border-bottom: 2px solid rgba(255,255,255,0.1);
+  overflow:hidden;
+  position:relative;
+}
+.ticker::before, .ticker::after{
+  content:''; position:absolute; top:0; bottom:0; width:120px; z-index:2; pointer-events:none;
+}
+.ticker::before{ left:0; background: linear-gradient(90deg, var(--ink), transparent);}
+.ticker::after{ right:0; background: linear-gradient(270deg, var(--ink), transparent);}
+.ticker-track{
+  display:flex; gap: 40px; white-space: nowrap;
+  animation: marquee 38s linear infinite;
+  font-family:'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 28px;
+  letter-spacing: -0.03em;
+}
+.ticker-track span{ display:inline-flex; align-items:center; gap:40px;}
+.ticker-track .dotc{ width: 14px; height:14px; border-radius:50%; background: var(--lime); box-shadow: 0 0 14px var(--lime); display:inline-block;}
+.ticker-track .mag{ color: var(--magenta); }
+.ticker-track .cy{ color: var(--cyan); }
+.ticker-track .li{ color: var(--lime); }
+.ticker-track .vi{ color: var(--violet); }
+@keyframes marquee{ to{ transform: translateX(-50%);} }
+
+/* ============== FLAVORS BENTO ============== */
+.section-head{
+  text-align:center; margin-bottom: 56px;
+}
+.section-head .kicker{
+  display:inline-block;
+  font-family:'Bricolage Grotesque', sans-serif; font-weight:800;
+  font-size: 14px; letter-spacing: 0.2em; text-transform:uppercase;
+  background: linear-gradient(90deg, var(--magenta), var(--cyan));
+  -webkit-background-clip:text; background-clip:text; color: transparent;
+}
+.section-head h2{
+  font-family:'Bricolage Grotesque', sans-serif; font-weight: 800;
+  font-size: clamp(40px, 6.5vw, 96px);
+  line-height: 0.92; letter-spacing: -0.05em;
+  color: #fff; margin: 14px auto 0; max-width: 880px;
+  text-shadow: 0 0 40px rgba(34,231,255,0.3);
+}
+.section-head h2 em{ font-style: normal; background: linear-gradient(110deg, var(--lime), var(--magenta)); -webkit-background-clip:text; background-clip:text; color: transparent;}
+.section-head p{ color: rgba(255,255,255,0.85); max-width: 560px; margin: 16px auto 0; font-size: 17px;}
+
+.flavors{
+  display:grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-auto-rows: 220px;
+  gap: 22px;
+}
+.flavor{
+  position:relative; overflow:hidden; cursor:pointer;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(18px);
+  border: 1.5px solid rgba(255,255,255,0.4);
+  color: #fff;
+  padding: 24px;
+  display:flex; flex-direction:column; justify-content:space-between;
+  transition: all 0.5s var(--bezier);
+  box-shadow: 0 18px 40px rgba(10,4,20,0.45);
+}
+.flavor:hover{ transform: translateY(-8px) rotate(-1.5deg) scale(1.02);}
+.flavor .emoji{ font-size: 64px; filter: drop-shadow(0 0 18px rgba(255,255,255,0.6)); transition: transform 0.6s var(--bezier);}
+.flavor:hover .emoji{ transform: rotate(-12deg) scale(1.15);}
+.flavor h3{ font-family:'Bricolage Grotesque', sans-serif; font-weight:800; font-size: 28px; letter-spacing:-0.03em; line-height:1;}
+.flavor .sub{ font-size: 12px; opacity: 0.85; letter-spacing: 0.1em; text-transform:uppercase; font-weight:600;}
+.flavor .glow{
+  position:absolute; right:-30%; top:-30%; width:200px; height:200px; border-radius:50%;
+  filter: blur(40px); opacity:0.75;
+}
+.flavor .cal{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; padding:6px 10px; border-radius:999px; background: rgba(0,0,0,0.25); align-self:flex-start;}
+
+.f1{ grid-column: span 3; grid-row: span 2; border-radius: 60% 40% 50% 50% / 50% 60% 40% 50%;}
+.f1 .glow{ background: radial-gradient(circle, var(--magenta), transparent 70%);}
+.f2{ grid-column: span 3; grid-row: span 1; border-radius: 50% 50% 30% 30% / 30% 30% 50% 50%;}
+.f2 .glow{ background: radial-gradient(circle, var(--cyan), transparent 70%);}
+.f3{ grid-column: span 2; grid-row: span 1; border-radius: 30% 50% 50% 30% / 50% 30% 30% 50%;}
+.f3 .glow{ background: radial-gradient(circle, var(--lime), transparent 70%);}
+.f4{ grid-column: span 1; grid-row: span 1; border-radius: 50% 30% 60% 40% / 40% 50% 50% 60%; padding: 18px;}
+.f4 .glow{ background: radial-gradient(circle, var(--violet), transparent 70%);}
+.f5{ grid-column: span 3; grid-row: span 1; border-radius: 40% 60% 30% 50% / 50% 40% 60% 30%;}
+.f5 .glow{ background: radial-gradient(circle, var(--orange), transparent 70%);}
+.f6{ grid-column: span 2; grid-row: span 1; border-radius: 50% 50% 50% 30% / 30% 30% 50% 50%;}
+.f6 .glow{ background: radial-gradient(circle, var(--pink), transparent 70%);}
+.f7{ grid-column: span 4; grid-row: span 1; border-radius: 30% 70% 50% 50% / 50% 50% 30% 70%;}
+.f7 .glow{ background: radial-gradient(circle, var(--sun), transparent 70%);}
+
+@media (max-width: 860px){
+  .flavors{ grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px;}
+  .f1, .f2, .f5, .f7{ grid-column: span 2; grid-row: span 1;}
+  .f3, .f4, .f6{ grid-column: span 1;}
+  .f1{ grid-row: span 2;}
+}
+
+/* ============== MIXER ============== */
+.mixer{
+  display:grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items:stretch;
+}
+@media (max-width: 920px){ .mixer{ grid-template-columns: 1fr;}}
+
+.mixer-pad{
+  position:relative; min-height: 480px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(20px);
+  border: 1.5px solid rgba(255,255,255,0.4);
+  border-radius: 40% 60% 50% 50% / 50% 50% 60% 40%;
+  padding: 36px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px;
+  overflow:hidden;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.45);
+}
+.mixer-pad::before{
+  content:''; position:absolute; inset:-20%;
+  background: conic-gradient(from var(--ang,0deg), var(--magenta), var(--cyan), var(--lime), var(--violet), var(--orange), var(--magenta));
+  filter: blur(40px); opacity:0.6; z-index:0; animation: spin 12s linear infinite;
+}
+.mixer-pad > *{ position:relative; z-index:1; }
+.swirl{
+  width: 200px; height: 200px; border-radius: 50% 30% 60% 40% / 40% 50% 50% 60%;
+  background: var(--swirl, radial-gradient(circle at 30% 30%, #fff, var(--magenta) 30%, var(--violet) 70%, var(--cyan)));
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 0 60px rgba(255,255,255,0.3);
+  animation: floaty 5s ease-in-out infinite;
+  position:relative;
+}
+.swirl::after{
+  content:''; position:absolute; left:18%; top:14%; width:36%; height:26%;
+  background: radial-gradient(circle, rgba(255,255,255,0.7), transparent 70%);
+  border-radius: 50%; filter: blur(2px);
+}
+.mix-name{
+  font-family:'Bricolage Grotesque', sans-serif; font-weight:800;
+  font-size: 32px; color:#fff; letter-spacing:-0.04em;
+  text-shadow: 0 0 24px var(--magenta);
+}
+
+.mix-controls{ display:grid; grid-template-columns: 1fr 1fr; gap: 14px; width:100%;}
+.mix-btn{
+  background: rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.4);
+  color: #fff; font-family:'Bricolage Grotesque', sans-serif; font-weight:700;
+  font-size: 14px; padding: 14px; border-radius: 999px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  transition: all 0.4s var(--bezier);
+}
+.mix-btn:hover{ background:#fff; color: var(--ink); transform: translateY(-3px) scale(1.05) rotate(-1deg);}
+.mix-btn .sw{ width:18px; height:18px; border-radius:50%; box-shadow: 0 0 10px currentColor;}
+.mix-btn.b1 .sw{ background: var(--magenta);}
+.mix-btn.b2 .sw{ background: var(--cyan);}
+.mix-btn.b3 .sw{ background: var(--lime);}
+.mix-btn.b4 .sw{ background: var(--violet);}
+.mix-btn.b5 .sw{ background: var(--orange);}
+.mix-btn.b6 .sw{ background: var(--pink);}
+
+.mixer-text{ color:#fff; padding: 8px;}
+.mixer-text h3{
+  font-family:'Bricolage Grotesque', sans-serif; font-weight: 800;
+  font-size: clamp(36px, 4.5vw, 64px); letter-spacing:-0.045em; line-height:0.95; margin-bottom: 18px;
+}
+.mixer-text h3 em{ font-style:normal; background: linear-gradient(120deg, var(--lime), var(--cyan)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+.mixer-text p{ font-size: 17px; opacity: 0.9; margin-bottom: 24px; max-width: 460px;}
+.mixer-stats{ display:flex; gap: 18px; flex-wrap: wrap; margin-top: 28px;}
+.mstat{ background: rgba(255,255,255,0.12); padding: 14px 18px; border-radius: 24px 32px 24px 32px / 24px 32px 24px 32px; border:1.5px solid rgba(255,255,255,0.35);}
+.mstat .n{ font-family:'Bricolage Grotesque', sans-serif; font-weight:800; font-size: 28px; color: var(--lime); line-height:1;}
+.mstat .l{ font-size: 11px; opacity: 0.85; letter-spacing: 0.1em; text-transform:uppercase; margin-top:4px;}
+
+/* ============== QUOTE ============== */
+.quote{
+  position:relative; padding: 60px 0;
+}
+.quote-card{
+  position:relative;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(24px);
+  border: 2px solid rgba(255,255,255,0.45);
+  border-radius: 50% 50% 30% 70% / 30% 70% 50% 50%;
+  padding: 80px clamp(28px, 5vw, 80px);
+  text-align: center;
+  box-shadow: 0 30px 80px rgba(138,61,255,0.45);
+}
+.quote-card::before{
+  content:'"';
+  position:absolute; top:-30px; left: 40px;
+  font-family:'Bricolage Grotesque', sans-serif; font-weight:900;
+  font-size: 200px; line-height:1;
+  background: linear-gradient(180deg, var(--magenta), var(--cyan));
+  -webkit-background-clip:text; background-clip:text; color: transparent;
+  opacity: 0.6;
+}
+.quote-card blockquote{
+  font-family:'Bricolage Grotesque', sans-serif; font-weight:800;
+  font-size: clamp(28px, 4.4vw, 64px); line-height: 1.05; letter-spacing:-0.04em;
+  color: #fff;
+  text-shadow: 0 0 40px rgba(34,231,255,0.3);
+}
+.quote-card blockquote em{ font-style:normal; color: var(--lime);}
+.quote-card cite{
+  display:inline-block; margin-top: 28px;
+  font-style:normal; font-weight:600; font-size: 14px; letter-spacing: 0.15em; text-transform:uppercase;
+  color: var(--magenta);
+}
+.quote-card cite::before{ content:'— ';}
+
+/* ============== FINAL CTA ============== */
+.cta{
+  position:relative;
+  background:
+    radial-gradient(circle at 20% 30%, var(--magenta) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, var(--cyan) 0%, transparent 40%),
+    radial-gradient(circle at 60% 30%, var(--violet) 0%, transparent 50%),
+    linear-gradient(135deg, #ff2bd6 0%, #8a3dff 50%, #22e7ff 100%);
+  border-radius: 50% 50% 30% 70% / 30% 70% 50% 50%;
+  padding: clamp(70px, 10vw, 130px) clamp(28px, 5vw, 80px);
+  text-align: center;
+  color: #fff;
+  overflow:hidden;
+  box-shadow: 0 40px 100px rgba(255,43,214,0.6), 0 30px 80px rgba(34,231,255,0.5);
+  margin-bottom: 60px;
+}
+.cta::before{
+  content:''; position:absolute; inset:-20%;
+  background: conic-gradient(from 0deg, var(--lime), var(--magenta), var(--cyan), var(--violet), var(--lime));
+  filter: blur(60px); opacity:0.5; z-index:0; animation: spin 20s linear infinite;
+}
+.cta > *{ position:relative; z-index:1; }
+.cta h2{
+  font-family:'Bricolage Grotesque', sans-serif; font-weight: 800;
+  font-size: clamp(48px, 8vw, 128px); letter-spacing:-0.055em; line-height: 0.9;
+  text-shadow: 0 0 40px rgba(0,0,0,0.4);
+  margin-bottom: 18px;
+}
+.cta h2 .alt{
+  background: linear-gradient(120deg, var(--sun), var(--lime));
+  -webkit-background-clip:text; background-clip:text; color: transparent;
+}
+.cta p{ font-size: clamp(17px, 1.6vw, 22px); max-width: 580px; margin: 0 auto 36px; font-weight: 500; }
+.cta-form{
+  display:flex; gap:10px; max-width: 520px; margin: 0 auto;
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(14px);
+  border: 2px solid rgba(255,255,255,0.55);
+  border-radius: 999px; padding: 8px 8px 8px 24px;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+}
+.cta-form input{
+  flex:1; background:transparent; border:none; outline:none;
+  color:#fff; font-size: 16px; font-weight:600;
+  font-family: inherit;
+}
+.cta-form input::placeholder{ color: rgba(255,255,255,0.7);}
+.cta-form button{
+  background: var(--ink); color: var(--lime);
+  border: none; padding: 14px 20px;
+  border-radius: 999px;
+  font-family:'Bricolage Grotesque', sans-serif; font-weight:800; font-size: 15px;
+  cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+  transition: all 0.4s var(--bezier);
+}
+.cta-form button:hover{ background: var(--lime); color: var(--ink); transform: scale(1.05) rotate(2deg);}
+.cta-success{
+  display:none; margin-top: 18px;
+  background: rgba(10,4,20,0.6); color: var(--lime);
+  padding: 14px 22px; border-radius: 999px; font-weight: 700; font-size: 15px;
+  border: 2px solid var(--lime);
+}
+.cta-success.show{ display:inline-block; animation: pop 0.6s var(--bezier);}
+@keyframes pop{ 0%{ transform: scale(0.5); opacity:0;} 60%{ transform: scale(1.1);} 100%{ transform: scale(1); opacity:1;}}
+
+.cta-mini{ display:flex; justify-content:center; gap: 30px; flex-wrap:wrap; margin-top: 50px; font-weight:700; font-size: 14px; letter-spacing:0.05em;}
+.cta-mini span{ display:inline-flex; align-items:center; gap:8px;}
+
+/* ============== FOOTER ============== */
+footer{
+  padding: 60px 0 40px;
+  color: rgba(255,255,255,0.85);
+  text-align: center;
+}
+.foot-brand{
+  font-family:'Bricolage Grotesque', sans-serif; font-weight:800;
+  font-size: clamp(40px, 7vw, 92px); letter-spacing:-0.05em; line-height: 0.9;
+  background: linear-gradient(110deg, var(--magenta), var(--cyan), var(--lime));
+  background-size: 200% 100%;
+  -webkit-background-clip:text; background-clip:text; color: transparent;
+  animation: shimmer 6s linear infinite;
+  margin-bottom: 16px;
+}
+.foot-tag{ font-size: 14px; opacity: 0.8; max-width: 520px; margin: 0 auto 28px;}
+.foot-mini{ display:flex; justify-content:center; gap: 22px; flex-wrap: wrap; font-size: 13px; opacity: 0.75; margin-bottom: 30px;}
+.foot-mini a{ color:#fff; text-decoration:none; padding: 6px 14px; border-radius: 999px; background: rgba(255,255,255,0.1); border:1.5px solid rgba(255,255,255,0.3); transition: all 0.4s var(--bezier);}
+.foot-mini a:hover{ background: var(--lime); color: var(--ink); transform: rotate(-2deg) scale(1.05);}
+.foot-meta{ font-size: 12px; opacity: 0.55; letter-spacing: 0.1em; text-transform:uppercase;}
+
+/* ============== REVEAL ANIMATION ============== */
+.reveal{ opacity: 0; transform: translateY(40px) scale(0.96); filter: blur(8px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease), filter 0.9s var(--ease);}
+.reveal.in{ opacity:1; transform: translateY(0) scale(1); filter: blur(0);}
+.reveal.d1{ transition-delay: 0.08s; }
+.reveal.d2{ transition-delay: 0.16s; }
+.reveal.d3{ transition-delay: 0.24s; }
+.reveal.d4{ transition-delay: 0.32s; }
+.reveal.d5{ transition-delay: 0.4s; }
+@media (prefers-reduced-motion: reduce){
+  *{ animation: none !important; transition: none !important;}
+  .reveal{ opacity:1; transform:none; filter:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="mesh"></div>
+<div class="grain"></div>
+<div class="floaters" aria-hidden="true">
+  <div class="floater a"></div>
+  <div class="floater b"></div>
+  <div class="floater c"></div>
+  <div class="floater d"></div>
+  <div class="floater e"></div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top"><span class="brand-dot"></span>BIOLUM™</a>
+    <div class="nav-links">
+      <a href="#flavors">Flavors</a>
+      <a href="#mixer">Mixer</a>
+      <a href="#proof">Stories</a>
+      <a href="#stock">Stockists</a>
+    </div>
+    <a class="nav-cta" href="#stock">Grab a case<span class="arrow">→</span></a>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+  </div>
+</nav>
+
+<div class="overlay" id="overlay">
+  <button class="overlay-close" id="closeOverlay" aria-label="Close menu">✕</button>
+  <a href="#flavors">Flavors</a>
+  <a href="#mixer">Mixer</a>
+  <a href="#proof">Stories</a>
+  <a href="#stock">Stockists</a>
+</div>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="shell hero-grid">
+    <div class="hero-text">
+      <span class="eyebrow reveal"><span class="dot">🌱</span> Now glowing in 38 cities</span>
+      <h1 class="reveal d1">
+        <span class="word">Drink</span> the <span class="word alt">glow</span>.<br>
+        Become the <span class="word">night</span><span class="star">✦</span><br>
+        <span class="word alt">light</span> you craved.
+      </h1>
+      <p class="lede reveal d2">
+        BIOLUM™ is a fizzy, electric-blue elixir brewed from synthetic bioluminescent algae grown in zero-gravity tanks. Crack one open at midnight, and your fingertips literally shimmer till sunrise. Zero sugar. 100% chaos. ⚡
+      </p>
+      <div class="hero-ctas reveal d3">
+        <a class="btn" href="#stock">Order a 12-pack <span class="chip">→</span></a>
+        <a class="btn btn-ghost" href="#mixer">Mix your own 💧</a>
+      </div>
+      <div class="hero-meta reveal d4">
+        <span class="meta-pill"><span class="e">⚡</span> 0g sugar</span>
+        <span class="meta-pill"><span class="e">🌱</span> Vegan &amp; gluten-free</span>
+        <span class="meta-pill"><span class="e">✨</span> Glows for 6 hrs</span>
+        <span class="meta-pill"><span class="e">🧪</span> Lab-grown algae</span>
+      </div>
+    </div>
+
+    <div class="hero-visual reveal d2" id="heroVisual">
+      <div class="orbit">
+        <div class="orbit-ring r3"></div>
+        <div class="orbit-ring r1"></div>
+        <div class="orbit-ring r2"></div>
+        <div class="blob-satelite s1">G</div>
+        <div class="blob-satelite s2">L</div>
+        <div class="blob-satelite s3">O</div>
+        <div class="blob-satelite s4">W</div>
+      </div>
+
+      <div class="float-card fc1">
+        <span class="ic">⚡</span>
+        <div>
+          <div class="v" id="liveCounter">847,302</div>
+          <div class="l">cans cracked today</div>
+        </div>
+      </div>
+      <div class="float-card fc2">
+        <span class="ic">🌙</span>
+        <div>
+          <div class="v">6h 14m</div>
+          <div class="l">avg glow time</div>
+        </div>
+      </div>
+
+      <div class="bottle-stage" id="bottle">
+        <div class="bottle">
+          <div class="bottle-cap"></div>
+          <div class="glow-liquid"></div>
+          <div class="bubbles">
+            <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+            <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+          </div>
+        </div>
+        <div class="bottle-label">
+          <small>Biolum™</small>
+          MIDNIGHT
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>
+      ✦ DRINK THE GLOW <span class="dotc"></span>
+      <span class="mag">GLOW HARDER</span> <span class="dotc"></span>
+      <span class="cy">ZERO SUGAR, FULL CHAOS</span> <span class="dotc"></span>
+      <span class="li">GROWN IN ZERO-G</span> <span class="dotc"></span>
+      <span class="vi">SHIP IT BEFORE DAWN</span> <span class="dotc"></span>
+      ✦ NOW GLOWING IN 38 CITIES <span class="dotc"></span>
+      <span class="mag">SHIMMER RESPONSIBLY</span> <span class="dotc"></span>
+      <span class="cy">DARK MODE FOR YOUR BLOOD</span> <span class="dotc"></span>
+    </span>
+    <span>
+      ✦ DRINK THE GLOW <span class="dotc"></span>
+      <span class="mag">GLOW HARDER</span> <span class="dotc"></span>
+      <span class="cy">ZERO SUGAR, FULL CHAOS</span> <span class="dotc"></span>
+      <span class="li">GROWN IN ZERO-G</span> <span class="dotc"></span>
+      <span class="vi">SHIP IT BEFORE DAWN</span> <span class="dotc"></span>
+      ✦ NOW GLOWING IN 38 CITIES <span class="dotc"></span>
+      <span class="mag">SHIMMER RESPONSIBLY</span> <span class="dotc"></span>
+      <span class="cy">DARK MODE FOR YOUR BLOOD</span> <span class="dotc"></span>
+    </span>
+  </div>
+</div>
+
+<!-- FLAVORS -->
+<section class="section-pad" id="flavors">
+  <div class="shell">
+    <div class="section-head reveal">
+      <span class="kicker">✦ The flavour constellation ✦</span>
+      <h2>Six cans. <em>One shimmer</em> for every mood on the spectrum.</h2>
+      <p>Each variant is a different algae strain, hand-bred in our underground biolab beneath an old ice rink in Reykjavík. Tap a blob, get the full spec.</p>
+    </div>
+
+    <div class="flavors">
+      <article class="flavor f1 reveal">
+        <div class="glow"></div>
+        <span class="emoji">🌌</span>
+        <div>
+          <span class="sub">#01 · Crowd favourite</span>
+          <h3>Midnight Bloom</h3>
+        </div>
+        <span class="cal">⚡ 0g · 12 kcal</span>
+      </article>
+
+      <article class="flavor f2 reveal d1">
+        <div class="glow"></div>
+        <span class="emoji">🍋</span>
+        <div>
+          <span class="sub">#02 · Citrus scream</span>
+          <h3>Solar Slice</h3>
+        </div>
+        <span class="cal">⚡ 0g · 10 kcal</span>
+      </article>
+
+      <article class="flavor f3 reveal d2">
+        <div class="glow"></div>
+        <span class="emoji">🍓</span>
+        <div>
+          <span class="sub">#03</span>
+          <h3>Cosmic Berry</h3>
+        </div>
+        <span class="cal">⚡ 0g · 14 kcal</span>
+      </article>
+
+      <article class="flavor f4 reveal d3">
+        <div class="glow"></div>
+        <span class="emoji">🌿</span>
+        <div>
+          <span class="sub">#04</span>
+          <h3>Mint Static</h3>
+        </div>
+        <span class="cal">⚡ 0g · 8 kcal</span>
+      </article>
+
+      <article class="flavor f5 reveal d1">
+        <div class="glow"></div>
+        <span class="emoji">🍑</span>
+        <div>
+          <span class="sub">#05 · Limited drop</span>
+          <h3>Aurora Punch</h3>
+        </div>
+        <span class="cal">⚡ 0g · 16 kcal</span>
+      </article>
+
+      <article class="flavor f6 reveal d2">
+        <div class="glow"></div>
+        <span class="emoji">🥝</span>
+        <div>
+          <span class="sub">#06 · Sour</span>
+          <h3>Reactor Lime</h3>
+        </div>
+        <span class="cal">⚡ 0g · 11 kcal</span>
+      </article>
+
+      <article class="flavor f7 reveal d3">
+        <div class="glow"></div>
+        <span class="emoji">🍍</span>
+        <div>
+          <span class="sub">#07 · Secret menu</span>
+          <h3>Plasma Pineapple — only at the Reykjavík lab on full moons 🌕</h3>
+        </div>
+        <span class="cal">⚡ 0g · 13 kcal</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- MIXER -->
+<section class="section-pad" id="mixer">
+  <div class="shell">
+    <div class="section-head reveal">
+      <span class="kicker">✦ Lab-grade chaos ✦</span>
+      <h2>Mix your own <em>signature glow</em>.</h2>
+      <p>Smash two algae strains together. Watch the bottle change colour. Name your creation. We bottle the best ones every quarter.</p>
+    </div>
+
+    <div class="mixer">
+      <div class="mixer-pad reveal">
+        <div class="swirl" id="swirl"></div>
+        <div class="mix-name" id="mixName">Pure Magenta</div>
+        <div class="mix-controls">
+          <button class="mix-btn b1" data-c="magenta"><span class="sw"></span>+ Magenta</button>
+          <button class="mix-btn b2" data-c="cyan"><span class="sw"></span>+ Cyan</button>
+          <button class="mix-btn b3" data-c="lime"><span class="sw"></span>+ Lime</button>
+          <button class="mix-btn b4" data-c="violet"><span class="sw"></span>+ Violet</button>
+          <button class="mix-btn b5" data-c="orange"><span class="sw"></span>+ Orange</button>
+          <button class="mix-btn b6" data-c="pink"><span class="sw"></span>+ Pink</button>
+        </div>
+        <button class="btn btn-ghost" id="resetMix" style="background:rgba(0,0,0,0.4); color:#fff; border-color:rgba(255,255,255,0.6);">↺ Reset</button>
+      </div>
+
+      <div class="mixer-text reveal d1">
+        <h3>Build a <em>spectrum</em> nobody else on earth has tasted.</h3>
+        <p>Our mixer is hooked up to the same quantum spectrometer we use to certify each batch. Stack strains, watch the bottle goop in real time, and (if you're brave) submit your recipe. The top 12 mixes per quarter get bottled and shipped with your name on the cap.</p>
+        <div class="mixer-stats">
+          <div class="mstat"><div class="n" id="mixCount">0</div><div class="l">combos brewed</div></div>
+          <div class="mstat"><div class="n">12</div><div class="l">winning recipes</div></div>
+          <div class="mstat"><div class="n">$0</div><div class="l">to enter</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="section-pad quote" id="proof">
+  <div class="shell">
+    <div class="quote-card reveal">
+      <blockquote>
+        I drank a Midnight Bloom at <em>2:47am</em> in a Berlin U-Bahn station. By the time the train arrived I was <em>literally emitting light</em> from my hands. The conductor asked for the <em>recipe</em>.
+      </blockquote>
+      <cite>Lena Ström · DJ · Berlin</cite>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="section-pad" id="stock">
+  <div class="shell">
+    <div class="cta reveal">
+      <h2>Glow <span class="alt">tonight</span>.<br>Or don't. Up to you.</h2>
+      <p>Join 24,891 night creatures on the Biolum drop list. We text you a single can, a 6-pack, or a glowing mini-fridge full. Cancels with one word. Stops glowing never.</p>
+      <form class="cta-form" id="ctaForm">
+        <input type="email" placeholder="your@inbox.lol" required>
+        <button type="submit">Glow me in <span>→</span></button>
+      </form>
+      <div class="cta-success" id="ctaSuccess">⚡ You're in. Watch your inbox. Watch your hands. ⚡</div>
+      <div class="cta-mini">
+        <span>✓ Cancel any time</span>
+        <span>✓ Ships in 48h</span>
+        <span>✓ Carbon neutral glow</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="shell">
+    <div class="foot-brand">BIOLUM™</div>
+    <p class="foot-tag">Grown in zero-gravity tanks beneath an ice rink in Reykjavík. Bottled in Brooklyn. Drunk in the dark. ✦</p>
+    <div class="foot-mini">
+      <a href="#">Shop</a>
+      <a href="#">Lab tours</a>
+      <a href="#">Wholesale</a>
+      <a href="#">Press kit</a>
+      <a href="#">Become a night creature</a>
+    </div>
+    <p class="foot-meta">© 2026 Biolum Industries · Drink responsibly. Glow irresponsibly.</p>
+  </div>
+</footer>
+
+<script>
+/* ============== MENU ============== */
+const overlay = document.getElementById('overlay');
+document.getElementById('menuBtn').addEventListener('click', () => overlay.classList.add('open'));
+document.getElementById('closeOverlay').addEventListener('click', () => overlay.classList.remove('open'));
+overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', () => overlay.classList.remove('open')));
+
+/* ============== LIVE COUNTER ============== */
+const liveEl = document.getElementById('liveCounter');
+let base = 847302;
+function tick(){
+  base += Math.floor(Math.random()*3) + 1;
+  liveEl.textContent = base.toLocaleString();
+}
+setInterval(tick, 2200);
+
+/* ============== BOTTLE PARALLAX ============== */
+const heroVisual = document.getElementById('heroVisual');
+const bottle = document.getElementById('bottle');
+heroVisual.addEventListener('mousemove', (e) => {
+  const r = heroVisual.getBoundingClientRect();
+  const x = (e.clientX - r.left) / r.width - 0.5;
+  const y = (e.clientY - r.top) / r.height - 0.5;
+  bottle.style.transform = `translate(${x * 14}px, ${y * 14}px)`;
+});
+heroVisual.addEventListener('mouseleave', () => { bottle.style.transform = ''; });
+
+/* ============== MIXER ============== */
+const swirl = document.getElementById('swirl');
+const mixName = document.getElementById('mixName');
+const mixCount = document.getElementById('mixCount');
+let mix = { magenta:1, cyan:0, lime:0, violet:0, orange:0, pink:0 };
+let comboCount = 0;
+
+const names = {
+  magenta: 'Pure Magenta',
+  cyan: 'Glacial Cyan',
+  lime: 'Reactor Lime',
+  violet: 'Royal Violet',
+  orange: 'Sunset Slap',
+  pink: 'Bubblegum Static',
+  'magenta-cyan': 'Neon Tide',
+  'magenta-lime': 'Toxic Romance',
+  'magenta-violet': 'Plum Bomb',
+  'magenta-orange': 'Tangerine Tantrum',
+  'magenta-pink': 'Bubble Pop',
+  'cyan-lime': 'Reactor Coolant',
+  'cyan-violet': 'Arctic Plasma',
+  'cyan-orange': 'Tropical Shock',
+  'cyan-pink': 'Mermaid Static',
+  'lime-violet': 'Grape Shock',
+  'lime-orange': 'Citrus Reactor',
+  'lime-pink': 'Sour Fairy',
+  'violet-orange': 'Sunset Grape',
+  'violet-pink': 'Lavender Pop',
+  'orange-pink': 'Peach Plasma'
+};
+function mixNameFn(m){
+  const present = Object.entries(m).filter(([k,v])=>v>0).map(([k])=>k);
+  if(present.length === 0) return 'Empty Tank';
+  if(present.length === 1) return names[present[0]];
+  present.sort();
+  const k = present.slice(0,2).join('-');
+  return names[k] || present.map(p=>names[p].split(' ')[0]).join(' ');
+}
+function renderMix(){
+  const total = Object.values(mix).reduce((a,b)=>a+b,0) || 1;
+  const c = Object.entries(mix).filter(([k,v])=>v>0);
+  const stops = [];
+  const palette = { magenta:'#ff2bd6', cyan:'#22e7ff', lime:'#c6ff3d', violet:'#8a3dff', orange:'#ff7a1a', pink:'#ff7ab8' };
+  if(c.length === 0){
+    swirl.style.background = 'radial-gradient(circle at 30% 30%, #fff, #444 30%, #222 70%, #111)';
+  } else {
+    let pos = 0;
+    c.forEach(([k,v])=>{
+      const next = pos + (v/total)*100;
+      stops.push(`${palette[k]} ${pos}% ${next}%`);
+      pos = next;
+    });
+    swirl.style.background = `radial-gradient(circle at 30% 30%, #fff, ${stops.join(', ')})`;
+  }
+  mixName.textContent = mixNameFn(mix);
+}
+document.querySelectorAll('.mix-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const c = btn.dataset.c;
+    mix[c] = (mix[c] || 0) + 1;
+    if(Object.values(mix).reduce((a,b)=>a+b,0) > 12){
+      const k = Object.keys(mix).reduce((a,b)=>mix[a]<mix[b]?a:b);
+      mix[k] = Math.max(0, mix[k] - 1);
+    }
+    renderMix();
+    comboCount++;
+    mixCount.textContent = comboCount;
+    swirl.animate(
+      [{ transform:'scale(1) rotate(0deg)' }, { transform:'scale(1.15) rotate(20deg)' }, { transform:'scale(1) rotate(0deg)' }],
+      { duration: 500, easing: 'cubic-bezier(0.68, -0.55, 0.27, 1.55)' }
+    );
+  });
+});
+document.getElementById('resetMix').addEventListener('click', () => {
+  mix = { magenta:1, cyan:0, lime:0, violet:0, orange:0, pink:0 };
+  renderMix();
+});
+
+/* ============== CTA FORM ============== */
+const form = document.getElementById('ctaForm');
+const success = document.getElementById('ctaSuccess');
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  form.style.display = 'none';
+  success.classList.add('show');
+});
+
+/* ============== REVEAL ON SCROLL ============== */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(en => {
+    if(en.isIntersecting){
+      en.target.classList.add('in');
+      io.unobserve(en.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

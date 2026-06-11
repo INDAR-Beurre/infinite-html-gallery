@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUMEN™ — The Bioluminescent Algae Energy Elixir</title>
+  <meta name="description" content="DRINK THE LIGHT!!! Power your brain cells with synthetic bioluminescent algae. High-energy, organic luminescence. Feel the glow.">
+  
+  <!-- Bouncy & Round Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Outfit:wght@800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ----------------------------------
+       THE NEON GLOOP DESIGN SYSTEM
+       ---------------------------------- */
+    :root {
+      --magenta: #ff007f;
+      --cyan: #00f0ff;
+      --neon-green: #39ff14;
+      --purple: #7800ff;
+      --dark-space: #070114;
+      --glass-bg: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.16);
+      
+      --bouncy-transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--dark-space);
+      /* Glowing Cosmic Aurora Mesh Gradient */
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255, 0, 127, 0.45), transparent 45%),
+        radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.45), transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(120, 0, 255, 0.35), transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(57, 255, 20, 0.3), transparent 40%);
+      background-attachment: fixed;
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Floating bubble particle container */
+    #bubble-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 6rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 5rem;
+    }
+
+    /* ----------------------------------
+       HEADER & FLOATING GLOOP CARD
+       ---------------------------------- */
+    header {
+      text-align: center;
+      position: relative;
+    }
+
+    .logo-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--magenta), var(--purple));
+      padding: 0.6rem 1.8rem;
+      border-radius: 999px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      box-shadow: 0 0 25px rgba(255, 0, 127, 0.6);
+      margin-bottom: 2rem;
+      animation: pulse 2.5s infinite alternate;
+    }
+
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 0 40px rgba(0, 240, 255, 0.5);
+    }
+
+    h1 mark {
+      background: none;
+      color: var(--neon-green);
+      text-shadow: 0 0 30px rgba(57, 255, 20, 0.8);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+      font-weight: 700;
+      max-width: 700px;
+      margin: 0 auto 3rem auto;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.4;
+    }
+
+    /* ----------------------------------
+       TACTILE FLOATING GLOOP BOTTLE
+       ---------------------------------- */
+    .hero-stage {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero-stage {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+    }
+
+    /* Glassmorphism panel shape-gloop */
+    .glass-card {
+      background: var(--glass-bg);
+      border: 3px solid var(--glass-border);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border-radius: 40% 60% 55% 45% / 45% 55% 45% 55%;
+      padding: 3.5rem;
+      box-shadow: 0 25px 60px rgba(0, 240, 255, 0.15), inset 0 0 30px rgba(255, 255, 255, 0.05);
+      position: relative;
+      animation: drift 10s infinite ease-in-out;
+    }
+
+    .glass-card::before {
+      content: "";
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      border-radius: inherit;
+      background: linear-gradient(135deg, var(--magenta), var(--cyan));
+      z-index: -1;
+      opacity: 0.3;
+    }
+
+    /* Soft bottle animation */
+    .bottle-canvas {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .lumen-bottle {
+      width: 260px;
+      height: 440px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+      border: 4px solid var(--glass-border);
+      border-radius: 90px 90px 45px 45px / 120px 120px 45px 45px;
+      position: relative;
+      cursor: pointer;
+      box-shadow: 
+        0 30px 60px rgba(0, 240, 255, 0.3),
+        inset 0 0 35px rgba(255, 255, 255, 0.2);
+      transition: var(--bouncy-transition);
+      transform-origin: bottom center;
+    }
+
+    .lumen-bottle:hover {
+      transform: scale(1.04) rotate(2deg);
+      box-shadow: 
+        0 40px 80px rgba(57, 255, 20, 0.4),
+        inset 0 0 45px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Dynamic glowing algae liquid inside bottle */
+    .algae-liquid {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      height: 80%;
+      background: linear-gradient(0deg, var(--purple) 0%, var(--neon-green) 100%);
+      border-radius: 40px 40px 35px 35px;
+      opacity: 0.85;
+      overflow: hidden;
+      transition: height 0.5s ease, background 0.5s ease;
+      box-shadow: 0 0 30px var(--neon-green);
+    }
+
+    /* Bubbles rising inside bottle */
+    .bottle-bubble {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      bottom: -10px;
+      animation: rise 3s infinite linear;
+    }
+
+    @keyframes rise {
+      0% { transform: translateY(0) scale(1); opacity: 0; }
+      50% { opacity: 0.6; }
+      100% { transform: translateY(-300px) scale(0.6); opacity: 0; }
+    }
+
+    /* ----------------------------------
+       TACTILE BUTTONS & SLIDERS
+       ---------------------------------- */
+    .lumen-btn {
+      font-family: inherit;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: var(--dark-space);
+      background: var(--neon-green);
+      border: none;
+      padding: 1rem 2.5rem;
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 12px 30px rgba(57, 255, 20, 0.4);
+      transition: var(--bouncy-transition);
+    }
+
+    .lumen-btn:hover {
+      transform: scale(1.05) translateY(-3px);
+      background: var(--cyan);
+      color: var(--dark-space);
+      box-shadow: 0 20px 40px rgba(0, 240, 255, 0.6);
+    }
+
+    .lumen-btn:active {
+      transform: scale(0.95) translateY(2px);
+    }
+
+    /* ----------------------------------
+       GLOW GENERATOR (INTERACTIVE WIDGET)
+       ---------------------------------- */
+    .generator-section {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .slider-group label {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--cyan);
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 12px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      outline: none;
+      overflow: hidden;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--neon-green);
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--neon-green);
+      transition: background 0.2s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      background: var(--magenta);
+      box-shadow: 0 0 10px var(--magenta);
+    }
+
+    .color-matrix-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .matrix-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid var(--glass-border);
+      color: #ffffff;
+      padding: 0.8rem;
+      border-radius: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--bouncy-transition);
+    }
+
+    .matrix-btn.active {
+      background: var(--purple);
+      border-color: var(--magenta);
+      box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+    }
+
+    .matrix-btn:hover {
+      transform: scale(1.03);
+    }
+
+    /* ----------------------------------
+       ANOMALOUS BENEFITS (TACTILE CARDS)
+       ---------------------------------- */
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.5rem;
+    }
+
+    .benefit-card {
+      background: var(--glass-bg);
+      border: 3px solid var(--glass-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 40px 60px 45px 50px / 50px 45px 55px 40px;
+      padding: 2.5rem;
+      box-shadow: 0 15px 35px rgba(120, 0, 255, 0.1);
+      transition: var(--bouncy-transition);
+    }
+
+    .benefit-card:hover {
+      transform: translateY(-8px) rotate(1deg);
+      border-color: var(--magenta);
+      box-shadow: 0 25px 50px rgba(255, 0, 127, 0.35);
+    }
+
+    .benefit-emoji {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      display: inline-block;
+      animation: pulse 1.5s infinite alternate;
+    }
+
+    .benefit-card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.6rem;
+      color: var(--cyan);
+      margin-bottom: 1rem;
+    }
+
+    .benefit-card p {
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.5;
+    }
+
+    /* ----------------------------------
+       ANIMATIONS & DRIFTING EFFECT
+       ---------------------------------- */
+    @keyframes drift {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(1deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.9; }
+      100% { transform: scale(1.03); opacity: 1; }
+    }
+
+    /* Bubble particle rising animations */
+    .particle {
+      position: fixed;
+      background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      animation: floatUp 2.5s forwards linear;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.2); opacity: 1; }
+      100% { transform: translateY(-400px) scale(1.5); opacity: 0; }
+    }
+
+    /* Footer styled colophon */
+    footer {
+      text-align: center;
+      margin-top: 4rem;
+      padding: 3rem 0;
+      border-top: 2px solid var(--glass-border);
+    }
+
+    footer p {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating screen-wide bubble physics canvas -->
+  <div id="bubble-canvas"></div>
+
+  <main class="main-container">
+
+    <!-- Header badge -->
+    <header>
+      <div class="logo-badge">SYNTHETIC BIOLOGY</div>
+      <h1>DRINK THE <mark>LIGHT</mark></h1>
+      <p class="hero-tagline">
+        Meet LUMEN™ — The world's first carbonated energy elixir powered by bio-engineered photosynthetic microalgae. Recharge your mitochondrias directly with raw light.
+      </p>
+    </header>
+
+    <!-- Stage Area: Interactive Bottle + controls -->
+    <section class="hero-stage">
+      
+      <!-- Live Glowing Interactive Bottle -->
+      <div class="bottle-stage">
+        <div class="bottle-canvas">
+          <div class="lumen-bottle" id="lumen-can">
+            <!-- Algae liquid containing bubble particles -->
+            <div class="algae-liquid" id="bottle-liquid">
+              <div class="bottle-bubble" style="left: 20%; width: 12px; height: 12px; animation-duration: 2.2s; animation-delay: 0.2s;"></div>
+              <div class="bottle-bubble" style="left: 45%; width: 16px; height: 16px; animation-duration: 3.5s; animation-delay: 0.8s;"></div>
+              <div class="bottle-bubble" style="left: 70%; width: 10px; height: 10px; animation-duration: 2.7s; animation-delay: 1.5s;"></div>
+              <div class="bottle-bubble" style="left: 30%; width: 14px; height: 14px; animation-duration: 3.1s; animation-delay: 0.5s;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Glow generator mixer -->
+      <div class="glass-card generator-section">
+        <h2>Transmute the Elixir</h2>
+        <p>Modify the algal density and bioluminescent charging of your specific canister formulation:</p>
+        
+        <div class="color-matrix-selector">
+          <button class="matrix-btn active" onclick="setMatrix('bloom', this)">Deep Bloom</button>
+          <button class="matrix-btn" onclick="setMatrix('flare', this)">Solar Flare</button>
+          <button class="matrix-btn" onclick="setMatrix('void', this)">Abyssal Void</button>
+        </div>
+
+        <div class="slider-group">
+          <label for="density-slider">Algae Cell Count (Density)</label>
+          <input type="range" id="density-slider" min="30" max="100" value="80" oninput="updateMixer()">
+        </div>
+
+        <div class="slider-group">
+          <label for="glow-slider">Bioluminescent Charge</label>
+          <input type="range" id="glow-slider" min="0.2" max="1" step="0.05" value="0.8" oninput="updateMixer()">
+        </div>
+
+        <button class="lumen-btn" id="drink-btn" style="width: 100%; justify-content: center;">INJECT CELL POWER 🌟</button>
+      </div>
+
+    </section>
+
+    <!-- Anomalous benefits grid -->
+    <section class="benefits-grid">
+      
+      <!-- Benefit 1 -->
+      <div class="benefit-card">
+        <span class="benefit-emoji">🌟</span>
+        <h3>Direct Photo-Charge</h3>
+        <p>Your cells don't need complex carbohydrates anymore. Expose your neck to sunlight and experience raw energy updates directly through dermal photosynthesis.</p>
+      </div>
+
+      <!-- Benefit 2 -->
+      <div class="benefit-card">
+        <span class="benefit-emoji">🔥</span>
+        <h3>Zero Thermic Crash</h3>
+        <p>No synthetic chemicals, no caffeine headaches, no jitters. The bioluminescent light is cold and efficient, maintaining peak mental focus without heating your system.</p>
+      </div>
+
+      <!-- Benefit 3 -->
+      <div class="benefit-card">
+        <span class="benefit-emoji">🌀</span>
+        <h3>Mouthglow Radiation</h3>
+        <p>Smile with confidence. The residual glowing chlorophyll leaves a gentle, clean luminescence in your mouth, acting as a natural nightlight for late night brainstorms.</p>
+      </div>
+
+    </section>
+
+    <!-- Colophon / Footer -->
+    <footer>
+      <p>&copy; 2026 LUMEN Bio-Technologies. Keep away from extreme temperatures. Consume immediately upon breaking seal.</p>
+    </footer>
+
+  </main>
+
+  <!-- Interactive Synthesizer & Bubble particles script -->
+  <script>
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function playFizz() {
+      initAudio();
+      if (!audioCtx) return;
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      const now = audioCtx.currentTime;
+
+      // Crackling fizz synthesis
+      for (let i = 0; i < 20; i++) {
+        const delay = Math.random() * 0.35;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1000 + Math.random() * 1500, now + delay);
+        osc.frequency.exponentialRampToValueAtTime(400, now + delay + 0.04);
+
+        gain.gain.setValueAtTime(0.08, now + delay);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.04);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now + delay);
+        osc.stop(now + delay + 0.05);
+      }
+    }
+
+    function playPowerUp() {
+      initAudio();
+      if (!audioCtx) return;
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      const filter = audioCtx.createBiquadFilter();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(120, now);
+      osc.frequency.exponentialRampToValueAtTime(960, now + 1.2);
+
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(300, now);
+      filter.frequency.exponentialRampToValueAtTime(2200, now + 1.2);
+
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(now);
+      osc.stop(now + 1.2);
+    }
+
+    // ----------------------------------
+    // DYNAMIC WIDGET INTERACTION
+    // ----------------------------------
+    const densitySlider = document.getElementById('density-slider');
+    const glowSlider = document.getElementById('glow-slider');
+    const bottleLiquid = document.getElementById('bottle-liquid');
+    const drinkBtn = document.getElementById('drink-btn');
+    const can = document.getElementById('lumen-can');
+
+    let currentMatrix = 'bloom';
+
+    function setMatrix(type, btn) {
+      currentMatrix = type;
+      
+      // Update active state class on buttons
+      document.querySelectorAll('.matrix-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      updateMixer();
+      playFizz();
+    }
+
+    function updateMixer() {
+      const density = densitySlider.value;
+      const glow = glowSlider.value;
+
+      // Update liquid height
+      bottleLiquid.style.height = density + '%';
+
+      // Update liquid colors based on matrix type
+      let color1 = 'var(--purple)';
+      let color2 = 'var(--neon-green)';
+      let shadowColor = 'var(--neon-green)';
+
+      if (currentMatrix === 'flare') {
+        color1 = 'var(--magenta)';
+        color2 = '#ffb300';
+        shadowColor = 'var(--magenta)';
+      } else if (currentMatrix === 'void') {
+        color1 = '#003366';
+        color2 = 'var(--cyan)';
+        shadowColor = 'var(--cyan)';
+      }
+
+      bottleLiquid.style.background = `linear-gradient(0deg, ${color1} 0%, ${color2} 100%)`;
+      bottleLiquid.style.boxShadow = `0 0 ${20 + (glow * 25)}px ${shadowColor}`;
+      bottleLiquid.style.opacity = glow;
+    }
+
+    // Trigger bottle shake & screen bubbles on click
+    drinkBtn.addEventListener('click', (e) => {
+      playPowerUp();
+      playFizz();
+      
+      // Flash screen color
+      document.body.style.backgroundImage = 'radial-gradient(circle, var(--neon-green) 0%, var(--dark-space) 100%)';
+      setTimeout(() => {
+        document.body.style.backgroundImage = '';
+      }, 500);
+
+      // Trigger bottle impact animation
+      can.style.transform = 'scale(1.15) rotate(-6deg)';
+      setTimeout(() => {
+        can.style.transform = '';
+      }, 400);
+
+      // Spawn bubbles rising up on screen
+      spawnScreenBubbles();
+    });
+
+    // Spawn bubbles inside canvas when can is hovered/clicked
+    can.addEventListener('mouseenter', () => {
+      playFizz();
+    });
+
+    const canvas = document.getElementById('bubble-canvas');
+
+    function spawnScreenBubbles() {
+      for (let i = 0; i < 25; i++) {
+        setTimeout(() => {
+          const bubble = document.createElement('div');
+          bubble.className = 'particle';
+          
+          const size = Math.random() * 20 + 8;
+          bubble.style.width = size + 'px';
+          bubble.style.height = size + 'px';
+          
+          // Random horizontal placement
+          bubble.style.left = Math.random() * window.innerWidth + 'px';
+          bubble.style.bottom = '10px';
+          
+          // Randomize coloring based on current matrix
+          if (currentMatrix === 'bloom') {
+            bubble.style.background = 'radial-gradient(circle, rgba(57, 255, 20, 0.8) 0%, rgba(57, 255, 20, 0) 70%)';
+          } else if (currentMatrix === 'flare') {
+            bubble.style.background = 'radial-gradient(circle, rgba(255, 0, 127, 0.8) 0%, rgba(255, 0, 127, 0) 70%)';
+          } else {
+            bubble.style.background = 'radial-gradient(circle, rgba(0, 240, 255, 0.8) 0%, rgba(0, 240, 255, 0) 70%)';
+          }
+
+          canvas.appendChild(bubble);
+
+          setTimeout(() => {
+            bubble.remove();
+          }, 2500);
+        }, i * 60);
+      }
+    }
+  </script>
+
+</body>
+</html>

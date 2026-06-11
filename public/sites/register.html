@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register — Websites that feel impossible to ignore</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800&display=swap');
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --ink:#120f0a;
+  --muted:#5e5548;
+  --paper:#fff7e6;
+  --cream:#ffeec5;
+  --red:#ff4d2e;
+  --blue:#1d4dff;
+  --violet:#7b3dff;
+  --lime:#d8ff38;
+  --rose:#ff8ab3;
+  --charcoal:#17130f;
+  --display:'Plus Jakarta Sans','Avenir Next',system-ui,sans-serif;
+  --body:'Plus Jakarta Sans','Avenir Next',system-ui,sans-serif;
+  --bezier:cubic-bezier(0.32,0.72,0,1);
+}
+
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{
+  font-family:var(--body);
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 12% 12%,rgba(255,77,46,0.28),transparent 28rem),
+    radial-gradient(circle at 88% 8%,rgba(29,77,255,0.22),transparent 30rem),
+    linear-gradient(135deg,#fff7e6 0%,#ffedbc 54%,#ffd7bd 100%);
+  background-attachment:fixed;
+  overflow-x:hidden;
+}
+
+/* ── Grain ─────────────────────────────────── */
+.grain{
+  position:fixed;inset:0;z-index:9999;pointer-events:none;
+  opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:180px;
+}
+
+/* ── Container ─────────────────────────────── */
+.wrap{width:min(1180px,calc(100% - 48px));margin:0 auto}
+@media(max-width:860px){.wrap{width:min(100% - 32px,1180px)}}
+section{padding:128px 0}
+@media(max-width:860px){section{padding:88px 0}}
+
+/* ── Nav ───────────────────────────────────── */
+.site-header{
+  position:fixed;top:24px;left:50%;transform:translateX(-50%);z-index:1000;
+  width:min(calc(100% - 32px),720px);
+  border-radius:999px;
+  background:rgba(255,247,230,0.72);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  box-shadow:0 24px 70px rgba(57,29,6,0.14);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px 10px 16px;
+  gap:12px;
+}
+.nav-brand{
+  font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:-.02em;
+  background:var(--ink);color:var(--paper);
+  padding:8px 18px;border-radius:999px;
+  white-space:nowrap;flex-shrink:0;
+}
+.nav-links{display:flex;gap:4px;align-items:center;justify-content:center;flex:1}
+.nav-links a{
+  font-family:var(--body);font-weight:600;font-size:14px;letter-spacing:-.01em;
+  color:var(--ink);text-decoration:none;
+  padding:8px 16px;border-radius:999px;
+  transition:background 400ms var(--bezier),color 400ms var(--bezier);
+  white-space:nowrap;
+}
+.nav-links a:hover{background:rgba(18,15,10,0.07)}
+.nav-cta{
+  font-family:var(--body);font-weight:700;font-size:14px;
+  color:var(--paper);background:var(--ink);
+  padding:10px 20px;border-radius:999px;border:none;cursor:pointer;
+  text-decoration:none;white-space:nowrap;flex-shrink:0;
+  transition:transform 400ms var(--bezier);
+}
+.nav-cta:hover{transform:translateY(-1px)}
+@media(max-width:860px){
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex!important}
+}
+
+/* ── Hamburger ─────────────────────────────── */
+.hamburger{
+  display:none;align-items:center;justify-content:center;
+  width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;
+  background:var(--ink);position:relative;z-index:1002;
+}
+.hamburger span,.hamburger span::before,.hamburger span::after{
+  display:block;width:20px;height:2px;background:var(--paper);border-radius:2px;
+  transition:transform 400ms var(--bezier),opacity 300ms var(--bezier);
+}
+.hamburger span{position:relative}
+.hamburger span::before,.hamburger span::after{content:'';position:absolute;left:0}
+.hamburger span::before{top:-6px}
+.hamburger span::after{top:6px}
+.hamburger.is-open span{background:transparent}
+.hamburger.is-open span::before{transform:rotate(45deg);top:0}
+.hamburger.is-open span::after{transform:rotate(-45deg);top:0}
+
+/* ── Mobile menu ───────────────────────────── */
+.mobile-menu{
+  position:fixed;inset:0;z-index:1001;
+  background:var(--charcoal);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:12px;opacity:0;pointer-events:none;
+  transition:opacity 500ms var(--bezier);
+}
+.mobile-menu.is-open{opacity:1;pointer-events:auto}
+.mobile-menu a{
+  font-family:var(--display);font-weight:900;font-size:clamp(40px,8vw,72px);
+  letter-spacing:-.04em;color:var(--paper);text-decoration:none;
+  line-height:1.1;
+  opacity:0;transform:translateY(30px);
+  transition:opacity 500ms var(--bezier),transform 500ms var(--bezier),color 300ms;
+}
+.mobile-menu.is-open a{opacity:1;transform:translateY(0)}
+.mobile-menu a:nth-child(1){transition-delay:80ms}
+.mobile-menu a:nth-child(2){transition-delay:150ms}
+.mobile-menu a:nth-child(3){transition-delay:220ms}
+.mobile-menu a:nth-child(4){transition-delay:290ms}
+.mobile-menu a:nth-child(5){transition-delay:360ms}
+.mobile-menu a:hover{color:var(--lime)}
+
+/* ── Eyebrow ───────────────────────────────── */
+.eyebrow{
+  font-family:var(--body);font-weight:700;font-size:13px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+  margin-bottom:18px;
+}
+
+/* ── Hero ──────────────────────────────────── */
+.hero{
+  min-height:100dvh;
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(320px,0.95fr);
+  gap:48px;align-items:center;
+  padding:144px 0 96px;
+}
+@media(max-width:860px){
+  .hero{
+    grid-template-columns:1fr;
+    min-height:auto;
+    padding:120px 0 64px;
+    gap:48px;
+  }
+}
+.hero-text h1{
+  font-family:var(--display);font-weight:950;font-size:clamp(52px,9.2vw,138px);
+  line-height:.84;letter-spacing:-.075em;color:var(--ink);margin:20px 0 28px;
+}
+.hero-text p{
+  font-family:var(--body);font-weight:600;font-size:clamp(16px,1.3vw,20px);
+  line-height:1.5;color:var(--muted);max-width:480px;margin-bottom:36px;
+}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+
+/* ── CTA button ────────────────────────────── */
+.cta{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--body);font-weight:700;font-size:16px;
+  background:var(--ink);color:var(--paper);
+  padding:14px 28px 14px 28px;border-radius:999px;border:none;cursor:pointer;
+  text-decoration:none;
+  transition:transform 650ms var(--bezier),box-shadow 650ms var(--bezier),background 650ms var(--bezier);
+}
+.cta:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(18,15,10,0.22)}
+.cta:active{transform:scale(0.98)}
+.cta .arrow{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:32px;height:32px;border-radius:50%;
+  background:var(--lime);color:var(--ink);font-weight:800;font-size:16px;
+  transition:transform 650ms var(--bezier);
+  flex-shrink:0;
+}
+.cta:hover .arrow{transform:translate(4px,-2px) scale(1.05)}
+.cta-secondary{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--body);font-weight:700;font-size:16px;
+  color:var(--ink);background:transparent;
+  padding:14px 24px;border-radius:999px;border:2px solid var(--ink);cursor:pointer;
+  text-decoration:none;
+  transition:background 400ms var(--bezier),transform 400ms var(--bezier);
+}
+.cta-secondary:hover{background:rgba(18,15,10,0.06);transform:translateY(-1px)}
+
+/* ── Hero visual stage ─────────────────────── */
+.hero-stage{position:relative;perspective:800px}
+@media(max-width:860px){
+  .hero-btns{flex-direction:column;align-items:flex-start}
+  .cta,.cta-secondary{width:100%;justify-content:center}
+}
+
+.poster-card{
+  border-radius:38px;overflow:hidden;
+  padding:10px;
+  background:rgba(255,255,255,0.45);
+  border:1px solid rgba(18,15,10,0.08);
+  box-shadow:0 30px 80px rgba(18,15,10,0.12),0 4px 16px rgba(18,15,10,0.06);
+  transform:rotate(3deg);
+  transition:transform 800ms var(--bezier);
+}
+.poster-card:hover{transform:rotate(1.5deg)}
+@media(max-width:860px){.poster-card{transform:none!important;max-width:400px;margin:0 auto}}
+
+.poster-inner{
+  border-radius:28px;
+  padding:clamp(40px,5vw,60px);
+  min-height:460px;display:flex;flex-direction:column;justify-content:flex-end;
+  position:relative;overflow:hidden;
+  background:linear-gradient(145deg,var(--red),var(--violet) 55%,var(--blue));
+}
+.poster-inner::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 20% 30%,rgba(216,255,56,0.35),transparent 55%),
+             radial-gradient(circle at 85% 70%,rgba(255,138,179,0.35),transparent 55%);
+  pointer-events:none;
+}
+.poster-inner::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,0.12) 0%,transparent 40%);
+  pointer-events:none;
+}
+.poster-text{
+  font-family:var(--display);font-weight:900;font-size:clamp(26px,3vw,38px);
+  line-height:1.1;letter-spacing:-.04em;color:var(--paper);
+  position:relative;z-index:1;
+}
+
+/* floating cards */
+.fcard{
+  position:absolute;
+  border-radius:18px;padding:16px 22px;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:0 12px 36px rgba(18,15,10,0.14);
+  font-family:var(--body);color:#fff;
+  transition:transform 800ms var(--bezier);
+}
+.fcard:hover{transform:scale(1.05)!important}
+.fcard-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-bottom:4px}
+.fcard-value{font-family:var(--display);font-weight:900;font-size:22px;letter-spacing:-.02em}
+.fcard-red{
+  background:rgba(255,77,46,0.92);color:#fff;
+  top:-6%;right:-6%;transform:rotate(8deg);
+}
+.fcard-blue{
+  background:rgba(29,77,255,0.92);color:#fff;
+  bottom:10%;left:-10%;transform:rotate(-6deg);
+}
+@media(max-width:860px){
+  .fcard{position:relative!important;top:auto!important;bottom:auto!important;left:auto!important;right:auto!important;transform:none!important;display:inline-block;margin:8px}
+  .hero-stage{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  .poster-card{flex:1;min-width:260px}
+}
+
+/* ── Ticker ────────────────────────────────── */
+.ticker{
+  background:var(--ink);color:var(--paper);
+  padding:28px 0;overflow:hidden;position:relative;
+}
+.ticker-track{
+  display:flex;width:max-content;
+  animation:ticker-scroll 28s linear infinite;
+}
+.ticker-item{
+  font-family:var(--display);font-weight:900;font-size:clamp(20px,2.8vw,36px);
+  letter-spacing:-.03em;white-space:nowrap;
+  padding:0 40px;display:flex;align-items:center;gap:40px;
+}
+.ticker-item .dot{
+  width:10px;height:10px;border-radius:50%;flex-shrink:0;
+}
+.ticker-item:nth-child(3n+1) .dot{background:var(--red)}
+.ticker-item:nth-child(3n+2) .dot{background:var(--lime)}
+.ticker-item:nth-child(3n) .dot{background:var(--violet)}
+@keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.ticker-track{animation:none}}
+
+/* ── Work / Bento ──────────────────────────── */
+.bento{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:20px;
+  margin-top:52px;
+}
+.bento-card{
+  border-radius:38px;padding:10px;
+  background:rgba(255,255,255,0.4);
+  border:1px solid rgba(18,15,10,0.08);
+  box-shadow:0 24px 60px rgba(18,15,10,0.08),0 2px 8px rgba(18,15,10,0.04);
+  transition:transform 600ms var(--bezier),box-shadow 600ms var(--bezier);
+}
+.bento-card:hover{transform:translateY(-4px);box-shadow:0 32px 80px rgba(18,15,10,0.14)}
+.bento-inner{
+  border-radius:28px;padding:clamp(28px,3.5vw,44px);
+  min-height:340px;display:flex;flex-direction:column;justify-content:flex-end;
+  position:relative;overflow:hidden;
+}
+.bento-inner::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,0.14) 0%,transparent 35%);
+  pointer-events:none;
+}
+.bento-label{
+  font-family:var(--body);font-weight:700;font-size:12px;letter-spacing:.1em;
+  text-transform:uppercase;opacity:.6;margin-bottom:12px;color:inherit;
+}
+.bento-heading{
+  font-family:var(--display);font-weight:900;font-size:clamp(22px,2.6vw,34px);
+  letter-spacing:-.04em;line-height:1.05;margin-bottom:12px;color:inherit;
+}
+.bento-body{
+  font-family:var(--body);font-weight:500;font-size:15px;line-height:1.55;
+  opacity:.85;color:inherit;max-width:380px;
+}
+
+.bc1{grid-column:span 7;grid-row:span 2}
+.bc1 .bento-inner{background:linear-gradient(145deg,var(--blue),#2d5aff);color:#fff;min-height:340px}
+.bc1 .bento-inner::before{
+  content:'';position:absolute;top:0;right:0;width:50%;height:60%;
+  background:radial-gradient(circle at 80% 20%,rgba(125,61,255,0.4),transparent 70%);
+  pointer-events:none;
+}
+
+.bc2{grid-column:span 5;grid-row:span 2}
+.bc2 .bento-inner{background:linear-gradient(145deg,var(--red),#ff6b4f);color:#fff;min-height:340px}
+.bc2 .bento-inner::before{
+  content:'';position:absolute;bottom:0;left:0;width:60%;height:50%;
+  background:radial-gradient(circle at 20% 80%,rgba(255,138,179,0.4),transparent 70%);
+  pointer-events:none;
+}
+
+.bc3{grid-column:span 12}
+.bc3 .bento-inner{background:linear-gradient(145deg,var(--violet),#9a5cff);color:#fff;min-height:220px}
+.bc3 .bento-inner::before{
+  content:'';position:absolute;top:50%;left:50%;width:60%;height:60%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(216,255,56,0.25),transparent 65%);
+  pointer-events:none;
+}
+@media(max-width:860px){
+  .bento{grid-template-columns:1fr;gap:16px}
+  .bc1,.bc2,.bc3{grid-column:span 1;grid-row:span 1}
+  .bento-inner{min-height:240px!important}
+}
+
+/* ── Method ────────────────────────────────── */
+.method-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);
+  gap:48px;align-items:start;
+}
+@media(max-width:860px){.method-grid{grid-template-columns:1fr;gap:40px}}
+
+.method-sticky{position:sticky;top:140px}
+.method-sticky h2{
+  font-family:var(--display);font-weight:950;font-size:clamp(44px,6.5vw,104px);
+  line-height:.88;letter-spacing:-.075em;margin-bottom:20px;
+}
+.method-sticky p{
+  font-family:var(--body);font-weight:600;font-size:17px;line-height:1.55;
+  color:var(--muted);max-width:420px;
+}
+@media(max-width:860px){.method-sticky{position:static}}
+
+.method-cards{display:flex;flex-direction:column;gap:24px}
+.method-card{
+  border-radius:28px;padding:clamp(28px,3vw,42px);
+  color:var(--paper);
+  position:relative;overflow:hidden;
+  transition:transform 600ms var(--bezier);
+}
+.method-card:hover{transform:translateY(-3px)}
+.method-card::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,0.1) 0%,transparent 40%);
+  pointer-events:none;
+}
+.mc-red{background:var(--red);transform:rotate(1.5deg)}
+.mc-violet{background:var(--violet);transform:rotate(-1deg)}
+.mc-lime{background:var(--lime);color:var(--ink)}
+.mc-lime::after{background:linear-gradient(180deg,rgba(255,255,255,0.18) 0%,transparent 40%)}
+@media(max-width:860px){
+  .mc-red,.mc-violet,.mc-lime{transform:none!important}
+}
+.method-label{
+  font-family:var(--body);font-weight:700;font-size:12px;letter-spacing:.1em;
+  text-transform:uppercase;opacity:.7;margin-bottom:14px;
+}
+.method-card p{
+  font-family:var(--display);font-weight:800;font-size:clamp(20px,2.2vw,28px);
+  line-height:1.2;letter-spacing:-.03em;
+}
+
+/* ── Proof Quote ───────────────────────────── */
+.quote-outer{
+  border-radius:46px;padding:12px;
+  background:rgba(255,255,255,0.4);
+  border:1px solid rgba(18,15,10,0.08);
+  box-shadow:0 24px 60px rgba(18,15,10,0.08);
+}
+.quote-inner{
+  background:var(--ink);color:var(--paper);
+  border-radius:34px;
+  padding:clamp(48px,7vw,96px);
+  text-align:center;
+}
+.quote-text{
+  font-family:var(--display);font-weight:900;font-size:clamp(26px,4vw,52px);
+  line-height:1.1;letter-spacing:-.05em;
+}
+.quote-attr{
+  margin-top:24px;font-family:var(--body);font-weight:600;font-size:15px;
+  color:var(--muted);
+}
+
+/* ── Final CTA ─────────────────────────────── */
+.final-panel{
+  border-radius:42px;overflow:hidden;
+  min-height:520px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:clamp(40px,6vw,80px);
+  position:relative;
+  background:linear-gradient(145deg,var(--red),var(--blue));
+  color:var(--paper);
+}
+.final-panel::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 20% 30%,rgba(216,255,56,0.3),transparent 55%),
+    radial-gradient(circle at 80% 75%,rgba(255,138,179,0.3),transparent 55%);
+  pointer-events:none;
+}
+.final-panel::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,0.1) 0%,transparent 35%);
+  pointer-events:none;
+}
+.final-panel .eyebrow{color:rgba(255,255,255,0.6)}
+.final-panel h2{
+  font-family:var(--display);font-weight:950;font-size:clamp(40px,6.5vw,96px);
+  line-height:.88;letter-spacing:-.075em;margin-bottom:36px;
+  position:relative;z-index:1;
+}
+.final-panel .cta{
+  background:var(--paper);color:var(--ink);position:relative;z-index:1;
+}
+.final-panel .cta:hover{box-shadow:0 16px 48px rgba(0,0,0,0.25)}
+.final-panel .cta .arrow{background:var(--lime)}
+
+/* ── Footer ────────────────────────────────── */
+footer{
+  text-align:center;padding:48px 0;
+  font-family:var(--body);font-weight:500;font-size:14px;color:var(--muted);
+}
+
+/* ── Reveal animation ──────────────────────── */
+[data-reveal]{
+  opacity:0;transform:translateY(54px);filter:blur(10px);
+  transition:opacity 900ms var(--bezier),transform 900ms var(--bezier),filter 900ms var(--bezier);
+}
+[data-reveal].is-visible{opacity:1;transform:translateY(0);filter:blur(0)}
+@media(prefers-reduced-motion:reduce){
+  [data-reveal]{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
+}
+
+/* ── Utility ───────────────────────────────── */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+</style>
+</head>
+<body>
+
+<!-- Grain -->
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ── Nav ─────────────────────────────────── -->
+<header class="site-header">
+  <a href="#top" class="nav-brand">Register</a>
+  <nav class="nav-links" aria-label="Main navigation">
+    <a href="#work">Work</a>
+    <a href="#method">Method</a>
+    <a href="#proof">Proof</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <a href="#contact" class="nav-cta">Get started</a>
+  <button class="hamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span>
+  </button>
+</header>
+
+<!-- ── Mobile menu ─────────────────────────── -->
+<div class="mobile-menu" role="dialog" aria-label="Navigation menu">
+  <a href="#work">Work</a>
+  <a href="#method">Method</a>
+  <a href="#proof">Proof</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- ── Main ────────────────────────────────── -->
+<main id="top">
+
+  <!-- Hero -->
+  <section class="hero wrap">
+    <div class="hero-text" data-reveal>
+      <p class="eyebrow">Audacious frontend craft</p>
+      <h1>Websites that feel impossible to ignore, effortless to trust.</h1>
+      <p>Register is a color-forward landing experience for visitors who decide in seconds whether a brand has taste.</p>
+      <div class="hero-btns">
+        <a href="#work" class="cta">Start the scroll <span class="arrow">↗</span></a>
+        <a href="#method" class="cta-secondary">See the system</a>
+      </div>
+    </div>
+    <div class="hero-stage" data-reveal>
+      <div class="poster-card">
+        <div class="poster-inner">
+          <p class="poster-text">Color carries meaning. Typography carries weight. Motion carries memory.</p>
+        </div>
+      </div>
+      <div class="fcard fcard-red">
+        <div class="fcard-label">Launch color</div>
+        <div class="fcard-value">FF4D2E</div>
+      </div>
+      <div class="fcard fcard-blue">
+        <div class="fcard-label">Attention curve</div>
+        <div class="fcard-value">0.82</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ticker -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span class="ticker-item"><span class="dot"></span>Color with intent</span>
+      <span class="ticker-item"><span class="dot"></span>Motion with restraint</span>
+      <span class="ticker-item"><span class="dot"></span>Layouts that refuse the template</span>
+      <span class="ticker-item"><span class="dot"></span>Color with intent</span>
+      <span class="ticker-item"><span class="dot"></span>Motion with restraint</span>
+      <span class="ticker-item"><span class="dot"></span>Layouts that refuse the template</span>
+      <span class="ticker-item"><span class="dot"></span>Color with intent</span>
+      <span class="ticker-item"><span class="dot"></span>Motion with restraint</span>
+      <span class="ticker-item"><span class="dot"></span>Layouts that refuse the template</span>
+      <span class="ticker-item"><span class="dot"></span>Color with intent</span>
+      <span class="ticker-item"><span class="dot"></span>Motion with restraint</span>
+      <span class="ticker-item"><span class="dot"></span>Layouts that refuse the template</span>
+    </div>
+  </div>
+
+  <!-- Work -->
+  <section id="work" class="wrap">
+    <p class="eyebrow" data-reveal>The visual argument</p>
+    <h2 style="font-family:var(--display);font-weight:950;font-size:clamp(44px,6.5vw,104px);line-height:.88;letter-spacing:-.075em" data-reveal>Every section earns its scroll.</h2>
+    <div class="bento">
+      <div class="bento-card bc1" data-reveal>
+        <div class="bento-inner">
+          <p class="bento-label">Palette logic</p>
+          <h3 class="bento-heading">High energy, zero chaos.</h3>
+          <p class="bento-body">Blocks of saturated color create hierarchy, route attention, and give the page a voice before a word is read.</p>
+        </div>
+      </div>
+      <div class="bento-card bc2" data-reveal>
+        <div class="bento-inner">
+          <p class="bento-label">Interaction</p>
+          <h3 class="bento-heading">Buttons with physical tension.</h3>
+          <p class="bento-body">Presses, reveals, and hovers use mass-like timing instead of default web stiffness.</p>
+        </div>
+      </div>
+      <div class="bento-card bc3" data-reveal>
+        <div class="bento-inner">
+          <p class="bento-label">Composition</p>
+          <h3 class="bento-heading">Asymmetry keeps the eye awake.</h3>
+          <p class="bento-body">No three-column sameness. No decorative metrics. Just deliberate spatial rhythm.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Method -->
+  <section id="method" class="wrap">
+    <div class="method-grid">
+      <div class="method-sticky" data-reveal>
+        <p class="eyebrow">Method</p>
+        <h2>Surprise the eye. Respect the mind.</h2>
+        <p>Every interaction, every color choice, every spatial relationship is a deliberate decision — not a template default.</p>
+      </div>
+      <div class="method-cards">
+        <div class="method-card mc-red" data-reveal>
+          <p class="method-label">01 / Signal</p>
+          <p>A first fold built to stop the scroll without begging for attention.</p>
+        </div>
+        <div class="method-card mc-violet" data-reveal>
+          <p class="method-label">02 / Rhythm</p>
+          <p>Sections land like chapters, each one changing scale, pace, and temperature.</p>
+        </div>
+        <div class="method-card mc-lime" data-reveal>
+          <p class="method-label">03 / Finish</p>
+          <p>Tiny interaction details create the feeling that someone cared deeply.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Proof Quote -->
+  <section id="proof" class="wrap">
+    <div class="quote-outer" data-reveal>
+      <div class="quote-inner">
+        <p class="quote-text">"The page itself is the product: captivating enough to remember, clear enough to convert."</p>
+        <p class="quote-attr">— Design Philosophy</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section id="contact" class="wrap">
+    <div class="final-panel" data-reveal>
+      <p class="eyebrow">Ready</p>
+      <h2>Make the next visitor feel something.</h2>
+      <a href="mailto:hello@example.com" class="cta">hello@example.com <span class="arrow">↗</span></a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <p>Register — Crafted with color and intention.</p>
+</footer>
+
+<script>
+// ── Scroll reveal ─────────────────────────────
+(function(){
+  var targets = document.querySelectorAll('[data-reveal]');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    targets.forEach(function(t){ t.classList.add('is-visible') });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.18 });
+  targets.forEach(function(t){ observer.observe(t) });
+})();
+
+// ── Mobile menu ───────────────────────────────
+(function(){
+  var btn = document.querySelector('.hamburger');
+  var menu = document.querySelector('.mobile-menu');
+  var links = menu.querySelectorAll('a');
+  var isOpen = false;
+
+  function toggle(){
+    isOpen = !isOpen;
+    btn.classList.toggle('is-open', isOpen);
+    menu.classList.toggle('is-open', isOpen);
+    btn.setAttribute('aria-expanded', String(isOpen));
+    btn.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
+  btn.addEventListener('click', toggle);
+  links.forEach(function(link){
+    link.addEventListener('click', function(){
+      if (isOpen) toggle();
+    });
+  });
+})();
+</script>
+</body>
+</html>

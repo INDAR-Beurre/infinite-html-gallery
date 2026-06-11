@@ -1,0 +1,2133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aura DB — The Local-First Sync Engine for Modern Apps</title>
+  <meta name="description" content="Aura DB is a high-performance, local-first database and synchronization engine. Get sub-millisecond local reads/writes and automatic cloud sync with zero friction.">
+  
+  <!-- Fontshare Fonts: Satoshi & Cabinet Grotesk -->
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&f[]=cabinet-grotesk@700,800,900&display=swap" rel="stylesheet">
+  <style>
+/* ----------------------------------------------------
+   Cascade Layers Declaration
+   ---------------------------------------------------- */
+@layer reset, base, theme, components, utilities;
+
+/* ----------------------------------------------------
+   Layer: Reset
+   ---------------------------------------------------- */
+@layer reset {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  img, svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  button, input, select, textarea {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  ul, ol {
+    list-style: none;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+/* ----------------------------------------------------
+   Layer: Theme & Tokens
+   ---------------------------------------------------- */
+@layer theme {
+  :root {
+    color-scheme: dark;
+
+    /* Border Radius tokens (sharp design direction) */
+    --radius-lg: 4px;
+    --radius-md: 4px;
+    --radius-sm: 2px;
+    --radius-pill: 2px;
+
+    /* Raw Dark Theme Tokens */
+    --bg-dark: #0f0e0d;
+    --text-dark: #e8e6e1;
+    --accent-dark: #00ffd4;
+    --accent-dim-dark: #00cca9;
+    --border-dark: oklch(from white l c h / 0.12); /* slightly higher contrast border */
+    --border-strong-dark: oklch(from white l c h / 0.22);
+    --card-bg-dark: #141312; /* slightly darker card bg */
+    --muted-dark: #a09e9a;
+    --shadow-dark: rgba(0, 0, 0, 0.6);
+
+    /* Raw Light Theme Tokens */
+    --bg-light: #fbfbfa;
+    --text-light: #0f0e0d;
+    --accent-light: #00736c;
+    --accent-dim-light: #005651;
+    --border-light: oklch(from black l c h / 0.12);
+    --border-strong-light: oklch(from black l c h / 0.22);
+    --card-bg-light: #f5f4f2;
+    --muted-light: #706e6a;
+    --shadow-light: rgba(0, 0, 0, 0.04);
+
+    /* Default (Dark) CSS variables for browsers without light-dark support */
+    --bg: var(--bg-dark);
+    --text: var(--text-dark);
+    --accent: var(--accent-dark);
+    --accent-dim: var(--accent-dim-dark);
+    --border: var(--border-dark);
+    --border-strong: var(--border-strong-dark);
+    --card-bg: var(--card-bg-dark);
+    --muted: var(--muted-dark);
+    --shadow: var(--shadow-dark);
+  }
+
+  /* HTML elements theme resolution */
+  html[data-theme="light"] {
+    color-scheme: light;
+    --bg: var(--bg-light);
+    --text: var(--text-light);
+    --accent: var(--accent-light);
+    --accent-dim: var(--accent-dim-light);
+    --border: var(--border-light);
+    --border-strong: var(--border-strong-light);
+    --card-bg: var(--card-bg-light);
+    --muted: var(--muted-light);
+    --shadow: var(--shadow-light);
+  }
+
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: var(--bg-dark);
+    --text: var(--text-dark);
+    --accent: var(--accent-dark);
+    --accent-dim: var(--accent-dim-dark);
+    --border: var(--border-dark);
+    --border-strong: var(--border-strong-dark);
+    --card-bg: var(--card-bg-dark);
+    --muted: var(--muted-dark);
+    --shadow: var(--shadow-dark);
+  }
+
+  /* Modern standard using light-dark() where supported */
+  @supports (color: light-dark(white, black)) {
+    :root {
+      --bg: light-dark(var(--bg-light), var(--bg-dark));
+      --text: light-dark(var(--text-light), var(--text-dark));
+      --accent: light-dark(var(--accent-light), var(--accent-dark));
+      --accent-dim: light-dark(var(--accent-dim-light), var(--accent-dim-dark));
+      --border: light-dark(var(--border-light), var(--border-dark));
+      --border-strong: light-dark(var(--border-strong-light), var(--border-strong-dark));
+      --card-bg: light-dark(var(--card-bg-light), var(--card-bg-dark));
+      --muted: light-dark(var(--muted-light), var(--muted-dark));
+      --shadow: light-dark(var(--shadow-light), var(--shadow-dark));
+    }
+  }
+}
+
+/* ----------------------------------------------------
+   Layer: Base Styles
+   ---------------------------------------------------- */
+@layer base {
+  body {
+    background-color: var(--bg);
+    background-image: 
+      radial-gradient(circle at center, transparent 40%, var(--bg) 85%),
+      radial-gradient(circle, var(--border) 1px, transparent 1px);
+    background-size: 100% 100%, 24px 24px;
+    background-attachment: fixed;
+    background-position: center;
+    color: var(--text);
+    font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1rem; /* 16px */
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Typography setup */
+  h1, h2, h3, h4 {
+    font-family: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    color: var(--text);
+  }
+
+  /* Keyboard Navigation Outlines */
+  button:focus-visible,
+  a:focus-visible,
+  [role="tab"]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  /* Global Layout elements */
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: clamp(1.5rem, 5vw, 3rem);
+    border-inline: 1px solid var(--border);
+    box-sizing: border-box;
+  }
+}
+
+/* ----------------------------------------------------
+   Layer: Components
+   ---------------------------------------------------- */
+@layer components {
+  
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: 'Satoshi', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    height: 48px; /* Touch target >= 44px */
+    padding-inline: 1.5rem;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
+  }
+
+  .btn-sm {
+    height: 38px;
+    padding-inline: 1rem;
+    font-size: 0.85rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .btn-primary {
+    background-color: var(--accent);
+    color: var(--bg-dark); /* Ensure perfect contrast on accent */
+    border-color: var(--accent);
+  }
+
+  .btn-primary:hover {
+    background-color: transparent;
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    border: 1px solid var(--border-strong);
+    color: var(--text);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--text);
+    background-color: oklch(from var(--text) l c h / 0.05);
+  }
+
+  /* Badges */
+  .badge {
+    display: inline-flex;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.3rem 0.6rem;
+    border-radius: var(--radius-sm);
+    background-color: oklch(from var(--accent) l c h / 0.08);
+    border: 1px solid oklch(from var(--accent) l c h / 0.2);
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+
+  /* Navigation Bar */
+  .nav-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 72px; /* Touch target height optimized */
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    background-color: oklch(from var(--bg) l c h / 0.8);
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+
+  .nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: clamp(1.5rem, 5vw, 3rem);
+    border-inline: 1px solid var(--border);
+    box-sizing: border-box;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: 1.3rem;
+    letter-spacing: -0.03em;
+  }
+
+  .nav-logo .logo-text span {
+    color: var(--accent);
+  }
+
+  .logo-mark {
+    color: var(--text);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .nav-link {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--muted);
+    transition: color 180ms ease-out;
+    padding: 0.5rem; /* Min click area sizing */
+  }
+
+  .nav-link:hover {
+    color: var(--text);
+  }
+
+  .github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* Theme Toggle Button */
+  .theme-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px; /* Touch target minimum */
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background-color: transparent;
+    color: var(--text);
+    transition: background-color 180ms ease-out, border-color 180ms ease-out;
+  }
+
+  .theme-toggle-btn:hover {
+    border-color: var(--border-strong);
+    background-color: oklch(from var(--text) l c h / 0.03);
+  }
+
+  /* Theme Icon Controls */
+  html[data-theme="dark"] .icon-sun { display: block; }
+  html[data-theme="dark"] .icon-moon { display: none; }
+  html[data-theme="light"] .icon-sun { display: none; }
+  html[data-theme="light"] .icon-moon { display: block; }
+
+  /* Hero Section */
+  .hero-section {
+    position: relative;
+    padding-block-start: clamp(4rem, 10vh, 8rem);
+    padding-block-end: clamp(4rem, 12vh, 10rem);
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .hero-content {
+    text-align: left; /* Asymmetric layout */
+  }
+
+  .hero-title {
+    font-size: clamp(2.8rem, 6.5vw, 4.8rem);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -0.05em;
+    margin-bottom: 1.5rem;
+  }
+
+  .accent-text {
+    color: var(--accent);
+  }
+
+  .hero-subtitle {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 580px;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .visual-sync-diagram {
+    max-width: 380px;
+    color: var(--text);
+  }
+
+  /* Node sync animation */
+  @keyframes orbit {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.15); opacity: 1; }
+  }
+
+  .node-central {
+    animation: pulse 4s infinite ease-in-out;
+    transform-origin: 200px 200px;
+  }
+
+  .node-client {
+    transform-origin: 200px 200px;
+  }
+
+  .client-1 { animation: orbit 24s infinite linear; }
+  .client-2 { animation: orbit 32s infinite linear; }
+  .client-3 { animation: orbit 40s infinite linear; }
+
+  @keyframes sync-flow-1 {
+    0% { transform: translate(0, 0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translate(55px, 0); opacity: 0; }
+  }
+  @keyframes sync-flow-2 {
+    0% { transform: translate(0, 0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translate(-42px, 42px); opacity: 0; }
+  }
+
+  .dot-1 {
+    animation: sync-flow-1 3s infinite linear;
+  }
+  .dot-2 {
+    animation: sync-flow-2 4s infinite linear;
+  }
+
+  /* Feature Sections */
+  .feature-detail-section {
+    padding-block: clamp(5rem, 10vw, 8rem);
+    border-top: 1px solid var(--border);
+  }
+
+  .feature-detail-section.alt-bg {
+    background-color: oklch(from var(--card-bg) l c h / 0.3);
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 8vw, 6rem);
+    align-items: center;
+  }
+
+  .row-reverse {
+    direction: ltr; /* Keeps read order */
+  }
+  
+  .row-reverse > .section-visual {
+    grid-column: 2;
+  }
+  .row-reverse > .section-content {
+    grid-column: 1;
+  }
+
+  .accent-line {
+    width: 20px;
+    height: 3px;
+    background-color: var(--accent);
+    margin-bottom: 1.25rem;
+  }
+
+  .section-heading {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-copy {
+    color: var(--muted);
+    font-size: 1.05rem;
+    margin-bottom: 2rem;
+    max-width: 520px;
+  }
+
+  .features-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.8rem;
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+
+  .features-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--accent);
+  }
+
+  .features-list li strong {
+    color: var(--text);
+  }
+
+  /* Interactive offline widget style */
+  .interactive-offline-widget {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 4px 20px var(--shadow);
+    width: 100%;
+    max-width: 420px;
+    margin-inline: auto;
+    transition: border-color 180ms ease-out;
+  }
+
+  .interactive-offline-widget:hover {
+    border-color: var(--accent);
+  }
+
+  .widget-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    background-color: oklch(from var(--bg) l c h / 0.2);
+  }
+
+  .widget-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--accent);
+  }
+
+  .widget-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+  }
+
+  .widget-body {
+    padding: 1.5rem;
+  }
+
+  .status-panel {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    padding: 0.75rem 1rem;
+    background-color: oklch(from var(--bg) l c h / 0.4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+
+  .status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #00e676; /* green */
+    box-shadow: 0 0 8px #00e676;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .status-indicator.offline {
+    background-color: #ff1744; /* red */
+    box-shadow: 0 0 8px #ff1744;
+  }
+
+  .status-label {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .status-label strong {
+    color: var(--text);
+  }
+
+  .simulation-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .simulation-actions button {
+    flex: 1;
+  }
+
+  .data-queue {
+    border-top: 1px solid var(--border);
+    padding-top: 1.25rem;
+  }
+
+  .queue-header {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .queue-list {
+    min-height: 90px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .queue-list li {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    background-color: oklch(from var(--bg) l c h / 0.5);
+    border: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: slideIn 0.2s ease-out;
+  }
+
+  .queue-list li.syncing {
+    border-color: var(--border-strong);
+    opacity: 0.6;
+  }
+
+  .queue-list li .item-action {
+    font-family: monospace;
+    font-weight: bold;
+  }
+
+  .queue-list li .item-time {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .queue-list li.empty-state {
+    border-left: none;
+    background: transparent;
+    color: var(--muted);
+    justify-content: center;
+    padding-block: 1rem;
+    font-style: italic;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Bento Grid Layout */
+  .bento-section {
+    padding-block: clamp(5rem, 10vw, 8rem);
+    border-top: 1px solid var(--border);
+  }
+
+  .bento-header {
+    margin-bottom: clamp(3rem, 6vw, 4.5rem);
+    max-width: 650px;
+  }
+
+  .bento-title {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    margin-bottom: 1rem;
+  }
+
+  .bento-subtitle {
+    color: var(--muted);
+    font-size: 1.1rem;
+  }
+
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: minmax(220px, auto);
+    gap: 1.5rem;
+  }
+
+  .bento-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    padding: 2rem;
+    transition: transform 180ms ease-out, border-color 180ms ease-out, box-shadow 180ms ease-out;
+    box-shadow: 0 4px 12px var(--shadow);
+  }
+
+  .bento-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    box-shadow: 0 8px 24px var(--shadow);
+  }
+
+  /* Span modifiers */
+  .col-span-2 { grid-column: span 2; }
+  .row-span-2 { grid-row: span 2; }
+
+  /* Bento inner components */
+  .bento-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    flex-grow: 1;
+    min-height: 120px;
+  }
+
+  .card-canvas-visual {
+    align-items: flex-end;
+    padding-bottom: 1rem;
+  }
+
+  .latency-graph {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .graph-bar-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .graph-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: 'Satoshi', sans-serif;
+  }
+
+  .font-bold { font-weight: 700; }
+
+  .graph-bar-container {
+    width: 100%;
+    height: 24px;
+    background-color: oklch(from var(--bg) l c h / 0.5);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .graph-bar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--bg-dark);
+    width: var(--val);
+    border-radius: 3px;
+  }
+
+  .graph-bar.standard {
+    background-color: var(--muted);
+    color: var(--bg);
+  }
+
+  .graph-bar.aura {
+    background-color: var(--accent);
+    color: var(--bg-dark);
+    box-shadow: 0 0 10px oklch(from var(--accent) l c h / 0.5);
+  }
+
+  .geometric-illustration {
+    color: var(--muted);
+  }
+  .bento-card:hover .geometric-illustration {
+    color: var(--accent);
+  }
+
+  .bento-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .bento-info.flex-row {
+    flex-direction: row;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .info-block {
+    flex: 1.3;
+  }
+
+  .info-visual-mini {
+    flex: 0.7;
+    display: flex;
+    justify-content: center;
+    color: var(--muted);
+  }
+
+  .bento-card:hover .info-visual-mini {
+    color: var(--accent);
+  }
+
+  .card-tag {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+  }
+
+  .card-description {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* Showcase Section */
+  .showcase-section {
+    padding-block: clamp(5rem, 10vw, 8rem);
+    border-top: 1px solid var(--border);
+  }
+
+  .showcase-header {
+    margin-bottom: clamp(3rem, 6vw, 4.5rem);
+    text-align: left;
+  }
+
+  .showcase-title {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    margin-bottom: 1rem;
+  }
+
+  .showcase-subtitle {
+    color: var(--muted);
+    font-size: 1.1rem;
+  }
+
+  /* Code Terminal Frame (Full Bleed Moment) */
+  .code-terminal-frame {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 10px 40px var(--shadow);
+    width: 100%;
+    transition: border-color 180ms ease-out;
+  }
+
+  .code-terminal-frame:hover {
+    border-color: var(--accent);
+  }
+
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 1.5rem;
+    height: 52px;
+    border-bottom: 1px solid var(--border);
+    background-color: oklch(from var(--bg) l c h / 0.3);
+  }
+
+  .terminal-controls {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .control-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .control-dot.close { background-color: #ff5f56; }
+  .control-dot.minimize { background-color: #ffbd2e; }
+  .control-dot.expand { background-color: #27c93f; }
+
+  .terminal-tabs {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .tab-btn {
+    height: 36px;
+    padding-inline: 1rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--muted);
+    border-radius: var(--radius-sm);
+    transition: color 180ms ease-out, background-color 180ms ease-out;
+  }
+
+  .tab-btn:hover {
+    color: var(--text);
+  }
+
+  .tab-btn.active {
+    color: var(--text);
+    background-color: oklch(from var(--bg) l c h / 0.5);
+    border: 1px solid var(--border);
+  }
+
+  .terminal-content {
+    position: relative;
+    padding: 2rem;
+    min-height: 280px;
+    overflow-x: auto;
+    background-color: oklch(from var(--card-bg) l c h / 0.5);
+  }
+
+  .code-panel {
+    display: none;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .code-panel.active {
+    display: block;
+  }
+
+  /* Code Syntax Highlighting Rules */
+  .token.keyword { color: #ff7b72; }
+  .token.string { color: var(--accent); }
+  .token.comment { color: #8b949e; font-style: italic; }
+  .token.punctuation { color: #c9d1d9; }
+  .token.operator { color: #ff7b72; }
+  .token.boolean { color: #d19a66; }
+  .token.function { color: #d2a6ff; }
+  .token.property { color: #79c0ff; }
+
+  /* CTA Section */
+  .cta-section {
+    padding-block: clamp(5rem, 10vw, 8rem);
+    border-top: 1px solid var(--border);
+  }
+
+  .cta-box {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(3rem, 8vw, 5rem);
+    text-align: center;
+    box-shadow: 0 10px 40px var(--shadow);
+  }
+
+  .cta-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.05em;
+    margin-bottom: 1rem;
+  }
+
+  .cta-subtitle {
+    color: var(--muted);
+    font-size: 1.15rem;
+    max-width: 620px;
+    margin-inline: auto;
+    margin-bottom: 2.5rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Footer */
+  .footer {
+    padding-block: 5rem 3rem;
+    border-top: 1px solid var(--border);
+    background-color: oklch(from var(--card-bg) l c h / 0.1);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr repeat(3, 1fr);
+    gap: 4rem 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: 1.25rem;
+    letter-spacing: -0.03em;
+  }
+
+  .footer-logo .logo-text span {
+    color: var(--accent);
+  }
+
+  .footer-tagline {
+    font-size: 0.9rem;
+    color: var(--muted);
+    max-width: 250px;
+  }
+
+  .footer-links-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .links-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-links-group a {
+    font-size: 0.9rem;
+    color: var(--muted);
+    transition: color 180ms ease-out;
+  }
+
+  .footer-links-group a:hover {
+    color: var(--text);
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+    padding-top: 2rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  /* Scroll Progress Bar */
+  .scroll-progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background-color: var(--accent);
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
+    z-index: 101;
+    transition: transform 0.1s ease-out;
+  }
+
+  /* Mobile Toggle Navigation Burger */
+  .mobile-toggle-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    color: var(--text);
+    transition: background-color 180ms ease-out, border-color 180ms ease-out;
+  }
+
+  .mobile-toggle-btn:hover {
+    border-color: var(--border-strong);
+    background-color: oklch(from var(--text) l c h / 0.03);
+  }
+
+  .mobile-toggle-btn svg line {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    transform-origin: center;
+  }
+
+  .mobile-toggle-btn[aria-expanded="true"] .line-mid {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  .mobile-toggle-btn[aria-expanded="true"] .line-top {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .mobile-toggle-btn[aria-expanded="true"] .line-bot {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  /* Mobile Nav Menu Drawer */
+  .mobile-nav-menu {
+    display: none;
+    position: absolute;
+    top: 72px;
+    left: 0;
+    width: 100%;
+    background-color: var(--bg);
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    padding: 2rem;
+    gap: 1.25rem;
+    box-shadow: 0 12px 30px var(--shadow);
+    z-index: 99;
+  }
+
+  .mobile-nav-menu.open {
+    display: flex;
+    animation: slideDownMenu 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes slideDownMenu {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .mobile-nav-link {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--muted);
+    padding-block: 0.5rem;
+    transition: color 180ms ease-out;
+  }
+
+  .mobile-nav-link:hover {
+    color: var(--text);
+  }
+
+  .mobile-menu-cta {
+    margin-top: 0.75rem;
+    width: 100%;
+  }
+
+  /* Terminal Copy Button */
+  .btn-copy-code {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--muted);
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background-color: oklch(from var(--bg) l c h / 0.5);
+    transition: color 180ms ease-out, border-color 180ms ease-out, background-color 180ms ease-out;
+    height: 32px;
+  }
+
+  .btn-copy-code:hover {
+    color: var(--text);
+    border-color: var(--border-strong);
+    background-color: oklch(from var(--text) l c h / 0.03);
+  }
+
+  /* Spotlight Glow Overlay */
+  .bento-card::after,
+  .code-terminal-frame::after,
+  .interactive-offline-widget::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: radial-gradient(280px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), oklch(from var(--accent) l c h / 0.06), transparent 75%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bento-card:hover::after,
+  .code-terminal-frame:hover::after,
+  .interactive-offline-widget:hover::after {
+    opacity: 1;
+  }
+
+  .bento-card > *,
+  .code-terminal-frame > *,
+  .interactive-offline-widget > * {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+/* ----------------------------------------------------
+   Layer: Utilities & Animations
+   ---------------------------------------------------- */
+@layer utilities {
+  
+  /* Scroll reveal base classes */
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .scroll-reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Responsive styling adjusters */
+  @media (max-width: 992px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      text-align: center;
+    }
+
+    .hero-content {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-buttons {
+      justify-content: center;
+    }
+
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .section-grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .row-reverse > .section-visual {
+      grid-column: auto;
+      grid-row: 1;
+    }
+    
+    .row-reverse > .section-content {
+      grid-column: auto;
+      grid-row: 2;
+    }
+
+    .nav-links, .nav-cta {
+      display: none !important; /* Keep nav clean for mobile */
+    }
+
+    .mobile-toggle-btn {
+      display: flex;
+    }
+
+    .col-span-2 {
+      grid-column: span 1;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .footer-bottom {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+  }
+}
+
+</style>
+  
+  <!-- MANDATORY: Declare support for both light and dark themes -->
+  <meta name="color-scheme" content="dark light">
+  
+  <!-- Early Inline Script: Prevent FOUC and set theme before render -->
+  <script>
+    {
+      const savedTheme = localStorage.getItem("theme");
+      const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      // Default to dark unless light is explicitly pinned
+      const activeTheme = savedTheme === "light" ? "light" : "dark";
+      
+      document.documentElement.setAttribute("data-theme", activeTheme);
+      document.querySelector('meta[name="color-scheme"]').content = activeTheme;
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav-bar" id="main-nav" aria-label="Main Navigation">
+    <div class="nav-container">
+      <a href="#" class="nav-logo" aria-label="Aura DB Home">
+        <!-- SVG logo mark - geometric, minimal, works at 24px and 200px -->
+        <svg class="logo-mark" viewBox="0 0 100 100" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="25" y="25" width="50" height="50" rx="12" stroke="currentColor" stroke-width="8" stroke-linejoin="round" />
+          <path d="M50 25 V75 M25 50 H75" stroke="currentColor" stroke-width="8" stroke-linecap="round" />
+          <circle cx="50" cy="50" r="10" fill="var(--accent)" />
+        </svg>
+        <span class="logo-text">aura<span>db</span></span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#bento" class="nav-link">Architecture</a>
+        <a href="#developer" class="nav-link">Developer API</a>
+        <a href="https://github.com" class="nav-link github-link" target="_blank" rel="noopener noreferrer">
+          GitHub
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M3.5 2H10V8.5M10 2L2 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="nav-actions">
+        <a href="#cta" class="btn btn-secondary nav-cta">Get Started</a>
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" aria-pressed="false">
+          <!-- Moon Icon -->
+          <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <!-- Sun Icon -->
+          <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.77" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+        <!-- Mobile Menu Hamburger Button -->
+        <button id="mobile-menu-toggle" class="mobile-toggle-btn" aria-label="Toggle navigation menu" aria-expanded="false">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12" class="line-mid"></line>
+            <line x1="3" y1="6" x2="21" y2="6" class="line-top"></line>
+            <line x1="3" y1="18" x2="21" y2="18" class="line-bot"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile Menu Dropdown Link List -->
+    <div class="mobile-nav-menu" id="mobile-menu" aria-hidden="true">
+      <a href="#features" class="mobile-nav-link">Features</a>
+      <a href="#bento" class="mobile-nav-link">Architecture</a>
+      <a href="#developer" class="mobile-nav-link">Developer API</a>
+      <a href="https://github.com" class="mobile-nav-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="#cta" class="btn btn-primary mobile-menu-cta">Get Started</a>
+    </div>
+    <!-- Scroll Progress Indicator -->
+    <div class="scroll-progress-bar" id="scroll-progress" aria-hidden="true"></div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section" id="hero">
+    <div class="container hero-grid">
+      <div class="hero-content scroll-reveal">
+        <div class="badge">Version 2.0 now available</div>
+        <h1 class="hero-title">
+          Local-first database.<br>
+          <span class="accent-text">Zero sync complexity.</span>
+        </h1>
+        <p class="hero-subtitle">
+          Aura DB runs directly inside your clients' devices. It reads and writes instantly in memory, then synchronizes conflict-free in the background the moment network returns. Zero spinning wheels.
+        </p>
+        <div class="hero-buttons">
+          <a href="#cta" class="btn btn-primary">Start Building Free</a>
+          <a href="#developer" class="btn btn-secondary">Explore API</a>
+        </div>
+      </div>
+      <div class="hero-visual scroll-reveal">
+        <!-- SVG diagram simulating real-time replication -->
+        <svg class="visual-sync-diagram" viewBox="0 0 400 400" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background grids -->
+          <circle cx="200" cy="200" r="160" stroke="currentColor" stroke-opacity="0.03" stroke-width="2" />
+          <circle cx="200" cy="200" r="100" stroke="currentColor" stroke-opacity="0.03" stroke-width="2" />
+          <!-- Central Server Node -->
+          <g class="node-central">
+            <circle cx="200" cy="200" r="28" fill="var(--card-bg)" stroke="currentColor" stroke-width="2" />
+            <path d="M190 200 H210 M200 190 V210" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <!-- Orbiting Client Nodes -->
+          <g class="node-client client-1">
+            <circle cx="80" cy="200" r="20" fill="var(--card-bg)" stroke="currentColor" stroke-width="2" />
+            <circle cx="80" cy="200" r="4" fill="var(--accent)" />
+            <path d="M100 200 H172" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4" />
+          </g>
+          <g class="node-client client-2">
+            <circle cx="280" cy="90" r="20" fill="var(--card-bg)" stroke="currentColor" stroke-width="2" />
+            <circle cx="280" cy="90" r="4" fill="var(--accent)" />
+            <path d="M265 105 L215 175" stroke="currentColor" stroke-width="1" stroke-opacity="0.2" />
+          </g>
+          <g class="node-client client-3">
+            <circle cx="280" cy="310" r="20" fill="var(--card-bg)" stroke="currentColor" stroke-width="2" />
+            <circle cx="280" cy="310" r="4" fill="var(--accent)" />
+            <path d="M265 295 L215 225" stroke="currentColor" stroke-width="1" stroke-opacity="0.2" />
+          </g>
+          <!-- Orbiting Ring Indicator -->
+          <circle cx="200" cy="200" r="100" stroke="var(--accent)" stroke-opacity="0.1" stroke-width="1.5" />
+          <!-- Floating data dots -->
+          <circle class="sync-dot dot-1" cx="140" cy="200" r="4" fill="var(--accent)" />
+          <circle class="sync-dot dot-2" cx="240" cy="140" r="4" fill="var(--accent)" />
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- Alternating Content Sections -->
+  <main id="main-content">
+    
+    <!-- Feature Section 1: Alternating Layout (Visual Left, Text Right) -->
+    <section class="feature-detail-section" id="features">
+      <div class="container section-grid">
+        <div class="section-visual scroll-reveal">
+          <div class="interactive-offline-widget" id="offline-simulator">
+            <div class="widget-header">
+              <span class="widget-dot"></span>
+              <span class="widget-title">Connection Status Simulator</span>
+            </div>
+            <div class="widget-body">
+              <div class="status-panel">
+                <span class="status-indicator online"></span>
+                <span class="status-label">Network: <strong id="network-state">Online</strong></span>
+              </div>
+              <div class="simulation-actions">
+                <button id="btn-toggle-network" class="btn btn-secondary btn-sm" aria-live="polite">Disconnect Network</button>
+                <button id="btn-add-record" class="btn btn-primary btn-sm">Insert Data Record</button>
+              </div>
+              <div class="data-queue">
+                <div class="queue-header">Local Log Queue</div>
+                <ul class="queue-list" id="sim-queue-list">
+                  <li class="empty-state">No changes made. Click 'Insert Data Record'</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="section-content scroll-reveal">
+          <div class="accent-line"></div>
+          <h2 class="section-heading">Offline by design.<br>Online when possible.</h2>
+          <p class="section-copy">
+            Traditional web architectures fail the moment connection degrades. Aura DB shifts the source of truth to the client device. Reads take 0ms. Writes take 0ms. Transactions succeed instantly offline and queue for server merge.
+          </p>
+          <ul class="features-list">
+            <li><strong>Replicated Cache:</strong> Automatic client database syncing.</li>
+            <li><strong>Optimistic Queries:</strong> Immediate UI feedback without server roundtrips.</li>
+            <li><strong>Intelligent Reconnect:</strong> Incremental delta synchronizations.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature Section 2: Alternating Layout (Text Left, Visual Right) -->
+    <section class="feature-detail-section alt-bg">
+      <div class="container section-grid row-reverse">
+        <div class="section-visual scroll-reveal">
+          <svg class="conflict-diagram" viewBox="0 0 400 300" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 100 H350" stroke="currentColor" stroke-opacity="0.1" stroke-width="2" />
+            <path d="M50 200 H350" stroke="currentColor" stroke-opacity="0.1" stroke-width="2" />
+            
+            <!-- Dynamic merging paths -->
+            <path d="M50 100 Q 200 100, 250 150 Q 300 200, 350 200" stroke="var(--accent)" stroke-width="2" stroke-dasharray="6 4" />
+            <path d="M50 200 Q 200 200, 250 150 Q 300 100, 350 100" stroke="currentColor" stroke-width="2" />
+
+            <!-- Convergence node -->
+            <g class="node-converge">
+              <circle cx="250" cy="150" r="14" fill="var(--bg)" stroke="var(--accent)" stroke-width="2" />
+              <path d="M246 150 L249 153 L254 147" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+
+            <text x="60" y="80" fill="var(--text)" font-family="Satoshi" font-size="12" font-weight="700">Client A (V1 → V2)</text>
+            <text x="60" y="230" fill="var(--text)" font-family="Satoshi" font-size="12" font-weight="700">Client B (V1 → V2')</text>
+            <text x="250" y="125" fill="var(--accent)" font-family="Satoshi" font-size="11" font-weight="bold" text-anchor="middle">CRDT Auto Merge</text>
+          </svg>
+        </div>
+        <div class="section-content scroll-reveal">
+          <div class="accent-line"></div>
+          <h2 class="section-heading">Mathematical conflict resolution.</h2>
+          <p class="section-copy">
+            Say goodbye to version mismatch errors and destructive overwrites. Aura DB implements conflict-free replicated data types (CRDTs) under the hood. Concurrency issues resolve themselves programmatically on convergence, keeping data coherent across every active node.
+          </p>
+          <ul class="features-list">
+            <li><strong>LWW-Register:</strong> Last-Write-Wins timestamps resolution.</li>
+            <li><strong>Grow-Only Counter:</strong> Additive counters safe from duplicate merges.</li>
+            <li><strong>Custom Merge Hooks:</strong> Intercept and resolve application logic.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bento Grid Section -->
+    <section class="bento-section" id="bento">
+      <div class="container">
+        <div class="bento-header scroll-reveal">
+          <span class="badge">Architecture</span>
+          <h2 class="bento-title">Designed for modern runtime performance.</h2>
+          <p class="bento-subtitle">A zero-dependency client foot-print that pairs absolute efficiency with developer ease.</p>
+        </div>
+        
+        <div class="bento-grid">
+          <!-- Bento Card 1: Large (Span 2 Cols, Span 2 Rows) -->
+          <div class="bento-card col-span-2 row-span-2 scroll-reveal">
+            <div class="bento-visual card-canvas-visual">
+              <div class="latency-graph">
+                <div class="graph-bar-group">
+                  <span class="graph-label">Standard APIs</span>
+                  <div class="graph-bar-container">
+                    <div class="graph-bar standard" style="--val: 85%;">180ms</div>
+                  </div>
+                </div>
+                <div class="graph-bar-group">
+                  <span class="graph-label font-bold">Aura Local Read</span>
+                  <div class="graph-bar-container">
+                    <div class="graph-bar aura" style="--val: 6%;">0.4ms</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="bento-info">
+              <span class="card-tag">Performance</span>
+              <h3 class="card-title">Sub-millisecond Local Engine</h3>
+              <p class="card-description">Because the database is in memory and mapped to a binary file, reads execute in micro-seconds. Your UI updates instantly without network delays or blocking threads.</p>
+            </div>
+          </div>
+
+          <!-- Bento Card 2: Medium (Span 1 Col, Span 1 Row) -->
+          <div class="bento-card scroll-reveal">
+            <div class="bento-visual geometric-illustration">
+              <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 20 H50 M10 30 H50 M10 40 H30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <rect x="10" y="10" width="40" height="40" rx="8" stroke="currentColor" stroke-width="2" stroke-opacity="0.1" />
+                <circle cx="45" cy="42" r="5" fill="var(--accent)" />
+              </svg>
+            </div>
+            <div class="bento-info">
+              <span class="card-tag">Footprint</span>
+              <h3 class="card-title">12KB Bundle Size</h3>
+              <p class="card-description">Fully treeshaken structure. No bloated ORM wrappers or SQLite WASM binaries required.</p>
+            </div>
+          </div>
+
+          <!-- Bento Card 3: Medium (Span 1 Col, Span 1 Row) -->
+          <div class="bento-card scroll-reveal">
+            <div class="bento-visual geometric-illustration">
+              <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="30" cy="30" r="20" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4" />
+                <path d="M30 15 V30 L40 35" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div class="bento-info">
+              <span class="card-tag">State Sync</span>
+              <h3 class="card-title">Delta Synchronization</h3>
+              <p class="card-description">Only transmits changes made since the last sync window, saving payload bandwidth.</p>
+            </div>
+          </div>
+
+          <!-- Bento Card 4: Medium (Span 1 Col, Span 1 Row) -->
+          <div class="bento-card scroll-reveal">
+            <div class="bento-visual geometric-illustration">
+              <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="15" y="15" width="30" height="30" rx="6" stroke="currentColor" stroke-width="2"/>
+                <path d="M30 22 V38" stroke="var(--accent)" stroke-width="2"/>
+                <path d="M22 30 H38" stroke="var(--accent)" stroke-width="2"/>
+              </svg>
+            </div>
+            <div class="bento-info">
+              <span class="card-tag">Cross-Platform</span>
+              <h3 class="card-title">Web, Mobile & Node</h3>
+              <p class="card-description">Identical API works in Chrome, React Native, Electron, iOS, and Android systems seamlessly.</p>
+            </div>
+          </div>
+
+          <!-- Bento Card 5: Large (Span 2 Cols, Span 1 Row) -->
+          <div class="bento-card col-span-2 scroll-reveal">
+            <div class="bento-info flex-row">
+              <div class="info-block">
+                <span class="card-tag">Security</span>
+                <h3 class="card-title">Zero-Knowledge Storage</h3>
+                <p class="card-description">Built-in AES-GCM client-side encryption. Data is encrypted prior to transit and stored encrypted on cloud relays. You own your keys; Aura relays cannot read your databases.</p>
+              </div>
+              <div class="info-visual-mini">
+                <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="30" y="45" width="40" height="30" rx="6" fill="var(--card-bg)" stroke="currentColor" stroke-width="2" />
+                  <path d="M40 45 V32 C40 24.5 44.5 20 50 20 C55.5 20 60 24.5 60 32 V45" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" />
+                  <circle cx="50" cy="60" r="4" fill="var(--accent)" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Full-Bleed Moment (Code Block / Showcase) -->
+    <section class="showcase-section" id="developer">
+      <div class="container showcase-container scroll-reveal">
+        <div class="showcase-header">
+          <span class="badge">Developer Friendly</span>
+          <h2 class="showcase-title">Works with simple native methods.</h2>
+          <p class="showcase-subtitle">Zero complicated setup steps. Initialize in three lines, query reactively.</p>
+        </div>
+
+        <!-- Full-bleed Code Frame -->
+        <div class="code-terminal-frame">
+          <div class="terminal-bar">
+            <div class="terminal-controls">
+              <span class="control-dot close"></span>
+              <span class="control-dot minimize"></span>
+              <span class="control-dot expand"></span>
+            </div>
+            <div class="terminal-tabs" role="tablist" aria-label="Code language selectors">
+              <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-js" id="tab-js">index.js</button>
+              <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-react" id="tab-react">App.jsx</button>
+              <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-schema" id="tab-schema">schema.json</button>
+            </div>
+            <button id="btn-copy-code" class="btn-copy-code" aria-label="Copy code to clipboard">
+              <svg class="icon-copy" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <svg class="icon-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span class="btn-copy-text">Copy</span>
+            </button>
+          </div>
+          
+          <div class="terminal-content">
+            <!-- JavaScript Tab Panel -->
+            <pre id="panel-js" class="code-panel active" role="tabpanel" aria-labelledby="tab-js"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">{</span> AuraDB <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@auradb/client'</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Initialize the DB and automatically load the disk store</span>
+<span class="token keyword">const</span> db <span class="token operator">=</span> <span class="token keyword">await</span> AuraDB<span class="token punctuation">.</span><span class="token function">open</span><span class="token punctuation">({</span>
+  name<span class="token operator">:</span> <span class="token string">'user_workspace'</span><span class="token punctuation">,</span>
+  syncUrl<span class="token operator">:</span> <span class="token string">'wss://sync.auradb.io/v2'</span>
+<span class="token punctuation">})</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Sub-millisecond write (instant local update, async sync)</span>
+<span class="token keyword">const</span> recordId <span class="token operator">=</span> <span class="token keyword">await</span> db<span class="token punctuation">.</span><span class="token function">collection</span><span class="token punctuation">(</span><span class="token string">'tasks'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">({</span>
+  title<span class="token operator">:</span> <span class="token string">'Design landing hero layout'</span><span class="token punctuation">,</span>
+  completed<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+  updatedAt<span class="token operator">:</span> Date<span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">()</span>
+<span class="token punctuation">})</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Reactive queries notify your UI automatically</span>
+db<span class="token punctuation">.</span><span class="token function">collection</span><span class="token punctuation">(</span><span class="token string">'tasks'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">({</span> completed<span class="token operator">:</span> <span class="token boolean">false</span> <span class="token punctuation">})</span>
+  <span class="token punctuation">.</span><span class="token function">subscribe</span><span class="token punctuation">(</span><span class="token parameter">tasks</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token function">updateUI</span><span class="token punctuation">(</span>tasks<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+
+            <!-- React Tab Panel (Hidden by default) -->
+            <pre id="panel-react" class="code-panel" role="tabpanel" aria-labelledby="tab-react" hidden><code class="language-jsx"><span class="token keyword">import</span> <span class="token punctuation">{</span> useQuery<span class="token punctuation">,</span> useMutation <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@auradb/react'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">function</span> <span class="token function">App</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// Hook auto-subscribes to local DB state transitions</span>
+  <span class="token keyword">const</span> <span class="token punctuation">{</span> data<span class="token operator">:</span> tasks<span class="token punctuation">,</span> loading <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">useQuery</span><span class="token punctuation">(</span><span class="token string">'tasks'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> completed<span class="token operator">:</span> <span class="token boolean">false</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>insertTask<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useMutation</span><span class="token punctuation">(</span><span class="token string">'tasks'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token class-name">className</span><span class="token operator">=</span><span class="token string">"app-container"</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token class-name">onClick</span><span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">insertTask</span><span class="token punctuation">(</span><span class="token punctuation">{</span> title<span class="token operator">:</span> <span class="token string">"Quick task"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">></span></span>
+        Add Task
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ul</span><span class="token punctuation">></span></span>
+        <span class="token punctuation">{</span>tasks<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token parameter">t</span> <span class="token operator">=></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token class-name">key</span><span class="token operator">=</span><span class="token punctuation">{</span>t<span class="token punctuation">.</span>_id<span class="token punctuation">}</span><span class="token punctuation">></span></span><span class="token punctuation">{</span>t<span class="token punctuation">.</span>title<span class="token punctuation">}</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span><span class="token punctuation">)}</span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ul</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+
+            <!-- Schema Tab Panel (Hidden by default) -->
+            <pre id="panel-schema" class="code-panel" role="tabpanel" aria-labelledby="tab-schema" hidden><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"collection"</span><span class="token operator">:</span> <span class="token string">"tasks"</span><span class="token punctuation">,</span>
+  <span class="token property">"encryption"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  <span class="token property">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"title"</span><span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"completed"</span><span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"boolean"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"updatedAt"</span><span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"number"</span> <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"indexes"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"completed"</span><span class="token punctuation">,</span> <span class="token string">"updatedAt"</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta">
+      <div class="container cta-box scroll-reveal">
+        <h2 class="cta-title">Upgrade your app's state engine.</h2>
+        <p class="cta-subtitle">Get started with a premium local-first infrastructure. Free for up to 10,000 active nodes. No credit card required.</p>
+        <div class="cta-buttons">
+          <a href="#" class="btn btn-primary">Create Free Account</a>
+          <a href="#features" class="btn btn-secondary">See Demo</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg viewBox="0 0 100 100" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="25" y="25" width="50" height="50" rx="12" stroke="currentColor" stroke-width="8" />
+            <circle cx="50" cy="50" r="10" fill="var(--accent)" />
+          </svg>
+          <span class="logo-text">aura<span>db</span></span>
+        </div>
+        <p class="footer-tagline">Premium local-first synchronization and data engine.</p>
+      </div>
+      
+      <div class="footer-links-group">
+        <span class="links-title">Product</span>
+        <a href="#features">Features</a>
+        <a href="#bento">Bento Spec</a>
+        <a href="#developer">API Docs</a>
+        <a href="#">Pricing</a>
+      </div>
+
+      <div class="footer-links-group">
+        <span class="links-title">Resources</span>
+        <a href="#">Github Repository</a>
+        <a href="#">Changelog</a>
+        <a href="#">Security Policy</a>
+        <a href="#">Contact Support</a>
+      </div>
+
+      <div class="footer-links-group">
+        <span class="links-title">Company</span>
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Brand Assets</a>
+        <a href="#">Legal & Privacy</a>
+      </div>
+    </div>
+    
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Aura DB Inc. All rights reserved. Built with modern, clean web layout guidelines.</p>
+    </div>
+  </footer>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  
+  /* ----------------------------------------------------
+     Theme Toggle Implementation
+     ---------------------------------------------------- */
+  const themeToggleBtn = document.getElementById("theme-toggle");
+  
+  const getTheme = () => {
+    return document.documentElement.getAttribute("data-theme") || "dark";
+  };
+  
+  const setTheme = (theme) => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+    
+    // Update the color-scheme meta tag for native component mapping
+    const metaColorScheme = document.querySelector('meta[name="color-scheme"]');
+    if (metaColorScheme) {
+      metaColorScheme.content = theme;
+    }
+    
+    // Update ARIA state
+    themeToggleBtn.setAttribute("aria-pressed", theme === "light");
+  };
+  
+  // Initialize ARIA state on load
+  if (themeToggleBtn) {
+    themeToggleBtn.setAttribute("aria-pressed", getTheme() === "light");
+    
+    themeToggleBtn.addEventListener("click", () => {
+      const nextTheme = getTheme() === "dark" ? "light" : "dark";
+      setTheme(nextTheme);
+    });
+  }
+  
+  // Listen to system changes (only apply if the user hasn't pinned a preference)
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+    if (!localStorage.getItem("theme")) {
+      setTheme(e.matches ? "dark" : "light");
+    }
+  });
+
+
+  /* ----------------------------------------------------
+     Mobile Menu Toggle Functionality
+     ---------------------------------------------------- */
+  const mobileMenuToggle = document.getElementById("mobile-menu-toggle");
+  const mobileMenu = document.getElementById("mobile-menu");
+  
+  if (mobileMenuToggle && mobileMenu) {
+    mobileMenuToggle.addEventListener("click", () => {
+      const isExpanded = mobileMenuToggle.getAttribute("aria-expanded") === "true";
+      mobileMenuToggle.setAttribute("aria-expanded", !isExpanded);
+      mobileMenu.classList.toggle("open", !isExpanded);
+      mobileMenu.setAttribute("aria-hidden", isExpanded);
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!mobileMenu.contains(e.target) && !mobileMenuToggle.contains(e.target) && mobileMenu.classList.contains("open")) {
+        mobileMenuToggle.setAttribute("aria-expanded", "false");
+        mobileMenu.classList.remove("open");
+        mobileMenu.setAttribute("aria-hidden", "true");
+      }
+    });
+
+    // Close menu when selecting links
+    mobileMenu.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        mobileMenuToggle.setAttribute("aria-expanded", "false");
+        mobileMenu.classList.remove("open");
+        mobileMenu.setAttribute("aria-hidden", "true");
+      });
+    });
+  }
+
+
+  /* ----------------------------------------------------
+     Scroll Progress Indicator Bar
+     ---------------------------------------------------- */
+  const scrollProgressBar = document.getElementById("scroll-progress");
+  if (scrollProgressBar) {
+    window.addEventListener("scroll", () => {
+      const windowScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (windowScroll / height) : 0;
+      scrollProgressBar.style.transform = `scaleX(${scrolled})`;
+    }, { passive: true });
+  }
+
+
+  /* ----------------------------------------------------
+     Spotlight Hover Effect for Bento Cards
+     ---------------------------------------------------- */
+  const spotlightTargets = document.querySelectorAll(".bento-card, .code-terminal-frame, .interactive-offline-widget");
+  spotlightTargets.forEach(target => {
+    target.addEventListener("mousemove", (e) => {
+      const rect = target.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      target.style.setProperty("--mouse-x", `${x}px`);
+      target.style.setProperty("--mouse-y", `${y}px`);
+    }, { passive: true });
+  });
+
+
+  /* ----------------------------------------------------
+     Code Terminal Tab Switcher & Clipboard Copy
+     ---------------------------------------------------- */
+  const tabs = document.querySelectorAll(".terminal-tabs [role='tab']");
+  const panels = document.querySelectorAll(".terminal-content [role='tabpanel']");
+  const btnCopyCode = document.getElementById("btn-copy-code");
+  
+  tabs.forEach(tab => {
+    tab.addEventListener("click", (e) => {
+      const targetPanelId = tab.getAttribute("aria-controls");
+      
+      // Deactivate all tabs and hide all panels
+      tabs.forEach(t => {
+        t.classList.remove("active");
+        t.setAttribute("aria-selected", "false");
+      });
+      panels.forEach(p => {
+        p.setAttribute("hidden", "true");
+        p.classList.remove("active");
+      });
+      
+      // Activate clicked tab and show corresponding panel
+      tab.classList.add("active");
+      tab.setAttribute("aria-selected", "true");
+      
+      const targetPanel = document.getElementById(targetPanelId);
+      targetPanel.removeAttribute("hidden");
+      
+      // Short timeout to trigger CSS transition/opacity animation
+      setTimeout(() => {
+        targetPanel.classList.add("active");
+      }, 20);
+    });
+    
+    // Keyboard navigation within tabs
+    tab.addEventListener("keydown", (e) => {
+      const tabList = tab.parentElement;
+      const tabButtons = Array.from(tabList.querySelectorAll("[role='tab']"));
+      const index = tabButtons.indexOf(tab);
+      
+      let nextTab = null;
+      if (e.key === "ArrowRight") {
+        nextTab = tabButtons[(index + 1) % tabButtons.length];
+      } else if (e.key === "ArrowLeft") {
+        nextTab = tabButtons[(index - 1 + tabButtons.length) % tabButtons.length];
+      }
+      
+      if (nextTab) {
+        nextTab.focus();
+        nextTab.click();
+      }
+    });
+  });
+
+  // Clipboard copy listener
+  if (btnCopyCode) {
+    const copyIcon = btnCopyCode.querySelector(".icon-copy");
+    const checkIcon = btnCopyCode.querySelector(".icon-check");
+    const copyText = btnCopyCode.querySelector(".btn-copy-text");
+
+    btnCopyCode.addEventListener("click", async () => {
+      const activePanel = document.querySelector(".code-panel.active");
+      if (!activePanel) return;
+
+      const code = activePanel.textContent;
+      try {
+        await navigator.clipboard.writeText(code);
+        
+        // Visual success feedback
+        copyIcon.style.display = "none";
+        checkIcon.style.display = "inline";
+        copyText.textContent = "Copied!";
+        btnCopyCode.style.borderColor = "var(--accent)";
+        btnCopyCode.style.color = "var(--accent)";
+        
+        setTimeout(() => {
+          copyIcon.style.display = "inline";
+          checkIcon.style.display = "none";
+          copyText.textContent = "Copy";
+          btnCopyCode.style.borderColor = "";
+          btnCopyCode.style.color = "";
+        }, 2000);
+      } catch (err) {
+        console.error("Failed to copy text: ", err);
+      }
+    });
+  }
+
+
+  /* ----------------------------------------------------
+     Scroll Reveal Animation (Intersection Observer)
+     ---------------------------------------------------- */
+  const revealElements = document.querySelectorAll(".scroll-reveal");
+  
+  const revealCallback = (entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("active");
+        observer.unobserve(entry.target);
+      }
+    });
+  };
+  
+  const revealObserver = new IntersectionObserver(revealCallback, {
+    root: null,
+    threshold: 0.05, // 5% visibility
+    rootMargin: "0px 0px -40px 0px"
+  });
+  
+  revealElements.forEach(el => {
+    revealObserver.observe(el);
+  });
+
+
+  /* ----------------------------------------------------
+     Interactive Connection Status Simulator
+     ---------------------------------------------------- */
+  const btnToggleNetwork = document.getElementById("btn-toggle-network");
+  const btnAddRecord = document.getElementById("btn-add-record");
+  const networkState = document.getElementById("network-state");
+  const statusIndicator = document.querySelector(".status-indicator");
+  const simQueueList = document.getElementById("sim-queue-list");
+  
+  let isOnline = true;
+  let recordCounter = 0;
+  
+  const updateNetworkUI = () => {
+    if (isOnline) {
+      networkState.textContent = "Online";
+      statusIndicator.classList.remove("offline");
+      btnToggleNetwork.textContent = "Disconnect Network";
+      btnToggleNetwork.className = "btn btn-secondary btn-sm";
+    } else {
+      networkState.textContent = "Offline";
+      statusIndicator.classList.add("offline");
+      btnToggleNetwork.textContent = "Reconnect Network";
+      btnToggleNetwork.className = "btn btn-primary btn-sm";
+    }
+  };
+  
+  if (btnToggleNetwork && btnAddRecord && simQueueList) {
+    btnToggleNetwork.addEventListener("click", () => {
+      isOnline = !isOnline;
+      updateNetworkUI();
+      
+      if (isOnline) {
+        syncOfflineQueue();
+      }
+    });
+    
+    btnAddRecord.addEventListener("click", () => {
+      const emptyState = simQueueList.querySelector(".empty-state");
+      if (emptyState) {
+        emptyState.remove();
+      }
+      
+      recordCounter++;
+      const recordId = `tx_${Math.random().toString(36).substr(2, 5)}`;
+      const timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      
+      const li = document.createElement("li");
+      li.dataset.recordId = recordId;
+      
+      if (isOnline) {
+        li.innerHTML = `
+          <span><span class="item-action">INSERT</span> #${recordCounter} (${recordId})</span>
+          <span class="item-time">Synced ${timeString}</span>
+        `;
+        simQueueList.appendChild(li);
+        
+        li.style.borderColor = "var(--accent)";
+        setTimeout(() => {
+          li.style.transition = "border-color 1s ease";
+          li.style.borderColor = "var(--border)";
+        }, 500);
+      } else {
+        li.classList.add("syncing");
+        li.innerHTML = `
+          <span><span class="item-action" style="color: var(--muted)">QUEUE</span> #${recordCounter} (${recordId})</span>
+          <span class="item-time" style="color: var(--muted)">Queued Offline</span>
+        `;
+        simQueueList.appendChild(li);
+      }
+      
+      while (simQueueList.children.length > 4) {
+        simQueueList.children[0].remove();
+      }
+    });
+  }
+  
+  const syncOfflineQueue = () => {
+    const offlineItems = Array.from(simQueueList.querySelectorAll("li.syncing"));
+    if (offlineItems.length === 0) return;
+    
+    offlineItems.forEach((item, index) => {
+      setTimeout(() => {
+        if (!isOnline) return;
+        
+        item.classList.remove("syncing");
+        const actionSpan = item.querySelector(".item-action");
+        const timeSpan = item.querySelector(".item-time");
+        
+        if (actionSpan) {
+          actionSpan.textContent = "SYNCED";
+          actionSpan.style.color = "var(--accent)";
+        }
+        if (timeSpan) {
+          const timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          timeSpan.textContent = `Synced ${timeString}`;
+          timeSpan.style.color = "";
+        }
+        
+        item.style.borderColor = "var(--accent)";
+        setTimeout(() => {
+          item.style.transition = "border-color 1s ease";
+          item.style.borderColor = "var(--border)";
+        }, 500);
+      }, (index + 1) * 800);
+    });
+  };
+
+});
+
+</script></script>
+</body>
+</html>

@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HOLLAND &amp; VERSE — Private Counsel since MCMLXXXI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0a0a0a;
+    --paper:#f3f1ec;
+    --rule:#0a0a0a;
+    --mute:#6a6a66;
+    --hair:1px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;border-radius:0;}
+  html,body{background:var(--paper);color:var(--ink);}
+  body{
+    font-family:"Inter Tight", "Helvetica Neue", Arial, sans-serif;
+    font-weight:400;
+    font-feature-settings:"ss01","ss02","tnum";
+    -webkit-font-smoothing:antialiased;
+    line-height:1.35;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--ink);color:var(--paper);}
+  a{color:inherit;text-decoration:none;}
+  hr.rule{border:0;border-top:var(--hair) solid var(--ink);}
+  .serif{font-family:"Playfair Display", "Times New Roman", serif;font-weight:400;}
+  .meta{
+    font-size:10.5px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    font-weight:500;
+  }
+  .micro{
+    font-size:9.5px;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    color:var(--mute);
+  }
+
+  /* PAGE FRAME */
+  .frame{
+    padding:28px 36px;
+    min-height:100vh;
+  }
+  @media (max-width:720px){ .frame{padding:18px 18px;} }
+
+  /* HEADER */
+  header.nav{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr 1fr;
+    align-items:start;
+    padding-bottom:24px;
+    border-bottom:var(--hair) solid var(--ink);
+    gap:24px;
+  }
+  .mark{
+    display:flex;flex-direction:column;gap:6px;
+  }
+  .mark .glyph{
+    font-family:"Playfair Display",serif;
+    font-style:italic;
+    font-size:22px;
+    letter-spacing:-0.01em;
+  }
+  .nav ul{list-style:none;display:flex;flex-direction:column;gap:6px;}
+  .nav .col-meta{display:flex;flex-direction:column;gap:6px;align-items:flex-start;}
+  .nav .col-right{display:flex;flex-direction:column;gap:6px;align-items:flex-end;text-align:right;}
+  .dot{
+    display:inline-block;width:6px;height:6px;background:var(--ink);
+    margin-right:8px;vertical-align:middle;
+  }
+  @media (max-width:880px){
+    header.nav{grid-template-columns:1fr 1fr;}
+    .nav .col-right{align-items:flex-start;text-align:left;}
+  }
+
+  /* HERO — typographic */
+  .hero{
+    display:grid;
+    grid-template-columns:1fr;
+    padding:96px 0 56px 0;
+    position:relative;
+  }
+  .hero .index{
+    position:absolute;top:48px;right:0;
+  }
+  .hero h1{
+    font-family:"Playfair Display",serif;
+    font-weight:400;
+    font-size:clamp(64px, 16.5vw, 260px);
+    line-height:0.86;
+    letter-spacing:-0.035em;
+    margin-left:-0.05em;
+  }
+  .hero h1 em{font-style:italic;color:var(--ink);}
+  .hero h1 .amp{font-style:italic;font-weight:400;}
+  .hero h1 .thin{
+    font-family:"Inter Tight",sans-serif;
+    font-weight:300;
+    letter-spacing:-0.04em;
+  }
+  .hero .sub{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr 1fr;
+    gap:24px;
+    margin-top:80px;
+    padding-top:18px;
+    border-top:var(--hair) solid var(--ink);
+  }
+  .hero .sub p{font-size:13px;line-height:1.55;max-width:34ch;}
+  .hero .sub .stat .n{
+    font-family:"Playfair Display",serif;
+    font-size:46px;line-height:1;letter-spacing:-0.02em;
+    display:block;margin-bottom:6px;
+  }
+  @media (max-width:880px){
+    .hero .sub{grid-template-columns:1fr 1fr;}
+    .hero .index{position:static;margin-bottom:12px;}
+  }
+  @media (max-width:520px){
+    .hero .sub{grid-template-columns:1fr;}
+  }
+
+  /* SECTION — DOCTRINE */
+  section{padding:72px 0;border-top:var(--hair) solid var(--ink);}
+  .sec-head{
+    display:grid;grid-template-columns:1fr 3fr;
+    gap:24px;
+    padding-bottom:48px;
+  }
+  .sec-head h2{
+    font-family:"Playfair Display",serif;
+    font-weight:400;
+    font-size:clamp(34px,5vw,68px);
+    line-height:1;
+    letter-spacing:-0.02em;
+  }
+  .sec-head h2 em{font-style:italic;}
+  .sec-head .lede{
+    font-size:15px;max-width:54ch;line-height:1.5;
+  }
+  @media (max-width:720px){ .sec-head{grid-template-columns:1fr;} }
+
+  .doctrine{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border-top:var(--hair) solid var(--ink);
+  }
+  .doctrine article{
+    border-right:var(--hair) solid var(--ink);
+    padding:28px 22px 36px 22px;
+    min-height:280px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    background:var(--paper);
+    transition:background .3s ease,color .3s ease;
+  }
+  .doctrine article:last-child{border-right:0;}
+  .doctrine article:hover{background:var(--ink);color:var(--paper);}
+  .doctrine article:hover .micro{color:var(--paper);}
+  .doctrine .num{
+    font-family:"Playfair Display",serif;
+    font-style:italic;
+    font-size:36px;
+    line-height:1;
+  }
+  .doctrine h3{
+    font-family:"Inter Tight",sans-serif;
+    font-weight:500;
+    font-size:18px;letter-spacing:-0.01em;
+    margin-top:36px;margin-bottom:10px;
+  }
+  .doctrine p{font-size:12.5px;line-height:1.55;}
+  @media (max-width:880px){
+    .doctrine{grid-template-columns:1fr 1fr;}
+    .doctrine article:nth-child(2){border-right:0;}
+    .doctrine article:nth-child(1),
+    .doctrine article:nth-child(2){border-bottom:var(--hair) solid var(--ink);}
+  }
+  @media (max-width:520px){
+    .doctrine{grid-template-columns:1fr;}
+    .doctrine article{border-right:0;border-bottom:var(--hair) solid var(--ink);}
+    .doctrine article:last-child{border-bottom:0;}
+  }
+
+  /* INDEX / DOSSIERS */
+  .dossiers{display:grid;grid-template-columns:1fr;}
+  .row{
+    display:grid;
+    grid-template-columns:80px 1.4fr 1fr 1fr 110px;
+    gap:24px;
+    padding:22px 0;
+    border-top:var(--hair) solid var(--ink);
+    align-items:baseline;
+    transition:padding-left .25s ease;
+    cursor:pointer;
+  }
+  .row:last-child{border-bottom:var(--hair) solid var(--ink);}
+  .row:hover{padding-left:18px;}
+  .row .idx{font-family:"Playfair Display",serif;font-style:italic;font-size:18px;}
+  .row .title{
+    font-family:"Playfair Display",serif;
+    font-size:clamp(22px,2.4vw,34px);
+    line-height:1.05;letter-spacing:-0.015em;
+  }
+  .row .client{font-size:12px;}
+  .row .year{font-size:12px;text-align:right;}
+  .row .tag{font-size:10.5px;letter-spacing:0.22em;text-transform:uppercase;}
+  @media (max-width:720px){
+    .row{grid-template-columns:40px 1fr 70px;}
+    .row .client,.row .tag{display:none;}
+  }
+
+  /* MANIFESTO BLOCK */
+  .manifesto{
+    display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;
+  }
+  .manifesto .quote{
+    font-family:"Playfair Display",serif;
+    font-style:italic;
+    font-size:clamp(28px,3.6vw,48px);
+    line-height:1.1;letter-spacing:-0.015em;
+  }
+  .manifesto .body p{font-size:14px;line-height:1.6;margin-bottom:18px;max-width:48ch;}
+  .manifesto .body p:first-letter{
+    font-family:"Playfair Display",serif;
+    font-size:54px;float:left;line-height:0.85;
+    padding:6px 10px 0 0;
+  }
+  @media (max-width:880px){.manifesto{grid-template-columns:1fr;gap:32px;}}
+
+  /* CONTACT / CORRESPONDENCE */
+  .correspondence{
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr;
+    gap:24px;
+    border-top:var(--hair) solid var(--ink);
+    padding-top:48px;
+  }
+  .correspondence h3{
+    font-family:"Playfair Display",serif;
+    font-weight:400;font-style:italic;
+    font-size:28px;letter-spacing:-0.01em;margin-bottom:14px;
+  }
+  .correspondence p, .correspondence address{
+    font-style:normal;font-size:13px;line-height:1.55;
+  }
+  .form{
+    display:grid;grid-template-columns:1fr;gap:0;
+    border-top:var(--hair) solid var(--ink);
+    margin-top:48px;
+  }
+  .field{
+    display:grid;grid-template-columns:160px 1fr;
+    border-bottom:var(--hair) solid var(--ink);
+    align-items:center;
+  }
+  .field label{
+    padding:18px 16px;
+    border-right:var(--hair) solid var(--ink);
+    font-size:10.5px;letter-spacing:0.22em;text-transform:uppercase;
+  }
+  .field input, .field textarea, .field select{
+    border:0;background:transparent;
+    padding:18px 16px;
+    font-family:inherit;font-size:15px;color:var(--ink);
+    width:100%;outline:none;
+    font-weight:400;
+  }
+  .field textarea{resize:vertical;min-height:120px;font-family:inherit;}
+  .submit{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:22px 0 0 0;
+  }
+  button.btn{
+    background:transparent;border:0;
+    font-family:"Playfair Display",serif;
+    font-style:italic;
+    font-size:34px;letter-spacing:-0.015em;
+    cursor:pointer;color:var(--ink);
+    padding:0;
+    position:relative;
+  }
+  button.btn::after{
+    content:"";display:block;height:1px;background:var(--ink);
+    transform:scaleX(0);transform-origin:left;
+    transition:transform .35s ease;margin-top:4px;
+  }
+  button.btn:hover::after{transform:scaleX(1);}
+  @media (max-width:720px){
+    .correspondence{grid-template-columns:1fr;}
+    .field{grid-template-columns:1fr;}
+    .field label{border-right:0;border-bottom:var(--hair) solid var(--ink);}
+  }
+
+  /* TICKER */
+  .ticker{
+    border-top:var(--hair) solid var(--ink);
+    border-bottom:var(--hair) solid var(--ink);
+    overflow:hidden;white-space:nowrap;
+    padding:14px 0;
+  }
+  .ticker .track{
+    display:inline-block;animation:slide 60s linear infinite;
+  }
+  .ticker span{
+    font-family:"Playfair Display",serif;
+    font-style:italic;
+    font-size:22px;
+    padding:0 28px;
+  }
+  .ticker .sep{
+    font-family:"Inter Tight",sans-serif;font-style:normal;
+    font-size:10px;letter-spacing:0.3em;
+    vertical-align:middle;
+  }
+  @keyframes slide{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+
+  /* FOOTER */
+  footer{
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr 1fr;
+    gap:24px;
+    padding:48px 0 24px 0;
+    border-top:var(--hair) solid var(--ink);
+  }
+  footer .colophon{
+    font-family:"Playfair Display",serif;
+    font-style:italic;
+    font-size:clamp(28px,4vw,52px);
+    line-height:1;letter-spacing:-0.015em;
+    max-width:14ch;
+  }
+  footer ul{list-style:none;display:flex;flex-direction:column;gap:6px;}
+  footer .micro{display:block;margin-bottom:12px;}
+  .legal{
+    display:flex;justify-content:space-between;
+    border-top:var(--hair) solid var(--ink);
+    padding-top:16px;margin-top:32px;
+    gap:24px;flex-wrap:wrap;
+  }
+  @media (max-width:720px){footer{grid-template-columns:1fr 1fr;}}
+
+  /* CURSOR TIME (subtle live element) */
+  .live{
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .pulse{
+    width:6px;height:6px;background:var(--ink);
+    display:inline-block;animation:blink 1.6s steps(2,end) infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="mark">
+      <span class="micro">Est. MCMLXXXI · Zürich · New York</span>
+      <span class="glyph">Holland &amp; Verse</span>
+      <span class="meta">Private Counsel</span>
+    </div>
+    <div class="col-meta">
+      <span class="micro">Index</span>
+      <ul class="meta">
+        <li><a href="#doctrine"><span class="dot"></span>Doctrine</a></li>
+        <li><a href="#dossiers"><span class="dot"></span>Dossiers</a></li>
+        <li><a href="#manifesto"><span class="dot"></span>Manifesto</a></li>
+      </ul>
+    </div>
+    <div class="col-meta">
+      <span class="micro">Practice</span>
+      <ul class="meta">
+        <li>Successor Capital</li>
+        <li>Sovereign Liaison</li>
+        <li>Quiet Litigation</li>
+      </ul>
+    </div>
+    <div class="col-right">
+      <span class="micro">Correspondence</span>
+      <ul class="meta" style="align-items:flex-end;">
+        <li>By Appointment Only</li>
+        <li><a href="#contact">Request Audience →</a></li>
+        <li class="live"><span class="pulse"></span><span id="clock">—</span> CET</li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:0;">
+    <span class="meta index">No. 047 / Vol. XLV</span>
+    <h1>
+      Counsel<br/>
+      for the <em>seldom</em><br/>
+      <span class="thin">spoken—of.</span>
+    </h1>
+
+    <div class="sub">
+      <div>
+        <span class="micro">Statement</span>
+        <p style="margin-top:10px;">A confidential advisory retained by forty-one families and nine institutions. We do not advertise; we are introduced.</p>
+      </div>
+      <div class="stat">
+        <span class="micro">In Service</span>
+        <span class="n">45<span style="font-size:18px;">yrs</span></span>
+        <span class="meta">Since 1981</span>
+      </div>
+      <div class="stat">
+        <span class="micro">Partners</span>
+        <span class="n">11</span>
+        <span class="meta">Of which seven principal</span>
+      </div>
+      <div class="stat">
+        <span class="micro">Mandates / annum</span>
+        <span class="n">≤ 19</span>
+        <span class="meta">Selective by doctrine</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker" aria-hidden="true">
+    <div class="track">
+      <span>Discretion</span><span class="sep">— § —</span>
+      <span>Continuity</span><span class="sep">— § —</span>
+      <span>Patience</span><span class="sep">— § —</span>
+      <span>Severity</span><span class="sep">— § —</span>
+      <span>Silence</span><span class="sep">— § —</span>
+      <span>Discretion</span><span class="sep">— § —</span>
+      <span>Continuity</span><span class="sep">— § —</span>
+      <span>Patience</span><span class="sep">— § —</span>
+      <span>Severity</span><span class="sep">— § —</span>
+      <span>Silence</span><span class="sep">— § —</span>
+    </div>
+  </div>
+
+  <!-- DOCTRINE -->
+  <section id="doctrine">
+    <div class="sec-head">
+      <h2>The <em>Doctrine.</em></h2>
+      <p class="lede">Four principles, observed without exception since the firm's founding article was deposited at the canton of Zürich on the 14th of October, 1981.</p>
+    </div>
+    <div class="doctrine">
+      <article>
+        <div>
+          <span class="num">i.</span>
+          <h3>Anonymity is structural, not aesthetic.</h3>
+          <p>We do not publish client lists, case histories, or quarterly notices. Reference is provided only between principals, in person.</p>
+        </div>
+        <span class="micro">Article I</span>
+      </article>
+      <article>
+        <div>
+          <span class="num">ii.</span>
+          <h3>Counsel before instrument.</h3>
+          <p>We accept no mandate that does not first require a position. Tools follow conviction; never the inverse.</p>
+        </div>
+        <span class="micro">Article II</span>
+      </article>
+      <article>
+        <div>
+          <span class="num">iii.</span>
+          <h3>The horizon is multigenerational.</h3>
+          <p>Engagements are measured in decades. We refuse work whose value collapses inside a fiscal year.</p>
+        </div>
+        <span class="micro">Article III</span>
+      </article>
+      <article>
+        <div>
+          <span class="num">iv.</span>
+          <h3>Refusal is a service.</h3>
+          <p>The firm declines roughly eighty percent of introductions. The declination is itself the first piece of counsel rendered.</p>
+        </div>
+        <span class="micro">Article IV</span>
+      </article>
+    </div>
+  </section>
+
+  <!-- DOSSIERS -->
+  <section id="dossiers">
+    <div class="sec-head">
+      <h2>Selected <em>dossiers.</em></h2>
+      <p class="lede">Names withheld in perpetuity. The following entries are abstracted from public filings only, and reproduced here at the discretion of each principal.</p>
+    </div>
+    <div class="dossiers">
+      <div class="row">
+        <span class="idx">01</span>
+        <span class="title">The Bregenz Succession.</span>
+        <span class="client">Family holding · Austria</span>
+        <span class="tag">Continuity</span>
+        <span class="year">1994 — present</span>
+      </div>
+      <div class="row">
+        <span class="idx">02</span>
+        <span class="title">A sovereign archive, repatriated.</span>
+        <span class="client">Ministerial mandate · undisclosed</span>
+        <span class="tag">Liaison</span>
+        <span class="year">2003 — 2011</span>
+      </div>
+      <div class="row">
+        <span class="idx">03</span>
+        <span class="title">Re: the matter of Verse v. Holland.</span>
+        <span class="client">Internal partition</span>
+        <span class="tag">Doctrine</span>
+        <span class="year">2008</span>
+      </div>
+      <div class="row">
+        <span class="idx">04</span>
+        <span class="title">The dissolution of an institution by its founder.</span>
+        <span class="client">Foundation · Geneva</span>
+        <span class="tag">Quiet</span>
+        <span class="year">2016 — 2019</span>
+      </div>
+      <div class="row">
+        <span class="idx">05</span>
+        <span class="title">An estate, reconstituted across three jurisdictions.</span>
+        <span class="client">Private trust</span>
+        <span class="tag">Succession</span>
+        <span class="year">2021 — 2024</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANIFESTO -->
+  <section id="manifesto">
+    <div class="sec-head">
+      <h2>On the <em>nature</em> of the work.</h2>
+      <p class="lede">An abridged extract from the firm's private bulletin, distributed twice annually to principals and senior counsel.</p>
+    </div>
+    <div class="manifesto">
+      <p class="quote">"We are not retained to be heard. We are retained so that, decades hence, no one will have needed to listen."</p>
+      <div class="body">
+        <p>The contemporary advisory has confused activity with usefulness. It produces decks, models, and announcements; it cultivates a public posture. We do none of this. The firm is built around a small number of relationships, each of which is expected to outlive its founders.</p>
+        <p>We hold ourselves to a single test, applied to every memorandum, every recommendation, every silence: would this still be sound a generation from now, read by a stranger who knew nothing of the present moment? If the answer is uncertain, we revise. If it remains uncertain, we withhold.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="sec-head">
+      <h2>By <em>appointment.</em></h2>
+      <p class="lede">Unsolicited inquiries are read by an associate clerk and answered, at our discretion, within sixty business days. Encrypted correspondence is preferred.</p>
+    </div>
+
+    <div class="correspondence">
+      <div>
+        <h3>Principal Office</h3>
+        <address>
+          Bahnhofstrasse 41<br/>
+          CH—8001 Zürich<br/>
+          Switzerland<br/><br/>
+          T. +41 44 000 00 00<br/>
+          F. +41 44 000 00 01<br/>
+          counsel@hollandverse.ch
+        </address>
+      </div>
+      <div>
+        <h3>New York</h3>
+        <address>
+          1 Hanover Square, IX. Fl.<br/>
+          New York NY 10004<br/>
+          United States<br/><br/>
+          By introduction only.
+        </address>
+      </div>
+      <div>
+        <h3>Press</h3>
+        <p>The firm declines all interviews. A standing statement may be requested in writing from the office of the Senior Clerk.</p>
+      </div>
+    </div>
+
+    <form class="form" onsubmit="event.preventDefault();document.getElementById('sent').textContent='Received — 47.3769° N, 8.5417° E.';">
+      <div class="field">
+        <label for="f1">Name</label>
+        <input id="f1" type="text" autocomplete="off" placeholder="As you wish to be addressed." />
+      </div>
+      <div class="field">
+        <label for="f2">Introducing Party</label>
+        <input id="f2" type="text" autocomplete="off" placeholder="Required. We do not accept cold correspondence." />
+      </div>
+      <div class="field">
+        <label for="f3">Jurisdiction</label>
+        <input id="f3" type="text" autocomplete="off" placeholder="Principal residence and any relevant secondary." />
+      </div>
+      <div class="field">
+        <label for="f4">Nature of Matter</label>
+        <textarea id="f4" placeholder="In confidence. No more than is necessary."></textarea>
+      </div>
+      <div class="submit">
+        <span class="micro" id="sent">All correspondence is held under seal.</span>
+        <button class="btn" type="submit">Submit under seal →</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="colophon">Holland &amp; Verse, Counsel.</div>
+    <div>
+      <span class="micro">Offices</span>
+      <ul class="meta">
+        <li>Zürich</li>
+        <li>New York</li>
+        <li>Singapore (liaison)</li>
+      </ul>
+    </div>
+    <div>
+      <span class="micro">Affiliations</span>
+      <ul class="meta">
+        <li>Inst. of Private Counsel</li>
+        <li>Helvetic Bar, ZH</li>
+        <li>NY State Bar (jr.)</li>
+      </ul>
+    </div>
+    <div>
+      <span class="micro">Bulletin</span>
+      <ul class="meta">
+        <li>Vol. XLV · No. 047</li>
+        <li>Spring, MMXXVI</li>
+        <li>Edition of 312</li>
+      </ul>
+    </div>
+    <div class="legal" style="grid-column:1 / -1;">
+      <span class="micro">© MCMLXXXI — MMXXVI · Holland &amp; Verse SA</span>
+      <span class="micro">This page contains no advertisement and is not an offer of services.</span>
+      <span class="micro">Set in Playfair Display &amp; Inter Tight</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // Discreet live clock — Zürich time.
+  function tick(){
+    try{
+      const now = new Date();
+      const fmt = new Intl.DateTimeFormat('en-GB',{
+        hour:'2-digit',minute:'2-digit',second:'2-digit',
+        hour12:false, timeZone:'Europe/Zurich'
+      });
+      document.getElementById('clock').textContent = fmt.format(now);
+    }catch(e){
+      document.getElementById('clock').textContent = '—';
+    }
+  }
+  tick();setInterval(tick,1000);
+
+  // Subtle row reveal on hover — index number swap.
+  document.querySelectorAll('.row').forEach((r,i)=>{
+    r.addEventListener('mouseenter',()=>{
+      const idx=r.querySelector('.idx');
+      idx.dataset.original = idx.dataset.original || idx.textContent;
+      idx.textContent = '§';
+    });
+    r.addEventListener('mouseleave',()=>{
+      const idx=r.querySelector('.idx');
+      if(idx.dataset.original) idx.textContent = idx.dataset.original;
+    });
+  });
+</script>
+</body>
+</html>

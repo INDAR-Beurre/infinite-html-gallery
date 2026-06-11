@@ -1,0 +1,1080 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BUREAU//01 — An agent that does the work</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bricolage+Grotesque:opsz,wght@10..48,300;10..48,500;10..48,800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* OKLCH, tinted neutrals toward warm paper */
+    --paper:      oklch(95.5% 0.018 86);   /* #F4F1EA-ish */
+    --paper-2:    oklch(92.5% 0.020 86);
+    --ink:        oklch(20% 0.018 60);     /* deep charcoal, warm-leaning */
+    --ink-soft:   oklch(34% 0.020 60);
+    --rule:       oklch(14% 0.010 60);     /* near-black border */
+    --acid:       oklch(89% 0.225 130);    /* acid green ≈ #C6FF3D */
+    --hazard:     oklch(67% 0.215 38);     /* hazard orange ≈ #FF5B14 */
+    --bleed:      oklch(98% 0.012 86);
+  }
+
+  *,*:before,*:after{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  html{ background:var(--paper); }
+  body{
+    font-family:"Bricolage Grotesque","Archivo",system-ui,sans-serif;
+    font-optical-sizing:auto;
+    color:var(--ink);
+    background:var(--paper);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.32;
+    overflow-x:hidden;
+  }
+
+  /* Grainy halftone — SVG noise tiled, low opacity, blended */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:1;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.08  0 0 0 0 0.07  0 0 0 0 0.05  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-size:220px 220px;
+    mix-blend-mode:multiply;
+    opacity:.42;
+  }
+  /* Halftone dot field for hero (separate texture, denser) */
+  .halftone{
+    background-image:
+      radial-gradient(var(--rule) 1px, transparent 1.4px);
+    background-size:6px 6px;
+  }
+
+  .frame{ position:relative; z-index:2; }
+
+  /* ---------- TOP BAR ---------- */
+  .topbar{
+    border-bottom:3px solid var(--rule);
+    display:grid;
+    grid-template-columns: 1fr auto auto;
+    align-items:stretch;
+    font-family:"JetBrains Mono",ui-monospace,monospace;
+    font-size:12px;
+    letter-spacing:.02em;
+  }
+  .topbar > *{ padding:14px 18px; }
+  .topbar .mark{
+    font-family:"Archivo Black",sans-serif;
+    font-size:18px; letter-spacing:.005em;
+    text-transform:uppercase;
+    border-right:3px solid var(--rule);
+    display:flex; align-items:center; gap:10px;
+  }
+  .mark .swatch{
+    width:14px; height:14px; background:var(--acid);
+    border:2px solid var(--rule);
+  }
+  .topbar nav{
+    display:flex; gap:24px;
+    border-right:3px solid var(--rule);
+    align-items:center;
+    text-transform:uppercase;
+  }
+  .topbar nav a{
+    color:var(--ink); text-decoration:none;
+    padding:4px 2px;
+    border-bottom:2px solid transparent;
+  }
+  .topbar nav a:hover{ border-bottom-color:var(--hazard); }
+  .topbar .meta{
+    display:flex; align-items:center; gap:14px;
+    text-transform:uppercase;
+  }
+  .dot{ width:10px; height:10px; background:var(--hazard); border:2px solid var(--rule); display:inline-block; }
+  .dot.green{ background:var(--acid); }
+
+  /* ---------- STATUS STRIP ---------- */
+  .status-strip{
+    background:var(--rule);
+    color:var(--paper);
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    border-bottom:3px solid var(--rule);
+    overflow:hidden;
+  }
+  .marquee{
+    display:flex; gap:48px;
+    padding:9px 0;
+    white-space:nowrap;
+    animation: slide 32s linear infinite;
+    width:max-content;
+  }
+  .marquee span{ display:inline-flex; align-items:center; gap:14px; }
+  .marquee i{ font-style:normal; color:var(--acid); }
+  @keyframes slide{ to{ transform:translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce){
+    .marquee{ animation:none; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    border-bottom:3px solid var(--rule);
+    padding:clamp(28px, 4vw, 56px) clamp(20px, 3vw, 44px) clamp(40px, 6vw, 80px);
+    display:grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: clamp(24px,4vw,56px);
+    align-items:end;
+  }
+  .hero .kicker{
+    font-family:"JetBrains Mono",monospace;
+    font-size:12px; letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    display:flex; gap:14px; align-items:center;
+    margin-bottom:24px;
+  }
+  .hero .kicker .tag{
+    background:var(--acid); color:var(--rule);
+    border:2px solid var(--rule);
+    padding:3px 8px; font-weight:700;
+  }
+  .hero h1{
+    font-family:"Archivo Black", sans-serif;
+    font-weight:900;
+    font-size: clamp(64px, 13vw, 220px);
+    line-height:.84;
+    letter-spacing:-0.035em;
+    margin:0;
+    text-transform:uppercase;
+    color:var(--ink);
+  }
+  .hero h1 .row{ display:block; position:relative; }
+  .hero h1 .row.indent{ padding-left:clamp(40px,8vw,140px); }
+  .hero h1 .row.shift{ margin-top:-0.08em; }
+  .hero h1 .strike{
+    position:relative;
+    display:inline-block;
+    color:var(--hazard);
+  }
+  .hero h1 .strike::after{
+    content:""; position:absolute;
+    left:-4px; right:-4px;
+    top:46%; height:.18em;
+    background:var(--rule);
+    transform:skewY(-2deg);
+  }
+  .hero h1 .underline-acid{
+    box-shadow: inset 0 -0.18em 0 var(--acid);
+  }
+  /* Overlap: a stamped circle on the headline */
+  .hero h1 .stamp{
+    position:absolute;
+    right:-2vw; top:-4vw;
+    width:clamp(80px,11vw,180px); height:clamp(80px,11vw,180px);
+    border:3px solid var(--rule);
+    border-radius:50%;
+    background:var(--paper);
+    display:grid; place-items:center;
+    font-family:"JetBrains Mono",monospace;
+    font-weight:700;
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--rule);
+    line-height:1.2; text-align:center;
+    transform:rotate(-8deg);
+    z-index:3;
+  }
+  .hero h1 .stamp::before{
+    content:""; position:absolute; inset:8px;
+    border:2px dashed var(--rule); border-radius:50%;
+  }
+
+  .hero .lede{
+    font-family:"Bricolage Grotesque",sans-serif;
+    font-weight:500;
+    font-size:clamp(16px,1.25vw,20px);
+    max-width:46ch;
+    line-height:1.45;
+    color:var(--ink);
+    margin:0 0 28px;
+  }
+  .hero .lede strong{ background:var(--acid); padding:1px 6px; font-weight:700; border:2px solid var(--rule); }
+  .hero .ctas{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    font-family:"Archivo Black",sans-serif;
+    text-transform:uppercase;
+    font-size:14px; letter-spacing:.06em;
+    padding:16px 22px;
+    border:3px solid var(--rule);
+    background:var(--ink); color:var(--paper);
+    text-decoration:none;
+    display:inline-flex; align-items:center; gap:12px;
+    box-shadow: 6px 6px 0 0 var(--rule);
+    transition: transform .18s cubic-bezier(.2,.7,.2,1), box-shadow .18s;
+  }
+  .btn:hover{ transform: translate(-2px,-2px); box-shadow:8px 8px 0 0 var(--rule); }
+  .btn.alt{ background:var(--acid); color:var(--rule); }
+  .btn.ghost{ background:var(--paper); color:var(--rule); }
+  .btn .arrow{
+    width:16px; height:16px; display:inline-block;
+    background:
+      conic-gradient(from 45deg at 50% 50%, currentColor 0 25%, transparent 0 100%);
+    /* simple arrow via clip-path */
+    clip-path: polygon(0 40%, 60% 40%, 60% 20%, 100% 50%, 60% 80%, 60% 60%, 0 60%);
+    background:currentColor;
+  }
+
+  /* Hero right column: an analog "console" diagram, flat vectors */
+  .console{
+    position:relative;
+    border:3px solid var(--rule);
+    background:var(--paper-2);
+    aspect-ratio: 1/1.1;
+    min-height: 380px;
+    display:grid;
+    grid-template-rows: auto 1fr auto;
+    overflow:hidden;
+  }
+  .console::after{
+    content:""; position:absolute; inset:0;
+    background-image:
+      linear-gradient(var(--rule) 1px, transparent 1px),
+      linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+    background-size: 32px 32px, 32px 32px;
+    opacity:.07; pointer-events:none;
+  }
+  .console .head{
+    border-bottom:3px solid var(--rule);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 14px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+    background:var(--rule); color:var(--paper);
+  }
+  .console .head .pills{ display:flex; gap:6px; }
+  .console .head .pills span{
+    width:12px; height:12px; border:2px solid var(--paper);
+    background:transparent;
+  }
+  .console .head .pills span.on{ background:var(--acid); }
+  .console .body{
+    position:relative; padding:18px;
+    display:grid; grid-template-columns: 1fr 1fr; gap:12px;
+    align-content:start;
+  }
+  .node{
+    border:3px solid var(--rule);
+    background:var(--paper);
+    padding:12px 12px 14px;
+    position:relative;
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  }
+  .node b{ display:block; font-size:18px; letter-spacing:0; font-family:"Archivo Black"; text-transform:uppercase; line-height:1; margin-bottom:6px; }
+  .node.accent{ background:var(--acid); }
+  .node.alert{ background:var(--hazard); color:var(--rule); }
+  .node .pin{ position:absolute; right:-7px; top:-7px; width:14px; height:14px; background:var(--rule); border:2px solid var(--paper); }
+  .console .body .span2{ grid-column:span 2; }
+  .console .foot{
+    border-top:3px solid var(--rule);
+    padding:10px 14px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+    display:flex; justify-content:space-between; align-items:center;
+    background:var(--paper);
+  }
+  .console .foot .blink{ color:var(--hazard); }
+
+  /* Hero bottom rail */
+  .rail{
+    border-top:3px solid var(--rule);
+    border-bottom:3px solid var(--rule);
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+  }
+  .rail > div{
+    padding:14px 18px;
+    border-right:3px solid var(--rule);
+    display:flex; align-items:center; justify-content:space-between;
+    gap:12px;
+  }
+  .rail > div:last-child{ border-right:none; }
+  .rail b{
+    font-family:"Archivo Black"; font-size:28px;
+    letter-spacing:-.01em;
+    color:var(--rule);
+  }
+  .rail .gh{ background:var(--acid); }
+  .rail .or{ background:var(--hazard); color:var(--rule); }
+
+  /* ---------- SECTION: WHAT IT DOES ---------- */
+  section.does{
+    padding:clamp(48px,7vw,96px) clamp(20px,3vw,44px);
+    border-bottom:3px solid var(--rule);
+    display:grid;
+    grid-template-columns: 1fr 2.2fr;
+    gap: clamp(28px,5vw,72px);
+    align-items:start;
+  }
+  .section-tag{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+    border:2px solid var(--rule);
+    background:var(--paper);
+    padding:6px 10px;
+    display:inline-flex; gap:10px; align-items:center;
+  }
+  .section-tag::before{ content:""; width:8px; height:8px; background:var(--hazard); }
+  .does h2{
+    font-family:"Archivo Black";
+    font-size:clamp(40px,5.5vw,80px);
+    line-height:.9;
+    letter-spacing:-.025em;
+    margin:18px 0 0;
+    text-transform:uppercase;
+  }
+  .does h2 em{
+    font-style:normal;
+    background:var(--acid);
+    box-shadow: 6px 6px 0 0 var(--rule);
+    border:3px solid var(--rule);
+    padding:0 .12em;
+    display:inline-block;
+    transform:translateY(-4px) rotate(-1.5deg);
+  }
+  .capabilities{
+    display:grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap:0;
+    border:3px solid var(--rule);
+    background:var(--paper);
+  }
+  .cap{
+    border-right:3px solid var(--rule);
+    border-bottom:3px solid var(--rule);
+    padding:22px 20px 24px;
+    position:relative;
+    min-height:200px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    gap:12px;
+  }
+  .cap:nth-child(3n){ border-right:none; }
+  .cap:nth-last-child(-n+3){ border-bottom:none; }
+  .cap.wide{ grid-column:span 6; min-height:auto; padding:18px 20px;
+    display:grid; grid-template-columns: 1fr auto; align-items:center;
+    background:var(--rule); color:var(--paper);
+  }
+  .cap.wide .num{ color:var(--paper); }
+  .cap.wide h3{ font-size:22px; }
+  .cap.wide p{ display:none; }
+  .cap.green{ background:var(--acid); }
+  .cap.orange{ background:var(--hazard); color:var(--rule); }
+  .cap{ grid-column: span 2; }
+
+  .cap .num{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px; letter-spacing:.2em;
+    color:var(--ink-soft);
+  }
+  .cap.orange .num{ color:var(--rule); }
+  .cap h3{
+    font-family:"Archivo Black"; text-transform:uppercase;
+    font-size:26px; line-height:.95; letter-spacing:-.01em;
+    margin:0;
+  }
+  .cap p{
+    font-size:14.5px; line-height:1.45;
+    margin:0; max-width: 32ch;
+  }
+  /* Flat vector glyph (no 3D, no rounded glow) */
+  .glyph{
+    width:46px; height:46px;
+    border:3px solid var(--rule);
+    background:var(--paper);
+    display:grid; place-items:center;
+  }
+  .cap.green .glyph, .cap.orange .glyph{ background:var(--paper); }
+  .glyph svg{ width:26px; height:26px; }
+
+  /* ---------- HOW ---------- */
+  section.how{
+    padding: clamp(48px,7vw,96px) clamp(20px,3vw,44px);
+    border-bottom:3px solid var(--rule);
+    display:grid;
+    grid-template-columns: 1.1fr 1.4fr;
+    gap: clamp(28px,5vw,72px);
+    align-items:start;
+    position:relative;
+  }
+  section.how::before{
+    content:"";
+    position:absolute; right:-40px; top:40px;
+    width:220px; height:220px;
+    background:
+      repeating-linear-gradient(45deg,
+        var(--rule) 0 6px, transparent 6px 16px);
+    opacity:.5; transform:rotate(8deg);
+    pointer-events:none;
+  }
+  .how h2{
+    font-family:"Archivo Black";
+    font-size:clamp(48px,7vw,108px);
+    line-height:.85;
+    letter-spacing:-.03em;
+    margin:18px 0 18px;
+    text-transform:uppercase;
+  }
+  .how h2 .out{
+    -webkit-text-stroke:3px var(--rule);
+    color:transparent;
+  }
+  .how p.cap-copy{
+    max-width:46ch; font-size:16px; line-height:1.5; margin:0 0 24px;
+  }
+  .steps{ display:grid; gap:0; border:3px solid var(--rule); }
+  .step{
+    display:grid;
+    grid-template-columns: 110px 1fr auto;
+    align-items:stretch;
+    border-bottom:3px solid var(--rule);
+    background:var(--paper);
+  }
+  .step:last-child{ border-bottom:none; }
+  .step .n{
+    background:var(--rule); color:var(--paper);
+    font-family:"Archivo Black";
+    font-size:64px; line-height:1; letter-spacing:-.02em;
+    display:grid; place-items:center;
+    border-right:3px solid var(--rule);
+  }
+  .step .copy{ padding:20px 22px; }
+  .step .copy h4{
+    margin:0 0 6px;
+    font-family:"Archivo Black"; text-transform:uppercase;
+    font-size:22px; letter-spacing:-.01em;
+  }
+  .step .copy p{ margin:0; font-size:14.5px; line-height:1.5; max-width:52ch; }
+  .step .badge{
+    align-self:center;
+    margin-right:16px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+    padding:6px 10px;
+    background:var(--acid);
+    border:2px solid var(--rule);
+  }
+  .step:nth-child(2) .badge{ background:var(--hazard); color:var(--rule); }
+  .step:nth-child(4) .badge{ background:var(--paper); }
+
+  /* ---------- QUOTE / MANIFESTO ---------- */
+  section.shout{
+    border-bottom:3px solid var(--rule);
+    background:var(--ink);
+    color:var(--paper);
+    padding:clamp(60px,9vw,140px) clamp(20px,3vw,44px);
+    position:relative;
+    overflow:hidden;
+  }
+  section.shout::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image: radial-gradient(var(--paper) 1px, transparent 1.4px);
+    background-size:7px 7px;
+    opacity:.08;
+  }
+  .shout p{
+    position:relative;
+    font-family:"Archivo Black";
+    font-size:clamp(40px,6.5vw,110px);
+    line-height:.92;
+    letter-spacing:-.03em;
+    margin:0;
+    max-width: 22ch;
+    text-transform:uppercase;
+  }
+  .shout p .hl{
+    background:var(--hazard);
+    color:var(--rule);
+    padding:0 .12em;
+    box-shadow: 6px 6px 0 0 var(--paper);
+    border:3px solid var(--paper);
+    display:inline-block;
+    transform:rotate(-1.2deg);
+  }
+  .shout p .ul{
+    box-shadow: inset 0 -.18em 0 var(--acid);
+  }
+  .shout .attribution{
+    margin-top:32px; position:relative;
+    display:flex; gap:18px; align-items:center;
+    font-family:"JetBrains Mono",monospace;
+    font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+  }
+  .shout .attribution .sign{
+    width:48px; height:48px;
+    border:3px solid var(--paper);
+    display:grid; place-items:center;
+    font-family:"Archivo Black";
+    color:var(--acid);
+    font-size:18px;
+  }
+
+  /* ---------- LOG / SPEC ---------- */
+  section.spec{
+    padding: clamp(48px,7vw,96px) clamp(20px,3vw,44px);
+    border-bottom:3px solid var(--rule);
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(28px,5vw,72px);
+  }
+  .spec h2{
+    font-family:"Archivo Black";
+    font-size:clamp(36px,4.5vw,68px);
+    line-height:.9;
+    letter-spacing:-.02em;
+    text-transform:uppercase;
+    margin:14px 0 18px;
+  }
+  .spec p{ max-width:46ch; font-size:16px; line-height:1.5; }
+  .spec .log{
+    border:3px solid var(--rule);
+    background:var(--paper);
+    font-family:"JetBrains Mono",monospace;
+    font-size:13px;
+    line-height:1.55;
+  }
+  .log .head{
+    background:var(--rule); color:var(--paper);
+    padding:10px 14px;
+    display:flex; justify-content:space-between;
+    letter-spacing:.18em; text-transform:uppercase; font-size:11px;
+    border-bottom:3px solid var(--rule);
+  }
+  .log .lines{ padding:14px 16px; }
+  .log .ln{ display:grid; grid-template-columns: 56px 70px 1fr; gap:12px; padding:4px 0; }
+  .log .ln span:first-child{ color:var(--ink-soft); }
+  .log .ln span:nth-child(2){
+    text-transform:uppercase; font-weight:700;
+  }
+  .log .ln.ok span:nth-child(2){ color: oklch(45% 0.15 145); }
+  .log .ln.warn span:nth-child(2){ color: var(--hazard); }
+  .log .ln.act span:nth-child(2){ color: var(--rule); background:var(--acid); padding:0 6px; }
+  .log .ln.die span:nth-child(2){ color: var(--paper); background:var(--rule); padding:0 6px; }
+
+  /* ---------- CTA ---------- */
+  section.cta{
+    padding: clamp(56px,9vw,140px) clamp(20px,3vw,44px);
+    display:grid;
+    grid-template-columns: 1fr auto;
+    align-items:end;
+    gap:48px;
+    border-bottom:3px solid var(--rule);
+    position:relative;
+  }
+  section.cta::before{
+    content:"";
+    position:absolute; left:-60px; bottom:-60px;
+    width:280px; height:280px;
+    border:3px solid var(--rule);
+    background:var(--acid);
+    transform:rotate(12deg);
+    z-index:-1;
+  }
+  .cta h2{
+    font-family:"Archivo Black";
+    font-size:clamp(56px,10vw,180px);
+    line-height:.84;
+    letter-spacing:-.035em;
+    margin:0;
+    text-transform:uppercase;
+  }
+  .cta h2 .stk{
+    background:var(--hazard); color:var(--rule);
+    border:3px solid var(--rule);
+    box-shadow: 8px 8px 0 0 var(--rule);
+    padding: 0 .08em;
+    display:inline-block;
+    transform: rotate(-1deg);
+  }
+  .cta .form{
+    border:3px solid var(--rule);
+    background:var(--paper);
+    padding:16px;
+    display:flex; flex-direction:column; gap:10px;
+    min-width: 360px;
+  }
+  .cta label{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .cta input{
+    font: inherit;
+    font-family:"Bricolage Grotesque",sans-serif;
+    font-size:16px;
+    border:3px solid var(--rule);
+    background:var(--paper);
+    padding:14px 14px;
+    width:100%;
+    outline-offset:2px;
+    outline-color:var(--hazard);
+  }
+  .cta .row{
+    display:grid; grid-template-columns: 1fr auto; gap:10px;
+  }
+  .cta .row .btn{ box-shadow: 4px 4px 0 0 var(--rule); }
+  .cta .smallprint{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--rule);
+    color:var(--paper);
+    padding:28px clamp(20px,3vw,44px);
+    display:grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap:32px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+  }
+  footer h5{
+    margin:0 0 12px; color:var(--acid);
+    font-family:"Archivo Black"; font-size:14px; letter-spacing:.04em;
+  }
+  footer a{ color:var(--paper); text-decoration:none; display:block; padding:4px 0; opacity:.85; }
+  footer a:hover{ opacity:1; color:var(--acid); }
+  footer .brand-foot{
+    font-family:"Archivo Black"; font-size:clamp(48px,8vw,120px);
+    line-height:.85; color:var(--paper); letter-spacing:-.03em;
+  }
+  footer .brand-foot small{
+    display:block; font:inherit; font-size:12px; color:var(--acid);
+    letter-spacing:.18em; margin-top:14px;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 1080px){
+    .hero{ grid-template-columns:1fr; }
+    .console{ aspect-ratio:auto; min-height:340px; }
+    section.does{ grid-template-columns:1fr; }
+    section.how{ grid-template-columns:1fr; }
+    section.spec{ grid-template-columns:1fr; }
+    .capabilities{ grid-template-columns: repeat(2,1fr); }
+    .cap{ grid-column:span 1; }
+    .cap:nth-child(3n){ border-right:3px solid var(--rule); }
+    .cap:nth-child(2n){ border-right:none; }
+    .cap.wide{ grid-column:span 2; }
+    .rail{ grid-template-columns: repeat(2,1fr); }
+    .rail > div:nth-child(2){ border-right:none; }
+    .rail > div:nth-child(-n+2){ border-bottom:3px solid var(--rule); }
+    .topbar nav{ display:none; }
+    .topbar{ grid-template-columns: 1fr auto; }
+    section.cta{ grid-template-columns:1fr; }
+    .cta .form{ min-width:auto; }
+    footer{ grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px){
+    .step{ grid-template-columns: 80px 1fr; }
+    .step .badge{ display:none; }
+    .step .n{ font-size:44px; }
+    .hero h1 .stamp{ display:none; }
+    footer{ grid-template-columns:1fr; }
+  }
+
+  ::selection{ background:var(--acid); color:var(--rule); }
+
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <!-- ============ TOP BAR ============ -->
+  <header class="topbar">
+    <div class="mark">
+      <span class="swatch" aria-hidden="true"></span>
+      BUREAU//01
+    </div>
+    <nav aria-label="Primary">
+      <a href="#does">Capabilities</a>
+      <a href="#how">Protocol</a>
+      <a href="#spec">Specification</a>
+      <a href="#book">Field Notes</a>
+    </nav>
+    <div class="meta">
+      <span><span class="dot green" aria-hidden="true"></span> Online · 03 nodes</span>
+      <span>v4.7 / build 11.06</span>
+      <a class="btn ghost" href="#cta" style="padding:8px 14px; font-size:11px; box-shadow:3px 3px 0 0 var(--rule);">Deploy →</a>
+    </div>
+  </header>
+
+  <!-- ============ STATUS STRIP ============ -->
+  <div class="status-strip" aria-hidden="true">
+    <div class="marquee">
+      <span><i>●</i> Operator handoff complete</span>
+      <span><i>●</i> 2,148 tasks closed this week</span>
+      <span><i>●</i> Median resolution 4m 12s</span>
+      <span><i>●</i> Zero hallucinated invoices since March</span>
+      <span><i>●</i> Built in Lyon · Mexico City · Lagos</span>
+      <span><i>●</i> Operator handoff complete</span>
+      <span><i>●</i> 2,148 tasks closed this week</span>
+      <span><i>●</i> Median resolution 4m 12s</span>
+      <span><i>●</i> Zero hallucinated invoices since March</span>
+      <span><i>●</i> Built in Lyon · Mexico City · Lagos</span>
+    </div>
+  </div>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div>
+      <div class="kicker">
+        <span class="tag">FILE NO. 01–B</span>
+        <span>An agent built for people who do the work.</span>
+      </div>
+
+      <h1>
+        <span class="row">Makes</span>
+        <span class="row indent">
+          <span class="strike">Decisions</span>.
+          <span class="stamp" aria-hidden="true">Field<br/>Tested<br/>★ ★ ★</span>
+        </span>
+        <span class="row shift">Reads the</span>
+        <span class="row indent"><span class="underline-acid">Room.</span></span>
+      </h1>
+
+      <p class="lede" style="margin-top:32px;">
+        BUREAU//01 is an autonomous operator that handles the unglamorous half of your business: <strong>inbox triage, reconciliation, vendor chase, drafty contracts.</strong> No avatars. No hand-wavy demos. It just clears the queue and shows its work.
+      </p>
+
+      <div class="ctas">
+        <a class="btn" href="#cta">
+          Deploy your agent
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+        <a class="btn alt" href="#how">
+          Read the protocol
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Right column: brutalist console -->
+    <div class="console" aria-hidden="true">
+      <div class="head">
+        <span>BUREAU//01 · LIVE</span>
+        <span class="pills">
+          <span class="on"></span><span></span><span class="on"></span>
+        </span>
+      </div>
+      <div class="body">
+        <div class="node accent">
+          <span class="pin"></span>
+          <b>Inbox</b>
+          314 → 12
+        </div>
+        <div class="node">
+          <span class="pin"></span>
+          <b>Drafts</b>
+          18 sent
+        </div>
+        <div class="node alert span2">
+          <span class="pin"></span>
+          <b>Escalated</b>
+          02 to operator — vendor PO mismatch
+        </div>
+        <div class="node">
+          <b>Reconciled</b>
+          €48,210
+        </div>
+        <div class="node">
+          <b>Calendar</b>
+          7 holds set
+        </div>
+        <div class="node span2">
+          <b>Next action</b>
+          Draft Q3 vendor renewals · 09:42
+        </div>
+      </div>
+      <div class="foot">
+        <span>NODE 02 · LYON</span>
+        <span class="blink">● RUNNING</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RAIL ============ -->
+  <div class="rail">
+    <div><span>Tasks closed / wk</span><b>2,148</b></div>
+    <div class="gh"><span>Operator hours saved</span><b>11k+</b></div>
+    <div><span>Median resolution</span><b>4m12s</b></div>
+    <div class="or"><span>Teams shipping</span><b>312</b></div>
+  </div>
+
+  <!-- ============ WHAT IT DOES ============ -->
+  <section class="does" id="does">
+    <div>
+      <span class="section-tag">§ 02 · Capabilities</span>
+      <h2>Does the<br/>boring <em>half</em><br/>of the job.</h2>
+      <p style="font-size:15.5px; line-height:1.55; max-width:36ch; margin:28px 0 0;">
+        Six surfaces, one operator. No marketing-speak. Every action gets logged, every output gets a paper trail.
+      </p>
+    </div>
+
+    <div class="capabilities">
+      <div class="cap">
+        <div>
+          <div class="num">§ 02.1</div>
+          <h3>Inbox triage</h3>
+        </div>
+        <p>Sorts, drafts, routes. Flags only what needs your name on it.</p>
+        <div class="glyph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <rect x="3" y="5" width="18" height="14"/>
+            <path d="M3 7l9 7 9-7"/>
+          </svg>
+        </div>
+      </div>
+      <div class="cap green">
+        <div>
+          <div class="num">§ 02.2</div>
+          <h3>Reconciliation</h3>
+        </div>
+        <p>Matches invoices, statements, contracts. Surfaces gaps in plain language.</p>
+        <div class="glyph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <path d="M3 6h12M3 12h18M3 18h9"/>
+            <circle cx="20" cy="6" r="2.4" fill="currentColor"/>
+            <circle cx="16" cy="18" r="2.4" fill="currentColor"/>
+          </svg>
+        </div>
+      </div>
+      <div class="cap">
+        <div>
+          <div class="num">§ 02.3</div>
+          <h3>Vendor chase</h3>
+        </div>
+        <p>Polite, relentless, on-brand. Knows when to stop.</p>
+        <div class="glyph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <path d="M4 4h16v12H7l-3 4z"/>
+            <path d="M8 10h8M8 13h5"/>
+          </svg>
+        </div>
+      </div>
+      <div class="cap orange">
+        <div>
+          <div class="num">§ 02.4</div>
+          <h3>Drafty contracts</h3>
+        </div>
+        <p>Redlines NDAs, MSAs, SOWs against your house style.</p>
+        <div class="glyph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <path d="M6 3h9l5 5v13H6z"/>
+            <path d="M14 3v6h6"/>
+            <path d="M9 14l2 2 5-5"/>
+          </svg>
+        </div>
+      </div>
+      <div class="cap">
+        <div>
+          <div class="num">§ 02.5</div>
+          <h3>Briefing</h3>
+        </div>
+        <p>One page, every morning. The signal, not the digest.</p>
+        <div class="glyph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <rect x="3" y="4" width="18" height="16"/>
+            <path d="M7 9h10M7 13h10M7 17h6"/>
+          </svg>
+        </div>
+      </div>
+      <div class="cap">
+        <div>
+          <div class="num">§ 02.6</div>
+          <h3>Hand-off</h3>
+        </div>
+        <p>Anything ambiguous lands in your queue with a one-line summary.</p>
+        <div class="glyph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <path d="M3 12h13M11 7l5 5-5 5"/>
+            <path d="M19 5v14"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="cap wide">
+        <div>
+          <div class="num">§ 02.X · Custom skills</div>
+          <h3>Or train a new operator in an afternoon.</h3>
+        </div>
+        <a class="btn alt" href="#cta" style="box-shadow:4px 4px 0 0 var(--paper);">
+          Open the workshop
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW ============ -->
+  <section class="how" id="how">
+    <div>
+      <span class="section-tag">§ 03 · Protocol</span>
+      <h2>
+        Four steps.<br/>
+        <span class="out">No magic.</span><br/>
+        No demo<br/>theater.
+      </h2>
+      <p class="cap-copy">
+        Every action is a written instruction, every instruction has a paper trail. If the agent can't show its receipts, the agent doesn't ship.
+      </p>
+      <a class="btn ghost" href="#spec" style="margin-top:8px;">
+        See the spec
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <ol class="steps" style="list-style:none; padding:0; margin:0;">
+      <li class="step">
+        <div class="n">01</div>
+        <div class="copy">
+          <h4>Hand it the keys</h4>
+          <p>Connect your inbox, calendar, accounting, and document store. Read-only by default. Write access is opt-in, per surface.</p>
+        </div>
+        <span class="badge">5 min</span>
+      </li>
+      <li class="step">
+        <div class="n">02</div>
+        <div class="copy">
+          <h4>Teach it your house style</h4>
+          <p>Paste three past emails, one redlined contract, one Slack post. That's the voice. It writes the way you write, or doesn't write at all.</p>
+        </div>
+        <span class="badge">DAY ONE</span>
+      </li>
+      <li class="step">
+        <div class="n">03</div>
+        <div class="copy">
+          <h4>Let it run, in dry mode</h4>
+          <p>For a week, it drafts everything and sends nothing. You approve, edit, or kill. After 200 approvals on a surface, the surface goes live.</p>
+        </div>
+        <span class="badge">SHADOW</span>
+      </li>
+      <li class="step">
+        <div class="n">04</div>
+        <div class="copy">
+          <h4>Get your afternoons back</h4>
+          <p>The boring half is done. The interesting half is yours.</p>
+        </div>
+        <span class="badge">★ ★ ★</span>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============ MANIFESTO ============ -->
+  <section class="shout">
+    <p>
+      We don't<br/>
+      sell <span class="hl">magic</span>.<br/>
+      We sell a<br/>
+      <span class="ul">clean queue</span>.
+    </p>
+    <div class="attribution">
+      <span class="sign">B/</span>
+      <span>Field note 11 · Bureau Operations · Lyon, 2026</span>
+    </div>
+  </section>
+
+  <!-- ============ SPEC / LOG ============ -->
+  <section class="spec" id="spec">
+    <div>
+      <span class="section-tag">§ 04 · Specification</span>
+      <h2>Built like an instrument, not a chatbot.</h2>
+      <p>
+        Deterministic where it can be, accountable where it can't. The agent prefers a small set of well-formed tools over a sprawl of plug-ins. Every decision lives in an append-only log you can read at 2am.
+      </p>
+      <ul style="font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.9; list-style:none; padding:0; margin-top:20px;">
+        <li>—— Self-hostable / on your VPC</li>
+        <li>—— Read-only by default, write per-surface</li>
+        <li>—— SOC 2 type II · ISO 27001 · GDPR</li>
+        <li>—— Models swappable: keep your own</li>
+        <li>—— Every action exportable as PDF receipt</li>
+      </ul>
+    </div>
+
+    <div class="log" role="img" aria-label="Sample activity log from BUREAU//01">
+      <div class="head">
+        <span>BUREAU.LOG · 11.06.2026</span>
+        <span>09:42:18</span>
+      </div>
+      <div class="lines">
+        <div class="ln ok"><span>09:41</span><span>OK</span><span>Inbox sweep · 314 read · 18 drafted</span></div>
+        <div class="ln act"><span>09:41</span><span>DO</span><span>Reply to Atelier Brun · invoice query · tone: house/short</span></div>
+        <div class="ln ok"><span>09:41</span><span>OK</span><span>Calendar hold · Thu 14:00 · 30m · operator</span></div>
+        <div class="ln warn"><span>09:42</span><span>?</span><span>PO 2811 mismatch · €420 short · escalate to operator</span></div>
+        <div class="ln act"><span>09:42</span><span>DO</span><span>Drafted redline: NDA · Maison Vert · 6 edits</span></div>
+        <div class="ln die"><span>09:42</span><span>NO</span><span>Refused: send wire transfer · policy: human only</span></div>
+        <div class="ln ok"><span>09:42</span><span>OK</span><span>Reconciled bank · 47 lines · 0 discrepancies</span></div>
+        <div class="ln act"><span>09:43</span><span>DO</span><span>Composing briefing · 1 page · for 10:00 stand-up</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="cta" id="cta">
+    <h2>
+      Put it<br/>to <span class="stk">work.</span>
+    </h2>
+
+    <form class="form" onsubmit="event.preventDefault();">
+      <label for="email">Operator email</label>
+      <div class="row">
+        <input id="email" type="email" placeholder="you@studio.work" required />
+        <button class="btn" type="submit">Deploy</button>
+      </div>
+      <span class="smallprint">No demo theater. We'll set you up inside 24h.</span>
+    </form>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div>
+      <div class="brand-foot">
+        BUREAU//01
+        <small>An agent that does the work · Est. 2024</small>
+      </div>
+    </div>
+    <div>
+      <h5>Surfaces</h5>
+      <a href="#">Inbox</a>
+      <a href="#">Reconciliation</a>
+      <a href="#">Contracts</a>
+      <a href="#">Briefings</a>
+    </div>
+    <div>
+      <h5>Bureau</h5>
+      <a href="#">Field Notes</a>
+      <a href="#">Operators</a>
+      <a href="#">Trust & Receipts</a>
+      <a href="#">Status</a>
+    </div>
+    <div>
+      <h5>Index</h5>
+      <a href="#">Lyon · HQ</a>
+      <a href="#">Mexico City</a>
+      <a href="#">Lagos</a>
+      <a href="mailto:hello@bureau01.work">hello@bureau01.work</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

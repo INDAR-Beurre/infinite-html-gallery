@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chroma — Design Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: oklch(0.97 0.008 95);
+  --bg-elevated: oklch(0.94 0.01 95);
+  --text: oklch(0.18 0.015 280);
+  --text-muted: oklch(0.45 0.015 280);
+  --coral: oklch(0.65 0.22 25);
+  --blue: oklch(0.55 0.24 260);
+  --lime: oklch(0.82 0.18 130);
+  --coral-soft: oklch(0.88 0.08 25);
+  --blue-soft: oklch(0.85 0.08 260);
+  --lime-soft: oklch(0.93 0.06 130);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Figtree', sans-serif;
+  font-weight: 400;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem clamp(1.5rem, 4vw, 4rem);
+  mix-blend-mode: difference;
+}
+
+nav .logo {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 800;
+  font-size: 1.35rem;
+  letter-spacing: -0.04em;
+  color: oklch(1 0 0);
+}
+
+nav ul {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+nav ul li a {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: oklch(1 0 0);
+  letter-spacing: 0.02em;
+  transition: opacity 0.3s ease-out-quart;
+}
+
+nav ul li a:hover {
+  opacity: 0.7;
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 1fr;
+  place-items: center;
+  padding: clamp(6rem, 12vh, 10rem) clamp(1.5rem, 4vw, 4rem) clamp(3rem, 6vh, 6rem);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-shape {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(clamp(40px, 8vw, 100px));
+  opacity: 0;
+  animation: shapeIn 1.4s ease-out forwards;
+}
+
+.hero-shape:nth-child(1) {
+  width: clamp(300px, 45vw, 700px);
+  height: clamp(300px, 45vw, 700px);
+  background: var(--coral);
+  top: -10%;
+  right: -5%;
+  animation-delay: 0.2s;
+}
+
+.hero-shape:nth-child(2) {
+  width: clamp(250px, 35vw, 550px);
+  height: clamp(250px, 35vw, 550px);
+  background: var(--blue);
+  bottom: 5%;
+  left: -8%;
+  animation-delay: 0.5s;
+}
+
+.hero-shape:nth-child(3) {
+  width: clamp(200px, 25vw, 400px);
+  height: clamp(200px, 25vw, 400px);
+  background: var(--lime);
+  top: 40%;
+  left: 35%;
+  animation-delay: 0.8s;
+}
+
+@keyframes shapeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 28ch;
+}
+
+.hero h1 {
+  font-size: clamp(2.5rem, 7vw, 6rem);
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 1s 0.6s ease-out forwards;
+  line-height: 1.1;
+}
+
+.hero h1 span {
+  display: inline;
+}
+
+.hero p {
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  color: var(--text-muted);
+  max-width: 60ch;
+  margin: 0 auto 2.5rem;
+  opacity: 0;
+  animation: fadeUp 1s 0.9s ease-out forwards;
+  line-height: 1.6;
+}
+
+.hero-cta {
+  display: inline-flex;
+  gap: 1rem;
+  opacity: 0;
+  animation: fadeUp 1s 1.2s ease-out forwards;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 2rem;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s ease-out-quart, box-shadow 0.3s ease-out-quart;
+  letter-spacing: -0.01em;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: var(--text);
+  color: var(--bg);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 8px 30px oklch(0.18 0.015 280 / 0.25);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1.5px solid oklch(0.7 0.015 280);
+}
+
+.btn-secondary:hover {
+  border-color: var(--text);
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* MARQUEE */
+.marquee-section {
+  padding: 2rem 0;
+  border-top: 1px solid oklch(0.88 0.01 280);
+  border-bottom: 1px solid oklch(0.88 0.01 280);
+  overflow: hidden;
+  background: var(--bg-elevated);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+
+.marquee-track span {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  white-space: nowrap;
+  padding: 0 1.5rem;
+  color: var(--text-muted);
+  letter-spacing: -0.02em;
+}
+
+.marquee-track span.dot {
+  color: var(--coral);
+  padding: 0 0.75rem;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* STATEMENT */
+.statement {
+  padding: clamp(5rem, 12vh, 10rem) clamp(1.5rem, 4vw, 4rem);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(3rem, 6vh, 6rem);
+}
+
+.statement-inner {
+  max-width: 900px;
+}
+
+.statement h2 {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+
+.statement h2 em {
+  font-style: normal;
+  color: var(--coral);
+}
+
+.statement p {
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  color: var(--text-muted);
+  max-width: 55ch;
+  line-height: 1.7;
+}
+
+/* WORK */
+.work {
+  padding: clamp(3rem, 6vh, 6rem) clamp(1.5rem, 4vw, 4rem) clamp(5rem, 10vh, 8rem);
+}
+
+.work-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: clamp(2.5rem, 5vh, 4rem);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.work-header h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+}
+
+.work-header a {
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-bottom: 1.5px solid var(--text);
+  padding-bottom: 2px;
+  transition: opacity 0.3s ease-out-quart;
+}
+
+.work-header a:hover {
+  opacity: 0.6;
+}
+
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: clamp(1rem, 2vw, 1.75rem);
+}
+
+.work-card {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--bg-elevated);
+}
+
+.work-card:nth-child(1) {
+  grid-column: 1 / 8;
+  aspect-ratio: 16 / 10;
+}
+
+.work-card:nth-child(2) {
+  grid-column: 8 / 13;
+  aspect-ratio: 4 / 5;
+}
+
+.work-card:nth-child(3) {
+  grid-column: 1 / 5;
+  aspect-ratio: 3 / 4;
+}
+
+.work-card:nth-child(4) {
+  grid-column: 5 / 13;
+  aspect-ratio: 21 / 9;
+}
+
+.work-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease-out-quart, opacity 0.4s ease-out;
+  opacity: 0;
+}
+
+.work-card img.loaded {
+  opacity: 1;
+}
+
+.work-card:hover img {
+  transform: scale(1.04);
+}
+
+.work-card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: clamp(1rem, 2vw, 1.75rem);
+  background: linear-gradient(to top, oklch(0.15 0.015 280 / 0.85), transparent);
+  color: oklch(0.97 0.008 95);
+}
+
+.work-card-overlay h3 {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.work-card-overlay p {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+/* SERVICES */
+.services {
+  padding: clamp(5rem, 10vh, 8rem) clamp(1.5rem, 4vw, 4rem);
+  background: var(--text);
+  color: var(--bg);
+}
+
+.services-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.services h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  margin-bottom: clamp(3rem, 6vh, 5rem);
+  color: var(--bg);
+}
+
+.services-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(2rem, 4vw, 3.5rem);
+}
+
+.service-item {
+  border-top: 1px solid oklch(0.35 0.015 280);
+  padding-top: 1.5rem;
+}
+
+.service-number {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 800;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.service-item:nth-child(1) .service-number { color: var(--coral); }
+.service-item:nth-child(2) .service-number { color: var(--blue); }
+.service-item:nth-child(3) .service-number { color: var(--lime); }
+.service-item:nth-child(4) .service-number { color: var(--coral); }
+
+.service-item h3 {
+  font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--bg);
+}
+
+.service-item p {
+  font-size: 0.95rem;
+  color: oklch(0.7 0.015 280);
+  line-height: 1.65;
+  max-width: 45ch;
+}
+
+/* TESTIMONIAL */
+.testimonial {
+  padding: clamp(5rem, 12vh, 10rem) clamp(1.5rem, 4vw, 4rem);
+  text-align: center;
+  position: relative;
+}
+
+.testimonial::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(250px, 40vw, 600px);
+  height: clamp(250px, 40vw, 600px);
+  background: var(--lime-soft);
+  border-radius: 50%;
+  filter: blur(clamp(60px, 10vw, 120px));
+  z-index: 0;
+}
+
+.testimonial blockquote {
+  position: relative;
+  z-index: 1;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(1.5rem, 3.5vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.25;
+  max-width: 18ch;
+  margin: 0 auto 2rem;
+  letter-spacing: -0.02em;
+}
+
+.testimonial cite {
+  position: relative;
+  z-index: 1;
+  font-style: normal;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.testimonial cite strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* CTA */
+.cta {
+  padding: clamp(5rem, 12vh, 10rem) clamp(1.5rem, 4vw, 4rem);
+  text-align: center;
+  background: var(--coral);
+  color: oklch(0.97 0.008 95);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -10%;
+  width: clamp(300px, 50vw, 800px);
+  height: clamp(300px, 50vw, 800px);
+  background: oklch(0.75 0.18 25);
+  border-radius: 50%;
+  filter: blur(clamp(60px, 10vw, 140px));
+}
+
+.cta h2 {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(2.5rem, 7vw, 6rem);
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.04em;
+}
+
+.cta p {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  max-width: 45ch;
+  margin: 0 auto 2.5rem;
+  opacity: 0.9;
+}
+
+.cta .btn {
+  position: relative;
+  z-index: 1;
+  background: oklch(0.97 0.008 95);
+  color: var(--coral);
+}
+
+.cta .btn:hover {
+  box-shadow: 0 8px 40px oklch(0.15 0.015 280 / 0.3);
+}
+
+/* FOOTER */
+footer {
+  padding: clamp(3rem, 6vh, 5rem) clamp(1.5rem, 4vw, 4rem);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: start;
+  border-top: 1px solid oklch(0.88 0.01 280);
+}
+
+.footer-brand {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.04em;
+  margin-bottom: 0.5rem;
+}
+
+.footer-copy {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.footer-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.footer-links a {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: color 0.3s ease-out-quart;
+}
+
+.footer-links a:hover {
+  color: var(--text);
+}
+
+/* SCROLL REVEAL */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.05s; }
+.reveal-delay-2 { transition-delay: 0.1s; }
+.reveal-delay-3 { transition-delay: 0.15s; }
+.reveal-delay-4 { transition-delay: 0.2s; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  nav ul {
+    display: none;
+  }
+
+  .work-card:nth-child(1),
+  .work-card:nth-child(2),
+  .work-card:nth-child(3),
+  .work-card:nth-child(4) {
+    grid-column: 1 / -1;
+    aspect-ratio: 16 / 10;
+  }
+
+  .work-card:nth-child(3) {
+    aspect-ratio: 4 / 3;
+  }
+
+  footer {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-links {
+    gap: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .marquee-track {
+    animation: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">Chroma</a>
+  <ul>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-shape"></div>
+    <div class="hero-shape"></div>
+    <div class="hero-shape"></div>
+  </div>
+  <div class="hero-content">
+    <h1>
+      <span>We design what color feels like</span>
+    </h1>
+    <p>A studio at the intersection of brand, interface, and the spaces between.</p>
+    <div class="hero-cta">
+      <a href="#work" class="btn btn-primary">See our work</a>
+      <a href="#contact" class="btn btn-secondary">Get in touch</a>
+    </div>
+  </div>
+</section>
+
+<section class="marquee-section" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Brand Identity</span><span class="dot">●</span>
+    <span>Web Design</span><span class="dot">●</span>
+    <span>Motion</span><span class="dot">●</span>
+    <span>Art Direction</span><span class="dot">●</span>
+    <span>Design Systems</span><span class="dot">●</span>
+    <span>Creative Strategy</span><span class="dot">●</span>
+    <span>Brand Identity</span><span class="dot">●</span>
+    <span>Web Design</span><span class="dot">●</span>
+    <span>Motion</span><span class="dot">●</span>
+    <span>Art Direction</span><span class="dot">●</span>
+    <span>Design Systems</span><span class="dot">●</span>
+    <span>Creative Strategy</span><span class="dot">●</span>
+  </div>
+</section>
+
+<section class="statement">
+  <div class="statement-inner reveal">
+    <h2>We believe a brand's <em>color</em> is its most honest signal.</h2>
+    <p>Not the hex code. The feeling. The split-second recognition when someone lands on your page and knows, before reading a word, who you are. We build surfaces that make that moment inevitable.</p>
+  </div>
+</section>
+
+<section class="work" id="work">
+  <div class="work-header reveal">
+    <h2>Selected work</h2>
+    <a href="#">View all projects</a>
+  </div>
+  <div class="work-grid">
+    <div class="work-card reveal reveal-delay-1">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&w=1200&q=80" alt="Vibrant abstract color study with layered geometric forms" decoding="async">
+      <div class="work-card-overlay">
+        <h3>Solstice Festival</h3>
+        <p>Brand identity & campaign</p>
+      </div>
+    </div>
+    <div class="work-card reveal reveal-delay-2">
+      <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=800&q=80" alt="Bold typographic poster design with saturated colors" loading="lazy" decoding="async">
+      <div class="work-card-overlay">
+        <h3>Forma Magazine</h3>
+        <p>Art direction</p>
+      </div>
+    </div>
+    <div class="work-card reveal reveal-delay-3">
+      <img src="https://images.unsplash.com/photo-1550859492-d5da9d8e45f3?auto=format&fit=crop&w=800&q=80" alt="Colorful design workspace with paint swatches and materials" loading="lazy" decoding="async">
+      <div class="work-card-overlay">
+        <h3>Pigment App</h3>
+        <p>Product design</p>
+      </div>
+    </div>
+    <div class="work-card reveal reveal-delay-4">
+      <img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1400&q=80" alt="Abstract fluid art with flowing gradients of color" loading="lazy" decoding="async">
+      <div class="work-card-overlay">
+        <h3>Flux Conference</h3>
+        <p>Visual identity & web</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="services-inner">
+    <h2 class="reveal">What we do</h2>
+    <div class="services-list">
+      <div class="service-item reveal reveal-delay-1">
+        <div class="service-number">01</div>
+        <h3>Brand Identity</h3>
+        <p>Name, logo, color, type, voice. The full system that makes a brand unmistakably itself across every surface.</p>
+      </div>
+      <div class="service-item reveal reveal-delay-2">
+        <div class="service-number">02</div>
+        <h3>Web & Interface</h3>
+        <p>Sites and products built to production quality. Responsive, accessible, fast. Design that ships, not just presents.</p>
+      </div>
+      <div class="service-item reveal reveal-delay-3">
+        <div class="service-number">03</div>
+        <h3>Motion & Film</h3>
+        <p>From micro-interactions to campaign films. Motion that clarifies hierarchy and gives a brand its kinetic voice.</p>
+      </div>
+      <div class="service-item reveal reveal-delay-4">
+        <div class="service-number">04</div>
+        <h3>Creative Strategy</h3>
+        <p>Positioning, messaging, visual territory. The thinking before the making that ensures the making matters.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonial">
+  <blockquote class="reveal">
+    They didn't just redesign our site. They redesigned how people feel when they find us.
+  </blockquote>
+  <cite class="reveal reveal-delay-1">
+    <strong>Maren Voss</strong>, Head of Brand at Solstice
+  </cite>
+</section>
+
+<section class="cta" id="contact">
+  <h2 class="reveal">Let's make<br>something bold</h2>
+  <p class="reveal reveal-delay-1">Tell us what you're building. We'll tell you what it could feel like.</p>
+  <a href="mailto:hello@chroma.studio" class="btn reveal reveal-delay-2">Start a project</a>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-brand">Chroma</div>
+    <p class="footer-copy">2026 Chroma Studio. All rights reserved.</p>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#">Twitter</a></li>
+    <li><a href="#">Instagram</a></li>
+    <li><a href="#">Dribbble</a></li>
+    <li><a href="#">LinkedIn</a></li>
+  </ul>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, {
+  threshold: 0.1,
+  rootMargin: '0px 0px -40px 0px'
+});
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+document.querySelectorAll('.work-card img').forEach(img => {
+  if (img.complete) {
+    img.classList.add('loaded');
+  } else {
+    img.addEventListener('load', () => img.classList.add('loaded'));
+    img.addEventListener('error', () => img.classList.add('loaded'));
+  }
+});
+</script>
+
+<!-- impeccable-live-start -->
+<script src="http://localhost:8400/live.js"></script>
+<!-- impeccable-live-end -->
+</body>
+</html>

@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NutriStaple-9™ — Standardized Synthetic Nutrient Suspension | Regulatory Dossier</title>
+<style>
+  /* === RESET & BASE === */
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border-radius: 0;
+  }
+
+  :root {
+    --black: #000000;
+    --white: #FFFFFF;
+    --clinical-blue: #7B98A8;
+    --border-weight: 2px;
+    --border-heavy: 3px;
+    --mono: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+  }
+
+  html {
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background: var(--white);
+    color: var(--black);
+    font-family: var(--mono);
+    line-height: 1.45;
+    letter-spacing: 0.01em;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0;
+    border-left: var(--border-heavy) solid var(--black);
+    border-right: var(--border-heavy) solid var(--black);
+    min-height: 100vh;
+  }
+
+  /* === DOCUMENT HEADER === */
+  .document-header {
+    border-bottom: var(--border-heavy) solid var(--black);
+    padding: 1.6rem 2rem 1.2rem;
+  }
+
+  .document-header__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .document-id {
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--black);
+    line-height: 1.6;
+  }
+
+  .document-id strong {
+    font-weight: 700;
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+  }
+
+  .registration-marks {
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+  }
+
+  .reg-mark {
+    width: 24px;
+    height: 24px;
+    border: var(--border-weight) solid var(--black);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .reg-mark::before {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border: 1.5px solid var(--black);
+  }
+
+  .reg-mark::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 1.5px;
+    background: var(--black);
+    top: 11px;
+  }
+
+  .product-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-top: 1.4rem;
+    line-height: 1.1;
+  }
+
+  .product-title sup {
+    font-size: 0.5rem;
+    letter-spacing: 0.2em;
+    vertical-align: super;
+    margin-left: 0.15em;
+  }
+
+  .product-subtitle {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+    color: var(--black);
+    font-weight: 500;
+  }
+
+  .specs-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-top: 1rem;
+    border-top: var(--border-weight) solid var(--black);
+    border-bottom: var(--border-weight) solid var(--black);
+  }
+
+  .specs-strip__item {
+    flex: 1;
+    min-width: 120px;
+    padding: 0.55rem 0.8rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-right: var(--border-weight) solid var(--black);
+    line-height: 1.5;
+  }
+
+  .specs-strip__item:last-child {
+    border-right: none;
+  }
+
+  .specs-strip__item span {
+    display: block;
+    font-weight: 700;
+    font-size: 0.65rem;
+  }
+
+  /* === SECTION DIVIDER === */
+  .section-divider {
+    height: 8px;
+    background: var(--black);
+    border: none;
+  }
+
+  /* === GENERIC SECTION === */
+  .section {
+    border-bottom: var(--border-heavy) solid var(--black);
+    padding: 2rem;
+  }
+
+  .section__header {
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: var(--border-weight) solid var(--black);
+    display: inline-block;
+  }
+
+  .section__body {
+    font-size: 0.78rem;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+    max-width: 72ch;
+  }
+
+  .section__body p {
+    margin-bottom: 0.85rem;
+  }
+
+  .section__body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .section__body .footnote {
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    color: var(--black);
+    margin-top: 0.8rem;
+    border-top: var(--border-weight) solid var(--black);
+    padding-top: 0.5rem;
+  }
+
+  /* === TWO-COLUMN LAYOUT === */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-bottom: var(--border-heavy) solid var(--black);
+  }
+
+  .two-col__left,
+  .two-col__right {
+    padding: 2rem;
+  }
+
+  .two-col__left {
+    border-right: var(--border-heavy) solid var(--black);
+  }
+
+  /* === SPEC TABLE === */
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+  }
+
+  .spec-table th,
+  .spec-table td {
+    border: var(--border-weight) solid var(--black);
+    padding: 0.45rem 0.6rem;
+    text-align: left;
+    font-weight: 400;
+  }
+
+  .spec-table th {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.56rem;
+    letter-spacing: 0.16em;
+    background: var(--black);
+    color: var(--white);
+  }
+
+  /* === BARCODE PATTERN === */
+  .barcode-placeholder {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: flex-end;
+    gap: 1px;
+    padding: 0.5rem 0;
+  }
+
+  .barcode-line {
+    background: var(--black);
+    flex: 1;
+    min-width: 2px;
+  }
+
+  .barcode-line--tall   { height: 100%; }
+  .barcode-line--med    { height: 72%; }
+  .barcode-line--short  { height: 48%; }
+  .barcode-line--tiny   { height: 28%; }
+
+  .barcode-label {
+    font-size: 0.5rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+
+  /* === X PLACEHOLDER === */
+  .x-placeholder {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    border: var(--border-weight) solid var(--black);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .x-placeholder::before,
+  .x-placeholder::after {
+    content: '';
+    position: absolute;
+    background: var(--black);
+  }
+
+  .x-placeholder::before {
+    width: 60%;
+    height: var(--border-weight);
+    transform: rotate(28deg);
+  }
+
+  .x-placeholder::after {
+    width: 60%;
+    height: var(--border-weight);
+    transform: rotate(-28deg);
+  }
+
+  .x-placeholder__label {
+    position: absolute;
+    bottom: 0.4rem;
+    font-size: 0.5rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  /* === WARNING CALL-OUT === */
+  .warning-box {
+    border: var(--border-heavy) solid var(--clinical-blue);
+    padding: 1.2rem 1.4rem;
+    margin-top: 1.2rem;
+  }
+
+  .warning-box__header {
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--clinical-blue);
+    margin-bottom: 0.5rem;
+  }
+
+  .warning-box__body {
+    font-size: 0.68rem;
+    line-height: 1.6;
+    letter-spacing: 0.03em;
+  }
+
+  /* === ACTION BUTTON === */
+  .action-area {
+    padding: 2.5rem 2rem;
+    border-bottom: var(--border-heavy) solid var(--black);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .action-button {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 0.85rem 2rem;
+    border: var(--border-heavy) solid var(--clinical-blue);
+    background: transparent;
+    color: var(--clinical-blue);
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .action-button:hover {
+    background: var(--clinical-blue);
+    color: var(--white);
+  }
+
+  .action-button:active {
+    background: var(--black);
+    border-color: var(--black);
+    color: var(--white);
+  }
+
+  .action-legal {
+    font-size: 0.52rem;
+    letter-spacing: 0.1em;
+    line-height: 1.5;
+    max-width: 56ch;
+  }
+
+  /* === DOCUMENT FOOTER === */
+  .document-footer {
+    padding: 1.2rem 2rem;
+    font-size: 0.56rem;
+    letter-spacing: 0.1em;
+    line-height: 1.7;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border-top: var(--border-weight) solid var(--black);
+  }
+
+  .document-footer__col {
+    flex: 1;
+    min-width: 180px;
+  }
+
+  .document-footer strong {
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 720px) {
+    body {
+      border-left: var(--border-weight) solid var(--black);
+      border-right: var(--border-weight) solid var(--black);
+    }
+
+    .two-col {
+      grid-template-columns: 1fr;
+    }
+
+    .two-col__left {
+      border-right: none;
+      border-bottom: var(--border-heavy) solid var(--black);
+    }
+
+    .section,
+    .two-col__left,
+    .two-col__right,
+    .action-area {
+      padding: 1.4rem 1.2rem;
+    }
+
+    .document-header {
+      padding: 1.2rem 1.2rem 1rem;
+    }
+
+    .product-title {
+      font-size: 1.2rem;
+    }
+
+    .specs-strip__item {
+      min-width: 100px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== DOCUMENT HEADER ===== -->
+<header class="document-header">
+  <div class="document-header__top">
+    <div class="document-id">
+      <strong>Document ID: NS9-REG-2026-0047-A</strong>
+      Regulatory Dossier — Section 1: Product Identification<br>
+      Revision: 04 &nbsp;|&nbsp; Date: 2026-06-07 &nbsp;|&nbsp; Classification: UNRESTRICTED<br>
+      Authority: Global Nutrition Standards Board (GNSB) &mdash; Directive 884.12(c)
+    </div>
+    <div class="registration-marks">
+      <div class="reg-mark" title="Registration Mark — Alignment Target"></div>
+      <div class="reg-mark" title="Registration Mark — Alignment Target"></div>
+    </div>
+  </div>
+
+  <h1 class="product-title">NutriStaple-9<sup>™</sup></h1>
+  <p class="product-subtitle">Standardized Synthetic Nutrient Suspension &bull; Formulation 9.4.1-L</p>
+
+  <div class="specs-strip">
+    <div class="specs-strip__item"><span>Net Mass</span>1,000 g ± 2 g</div>
+    <div class="specs-strip__item"><span>Caloric Density</span>4.12 kcal/g</div>
+    <div class="specs-strip__item"><span>Water Activity</span>a<sub>w</sub> ≤ 0.61</div>
+    <div class="specs-strip__item"><span>Shelf Stability</span>48 months at 22°C</div>
+    <div class="specs-strip__item"><span>Lot Trace</span>L9-6241-BX7</div>
+  </div>
+</header>
+
+<hr class="section-divider">
+
+<!-- ===== INDICATION ===== -->
+<section class="section" id="indication">
+  <h2 class="section__header">1. Indication</h2>
+  <div class="section__body">
+    <p>NutriStaple-9™ is indicated for the complete nutritional maintenance of adult humans (≥ 18 years of age) in circumstances where conventional food acquisition, preparation, or consumption is infeasible, inadvisable, or logistically contraindicated. It is formulated to meet or exceed the macronutrient and micronutrient reference intake values established under GNSB Directive 884.12(c), Schedule A, without reliance on any agriculturally derived input stream.</p>
+    <p>This formulation is not a dietary supplement. It is a total nutrition replacement. When administered as the sole source of caloric intake, NutriStaple-9™ sustains baseline metabolic function for a period not exceeding 540 consecutive days, after which a supervised dietary reintroduction protocol is mandated per GNSB Directive 884.12(c), Annex IV.</p>
+    <p class="footnote">This product has not been evaluated for use in pediatric populations, gestating individuals, or persons with diagnosed metabolic disorders of the urea cycle, phenylketonuria, or maple syrup urine disease. Refer to Contraindications (§ 5).</p>
+  </div>
+</section>
+
+<!-- ===== TWO-COLUMN: ACTIVE MECHANISMS + VISUAL ===== -->
+<div class="two-col">
+  <div class="two-col__left" id="mechanisms">
+    <h2 class="section__header">2. Active Mechanisms</h2>
+    <div class="section__body">
+      <p>NutriStaple-9™ operates through four parallel delivery vectors:</p>
+      <p><strong>(a) Pre-Hydrolyzed Macronutrient Matrix.</strong> Proteins are reduced to constituent di- and tri-peptides via controlled enzymatic cleavage. Long-chain fatty acids are micro-emulsified with a synthetic phospholipid monolayer (DPPC-analogue) at a mean droplet diameter of 0.4 µm. Carbohydrates are supplied as maltodextrin (DE 12) and crystalline D-glucose in a 3:1 mass ratio.</p>
+      <p><strong>(b) Chelated Micronutrient Payload.</strong> All mineral species (Ca, Mg, Fe, Zn, Se, Cu, Mn, Cr, Mo, I) are presented as bis-glycinate chelates or equivalent bioavailable coordination complexes suspended in a pH-buffered aqueous medium (pH 6.8 ± 0.1).</p>
+      <p><strong>(c) Stabilized Vitamin Ensemble.</strong> Fat-soluble vitamins (A, D₂, E, K₁) are microencapsulated in a synthetic amylose shell resistant to oxidation and photodegradation. Water-soluble vitamins (B₁, B₂, B₃, B₅, B₆, B₇, B₉, B₁₂, C) are stabilized as crystalline suspensions in a low-water-activity matrix.</p>
+      <p><strong>(d) Gastric Transit Modulation.</strong> A 0.8% (w/w) addition of synthetic methylcellulose (viscosity grade: 4,000 cP at 2% aqueous) ensures controlled gastric emptying and mitigates osmotic diarrhea at full-dose administration.</p>
+    </div>
+  </div>
+
+  <div class="two-col__right">
+    <h2 class="section__header">3. Visual Reference</h2>
+    <div class="x-placeholder" aria-label="Product appearance — homogenous beige suspension">
+      <span class="x-placeholder__label">FIG. 1 — DELETED PER GNSB 884.12(c) § 7.2</span>
+    </div>
+    <p style="font-size:0.58rem;letter-spacing:0.1em;margin-top:0.6rem;line-height:1.5;">Visual depiction of product appearance is not authorized under current labeling regulations. The formulation presents as a homogenous, beige-to-tan suspension with a viscosity of 1,200–1,800 cP at 20°C. No visible phase separation shall be present at the time of administration.</p>
+  </div>
+</div>
+
+<!-- ===== SPECIFICATIONS TABLE ===== -->
+<section class="section" id="specifications">
+  <h2 class="section__header">4. Formulation Specifications</h2>
+
+  <table class="spec-table">
+    <thead>
+      <tr>
+        <th>Component</th>
+        <th>Concentration (per 100 g)</th>
+        <th>% RDI Met</th>
+        <th>Analytical Method</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Protein (as peptide hydrolysate)</td>
+        <td>15.2 g ± 0.3 g</td>
+        <td>100%</td>
+        <td>Kjeldahl (AOAC 984.13)</td>
+      </tr>
+      <tr>
+        <td>Total Lipid (emulsified)</td>
+        <td>7.8 g ± 0.2 g</td>
+        <td>100%</td>
+        <td>Gravimetric (AOAC 922.06)</td>
+      </tr>
+      <tr>
+        <td>Total Carbohydrate</td>
+        <td>68.4 g ± 0.5 g</td>
+        <td>100%</td>
+        <td>HPLC-RI (AOAC 982.14)</td>
+      </tr>
+      <tr>
+        <td>Dietary Fiber (methylcellulose)</td>
+        <td>2.8 g ± 0.1 g</td>
+        <td>100%</td>
+        <td>Enzymatic-gravimetric</td>
+      </tr>
+      <tr>
+        <td>Ash (mineral residue)</td>
+        <td>3.1 g ± 0.1 g</td>
+        <td>&mdash;</td>
+        <td>Gravimetric (550°C)</td>
+      </tr>
+      <tr>
+        <td>Moisture</td>
+        <td>≤ 2.7 g</td>
+        <td>&mdash;</td>
+        <td>Karl Fischer titration</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:0.56rem;letter-spacing:0.1em;margin-top:0.8rem;line-height:1.5;">All values represent mean ± 2σ from a minimum of 12 independent production lots. RDI = Reference Daily Intake per GNSB Directive 884.12(c), Schedule A, adult male (70 kg reference mass). Analytical methods are cited per AOAC International, 22nd Edition (2023).</p>
+</section>
+
+<!-- ===== DOSAGE / ADMINISTRATION ===== -->
+<section class="section" id="dosage">
+  <h2 class="section__header">5. Dosage / Administration</h2>
+  <div class="section__body">
+    <p><strong>Standard Adult Protocol (70 kg reference mass):</strong> Administer 243 g of NutriStaple-9™ suspension per 24-hour period, divided into three equal aliquots of 81 g each, at intervals not less than 5 hours and not more than 9 hours apart. Each aliquot shall be reconstituted with potable water at a ratio of 1:2.5 (w/w) immediately prior to ingestion. The resulting mixture shall be agitated for no fewer than 30 seconds and consumed within 15 minutes of reconstitution.</p>
+    <p><strong>Initiation Protocol:</strong> For first-time recipients, a 72-hour graduated introduction is required. Day 1: one-third standard aliquot (27 g) administered once. Day 2: two-thirds standard aliquot (54 g) administered twice, 8 hours apart. Day 3: full protocol as described above. Monitoring for gastrointestinal distress is required throughout the initiation window.</p>
+    <p><strong>Discontinuation:</strong> Abrupt cessation after ≥ 14 days of exclusive NutriStaple-9™ consumption is contraindicated. A 7-day graduated reintroduction of conventional foodstuffs is required per GNSB Directive 884.12(c), Annex IV, Protocol R-3.</p>
+  </div>
+</section>
+
+<!-- ===== BARCODE SEPARATOR ===== -->
+<section class="section" style="padding:1rem 2rem;" aria-hidden="true">
+  <div class="barcode-placeholder">
+    <div class="barcode-line barcode-line--tall"></div>
+    <div class="barcode-line barcode-line--short"></div>
+    <div class="barcode-line barcode-line--tall"></div>
+    <div class="barcode-line barcode-line--med"></div>
+    <div class="barcode-line barcode-line--tiny"></div>
+    <div class="barcode-line barcode-line--tall"></div>
+    <div class="barcode-line barcode-line--short"></div>
+    <div class="barcode-line barcode-line--med"></div>
+    <div class="barcode-line barcode-line--tall"></div>
+    <div class="barcode-line barcode-line--tiny"></div>
+    <div class="barcode-line barcode-line--tall"></div>
+    <div class="barcode-line barcode-line--med"></div>
+    <div class="barcode-line barcode-line--short"></div>
+    <div class="barcode-line barcode-line--tall"></div>
+    <div class="barcode-line barcode-line--tiny"></div>
+    <div class="barcode-line barcode-line--med"></div>
+    <div class="barcode-line barcode-line--tall"></div>
+    <div class="barcode-line barcode-line--short"></div>
+    <div class="barcode-line barcode-line--tall"></div>
+    <div class="barcode-line barcode-line--med"></div>
+    <div class="barcode-line barcode-line--tiny"></div>
+    <div class="barcode-line barcode-line--tall"></div>
+    <div class="barcode-line barcode-line--short"></div>
+    <div class="barcode-line barcode-line--med"></div>
+    <div class="barcode-line barcode-line--tall"></div>
+    <div class="barcode-line barcode-line--tiny"></div>
+    <div class="barcode-line barcode-line--tall"></div>
+    <div class="barcode-line barcode-line--med"></div>
+    <div class="barcode-line barcode-line--short"></div>
+    <div class="barcode-line barcode-line--tall"></div>
+  </div>
+  <p class="barcode-label">Lot L9-6241-BX7 &nbsp;|&nbsp; Exp: 2030-06 &nbsp;|&nbsp; MFG: Facility 12-C, Sector 7</p>
+</section>
+
+<!-- ===== WARNINGS / CONTRAINDICATIONS ===== -->
+<section class="section" id="warnings">
+  <h2 class="section__header">6. Warnings &amp; Contraindications</h2>
+  <div class="section__body">
+    <p><strong>Absolute Contraindications:</strong> Hereditary fructose intolerance (due to trace sorbitol from the encapsulation matrix); severe hepatic insufficiency (Child-Pugh Class C); untreated hypothyroidism (may reduce basal metabolic rate below the caloric provision threshold of 1,000 kcal/day for a 70 kg reference mass).</p>
+    <p><strong>Adverse Reactions (Observed in Phase III Trials, n = 4,281):</strong> Mild osmotic diarrhea (14.2% of recipients, resolving within 72 hours of continued use); transient cephalalgia (6.7%); oral mucosal desquamation (2.1%, attributed to the mildly acidic pH of reconstituted suspension); urticaria of unknown etiology (0.4%). No serious adverse events were attributed to the formulation in the registration dataset.</p>
+
+    <div class="warning-box">
+      <div class="warning-box__header">⚠ Regulatory Warning</div>
+      <div class="warning-box__body">
+        Prolonged exclusive reliance on NutriStaple-9™ (exceeding 540 consecutive days) without supervised dietary reintroduction is associated with a statistically significant reduction in gut microbiome diversity (Shannon index reduction of 34% ± 8%, p &lt; 0.001) and an elevated risk of micronutrient imbalance due to chelation-compound accumulation in adipose tissue. Mandatory monitoring of serum trace element panels at 90-day intervals is required for any administration period exceeding 180 days.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ACKNOWLEDGE AND PROCEED ===== -->
+<div class="action-area" id="action">
+  <a href="#" class="action-button" role="button" aria-label="Acknowledge regulatory terms and submit requisition for NutriStaple-9">
+    Acknowledge and Proceed
+  </a>
+  <p class="action-legal">
+    By selecting the above, the requisitioning party acknowledges that they have read, understood, and accepted the terms set forth in GNSB Directive 884.12(c), including all appendices, annexes, and subsequent amendments. Submission of a requisition order does not constitute approval; all orders are subject to regulatory review and lot-availability verification. Unauthorized resale, redistribution, or off-label administration of NutriStaple-9™ is a Class B regulatory violation under GNSB Statute 221.7.
+  </p>
+</div>
+
+<!-- ===== DOCUMENT FOOTER ===== -->
+<footer class="document-footer">
+  <div class="document-footer__col">
+    <strong>Manufacturer</strong>
+    NutriStaple Synthesis Division<br>
+    Global Nutrient Consortium, Ltd.<br>
+    Facility 12-C, Sector 7<br>
+    Registration No. GNC-NS9-0012
+  </div>
+  <div class="document-footer__col">
+    <strong>Regulatory Authority</strong>
+    Global Nutrition Standards Board<br>
+    Dossier Reference: NS9-REG-2026-0047<br>
+    Certification: Pending Renewal (2026-Q3)
+  </div>
+  <div class="document-footer__col">
+    <strong>Document Control</strong>
+    Classification: UNRESTRICTED<br>
+    This document is valid for 12 months from revision date.<br>
+    Verify current revision at: reg.gnsb.int/ns9-0047
+  </div>
+</footer>
+
+<script>
+  /* === CLINICAL ACTION HANDLER === */
+  document.querySelector('.action-button').addEventListener('click', function(e) {
+    e.preventDefault();
+    this.textContent = 'REQUISITION RECORDED';
+    this.style.background = 'var(--clinical-blue)';
+    this.style.color = 'var(--white)';
+    this.style.pointerEvents = 'none';
+
+    const legal = document.querySelector('.action-legal');
+    const originalText = legal.textContent;
+    legal.textContent = 'Requisition reference NS9-REQ-' + Date.now().toString(36).toUpperCase() + ' has been logged. A confirmation dossier will be transmitted to the registered contact address within 3–5 business days. No further action is required at this time.';
+    legal.style.fontWeight = '700';
+    legal.style.letterSpacing = '0.08em';
+  });
+</script>
+
+</body>
+</html>

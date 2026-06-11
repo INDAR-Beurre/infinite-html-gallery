@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>the rain library / forest precipitation register</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #f5f2eb;
+      --fg: #2c2e2c;
+      --fg-muted: #737873;
+      --accent: #5e6b5f;
+      --border: rgba(44, 46, 44, 0.08);
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    #visuals-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Intro Overlay */
+    #intro-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: var(--bg);
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 2.5s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    #intro-overlay.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .intro-content {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      max-width: 500px;
+      padding: 2rem;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeInIntro 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      animation-delay: 0.5s;
+    }
+
+    @keyframes fadeInIntro {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .intro-title {
+      font-family: var(--font-serif);
+      font-size: 2.8rem;
+      font-weight: 300;
+      margin: 0;
+      color: var(--fg);
+      letter-spacing: -0.01em;
+    }
+
+    .intro-subtitle {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--fg-muted);
+      margin: 0;
+      font-weight: 300;
+    }
+
+    .enter-btn {
+      background: none;
+      border: none;
+      margin-top: 1rem;
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: var(--fg);
+      cursor: pointer;
+      border-bottom: 1px solid rgba(44, 46, 44, 0.3);
+      padding-bottom: 4px;
+      transition: border-color 0.4s ease, color 0.4s ease;
+      outline: none;
+    }
+
+    .enter-btn:hover {
+      color: var(--fg-muted);
+      border-color: rgba(44, 46, 44, 0.1);
+    }
+
+    /* Main Grid Structure */
+    .grid-container {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      height: 100vh;
+      position: relative;
+      z-index: 5;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 1.8rem 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      font-weight: 300;
+      margin-right: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .sublogo {
+      font-family: var(--font-sans);
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: var(--fg-muted);
+    }
+
+    .status-stamp {
+      font-family: var(--font-sans);
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: var(--fg-muted);
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      min-height: 0;
+    }
+
+    .sidebar {
+      padding: 4.5rem 3.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sidebar-top {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .label {
+      font-family: var(--font-sans);
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: var(--fg-muted);
+      font-weight: 400;
+    }
+
+    .forest-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .forest-item {
+      display: flex;
+      align-items: baseline;
+      gap: 1.5rem;
+      margin-bottom: 2.2rem;
+      cursor: pointer;
+      opacity: 0.35;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .forest-item:hover {
+      opacity: 0.7;
+      transform: translateX(4px);
+    }
+
+    .forest-item.active {
+      opacity: 1;
+    }
+
+    .forest-item .index {
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      color: var(--fg-muted);
+      width: 1.5rem;
+    }
+
+    .forest-item .name {
+      font-family: var(--font-serif);
+      font-size: clamp(1.6rem, 3vw, 2.3rem);
+      font-weight: 300;
+      letter-spacing: -0.01em;
+    }
+
+    .explanation {
+      max-width: 320px;
+    }
+
+    .explanation p {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: var(--fg-muted);
+      font-style: italic;
+      margin: 0;
+      font-weight: 300;
+    }
+
+    .details {
+      padding: 4.5rem 4.5rem;
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .detail-container {
+      opacity: 1;
+      transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+      transform: translateY(0);
+      max-width: 600px;
+    }
+
+    .detail-container.is-transitioning {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+
+    .climate-stamp {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.8rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2.2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .stamp-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .val {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      color: var(--fg);
+      font-weight: 300;
+    }
+
+    .journal-entry {
+      margin-bottom: 2.5rem;
+    }
+
+    .journal-entry h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 300;
+      margin: 0 0 1.2rem 0;
+      letter-spacing: -0.01em;
+    }
+
+    .journal-entry p {
+      font-family: var(--font-serif);
+      font-size: clamp(1.2rem, 2.2vw, 1.45rem);
+      line-height: 1.65;
+      font-style: italic;
+      color: var(--fg);
+      font-weight: 300;
+    }
+
+    .flora-box {
+      border-top: 1px solid var(--border);
+      padding-top: 2.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .flora-box .val {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--fg-muted);
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.8rem 3rem;
+      border-top: 1px solid var(--border);
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+    }
+
+    /* Play Button (Delicate Text Underline) */
+    .play-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--fg);
+      cursor: pointer;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      outline: none;
+    }
+
+    .play-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: var(--fg);
+      transform: scaleX(0.3);
+      transform-origin: left;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .play-btn:hover::after {
+      transform: scaleX(1);
+    }
+
+    .play-btn .indicator {
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      background-color: var(--fg-muted);
+      border-radius: 50%;
+      opacity: 0.3;
+      transition: opacity 0.6s ease, background-color 0.6s ease;
+    }
+
+    .play-btn.playing .indicator {
+      opacity: 1;
+      background-color: var(--fg);
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* Responsiveness */
+    @media (max-width: 768px) {
+      body, html {
+        overflow-y: auto;
+        height: auto;
+      }
+      
+      .grid-container {
+        grid-template-rows: auto auto auto;
+        height: auto;
+        min-height: 100vh;
+      }
+
+      main {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+      }
+
+      .sidebar {
+        padding: 3rem 2rem;
+      }
+
+      .explanation {
+        margin-top: 2rem;
+        max-width: 100%;
+      }
+
+      .details {
+        border-left: none;
+        border-top: 1px solid var(--border);
+        padding: 3rem 2rem;
+      }
+
+      header {
+        padding: 1.5rem 2rem;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      footer {
+        padding: 1.5rem 2rem;
+        flex-direction: column;
+        gap: 1.2rem;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <canvas id="visuals-canvas"></canvas>
+
+  <div id="intro-overlay">
+    <div class="intro-content">
+      <h1 class="intro-title">the rain library.</h1>
+      <p class="intro-subtitle">an auditory archive of precipitation in ancient forest canopies</p>
+      <button class="enter-btn" id="enter-btn">enter the silence</button>
+    </div>
+  </div>
+
+  <div class="grid-container">
+    <header>
+      <div class="header-left">
+        <span class="logo">the rain library.</span>
+        <span class="sublogo">registrum pluviae</span>
+      </div>
+      <div class="header-right">
+        <span class="status-stamp" id="active-index-stamp">INDEX 01 / 04 &bull; SILENT</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="sidebar">
+        <div class="sidebar-top">
+          <span class="label">select a canopy</span>
+          <ul class="forest-list">
+            <li class="forest-item active" data-id="yakushima">
+              <span class="index">01</span>
+              <span class="name">Yakushima</span>
+            </li>
+            <li class="forest-item" data-id="hoh">
+              <span class="index">02</span>
+              <span class="name">Hoh Valley</span>
+            </li>
+            <li class="forest-item" data-id="bialowieza">
+              <span class="index">03</span>
+              <span class="name">Białowieża</span>
+            </li>
+            <li class="forest-item" data-id="valdivian">
+              <span class="index">04</span>
+              <span class="name">Valdivia</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="sidebar-bottom">
+          <div class="explanation">
+            <p>an ongoing catalog documenting the unique acoustics of rain falling through distinct plant communities around the globe.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="details">
+        <div class="detail-container">
+          <div class="climate-stamp">
+            <div class="stamp-item">
+              <span class="label">location</span>
+              <span class="val" id="forest-location">Kagoshima, Japan</span>
+            </div>
+            <div class="stamp-item">
+              <span class="label">coordinates</span>
+              <span class="val" id="forest-coordinates">30°20'N, 130°31'E</span>
+            </div>
+            <div class="stamp-item">
+              <span class="label">elevation</span>
+              <span class="val" id="forest-elevation">820 m</span>
+            </div>
+            <div class="stamp-item">
+              <span class="label">recorded on</span>
+              <span class="val" id="forest-date">14 October</span>
+            </div>
+          </div>
+          
+          <div class="journal-entry">
+            <h2 id="forest-name">Yakushima Moss Forest</h2>
+            <p id="forest-note">
+              The rain here is heavy but muffled, falling onto centuries of moss-laden roots and cedar needles. There is no wind in the deep valleys, only the weight of the water descending through layers of ancient canopy.
+            </p>
+          </div>
+          
+          <div class="flora-box">
+            <span class="label">dominant canopy flora</span>
+            <span class="val" id="forest-flora">Cryptomeria japonica, Hymenophyllum, Trochodendron</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-left">
+        <button id="play-trigger" class="play-btn">
+          <span class="indicator"></span>
+          <span id="play-status-text">listen to the canopy</span>
+        </button>
+      </div>
+      <div class="footer-right">
+        <span>procedural sound synthesis &bull; no audio files loaded</span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const forests = [
+      {
+        id: "yakushima",
+        name: "Yakushima Moss Forest",
+        location: "Kagoshima, Japan",
+        coordinates: "30°20'N, 130°31'E",
+        elevation: "820 m",
+        date: "14 October",
+        note: "The rain here is heavy but muffled, falling onto centuries of moss-laden roots and cedar needles. There is no wind in the deep valleys, only the weight of the water descending through layers of ancient canopy.",
+        flora: "Cryptomeria japonica, Hymenophyllum, Trochodendron",
+        params: {
+          windGain: 0.03,
+          rainGain: 0.16,
+          rainFilterFreq: 480,
+          dropletRate: 26,
+          dropletVolume: 0.07,
+          dropletPitchMin: 500,
+          dropletPitchMax: 850,
+          windSpeed: 0.05,
+          windDepth: 0.02
+        }
+      },
+      {
+        id: "hoh",
+        name: "Hoh River Valley",
+        location: "Washington, USA",
+        coordinates: "47°51'N, 123°55'W",
+        elevation: "180 m",
+        date: "29 November",
+        note: "Big-leaf maples hold massive water droplets until they grow heavy enough to fall, striking the forest floor with deep, resonant, and sparse drops. The air is cool, and a slow, damp wind sweeps through hanging ferns.",
+        flora: "Acer macrophyllum, Picea sitchensis, Tsuga heterophylla",
+        params: {
+          windGain: 0.08,
+          rainGain: 0.10,
+          rainFilterFreq: 620,
+          dropletRate: 7,
+          dropletVolume: 0.16,
+          dropletPitchMin: 180,
+          dropletPitchMax: 450,
+          windSpeed: 0.08,
+          windDepth: 0.06
+        }
+      },
+      {
+        id: "bialowieza",
+        name: "Białowieża Primeval Forest",
+        location: "Podlaskie, Poland",
+        coordinates: "52°43'N, 23°52'E",
+        elevation: "165 m",
+        date: "03 April",
+        note: "A delicate, needle-like spring drizzle. The canopy is mostly bare oaks and hornbeams, letting the droplets hit the dry leaf litter directly, creating a quiet, papery rustling that feels close to the earth.",
+        flora: "Quercus robur, Carpinus betulus, Picea abies",
+        params: {
+          windGain: 0.02,
+          rainGain: 0.07,
+          rainFilterFreq: 850,
+          dropletRate: 34,
+          dropletVolume: 0.03,
+          dropletPitchMin: 650,
+          dropletPitchMax: 1200,
+          windSpeed: 0.04,
+          windDepth: 0.01
+        }
+      },
+      {
+        id: "valdivian",
+        name: "Valdivian Coastal Range",
+        location: "Los Ríos, Chile",
+        coordinates: "39°48'S, 73°14'W",
+        elevation: "410 m",
+        date: "21 June",
+        note: "An intense, wind-driven winter storm coming off the Pacific. The rain runs down the vertical stalks of climbing colihue bamboo, mixed with a constant, low roar of the forest canopy flexing under the wind.",
+        flora: "Nothofagus dombeyi, Laureliopsis philippiana, Chusquea culeou",
+        params: {
+          windGain: 0.20,
+          rainGain: 0.22,
+          rainFilterFreq: 520,
+          dropletRate: 18,
+          dropletVolume: 0.06,
+          dropletPitchMin: 380,
+          dropletPitchMax: 800,
+          windSpeed: 0.16,
+          windDepth: 0.14
+        }
+      }
+    ];
+
+    let currentForest = forests[0];
+    let audioCtx = null;
+    let nextDropletTime = 0;
+
+    // Web Audio Nodes
+    let noiseNode = null;
+    let rainFilter = null;
+    let rainGain = null;
+
+    let windNoiseNode = null;
+    let windFilter = null;
+    let windGain = null;
+
+    let lfoNode = null;
+    let lfoGain = null;
+
+    let masterGain = null;
+    let isPlaying = false;
+
+    // Visuals variables
+    const canvas = document.getElementById('visuals-canvas');
+    const ctx = canvas.getContext('2d');
+    let animationFrameId = null;
+    let isRunning = false;
+    let visualIntensity = 0;
+    let particles = [];
+    let ripples = [];
+
+    // Helper to generate pink noise
+    function createNoiseBuffer(context, duration = 3) {
+      const bufferSize = context.sampleRate * duration;
+      const buffer = context.createBuffer(1, bufferSize, context.sampleRate);
+      const data = buffer.getChannelData(0);
+      let b0, b1, b2, b3, b4, b5, b6;
+      b0 = b1 = b2 = b3 = b4 = b5 = b6 = 0.0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + white * 0.0555179;
+        b1 = 0.99332 * b1 + white * 0.0750759;
+        b2 = 0.96900 * b2 + white * 0.1538520;
+        b3 = 0.86650 * b3 + white * 0.3104856;
+        b4 = 0.55000 * b4 + white * 0.5329522;
+        b5 = -0.7616 * b5 - white * 0.0168980;
+        data[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+        data[i] *= 0.11; 
+        b6 = white * 0.115926;
+      }
+      return buffer;
+    }
+
+    function initAudio() {
+      if (audioCtx) return;
+
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioContextClass();
+
+      masterGain = audioCtx.createGain();
+      masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
+      masterGain.connect(audioCtx.destination);
+
+      const buffer = createNoiseBuffer(audioCtx, 3);
+
+      // Rain (Canopy) source
+      noiseNode = audioCtx.createBufferSource();
+      noiseNode.buffer = buffer;
+      noiseNode.loop = true;
+
+      rainFilter = audioCtx.createBiquadFilter();
+      rainFilter.type = 'lowpass';
+      rainFilter.frequency.setValueAtTime(currentForest.params.rainFilterFreq, audioCtx.currentTime);
+
+      rainGain = audioCtx.createGain();
+      rainGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+
+      noiseNode.connect(rainFilter);
+      rainFilter.connect(rainGain);
+      rainGain.connect(masterGain);
+
+      // Wind source
+      windNoiseNode = audioCtx.createBufferSource();
+      windNoiseNode.buffer = buffer;
+      windNoiseNode.loop = true;
+
+      windFilter = audioCtx.createBiquadFilter();
+      windFilter.type = 'bandpass';
+      windFilter.Q.setValueAtTime(1.5, audioCtx.currentTime);
+      windFilter.frequency.setValueAtTime(320, audioCtx.currentTime);
+
+      windGain = audioCtx.createGain();
+      windGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+
+      windNoiseNode.connect(windFilter);
+      windFilter.connect(windGain);
+      windGain.connect(masterGain);
+
+      // Wind LFO to modulate filter frequency
+      lfoNode = audioCtx.createOscillator();
+      lfoNode.type = 'sine';
+      lfoNode.frequency.setValueAtTime(currentForest.params.windSpeed, audioCtx.currentTime);
+
+      lfoGain = audioCtx.createGain();
+      lfoGain.gain.setValueAtTime(150 * currentForest.params.windDepth, audioCtx.currentTime);
+
+      lfoNode.connect(lfoGain);
+      lfoGain.connect(windFilter.frequency);
+
+      noiseNode.start(0);
+      windNoiseNode.start(0);
+      lfoNode.start(0);
+
+      nextDropletTime = audioCtx.currentTime;
+      setInterval(scheduler, 50);
+    }
+
+    const lookahead = 0.15;
+
+    function scheduler() {
+      if (!isPlaying || !audioCtx) return;
+
+      const currentTime = audioCtx.currentTime;
+      while (nextDropletTime < currentTime + lookahead) {
+        scheduleDroplet(nextDropletTime);
+        const meanInterval = 1 / currentForest.params.dropletRate;
+        const randomInterval = -Math.log(Math.random() || 0.0001) * meanInterval;
+        nextDropletTime += randomInterval;
+      }
+    }
+
+    function scheduleDroplet(time) {
+      if (!audioCtx) return;
+
+      const isLeafTap = Math.random() > 0.45;
+
+      if (isLeafTap) {
+        const noiseSrc = audioCtx.createBufferSource();
+        noiseSrc.buffer = noiseNode.buffer;
+
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'highpass';
+        filter.frequency.setValueAtTime(1800 + Math.random() * 2500, time);
+
+        const gainNode = audioCtx.createGain();
+        const vol = currentForest.params.dropletVolume * (0.3 + Math.random() * 0.7) * 0.45;
+        gainNode.gain.setValueAtTime(0, time);
+        gainNode.gain.linearRampToValueAtTime(vol, time + 0.002);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, time + 0.03 + Math.random() * 0.05);
+
+        noiseSrc.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(masterGain);
+
+        const offset = Math.random() * 2.8;
+        noiseSrc.start(time, offset);
+        noiseSrc.stop(time + 0.1);
+      } else {
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        const startFreq = currentForest.params.dropletPitchMin + Math.random() * (currentForest.params.dropletPitchMax - currentForest.params.dropletPitchMin);
+        const endFreq = startFreq * 0.2;
+
+        osc.frequency.setValueAtTime(startFreq, time);
+        osc.frequency.exponentialRampToValueAtTime(endFreq, time + 0.03);
+
+        const vol = currentForest.params.dropletVolume * (0.4 + Math.random() * 0.6) * 0.35;
+        gainNode.gain.setValueAtTime(0, time);
+        gainNode.gain.linearRampToValueAtTime(vol, time + 0.002);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, time + 0.04 + Math.random() * 0.04);
+
+        osc.connect(gainNode);
+        gainNode.connect(masterGain);
+
+        osc.start(time);
+        osc.stop(time + 0.1);
+      }
+    }
+
+    function togglePlay() {
+      if (!audioCtx) {
+        initAudio();
+      }
+
+      const playButton = document.getElementById('play-trigger');
+      const playStatusText = document.getElementById('play-status-text');
+
+      if (!isPlaying) {
+        audioCtx.resume().then(() => {
+          isPlaying = true;
+          nextDropletTime = audioCtx.currentTime;
+          
+          const t = audioCtx.currentTime;
+          masterGain.gain.setValueAtTime(masterGain.gain.value, t);
+          masterGain.gain.linearRampToValueAtTime(1.0, t + 2.0);
+
+          rainGain.gain.linearRampToValueAtTime(currentForest.params.rainGain, t + 2.0);
+          windGain.gain.linearRampToValueAtTime(currentForest.params.windGain, t + 2.0);
+
+          playStatusText.textContent = "pause listening";
+          playButton.classList.add('playing');
+          
+          updateStatusStamp();
+          startVisuals();
+        });
+      } else {
+        const t = audioCtx.currentTime;
+        masterGain.gain.setValueAtTime(masterGain.gain.value, t);
+        masterGain.gain.linearRampToValueAtTime(0.0001, t + 2.0);
+
+        isPlaying = false;
+        playStatusText.textContent = "listen to the canopy";
+        playButton.classList.remove('playing');
+
+        updateStatusStamp();
+
+        setTimeout(() => {
+          if (!isPlaying && audioCtx) {
+            audioCtx.suspend();
+          }
+        }, 2000);
+      }
+    }
+
+    function selectForest(forestId) {
+      const targetForest = forests.find(f => f.id === forestId);
+      if (!targetForest || (currentForest && currentForest.id === forestId && audioCtx)) return;
+
+      currentForest = targetForest;
+
+      document.querySelectorAll('.forest-item').forEach(item => {
+        item.classList.toggle('active', item.dataset.id === forestId);
+      });
+
+      const detailContainer = document.querySelector('.detail-container');
+      detailContainer.classList.add('is-transitioning');
+
+      setTimeout(() => {
+        document.getElementById('forest-name').textContent = targetForest.name;
+        document.getElementById('forest-location').textContent = targetForest.location;
+        document.getElementById('forest-coordinates').textContent = targetForest.coordinates;
+        document.getElementById('forest-elevation').textContent = targetForest.elevation;
+        document.getElementById('forest-date').textContent = targetForest.date;
+        document.getElementById('forest-note').textContent = targetForest.note;
+        document.getElementById('forest-flora').textContent = targetForest.flora;
+
+        updateStatusStamp();
+        detailContainer.classList.remove('is-transitioning');
+      }, 800);
+
+      if (audioCtx && isPlaying) {
+        const t = audioCtx.currentTime;
+        const fadeTime = 3.0;
+
+        rainFilter.frequency.exponentialRampToValueAtTime(targetForest.params.rainFilterFreq, t + fadeTime);
+        rainGain.gain.linearRampToValueAtTime(targetForest.params.rainGain, t + fadeTime);
+
+        windGain.gain.linearRampToValueAtTime(targetForest.params.windGain, t + fadeTime);
+        lfoNode.frequency.exponentialRampToValueAtTime(targetForest.params.windSpeed, t + fadeTime);
+        lfoGain.gain.linearRampToValueAtTime(150 * targetForest.params.windDepth, t + fadeTime);
+      }
+    }
+
+    function updateStatusStamp() {
+      const stamp = document.getElementById('active-index-stamp');
+      if (!stamp) return;
+      const idx = forests.findIndex(f => f.id === currentForest.id) + 1;
+      const statusStr = isPlaying ? "LISTENING" : "SILENT";
+      stamp.innerHTML = `INDEX 0${idx} / 04 &bull; ${statusStr}`;
+    }
+
+    // --- Visuals (Canvas Particle System) ---
+
+    class RainParticle {
+      constructor(w, h) {
+        this.reset(w, h);
+        this.y = Math.random() * h; 
+      }
+
+      reset(w, h) {
+        this.x = Math.random() * w;
+        this.y = -30;
+        this.vy = 1.2 + Math.random() * 2.2; 
+        this.vx = 0;
+        this.length = 8 + Math.random() * 16;
+        this.alpha = 0.03 + Math.random() * 0.07;
+        this.width = 0.5 + Math.random() * 0.8;
+      }
+
+      update(w, h, windForce) {
+        this.vx = windForce * 1.5;
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.y > h) {
+          if (ripples.length < 20 && Math.random() > 0.6) {
+            ripples.push(new Ripple(this.x, h - 30 - Math.random() * 120));
+          }
+          this.reset(w, h);
+        }
+        if (this.x < -30 || this.x > w + 30) {
+          this.reset(w, h);
+        }
+      }
+
+      draw() {
+        ctx.strokeStyle = `rgba(44, 46, 44, ${this.alpha * visualIntensity})`;
+        ctx.lineWidth = this.width;
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x + this.vx * 1.5, this.y + this.length);
+        ctx.stroke();
+      }
+    }
+
+    class Ripple {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.r = 1;
+        this.maxR = 30 + Math.random() * 50;
+        this.alpha = 0.06 + Math.random() * 0.10;
+        this.speed = 0.25 + Math.random() * 0.35;
+      }
+
+      update() {
+        this.r += this.speed;
+        this.alpha -= (this.speed / this.maxR) * this.alpha;
+      }
+
+      draw() {
+        if (this.alpha <= 0.001) return;
+        ctx.strokeStyle = `rgba(44, 46, 44, ${this.alpha * visualIntensity})`;
+        ctx.lineWidth = 0.6;
+        ctx.beginPath();
+        ctx.ellipse(this.x, this.y, this.r, this.r * 0.35, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    }
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function startVisuals() {
+      resizeCanvas();
+      if (particles.length === 0) {
+        for (let i = 0; i < 70; i++) {
+          particles.push(new RainParticle(canvas.width, canvas.height));
+        }
+      }
+
+      if (!isRunning) {
+        isRunning = true;
+        tick();
+      }
+    }
+
+    function tick() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      let targetIntensity = isPlaying ? 1 : 0;
+      visualIntensity += (targetIntensity - visualIntensity) * 0.04;
+
+      if (!isPlaying && visualIntensity < 0.002) {
+        visualIntensity = 0;
+        isRunning = false;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        return;
+      }
+
+      let windForce = 0;
+      if (isPlaying && currentForest) {
+        windForce = currentForest.params.windSpeed * 3.0;
+
+        if (Math.random() < currentForest.params.dropletRate * 0.01) {
+          const rx = Math.random() * canvas.width;
+          const ry = canvas.height * 0.35 + Math.random() * canvas.height * 0.55;
+          ripples.push(new Ripple(rx, ry));
+        }
+      }
+
+      particles.forEach(p => {
+        p.update(canvas.width, canvas.height, windForce);
+        p.draw();
+      });
+
+      ripples.forEach((r, idx) => {
+        r.update();
+        r.draw();
+        if (r.alpha <= 0.002 || r.r >= r.maxR) {
+          ripples.splice(idx, 1);
+        }
+      });
+
+      animationFrameId = requestAnimationFrame(tick);
+    }
+
+    // --- DOM Event Listeners ---
+
+    window.addEventListener('resize', resizeCanvas);
+
+    document.getElementById('enter-btn').addEventListener('click', () => {
+      const overlay = document.getElementById('intro-overlay');
+      overlay.classList.add('fade-out');
+      setTimeout(() => {
+        overlay.style.display = 'none';
+      }, 2500);
+
+      togglePlay();
+    });
+
+    document.getElementById('play-trigger').addEventListener('click', togglePlay);
+
+    document.querySelectorAll('.forest-item').forEach(item => {
+      item.addEventListener('click', () => {
+        selectForest(item.dataset.id);
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Værk — Identity & Interactive Studio / Copenhagen</title>
+  <meta name="description" content="Værk is an independent design studio in Copenhagen. We build identities, sites, and interactive work for people with taste." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Inter+Tight:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════════════
+       VÆRK — Design System
+       Editorial Luxury × Asymmetrical Bento
+       ═══════════════════════════════════════════════ */
+    :root {
+      /* Surface — warm paper / espresso */
+      --paper:      oklch(96.5% 0.012 75);          /* #F5F1EA-ish */
+      --paper-2:    oklch(93% 0.014 70);
+      --paper-3:    oklch(89% 0.018 65);
+      --ink:        oklch(18% 0.02 50);             /* deep espresso */
+      --ink-2:      oklch(28% 0.018 50);
+      --ink-dim:    oklch(45% 0.015 55);
+      --ink-mute:   oklch(60% 0.012 60);
+
+      /* Accent — burnt sienna + oxblood */
+      --sienna:     oklch(58% 0.16 45);
+      --sienna-2:   oklch(64% 0.18 50);
+      --oxblood:    oklch(36% 0.12 25);
+
+      /* Hairlines */
+      --line:       oklch(18% 0.02 50 / 0.10);
+      --line-2:     oklch(18% 0.02 50 / 0.18);
+
+      /* Type */
+      --display:    'Fraunces', 'Times New Roman', serif;
+      --sans:       'Inter Tight', system-ui, sans-serif;
+      --mono:       'JetBrains Mono', ui-monospace, monospace;
+
+      /* Easing */
+      --ease:       cubic-bezier(0.32, 0.72, 0, 1);
+      --ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-family: var(--sans); color: var(--ink); background: var(--paper); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    body { overflow-x: hidden; min-height: 100dvh; }
+    img, svg, video { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    ::selection { background: var(--sienna); color: var(--paper); }
+    button { font: inherit; background: none; border: 0; cursor: pointer; color: inherit; }
+
+    /* ─── Film-grain overlay (fixed, pointer-events none) ─── */
+    .grain::before {
+      content: ''; position: fixed; inset: 0; z-index: 50;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply; opacity: 0.35;
+    }
+
+    .wrap { width: 100%; max-width: 1480px; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 3.5rem); }
+
+    /* ─── NAV — fluid island ─── */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 40; padding: 1.25rem 0; }
+    .nav-pill {
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 1280px; margin: 0 auto;
+      padding: 0.6rem 0.6rem 0.6rem 1.4rem;
+      background: oklch(96.5% 0.012 75 / 0.72);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+    }
+    .nav-brand { display: flex; align-items: baseline; gap: 0.4rem; font-family: var(--display); font-weight: 600; font-size: 1.35rem; letter-spacing: -0.02em; font-variation-settings: "SOFT" 50, "WONK" 1; }
+    .nav-brand .mark { display: inline-block; width: 6px; height: 6px; background: var(--sienna); border-radius: 999px; transform: translateY(-2px); }
+    .nav-links { list-style: none; display: flex; gap: 1.75rem; align-items: center; }
+    .nav-links a { font-size: 0.85rem; color: var(--ink-2); transition: color .5s var(--ease); font-weight: 450; }
+    .nav-links a:hover { color: var(--sienna); }
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.55rem 0.55rem 0.55rem 1.1rem;
+      background: var(--ink); color: var(--paper);
+      border-radius: 999px; font-size: 0.82rem; font-weight: 500;
+      transition: transform .5s var(--ease), background .5s var(--ease);
+    }
+    .nav-cta:hover { background: var(--sienna); transform: translateY(-1px); }
+    .nav-cta .ic {
+      width: 26px; height: 26px; border-radius: 999px;
+      background: oklch(96.5% 0.012 75 / 0.15);
+      display: grid; place-items: center;
+      transition: transform .6s var(--ease), background .5s var(--ease);
+    }
+    .nav-cta:hover .ic { transform: translate(2px, -2px) rotate(45deg); background: oklch(96.5% 0.012 75 / 0.25); }
+    .nav-cta .ic svg { width: 12px; height: 12px; stroke: currentColor; stroke-width: 1.5; fill: none; }
+    @media (max-width: 820px) { .nav-links li:not(:last-child) { display: none; } }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative; overflow: hidden;
+      padding: clamp(9rem, 14vw, 13rem) 0 clamp(4rem, 6vw, 6rem);
+      min-height: 100dvh;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(60% 50% at 80% 20%, oklch(58% 0.16 45 / 0.07) 0%, transparent 60%),
+                  radial-gradient(50% 40% at 10% 70%, oklch(36% 0.12 25 / 0.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; flex-wrap: wrap; margin-bottom: clamp(3rem, 5vw, 5rem); position: relative; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-family: var(--mono); font-size: 0.7rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-dim);
+    }
+    .eyebrow::before { content: ''; width: 24px; height: 1px; background: currentColor; display: inline-block; }
+    .hero h1 {
+      font-family: var(--display); font-weight: 350;
+      font-size: clamp(3rem, 9vw, 9rem);
+      line-height: 0.92; letter-spacing: -0.045em;
+      font-variation-settings: "opsz" 144, "SOFT" 30, "WONK" 1;
+      max-width: 14ch;
+    }
+    .hero h1 em {
+      font-style: italic; font-weight: 300;
+      color: var(--sienna);
+      font-variation-settings: "opsz" 144, "SOFT" 80, "WONK" 1;
+    }
+    .hero h1 .underline {
+      position: relative; display: inline-block;
+    }
+    .hero h1 .underline::after {
+      content: ''; position: absolute; left: 0; right: 0; bottom: 0.08em;
+      height: 0.08em; background: var(--sienna); transform-origin: right;
+    }
+    .hero-foot {
+      display: grid; grid-template-columns: 1.2fr 1fr; gap: clamp(2rem, 4vw, 4rem);
+      align-items: end; margin-top: clamp(3rem, 5vw, 5rem);
+      position: relative;
+    }
+    .hero-lede {
+      font-size: clamp(1.05rem, 1.25vw, 1.25rem);
+      line-height: 1.5; color: var(--ink-2);
+      max-width: 42ch;
+    }
+    .hero-meta { display: flex; flex-direction: column; gap: 0.4rem; align-items: flex-end; text-align: right; }
+    .hero-meta .row { display: flex; align-items: center; gap: 0.6rem; font-family: var(--mono); font-size: 0.75rem; color: var(--ink-dim); letter-spacing: 0.04em; }
+    .hero-meta .row .d { width: 4px; height: 4px; background: var(--sienna); border-radius: 999px; }
+    @media (max-width: 768px) { .hero-foot { grid-template-columns: 1fr; } .hero-meta { align-items: flex-start; text-align: left; } }
+
+    /* ─── marquee ticker ─── */
+    .ticker { overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 1.1rem 0; }
+    .ticker-track { display: flex; gap: 3rem; white-space: nowrap; animation: scroll 50s linear infinite; }
+    .ticker-track span { font-family: var(--display); font-style: italic; font-size: 1.4rem; color: var(--ink-dim); display: inline-flex; align-items: center; gap: 3rem; }
+    .ticker-track span::after { content: '✦'; color: var(--sienna); font-size: 0.7rem; font-style: normal; }
+    @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ─── SECTION scaffolding ─── */
+    section { position: relative; }
+    .section-pad { padding: clamp(5rem, 9vw, 9rem) 0; }
+    .section-head { display: grid; grid-template-columns: 0.4fr 1fr; gap: clamp(1.5rem, 4vw, 4rem); align-items: start; margin-bottom: clamp(3rem, 5vw, 5rem); }
+    .section-head .num { font-family: var(--mono); font-size: 0.75rem; color: var(--sienna); letter-spacing: 0.06em; }
+    .section-head .label { font-family: var(--mono); font-size: 0.7rem; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 0.4rem; }
+    .section-head h2 {
+      font-family: var(--display); font-weight: 350;
+      font-size: clamp(2.25rem, 5.5vw, 4.75rem);
+      line-height: 1.0; letter-spacing: -0.035em;
+      max-width: 18ch;
+      font-variation-settings: "opsz" 144, "SOFT" 40;
+    }
+    .section-head h2 em { font-style: italic; color: var(--sienna); font-variation-settings: "opsz" 144, "SOFT" 80, "WONK" 1; }
+    @media (max-width: 768px) { .section-head { grid-template-columns: 1fr; gap: 1rem; } }
+
+    /* ─── BENTO: WORK ─── */
+    .bento { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1rem; }
+    .tile { position: relative; overflow: hidden; border-radius: 1.25rem; border: 1px solid var(--line); background: var(--paper-2); transition: transform .8s var(--ease), border-color .5s var(--ease); }
+    .tile:hover { border-color: var(--line-2); }
+    .tile-inner { position: relative; height: 100%; padding: 1.75rem; display: flex; flex-direction: column; }
+    .tile .meta { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 0.7rem; color: var(--ink-dim); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: auto; }
+    .tile .meta .idx { color: var(--sienna); }
+    .tile h3 { font-family: var(--display); font-size: clamp(1.5rem, 2.2vw, 2.25rem); font-weight: 400; line-height: 1.05; letter-spacing: -0.025em; margin-top: 1rem; max-width: 14ch; }
+    .tile h3 em { font-style: italic; color: var(--sienna); }
+    .tile p { font-size: 0.88rem; line-height: 1.5; color: var(--ink-dim); margin-top: 0.6rem; max-width: 32ch; }
+    .tile .visual { position: relative; flex: 1; min-height: 180px; margin-top: 1.5rem; border-radius: 0.75rem; overflow: hidden; background: var(--paper-3); }
+
+    /* grid placements */
+    .tile-1 { grid-column: span 7; min-height: 520px; }
+    .tile-2 { grid-column: span 5; min-height: 520px; }
+    .tile-3 { grid-column: span 4; min-height: 380px; }
+    .tile-4 { grid-column: span 4; min-height: 380px; }
+    .tile-5 { grid-column: span 4; min-height: 380px; }
+    .tile-6 { grid-column: span 8; min-height: 420px; }
+    .tile-7 { grid-column: span 4; min-height: 420px; }
+
+    /* artwork inside tiles */
+    .art { position: absolute; inset: 0; }
+    .art-1 {
+      background:
+        radial-gradient(circle at 30% 30%, oklch(58% 0.16 45 / 0.85), transparent 55%),
+        radial-gradient(circle at 80% 70%, oklch(36% 0.12 25 / 0.6), transparent 50%),
+        linear-gradient(135deg, oklch(82% 0.08 60), oklch(40% 0.06 35));
+    }
+    .art-2 {
+      background:
+        conic-gradient(from 220deg at 60% 40%, oklch(96% 0.02 75), oklch(36% 0.12 25), oklch(58% 0.16 45), oklch(96% 0.02 75));
+    }
+    .art-2::after {
+      content: ''; position: absolute; inset: 12% 18%; border-radius: 999px;
+      background: var(--paper); mix-blend-mode: screen;
+    }
+    .art-3 {
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 14px, oklch(18% 0.02 50 / 0.08) 14px, oklch(18% 0.02 50 / 0.08) 15px),
+        linear-gradient(180deg, oklch(89% 0.04 70), oklch(70% 0.08 55));
+    }
+    .art-4 {
+      background:
+        radial-gradient(circle at 50% 110%, var(--sienna) 0%, var(--oxblood) 50%, var(--ink) 100%);
+    }
+    .art-5 {
+      background:
+        linear-gradient(135deg, oklch(20% 0.02 50), oklch(40% 0.05 60)),
+        repeating-linear-gradient(45deg, transparent, transparent 8px, oklch(96.5% 0.012 75 / 0.06) 8px, oklch(96.5% 0.012 75 / 0.06) 9px);
+    }
+    .art-5::after { content: 'Aa'; position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--display); font-size: 6rem; color: var(--paper); font-weight: 300; }
+    .art-6 {
+      background:
+        linear-gradient(135deg, oklch(82% 0.08 60), oklch(96.5% 0.012 75));
+    }
+    .art-6::after {
+      content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--ink); transform: translateY(-0.5px);
+    }
+    .art-6::before {
+      content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: var(--ink);
+    }
+    .art-7 {
+      background:
+        radial-gradient(circle at 50% 50%, oklch(58% 0.16 45 / 0.2) 0%, transparent 70%),
+        oklch(20% 0.02 50);
+    }
+    .art-7::after {
+      content: ''; position: absolute; inset: 25%; border: 1px solid oklch(96.5% 0.012 75 / 0.4); border-radius: 999px;
+      box-shadow: inset 0 0 0 1px oklch(96.5% 0.012 75 / 0.2), 0 0 0 1px oklch(96.5% 0.012 75 / 0.1);
+    }
+
+    .tile-link {
+      margin-top: 1.5rem; align-self: flex-start;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-family: var(--mono); font-size: 0.75rem; color: var(--ink);
+      letter-spacing: 0.04em;
+    }
+    .tile-link .arrow { width: 18px; height: 18px; border-radius: 999px; background: var(--ink); color: var(--paper); display: grid; place-items: center; transition: transform .6s var(--ease), background .5s var(--ease); }
+    .tile-link .arrow svg { width: 10px; height: 10px; stroke: currentColor; stroke-width: 1.5; fill: none; }
+    .tile:hover .tile-link .arrow { transform: translate(2px, -2px) rotate(45deg); background: var(--sienna); }
+
+    @media (max-width: 900px) {
+      .tile-1, .tile-2, .tile-3, .tile-4, .tile-5, .tile-6, .tile-7 { grid-column: span 12; min-height: 360px; }
+    }
+
+    /* ─── MANIFESTO ─── */
+    .manifesto { padding: clamp(6rem, 10vw, 11rem) 0; background: var(--ink); color: var(--paper); position: relative; overflow: hidden; }
+    .manifesto::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(40% 40% at 80% 20%, oklch(58% 0.16 45 / 0.18) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .manifesto .label { font-family: var(--mono); font-size: 0.72rem; color: oklch(82% 0.08 60); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 3rem; }
+    .manifesto .label::before { content: '— '; }
+    .manifesto blockquote {
+      font-family: var(--display);
+      font-weight: 300;
+      font-size: clamp(2rem, 5.5vw, 5rem);
+      line-height: 1.05; letter-spacing: -0.035em;
+      max-width: 22ch;
+      font-variation-settings: "opsz" 144, "SOFT" 50, "WONK" 1;
+    }
+    .manifesto blockquote em { font-style: italic; color: oklch(82% 0.08 60); }
+    .manifesto blockquote .quote-mark { color: var(--sienna); font-style: normal; display: inline-block; transform: translateY(0.1em); }
+    .manifesto .signature { display: flex; align-items: center; gap: 1.5rem; margin-top: 3rem; font-family: var(--mono); font-size: 0.78rem; color: oklch(75% 0.04 70); letter-spacing: 0.04em; }
+    .manifesto .signature::before { content: ''; width: 60px; height: 1px; background: oklch(75% 0.04 70 / 0.4); }
+
+    /* ─── CAPABILITIES ─── */
+    .caps-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; border-top: 1px solid var(--line); }
+    .cap {
+      display: grid; grid-template-columns: auto 1fr auto; align-items: start; gap: 1.5rem;
+      padding: 2.25rem 1.5rem;
+      border-bottom: 1px solid var(--line);
+      transition: background .6s var(--ease);
+      cursor: default;
+    }
+    .cap:nth-child(odd) { border-right: 1px solid var(--line); }
+    .cap:hover { background: oklch(93% 0.014 70 / 0.5); }
+    .cap .n { font-family: var(--mono); font-size: 0.7rem; color: var(--sienna); letter-spacing: 0.08em; min-width: 2rem; }
+    .cap h4 { font-family: var(--display); font-size: clamp(1.4rem, 2vw, 2rem); font-weight: 400; letter-spacing: -0.02em; line-height: 1.1; }
+    .cap h4 em { font-style: italic; color: var(--ink-dim); }
+    .cap p { font-size: 0.88rem; color: var(--ink-dim); line-height: 1.5; margin-top: 0.5rem; max-width: 38ch; }
+    .cap .arrow {
+      width: 36px; height: 36px; border-radius: 999px; border: 1px solid var(--line-2);
+      display: grid; place-items: center; transition: transform .6s var(--ease), background .5s var(--ease), color .5s var(--ease);
+    }
+    .cap:hover .arrow { background: var(--ink); color: var(--paper); transform: rotate(45deg); }
+    .cap .arrow svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 1.4; fill: none; }
+    @media (max-width: 768px) {
+      .caps-grid { grid-template-columns: 1fr; }
+      .cap:nth-child(odd) { border-right: 0; }
+    }
+
+    /* ─── PRESS / RECOGNITION ─── */
+    .press { display: grid; grid-template-columns: 1fr 2fr; gap: clamp(2rem, 4vw, 4rem); align-items: start; padding: clamp(4rem, 7vw, 6rem) 0; border-top: 1px solid var(--line); }
+    .press h3 { font-family: var(--display); font-size: clamp(1.5rem, 2.5vw, 2.25rem); font-weight: 400; letter-spacing: -0.025em; }
+    .press h3 em { font-style: italic; color: var(--sienna); }
+    .press-list { list-style: none; display: flex; flex-direction: column; }
+    .press-list li { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 1.1rem 0; border-bottom: 1px solid var(--line); font-family: var(--display); font-size: clamp(1.1rem, 1.6vw, 1.5rem); font-weight: 400; letter-spacing: -0.015em; }
+    .press-list li span:first-child { flex: 1; }
+    .press-list li span:last-child { font-family: var(--mono); font-size: 0.72rem; color: var(--ink-dim); letter-spacing: 0.06em; }
+    @media (max-width: 768px) { .press { grid-template-columns: 1fr; } }
+
+    /* ─── FOOTER / CONTACT ─── */
+    .contact { padding: clamp(5rem, 8vw, 8rem) 0 clamp(2rem, 4vw, 3rem); border-top: 1px solid var(--line); }
+    .contact-top { display: grid; grid-template-columns: 1.2fr 1fr; gap: clamp(2rem, 4vw, 4rem); align-items: start; }
+    .contact h2 {
+      font-family: var(--display); font-weight: 300;
+      font-size: clamp(3rem, 9vw, 8.5rem);
+      line-height: 0.9; letter-spacing: -0.045em;
+      font-variation-settings: "opsz" 144, "SOFT" 40, "WONK" 1;
+    }
+    .contact h2 em { font-style: italic; color: var(--sienna); }
+    .contact h2 a { color: inherit; position: relative; }
+    .contact h2 a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0.05em; height: 1px; background: currentColor; }
+    .contact-meta { display: flex; flex-direction: column; gap: 1.5rem; padding-top: 1rem; }
+    .contact-meta .row { display: flex; flex-direction: column; gap: 0.3rem; }
+    .contact-meta .label { font-family: var(--mono); font-size: 0.7rem; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.12em; }
+    .contact-meta .val { font-family: var(--display); font-size: 1.1rem; font-weight: 400; }
+    .contact-meta .val a { border-bottom: 1px solid var(--line-2); padding-bottom: 1px; transition: border-color .5s var(--ease); }
+    .contact-meta .val a:hover { border-color: var(--sienna); color: var(--sienna); }
+    @media (max-width: 768px) { .contact-top { grid-template-columns: 1fr; } }
+
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; padding-top: 4rem; margin-top: 4rem; border-top: 1px solid var(--line); flex-wrap: wrap; }
+    .footer-bottom .copy { font-family: var(--mono); font-size: 0.72rem; color: var(--ink-dim); letter-spacing: 0.04em; }
+    .footer-bottom .links { display: flex; gap: 1.5rem; list-style: none; font-family: var(--mono); font-size: 0.72rem; color: var(--ink-dim); }
+    .footer-bottom .links a:hover { color: var(--sienna); }
+    .footer-bottom .clock { font-family: var(--mono); font-size: 0.72rem; color: var(--ink-dim); display: flex; align-items: center; gap: 0.5rem; }
+    .footer-bottom .clock .d { width: 5px; height: 5px; background: var(--sienna); border-radius: 999px; animation: pulse 2.2s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    /* ─── SCROLL ENTRY (JS-driven) ─── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 1s var(--ease-out), transform 1s var(--ease-out); }
+    .reveal.in { opacity: 1; transform: none; }
+    .reveal-d1 { transition-delay: 0.08s; }
+    .reveal-d2 { transition-delay: 0.18s; }
+    .reveal-d3 { transition-delay: 0.28s; }
+    .reveal-d4 { transition-delay: 0.38s; }
+
+    /* ─── Hover lift for tiles ─── */
+    .tile-1:hover .visual,
+    .tile-2:hover .visual,
+    .tile-3:hover .visual,
+    .tile-4:hover .visual,
+    .tile-5:hover .visual,
+    .tile-6:hover .visual,
+    .tile-7:hover .visual { transform: scale(1.02); }
+    .tile .visual { transition: transform 1.2s var(--ease-out); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body class="grain">
+
+  <!-- ─── NAV ─── -->
+  <nav class="nav">
+    <div class="nav-pill">
+      <a href="#" class="nav-brand"><span class="mark"></span>Værk<span style="font-style:italic; color:var(--ink-dim); font-weight:300;">·</span>studio</a>
+      <ul class="nav-links">
+        <li><a href="#work">Work</a></li>
+        <li><a href="#capabilities">Capabilities</a></li>
+        <li><a href="#studio">Studio</a></li>
+        <li><a href="#press">Press</a></li>
+        <li>
+          <a href="#contact" class="nav-cta">
+            <span>Start a project</span>
+            <span class="ic"><svg viewBox="0 0 12 12"><path d="M2 10 L10 2 M5 2 H10 V7"/></svg></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ─── HERO ─── -->
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-top reveal">
+        <div class="eyebrow">Independent design practice / Est. 2017</div>
+        <div class="eyebrow" style="color:var(--sienna);">Copenhagen · 55.67°N</div>
+      </div>
+
+      <h1 class="reveal reveal-d1">
+        We make brands that <em>feel</em> made —<br/>
+        identities, sites, and <span class="underline">interactive</span> work.
+      </h1>
+
+      <div class="hero-foot">
+        <p class="hero-lede reveal reveal-d2">
+          A small studio of seven. We work slowly with founders, museums, and a few patient brands
+          to make things that last longer than the launch week.
+        </p>
+        <div class="hero-meta reveal reveal-d3">
+          <div class="row"><span class="d"></span> Booking Q3 · 2026</div>
+          <div class="row" style="color:var(--ink);">Currently shipping a museum in Aarhus</div>
+          <div class="row">Replies within 48h, often less</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── TICKER ─── -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <span>Brand identity</span><span>Editorial design</span><span>Interactive sites</span><span>Type direction</span>
+      <span>Packaging</span><span>Motion</span><span>Sound</span><span>Strategy</span>
+      <!-- duplicate for seamless loop -->
+      <span>Brand identity</span><span>Editorial design</span><span>Interactive sites</span><span>Type direction</span>
+      <span>Packaging</span><span>Motion</span><span>Sound</span><span>Strategy</span>
+    </div>
+  </div>
+
+  <!-- ─── WORK / BENTO ─── -->
+  <section class="section-pad" id="work">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <div class="num">01</div>
+          <div class="label">Selected work</div>
+        </div>
+        <h2>Recent <em>commissions</em>, made with people we still call friends.</h2>
+      </div>
+
+      <div class="bento">
+        <!-- 1: Wide — featured -->
+        <a href="#" class="tile tile-1 reveal">
+          <div class="tile-inner">
+            <div class="meta"><span class="idx">01 / 07</span><span>Identity · 2025</span></div>
+            <h3>A new masthead for <em>Halcyon Quarterly</em>, a journal of slow things.</h3>
+            <p>Wordmark, type system, and a website that reads like paper. Issue 14 ships in October.</p>
+            <div class="visual"><div class="art art-1"></div></div>
+            <div class="tile-link"><span>Read the case</span><span class="arrow"><svg viewBox="0 0 10 10"><path d="M2 8 L8 2 M4 2 H8 V6"/></svg></span></div>
+          </div>
+        </a>
+
+        <!-- 2: Wide alt -->
+        <a href="#" class="tile tile-2 reveal reveal-d1">
+          <div class="tile-inner">
+            <div class="meta"><span class="idx">02 / 07</span><span>Site · 2025</span></div>
+            <h3>An interactive archive for <em>Nordlys</em> — 40 years of Nordic light.</h3>
+            <p>WebGL sun-path calculator, 12,000 photographs, one slow scroll. Built with Mapbox and patience.</p>
+            <div class="visual"><div class="art art-2"></div></div>
+            <div class="tile-link"><span>Read the case</span><span class="arrow"><svg viewBox="0 0 10 10"><path d="M2 8 L8 2 M4 2 H8 V6"/></svg></span></div>
+          </div>
+        </a>
+
+        <!-- 3 -->
+        <a href="#" class="tile tile-3 reveal">
+          <div class="tile-inner">
+            <div class="meta"><span class="idx">03 / 07</span><span>Packaging · 2024</span></div>
+            <h3><em>Måned</em>, a small-batch gin from a friend's farm.</h3>
+            <p>Labels, bottle, presentation case. Distilled in October, sold out by December.</p>
+            <div class="visual"><div class="art art-3"></div></div>
+          </div>
+        </a>
+
+        <!-- 4 -->
+        <a href="#" class="tile tile-4 reveal reveal-d1">
+          <div class="tile-inner">
+            <div class="meta"><span class="idx">04 / 07</span><span>Brand · 2024</span></div>
+            <h3><em>Studio Vela</em>, an architecture practice in Oslo.</h3>
+            <p>A wordmark drawn with the draftsman. Two weights, infinite grid.</p>
+            <div class="visual"><div class="art art-4"></div></div>
+          </div>
+        </a>
+
+        <!-- 5 -->
+        <a href="#" class="tile tile-5 reveal reveal-d2">
+          <div class="tile-inner">
+            <div class="meta"><span class="idx">05 / 07</span><span>Type · 2024</span></div>
+            <h3><em>Sølv</em> — a display family for long winter nights.</h3>
+            <p>Four weights, one italic, one monospaced cousin. Self-published, in use.</p>
+            <div class="visual"><div class="art art-5"></div></div>
+          </div>
+        </a>
+
+        <!-- 6: Wide -->
+        <a href="#" class="tile tile-6 reveal">
+          <div class="tile-inner">
+            <div class="meta"><span class="idx">06 / 07</span><span>Editorial · 2023</span></div>
+            <h3>The 256-page catalogue for <em>Kunsthal Aarhus</em>' winter programme.</h3>
+            <p>One grid, four essays, twelve artists. Printed in Copenhagen on Munken Pure.</p>
+            <div class="visual"><div class="art art-6"></div></div>
+            <div class="tile-link"><span>Read the case</span><span class="arrow"><svg viewBox="0 0 10 10"><path d="M2 8 L8 2 M4 2 H8 V6"/></svg></span></div>
+          </div>
+        </a>
+
+        <!-- 7 -->
+        <a href="#" class="tile tile-7 reveal reveal-d1">
+          <div class="tile-inner">
+            <div class="meta"><span class="idx">07 / 07</span><span>Sound · 2023</span></div>
+            <h3><em>Klokken</em>, a generative clock for the city's tram network.</h3>
+            <p>Each hour is a different bell. Installed at the central station since March.</p>
+            <div class="visual"><div class="art art-7"></div></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── MANIFESTO ─── -->
+  <section class="manifesto">
+    <div class="wrap">
+      <div class="label reveal">A short note on how we work</div>
+      <blockquote class="reveal reveal-d1">
+        <span class="quote-mark">“</span>The work that lasts is the work that was <em>argued about</em> — in a room, at a table, with too much coffee and not enough certainty.<span class="quote-mark">”</span>
+      </blockquote>
+      <div class="signature reveal reveal-d2">— Maren Høj, founder</div>
+    </div>
+  </section>
+
+  <!-- ─── CAPABILITIES ─── -->
+  <section class="section-pad" id="capabilities">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <div class="num">02</div>
+          <div class="label">What we do</div>
+        </div>
+        <h2>Five <em>disciplines</em>, one room, no silos.</h2>
+      </div>
+
+      <div class="caps-grid">
+        <div class="cap reveal">
+          <div class="n">01</div>
+          <div>
+            <h4>Identity <em>&</em> wordmark</h4>
+            <p>Naming, marks, type, voice. The boring foundation that makes everything else possible.</p>
+          </div>
+          <div class="arrow"><svg viewBox="0 0 14 14"><path d="M3 11 L11 3 M6 3 H11 V8"/></svg></div>
+        </div>
+        <div class="cap reveal reveal-d1">
+          <div class="n">02</div>
+          <div>
+            <h4>Editorial <em>&</em> print</h4>
+            <p>Books, catalogues, reports. Designed for the hand, not the screen.</p>
+          </div>
+          <div class="arrow"><svg viewBox="0 0 14 14"><path d="M3 11 L11 3 M6 3 H11 V8"/></svg></div>
+        </div>
+        <div class="cap reveal">
+          <div class="n">03</div>
+          <div>
+            <h4>Interactive <em>&</em> sites</h4>
+            <p>Hand-written front-ends, three.js where it earns its place, fast on slow connections.</p>
+          </div>
+          <div class="arrow"><svg viewBox="0 0 14 14"><path d="M3 11 L11 3 M6 3 H11 V8"/></svg></div>
+        </div>
+        <div class="cap reveal reveal-d1">
+          <div class="n">04</div>
+          <div>
+            <h4>Motion <em>&</em> sound</h4>
+            <p>Title sequences, brand films, generative loops. We edit our own soundtracks.</p>
+          </div>
+          <div class="arrow"><svg viewBox="0 0 14 14"><path d="M3 11 L11 3 M6 3 H11 V8"/></svg></div>
+        </div>
+        <div class="cap reveal">
+          <div class="n">05</div>
+          <div>
+            <h4>Type <em>&</em> lettering</h4>
+            <p>Custom display faces, expressive wordmarks, monospaced instruments for data.</p>
+          </div>
+          <div class="arrow"><svg viewBox="0 0 14 14"><path d="M3 11 L11 3 M6 3 H11 V8"/></svg></div>
+        </div>
+        <div class="cap reveal reveal-d1">
+          <div class="n">06</div>
+          <div>
+            <h4>Strategy <em>&</em> naming</h4>
+            <p>The thinking before the making. Often the most valuable hour of the project.</p>
+          </div>
+          <div class="arrow"><svg viewBox="0 0 14 14"><path d="M3 11 L11 3 M6 3 H11 V8"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── STUDIO ─── -->
+  <section class="section-pad" id="studio">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <div class="num">03</div>
+          <div class="label">The studio</div>
+        </div>
+        <h2>Seven <em>people</em>, one studio dog, one slow espresso machine.</h2>
+      </div>
+
+      <div style="display:grid; grid-template-columns: repeat(12, 1fr); gap: 1rem;">
+        <div class="reveal" style="grid-column: span 8; padding: 2.5rem; background: var(--paper-2); border: 1px solid var(--line); border-radius: 1.25rem; min-height: 320px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div style="font-family: var(--mono); font-size: 0.72rem; color: var(--ink-dim); letter-spacing: 0.06em; text-transform: uppercase;">Bredgade 46, 1260 København K</div>
+          <div>
+            <p style="font-family: var(--display); font-size: clamp(1.5rem, 2.5vw, 2.25rem); line-height: 1.2; letter-spacing: -0.025em; max-width: 28ch; font-weight: 400;">
+              We share a <em style="font-style:italic; color:var(--sienna);">single room</em> above a bookshop in central Copenhagen. Meetings happen at the same oak table, in good light, with the kettle on.
+            </p>
+          </div>
+        </div>
+
+        <div class="reveal reveal-d1" style="grid-column: span 4; padding: 2.5rem; background: var(--ink); color: var(--paper); border-radius: 1.25rem; min-height: 320px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div style="font-family: var(--mono); font-size: 0.72rem; color: oklch(75% 0.04 70); letter-spacing: 0.06em; text-transform: uppercase;">Studio hours</div>
+          <div style="font-family: var(--display); font-size: clamp(1.5rem, 2vw, 2rem); line-height: 1.1; font-weight: 350;">
+            Tue — Fri<br/><span style="color: oklch(75% 0.04 70);">10:00 — 18:00</span><br/><span style="font-style:italic;">Closed Mondays.<span style="color:var(--sienna);">*</span></span>
+          </div>
+          <div style="font-family: var(--mono); font-size: 0.7rem; color: oklch(65% 0.03 70);">* for thinking, walking, and the long lunch.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PRESS ─── -->
+  <section class="wrap" id="press">
+    <div class="press">
+      <div class="reveal">
+        <h3>Said <em>about</em> us, in the kind of magazines we keep.</h3>
+      </div>
+      <ul class="press-list">
+        <li class="reveal"><span>“A studio that knows when not to add.”</span><span>It's Nice That</span></li>
+        <li class="reveal reveal-d1"><span>Featured — New Nordic Design</span><span>Wallpaper*</span></li>
+        <li class="reveal reveal-d2"><span>“Patient, precise, and quietly funny.”</span><span>Eye Magazine</span></li>
+        <li class="reveal reveal-d3"><span>50 Best Small Studios, 2024</span><span>Computer Arts</span></li>
+        <li class="reveal"><span>“Værk make the work feel inevitable.”</span><span>Print &amp; Pattern</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ─── CONTACT ─── -->
+  <footer class="contact" id="contact">
+    <div class="wrap">
+      <div class="contact-top">
+        <h2 class="reveal">
+          Have a thing<br/>
+          worth <em>making</em>?<br/>
+          <a href="mailto:studio@vaerk.dk">studio@vaerk.dk</a>
+        </h2>
+        <div class="contact-meta reveal reveal-d1">
+          <div class="row">
+            <span class="label">Studio</span>
+            <span class="val">Bredgade 46, 2nd<br/>1260 Copenhagen K<br/>Denmark</span>
+          </div>
+          <div class="row">
+            <span class="label">Elsewhere</span>
+            <span class="val">
+              <a href="#">Are.na</a> &nbsp;·&nbsp;
+              <a href="#">Instagram</a> &nbsp;·&nbsp;
+              <a href="#">Read.cv</a>
+            </span>
+          </div>
+          <div class="row">
+            <span class="label">Press</span>
+            <span class="val"><a href="mailto:press@vaerk.dk">press@vaerk.dk</a></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="copy">© Værk Studio ApS · CVR 38291047</div>
+        <ul class="links">
+          <li><a href="#">Colophon</a></li>
+          <li><a href="#">Imprint</a></li>
+          <li><a href="#">Privacy</a></li>
+        </ul>
+        <div class="clock"><span class="d"></span><span id="clock">—</span> CET</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ─── Scroll reveal (IntersectionObserver) ───
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+    // ─── Live clock ───
+    const clock = document.getElementById('clock');
+    const tick = () => {
+      const d = new Date();
+      const hh = String(d.getHours()).padStart(2, '0');
+      const mm = String(d.getMinutes()).padStart(2, '0');
+      const ss = String(d.getSeconds()).padStart(2, '0');
+      clock.textContent = `${hh}:${mm}:${ss}`;
+    };
+    tick(); setInterval(tick, 1000);
+
+    // ─── Magnetic CTA (subtle) ───
+    document.querySelectorAll('.nav-cta, .cap').forEach((el) => {
+      el.addEventListener('mousemove', (e) => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left - r.width / 2) * 0.08;
+        const y = (e.clientY - r.top - r.height / 2) * 0.08;
+        el.style.transform = `translate(${x}px, ${y}px)`;
+      });
+      el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+    });
+  </script>
+</body>
+</html>

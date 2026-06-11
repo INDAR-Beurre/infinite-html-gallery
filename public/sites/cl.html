@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIR-IX // Transuranic Isotope Registry — Ledger 4A.7</title>
+<style>
+  :root{
+    --paper:#f1ede2;
+    --paper-2:#e8e2d1;
+    --ink:#0a0a0a;
+    --ink-2:#2a2a2a;
+    --rule:#0a0a0a;
+    --rule-soft:#8a8275;
+    --blueprint:#1d3b8a;
+    --warn:#ff6a00;
+    --hazard:#ffd400;
+    --matrix:#1e7a2f;
+    --redline:#b41414;
+    --grid:#c9c2b1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:'Inter','Helvetica Neue',Arial,sans-serif;font-size:12px;line-height:1.35;-webkit-font-smoothing:antialiased}
+  body{
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 16px 16px, 16px 16px;
+    background-position: -1px -1px;
+  }
+  .mono{font-family:'IBM Plex Mono','Space Mono','Fira Code',ui-monospace,Menlo,monospace}
+  .upper{text-transform:uppercase;letter-spacing:.08em}
+  .tiny{font-size:10px}
+  .micro{font-size:9px;letter-spacing:.12em}
+  a{color:var(--blueprint);text-decoration:none;border-bottom:1px dotted var(--blueprint)}
+  hr{border:0;border-top:1px solid var(--rule)}
+
+  /* SHELL */
+  .frame{
+    max-width:1440px;margin:24px auto;background:var(--paper);
+    border:2px solid var(--ink);
+    box-shadow: 0 0 0 1px var(--paper), 0 0 0 3px var(--ink);
+  }
+  .corner-tick{position:relative}
+  .corner-tick::before,.corner-tick::after{content:"";position:absolute;width:10px;height:10px;border:1px solid var(--ink)}
+  .corner-tick::before{top:-6px;left:-6px;border-right:0;border-bottom:0}
+  .corner-tick::after{bottom:-6px;right:-6px;border-left:0;border-top:0}
+
+  /* MASTHEAD */
+  .masthead{
+    display:grid;grid-template-columns: 200px 1fr 280px;
+    border-bottom:2px solid var(--ink);
+  }
+  .mh-cell{padding:10px 12px;border-right:1px solid var(--ink)}
+  .mh-cell:last-child{border-right:0}
+  .seal{
+    display:flex;align-items:center;justify-content:center;
+    background:repeating-linear-gradient(45deg,var(--paper),var(--paper) 6px,var(--paper-2) 6px,var(--paper-2) 12px);
+    min-height:96px;
+  }
+  .seal-svg{width:80px;height:80px}
+  .title-row{display:flex;flex-direction:column;justify-content:space-between;min-height:96px}
+  .title-row h1{font-family:'IBM Plex Mono',monospace;font-size:22px;letter-spacing:.02em;font-weight:600}
+  .title-row h1 small{font-size:11px;color:var(--ink-2);letter-spacing:.18em;display:block;margin-top:4px}
+  .meta-grid{display:grid;grid-template-columns:auto 1fr;gap:0 14px;font-size:10px}
+  .meta-grid dt{color:var(--ink-2);letter-spacing:.1em;text-transform:uppercase}
+  .meta-grid dd{font-family:'IBM Plex Mono',monospace}
+  .stamp{
+    border:2px solid var(--redline);color:var(--redline);
+    padding:4px 8px;display:inline-block;font-family:'IBM Plex Mono',monospace;
+    transform:rotate(-3deg);font-weight:700;letter-spacing:.14em;font-size:11px;
+    background:rgba(180,20,20,.04);
+  }
+  .barcode{
+    height:34px;
+    background:
+      repeating-linear-gradient(90deg,
+        var(--ink) 0 1px, transparent 1px 3px,
+        var(--ink) 3px 5px, transparent 5px 6px,
+        var(--ink) 6px 8px, transparent 8px 11px,
+        var(--ink) 11px 12px, transparent 12px 14px,
+        var(--ink) 14px 17px, transparent 17px 19px);
+    margin-top:6px;
+  }
+
+  /* NAVBAR */
+  .navbar{
+    display:flex;border-bottom:2px solid var(--ink);background:var(--ink);color:var(--paper);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;
+  }
+  .navbar a{color:var(--paper);border:0;padding:8px 14px;border-right:1px solid #444;text-transform:uppercase}
+  .navbar a.active{background:var(--hazard);color:var(--ink)}
+  .navbar .spacer{flex:1;border-right:1px solid #444}
+  .navbar .status{padding:8px 14px;display:flex;gap:14px}
+  .led{display:inline-block;width:8px;height:8px;border:1px solid var(--paper);vertical-align:middle;margin-right:6px}
+  .led.on{background:var(--matrix)}
+  .led.warn{background:var(--warn)}
+  .led.off{background:transparent}
+
+  /* PAGE GRID */
+  .page{display:grid;grid-template-columns: 220px 1fr 260px}
+  .col{border-right:1px solid var(--ink)}
+  .col:last-child{border-right:0}
+
+  /* LEFT INDEX */
+  .index-h{
+    padding:8px 10px;border-bottom:1px solid var(--ink);
+    font-family:'IBM Plex Mono',monospace;text-transform:uppercase;font-size:10px;letter-spacing:.18em;
+    background:var(--paper-2);
+  }
+  .index-list{list-style:none}
+  .index-list li{
+    display:grid;grid-template-columns: 48px 1fr 22px;
+    padding:6px 10px;border-bottom:1px dotted var(--rule-soft);font-family:'IBM Plex Mono',monospace;font-size:11px;cursor:default;
+  }
+  .index-list li.sel{background:var(--hazard)}
+  .index-list li:hover{background:var(--paper-2)}
+  .index-list .id{color:var(--blueprint)}
+  .index-list .badge{font-size:9px;text-align:right;color:var(--ink-2)}
+  .filter{
+    padding:10px;border-bottom:1px solid var(--ink);display:grid;grid-template-columns:1fr;gap:6px;
+  }
+  .filter label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+  .filter input,.filter select{
+    width:100%;background:var(--paper);border:1px solid var(--ink);padding:4px 6px;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink);border-radius:0;
+  }
+  .chip-row{display:flex;flex-wrap:wrap;gap:4px}
+  .chip{
+    border:1px solid var(--ink);padding:2px 6px;font-family:'IBM Plex Mono',monospace;font-size:10px;background:var(--paper-2);
+  }
+  .chip.on{background:var(--ink);color:var(--paper)}
+
+  /* CENTER DOCUMENT */
+  .doc-h{
+    padding:10px 14px;border-bottom:1px solid var(--ink);background:var(--paper-2);
+    display:grid;grid-template-columns: 1fr auto;align-items:end;gap:12px;
+  }
+  .doc-h h2{font-family:'IBM Plex Mono',monospace;font-size:18px;letter-spacing:.02em}
+  .doc-h .crumbs{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+  .doc-h .rev{font-family:'IBM Plex Mono',monospace;font-size:10px;text-align:right}
+  .doc-h .rev div{padding:1px 0}
+
+  .sec-h{
+    display:grid;grid-template-columns: 80px 1fr auto;align-items:center;
+    border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+    background:var(--ink);color:var(--paper);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  }
+  .sec-h .num{padding:6px 10px;border-right:1px solid #444;background:var(--hazard);color:var(--ink);font-weight:700}
+  .sec-h .ttl{padding:6px 12px}
+  .sec-h .meta{padding:6px 10px;border-left:1px solid #444;color:#cfcfcf;font-size:10px}
+
+  .panel{padding:14px;border-bottom:1px solid var(--ink)}
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--ink)}
+  .grid-4 .cell{padding:8px 10px;border-right:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+  .grid-4 .cell:nth-child(4n){border-right:0}
+  .grid-4 .cell:nth-last-child(-n+4){border-bottom:0}
+  .cell .k{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2)}
+  .cell .v{font-family:'IBM Plex Mono',monospace;font-size:14px;margin-top:2px}
+  .cell .v small{font-size:10px;color:var(--ink-2)}
+
+  /* SCHEMATIC */
+  .schematic-wrap{
+    display:grid;grid-template-columns: 1.4fr 1fr;gap:0;border:1px solid var(--ink);
+  }
+  .schematic{
+    border-right:1px solid var(--ink);position:relative;background:
+      linear-gradient(rgba(29,59,138,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(29,59,138,.06) 1px, transparent 1px),
+      var(--paper);
+    background-size:12px 12px,12px 12px;
+    min-height:340px;padding:10px;
+  }
+  .schematic .lbl{position:absolute;font-family:'IBM Plex Mono',monospace;font-size:10px;background:var(--paper);padding:1px 4px;border:1px solid var(--ink)}
+  .schematic svg{width:100%;height:320px;display:block}
+  .legend{padding:10px}
+  .legend h4{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;border-bottom:1px solid var(--ink);padding-bottom:4px;margin-bottom:8px}
+  .legend dl{display:grid;grid-template-columns: 56px 1fr;gap:4px 10px;font-size:11px;font-family:'IBM Plex Mono',monospace}
+  .legend dt{color:var(--ink-2)}
+  .legend .swatch{display:inline-block;width:12px;height:12px;border:1px solid var(--ink);vertical-align:middle;margin-right:6px}
+
+  /* TABLES */
+  table.tabular{
+    width:100%;border-collapse:collapse;font-family:'IBM Plex Mono',monospace;font-size:11px;
+  }
+  table.tabular th,table.tabular td{
+    border:1px solid var(--ink);padding:5px 8px;text-align:left;vertical-align:top;
+  }
+  table.tabular thead th{background:var(--ink);color:var(--paper);font-weight:500;letter-spacing:.14em;text-transform:uppercase;font-size:10px}
+  table.tabular tbody tr:nth-child(even){background:var(--paper-2)}
+  table.tabular td.num{text-align:right}
+  .tag{display:inline-block;border:1px solid var(--ink);padding:0 5px;font-size:10px}
+  .tag.warn{background:var(--warn);color:var(--ink)}
+  .tag.haz{background:var(--hazard);color:var(--ink)}
+  .tag.ok{background:var(--matrix);color:var(--paper)}
+  .tag.red{background:var(--redline);color:var(--paper)}
+  .tag.blu{background:var(--blueprint);color:var(--paper)}
+
+  /* DECAY CHAIN */
+  .chain{
+    display:grid;grid-template-columns:repeat(7,1fr);gap:0;border:1px solid var(--ink);
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .chain .node{
+    padding:8px 6px;text-align:center;border-right:1px solid var(--ink);position:relative;background:var(--paper);
+  }
+  .chain .node:last-child{border-right:0}
+  .chain .node .iso{font-size:13px;font-weight:600}
+  .chain .node .hl{font-size:9px;color:var(--ink-2);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+  .chain .node .mode{font-size:9px;color:var(--blueprint);margin-top:4px}
+  .chain .node.terminal{background:repeating-linear-gradient(45deg,var(--paper),var(--paper) 4px,var(--paper-2) 4px,var(--paper-2) 8px)}
+
+  /* SPECTRUM */
+  .spectrum-wrap{border:1px solid var(--ink);padding:10px}
+  .spectrum-wrap .head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .spectrum-wrap h4{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+  .spectrum-wrap .axis{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--ink-2);display:flex;justify-content:space-between;margin-top:4px}
+
+  /* WARNING BAR */
+  .warning-bar{
+    display:grid;grid-template-columns: 40px 1fr 120px;
+    border:2px solid var(--ink);background:
+      repeating-linear-gradient(135deg,var(--hazard),var(--hazard) 12px,var(--ink) 12px,var(--ink) 24px) 0 0/100% 12px no-repeat,
+      var(--paper);
+    background-position: top left, 0 12px;
+  }
+  .warning-bar > div{padding:10px 12px;border-right:1px solid var(--ink);background:var(--paper)}
+  .warning-bar > div:last-child{border-right:0}
+  .warning-bar .sym{font-family:'IBM Plex Mono',monospace;font-size:22px;text-align:center;background:var(--hazard) !important;border-right:2px solid var(--ink)}
+  .warning-bar .txt{font-family:'IBM Plex Mono',monospace;font-size:11px}
+  .warning-bar .txt b{font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+  .warning-bar .sig{font-family:'IBM Plex Mono',monospace;font-size:10px;text-align:right}
+
+  /* RIGHT RAIL */
+  .rail-h{
+    padding:8px 10px;border-bottom:1px solid var(--ink);background:var(--paper-2);
+    font-family:'IBM Plex Mono',monospace;text-transform:uppercase;font-size:10px;letter-spacing:.18em;
+  }
+  .rail-block{padding:10px;border-bottom:1px solid var(--ink)}
+  .rail-block dl{display:grid;grid-template-columns:auto 1fr;gap:3px 8px;font-family:'IBM Plex Mono',monospace;font-size:11px}
+  .rail-block dt{color:var(--ink-2);text-transform:uppercase;font-size:9px;letter-spacing:.12em;align-self:center}
+  .log{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;line-height:1.5;
+    max-height:240px;overflow:hidden;
+  }
+  .log .row{display:grid;grid-template-columns:78px 30px 1fr;gap:6px;padding:2px 0;border-bottom:1px dotted var(--rule-soft)}
+  .log .t{color:var(--ink-2)}
+  .log .l.O{color:var(--matrix)}
+  .log .l.W{color:var(--warn)}
+  .log .l.E{color:var(--redline)}
+  .log .l.I{color:var(--blueprint)}
+
+  .ascii{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;white-space:pre;line-height:1.1;
+    padding:8px;border:1px solid var(--ink);background:var(--paper-2);overflow:hidden;
+  }
+
+  /* FOOTER */
+  .footer{
+    display:grid;grid-template-columns: 1fr 1fr 1fr 1fr;
+    border-top:2px solid var(--ink);background:var(--paper-2);
+    font-family:'IBM Plex Mono',monospace;font-size:10px;
+  }
+  .footer > div{padding:8px 12px;border-right:1px solid var(--ink)}
+  .footer > div:last-child{border-right:0}
+  .footer b{letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+
+  /* small helpers */
+  .row-split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .row-split-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+  .label{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);margin-bottom:4px}
+  .kbd{font-family:'IBM Plex Mono',monospace;font-size:10px;border:1px solid var(--ink);padding:0 4px;background:var(--paper)}
+
+  /* Responsive */
+  @media (max-width: 1100px){
+    .page{grid-template-columns: 200px 1fr}
+    .col.rail{display:none}
+    .grid-4{grid-template-columns:repeat(2,1fr)}
+    .grid-4 .cell:nth-child(4n){border-right:1px solid var(--ink)}
+    .grid-4 .cell:nth-child(2n){border-right:0}
+    .schematic-wrap{grid-template-columns:1fr}
+    .schematic{border-right:0;border-bottom:1px solid var(--ink)}
+    .chain{grid-template-columns:repeat(4,1fr)}
+    .chain .node:nth-child(4n){border-right:0}
+  }
+  @media (max-width: 720px){
+    .page{grid-template-columns:1fr}
+    .col.left{border-right:0;border-bottom:1px solid var(--ink)}
+    .masthead{grid-template-columns:1fr}
+    .mh-cell{border-right:0;border-bottom:1px solid var(--ink)}
+    .footer{grid-template-columns:1fr 1fr}
+    .footer > div:nth-child(2n){border-right:0}
+    .chain{grid-template-columns:repeat(2,1fr)}
+    .chain .node:nth-child(2n){border-right:0}
+  }
+</style>
+</head>
+<body>
+<main class="frame" role="document" aria-label="Transuranic Isotope Registry">
+
+  <!-- MASTHEAD -->
+  <header class="masthead">
+    <div class="mh-cell seal" aria-hidden="true">
+      <svg class="seal-svg" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#0a0a0a" stroke-width="2"/>
+        <circle cx="50" cy="50" r="38" fill="none" stroke="#0a0a0a" stroke-width="1"/>
+        <g stroke="#0a0a0a" stroke-width="1" fill="none">
+          <circle cx="50" cy="50" r="6"/>
+          <ellipse cx="50" cy="50" rx="28" ry="10"/>
+          <ellipse cx="50" cy="50" rx="28" ry="10" transform="rotate(60 50 50)"/>
+          <ellipse cx="50" cy="50" rx="28" ry="10" transform="rotate(120 50 50)"/>
+        </g>
+        <text x="50" y="92" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="6" letter-spacing="1">DIR. NUCL. CART.</text>
+        <text x="50" y="14" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="6" letter-spacing="2">T·I·R — IX</text>
+      </svg>
+    </div>
+    <div class="mh-cell title-row">
+      <div>
+        <div class="micro upper" style="color:var(--ink-2)">Directorate of Nuclear Cartography &nbsp;/&nbsp; Volume IX &nbsp;/&nbsp; Ledger 4A.7</div>
+        <h1>TRANSURANIC ISOTOPE REGISTRY
+          <small>Synthetic Heavy-Element Index · Containment Class A–F · Public Excerpt</small>
+        </h1>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;justify-content:space-between">
+        <span class="stamp">CONTROLLED · DO NOT DUPLICATE</span>
+        <span class="mono tiny upper">Form TIR-04A · Rev. 17 · Sheet 1 of 412</span>
+      </div>
+    </div>
+    <div class="mh-cell">
+      <dl class="meta-grid">
+        <dt>Doc ID</dt><dd>TIR-IX/4A.7-00382</dd>
+        <dt>Filed</dt><dd>2026-04-11 · 04:17 UTC</dd>
+        <dt>Custodian</dt><dd>HALDEN, M. (CRT-7)</dd>
+        <dt>Vault</dt><dd>B-12 · Drawer 19 · Sleeve C</dd>
+        <dt>Print Run</dt><dd>0124 / 0500</dd>
+        <dt>Sheet</dt><dd>001 / 008</dd>
+      </dl>
+      <div class="barcode" aria-hidden="true"></div>
+      <div class="mono tiny" style="margin-top:4px">‖ 9 821 0044 73882 6 ‖</div>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" aria-label="Section navigation">
+    <a href="#" class="active">§ Registry</a>
+    <a href="#">§ Decay Atlas</a>
+    <a href="#">§ Containment</a>
+    <a href="#">§ Cross-Sections</a>
+    <a href="#">§ Errata</a>
+    <a href="#">§ Print Queue</a>
+    <span class="spacer"></span>
+    <span class="status">
+      <span><span class="led on"></span>LINK · OK</span>
+      <span><span class="led warn"></span>SHIELDING · 0.42 mSv/h</span>
+      <span><span class="led on"></span>SEAL · INTACT</span>
+      <span><span class="led off"></span>UPLOAD · OFF</span>
+    </span>
+  </nav>
+
+  <!-- PAGE -->
+  <section class="page">
+
+    <!-- LEFT INDEX -->
+    <aside class="col left" aria-label="Isotope index">
+      <div class="filter">
+        <div>
+          <label for="q">Query · CAS / Z / Σ</label>
+          <input id="q" type="text" placeholder="e.g. 119-Lv*  ▍" value="Z ≥ 118">
+        </div>
+        <div>
+          <label for="grp">Group filter</label>
+          <select id="grp">
+            <option>All transuranic (Z &gt; 92)</option>
+            <option>Superheavy (Z ≥ 104)</option>
+            <option>Synthesized · Confirmed</option>
+            <option>Synthesized · Pending replication</option>
+            <option>Theoretical / Predicted</option>
+          </select>
+        </div>
+        <div class="chip-row">
+          <span class="chip on">α</span><span class="chip">β−</span><span class="chip on">SF</span>
+          <span class="chip">EC</span><span class="chip on">γ</span><span class="chip">n</span>
+        </div>
+      </div>
+      <div class="index-h">Index · 047 entries</div>
+      <ul class="index-list" role="list">
+        <li><span class="id">293-Og</span><span>Oganesson</span><span class="badge">α</span></li>
+        <li><span class="id">294-Ts</span><span>Tennessine</span><span class="badge">α</span></li>
+        <li class="sel"><span class="id">296-Uue</span><span>Ununennium*</span><span class="badge">SF</span></li>
+        <li><span class="id">298-Ubn</span><span>Unbinilium*</span><span class="badge">α</span></li>
+        <li><span class="id">302-Ubt</span><span>Unbitrium*</span><span class="badge">SF</span></li>
+        <li><span class="id">310-Ubh</span><span>Unbihexium*</span><span class="badge">α</span></li>
+        <li><span class="id">318-Ubo</span><span>Unbioctium*</span><span class="badge">α</span></li>
+        <li><span class="id">326-Utn</span><span>Untrinilium†</span><span class="badge">SF</span></li>
+        <li><span class="id">334-Utq</span><span>Untriquadium†</span><span class="badge">α</span></li>
+        <li><span class="id">342-Uth</span><span>Untrihexium†</span><span class="badge">α</span></li>
+        <li><span class="id">350-Uto</span><span>Untrioctium†</span><span class="badge">SF</span></li>
+        <li><span class="id">355-Uqn</span><span>Unquadnilium‡</span><span class="badge">—</span></li>
+        <li><span class="id">364-Uqq</span><span>Unquadquadium‡</span><span class="badge">—</span></li>
+        <li><span class="id">372-Uqh</span><span>Unquadhexium‡</span><span class="badge">—</span></li>
+        <li><span class="id">380-Uqo</span><span>Unquadoctium‡</span><span class="badge">—</span></li>
+      </ul>
+      <div class="filter" style="border-bottom:0">
+        <div class="micro upper" style="color:var(--ink-2)">Legend</div>
+        <div class="mono tiny">* synthesized, awaiting replication<br>† single-event signature only<br>‡ theoretical (mass-formula)</div>
+      </div>
+    </aside>
+
+    <!-- CENTER DOCUMENT -->
+    <article class="col" aria-label="Selected isotope dossier">
+
+      <header class="doc-h">
+        <div>
+          <div class="crumbs">§ Registry / Period 8 / Series A / Entry 296-Uue</div>
+          <h2>ENTRY 296-Uue — “UNUNENNIUM” (Z=119, A=296)</h2>
+        </div>
+        <div class="rev">
+          <div>REV 17 · 2026-05-02</div>
+          <div>STATUS · <span class="tag haz">PROVISIONAL</span></div>
+          <div>SIG · M.HALDEN ⌗ K.OSEI</div>
+        </div>
+      </header>
+
+      <!-- SECTION 01 -->
+      <div class="sec-h">
+        <span class="num">SEC. 01</span>
+        <span class="ttl">Physical Parameters · Tabulated Constants</span>
+        <span class="meta">FIG. 1A — 1D</span>
+      </div>
+      <div class="panel">
+        <div class="grid-4">
+          <div class="cell"><div class="k">Atomic Number Z</div><div class="v">119</div></div>
+          <div class="cell"><div class="k">Mass Number A</div><div class="v">296</div></div>
+          <div class="cell"><div class="k">Half-Life t½</div><div class="v">0.71 <small>ms ± 0.04</small></div></div>
+          <div class="cell"><div class="k">Decay Mode</div><div class="v">α / SF <small>(branch 0.62/0.38)</small></div></div>
+
+          <div class="cell"><div class="k">Q-value α</div><div class="v">12.84 <small>MeV</small></div></div>
+          <div class="cell"><div class="k">Binding E/A</div><div class="v">7.04 <small>MeV</small></div></div>
+          <div class="cell"><div class="k">Neutron Sep. S<sub>n</sub></div><div class="v">5.92 <small>MeV</small></div></div>
+          <div class="cell"><div class="k">Cross-Section σ</div><div class="v">0.18 <small>pb</small></div></div>
+
+          <div class="cell"><div class="k">Production Path</div><div class="v">²⁴⁹Bk(⁵⁰Ti, 3n)</div></div>
+          <div class="cell"><div class="k">Beam Energy</div><div class="v">238.4 <small>MeV</small></div></div>
+          <div class="cell"><div class="k">Events Recorded</div><div class="v">004 <small>since 2024-Q3</small></div></div>
+          <div class="cell"><div class="k">Replication</div><div class="v"><span class="tag warn">PENDING</span></div></div>
+        </div>
+      </div>
+
+      <!-- SECTION 02 -->
+      <div class="sec-h">
+        <span class="num">SEC. 02</span>
+        <span class="ttl">Synthesis Schematic · Cyclotron Cross-View</span>
+        <span class="meta">FIG. 2A</span>
+      </div>
+      <div class="panel">
+        <div class="schematic-wrap">
+          <div class="schematic">
+            <svg viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet">
+              <!-- frame -->
+              <rect x="6" y="6" width="588" height="308" fill="none" stroke="#0a0a0a" stroke-width="1"/>
+              <!-- cyclotron rings -->
+              <g fill="none" stroke="#1d3b8a" stroke-width="1.2">
+                <circle cx="170" cy="160" r="110"/>
+                <circle cx="170" cy="160" r="84"/>
+                <circle cx="170" cy="160" r="58"/>
+                <circle cx="170" cy="160" r="32"/>
+                <line x1="60" y1="160" x2="280" y2="160" stroke-dasharray="2 3"/>
+                <line x1="170" y1="50" x2="170" y2="270" stroke-dasharray="2 3"/>
+              </g>
+              <!-- target chamber -->
+              <g stroke="#0a0a0a" fill="#f1ede2" stroke-width="1">
+                <rect x="300" y="120" width="120" height="80"/>
+                <rect x="306" y="126" width="108" height="68" fill="none" stroke-dasharray="2 2"/>
+                <circle cx="360" cy="160" r="10" fill="#ffd400"/>
+                <circle cx="360" cy="160" r="3" fill="#0a0a0a"/>
+              </g>
+              <!-- beam line -->
+              <g stroke="#b41414" stroke-width="1.4">
+                <line x1="280" y1="160" x2="300" y2="160"/>
+                <polygon points="298,156 306,160 298,164" fill="#b41414"/>
+              </g>
+              <!-- detector array -->
+              <g stroke="#0a0a0a" fill="none">
+                <rect x="430" y="100" width="150" height="120"/>
+                <line x1="430" y1="130" x2="580" y2="130"/>
+                <line x1="430" y1="160" x2="580" y2="160"/>
+                <line x1="430" y1="190" x2="580" y2="190"/>
+                <line x1="460" y1="100" x2="460" y2="220"/>
+                <line x1="490" y1="100" x2="490" y2="220"/>
+                <line x1="520" y1="100" x2="520" y2="220"/>
+                <line x1="550" y1="100" x2="550" y2="220"/>
+              </g>
+              <!-- callouts -->
+              <g font-family="IBM Plex Mono, monospace" font-size="9" fill="#0a0a0a">
+                <text x="170" y="40">[A] ION INJECTOR · ⁵⁰Ti²⁺</text>
+                <text x="170" y="294" text-anchor="middle">[B] ACCEL. STAGE · 238.4 MeV</text>
+                <text x="306" y="116">[C] ROTATING ²⁴⁹Bk TARGET</text>
+                <text x="430" y="92">[D] Si-STRIP DETECTOR (12×12)</text>
+                <text x="430" y="238">[E] VETO · BGO ANTI-COINCIDENCE</text>
+              </g>
+              <!-- index marks -->
+              <g font-family="IBM Plex Mono, monospace" font-size="8" fill="#1d3b8a">
+                <text x="14" y="20">0,0</text>
+                <text x="570" y="20">FIG 2A</text>
+                <text x="14" y="308">SCALE 1 : 240</text>
+                <text x="500" y="308">SHEET 01·08</text>
+              </g>
+            </svg>
+          </div>
+          <div class="legend">
+            <h4>Key · Callouts</h4>
+            <dl>
+              <dt><span class="swatch" style="background:#1d3b8a"></span>[A]</dt><dd>Ion injector (ECR-3, ⁵⁰Ti²⁺)</dd>
+              <dt><span class="swatch" style="background:#1d3b8a"></span>[B]</dt><dd>Accelerator · 238.4 MeV</dd>
+              <dt><span class="swatch" style="background:#ffd400"></span>[C]</dt><dd>²⁴⁹Bk target, rotating</dd>
+              <dt><span class="swatch"></span>[D]</dt><dd>Si-strip focal plane</dd>
+              <dt><span class="swatch"></span>[E]</dt><dd>BGO veto array</dd>
+              <dt><span class="swatch" style="background:#b41414"></span>→</dt><dd>Beam axis · evacuated 10⁻⁸ mbar</dd>
+            </dl>
+            <hr style="margin:10px 0">
+            <h4>Operating Window</h4>
+            <table class="tabular" style="font-size:10px">
+              <tbody>
+                <tr><td>Beam current</td><td class="num">6.2 pµA</td></tr>
+                <tr><td>Target thickness</td><td class="num">0.42 mg/cm²</td></tr>
+                <tr><td>Run length</td><td class="num">512 h</td></tr>
+                <tr><td>Vacuum</td><td class="num">8.4 × 10⁻⁹ mbar</td></tr>
+                <tr><td>Cooling</td><td class="num">LN₂ + He(g)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 03 -->
+      <div class="sec-h">
+        <span class="num">SEC. 03</span>
+        <span class="ttl">Decay Chain · Successive Daughter Products</span>
+        <span class="meta">FIG. 3A</span>
+      </div>
+      <div class="panel">
+        <div class="chain" aria-label="Decay chain">
+          <div class="node"><div class="iso">²⁹⁶Uue</div><div class="hl">0.71 ms</div><div class="mode">α · 12.84 MeV</div></div>
+          <div class="node"><div class="iso">²⁹²Ts</div><div class="hl">18 ms</div><div class="mode">α · 11.62 MeV</div></div>
+          <div class="node"><div class="iso">²⁸⁸Mc</div><div class="hl">87 ms</div><div class="mode">α · 10.74 MeV</div></div>
+          <div class="node"><div class="iso">²⁸⁴Nh</div><div class="hl">0.48 s</div><div class="mode">α · 10.12 MeV</div></div>
+          <div class="node"><div class="iso">²⁸⁰Rg</div><div class="hl">3.6 s</div><div class="mode">α · 9.91 MeV</div></div>
+          <div class="node"><div class="iso">²⁷⁶Mt</div><div class="hl">0.72 s</div><div class="mode">α · 9.71 MeV</div></div>
+          <div class="node terminal"><div class="iso">²⁷²Bh</div><div class="hl">9.8 s</div><div class="mode">SF · TERMINAL</div></div>
+        </div>
+
+        <div class="row-split" style="margin-top:14px">
+          <div class="spectrum-wrap">
+            <div class="head">
+              <h4>Fig. 3B · α-Spectrum (focal plane)</h4>
+              <div class="mono tiny">Σ events = 4 · live time 512 h</div>
+            </div>
+            <svg viewBox="0 0 480 140" preserveAspectRatio="none" style="width:100%;height:140px">
+              <rect x="0.5" y="0.5" width="479" height="139" fill="none" stroke="#0a0a0a"/>
+              <g stroke="#c9c2b1" stroke-width="0.5">
+                <line x1="0" y1="35" x2="480" y2="35"/>
+                <line x1="0" y1="70" x2="480" y2="70"/>
+                <line x1="0" y1="105" x2="480" y2="105"/>
+                <line x1="96" y1="0" x2="96" y2="140"/>
+                <line x1="192" y1="0" x2="192" y2="140"/>
+                <line x1="288" y1="0" x2="288" y2="140"/>
+                <line x1="384" y1="0" x2="384" y2="140"/>
+              </g>
+              <!-- baseline noise -->
+              <polyline fill="none" stroke="#1d3b8a" stroke-width="1" points="
+                0,128 12,126 24,127 36,128 48,125 60,127 72,128 84,126 96,128 108,124 120,126 132,128 144,127 156,128 168,125 180,127
+                192,128 204,126 216,127 228,128 240,125 252,127 264,128 276,126 288,128 300,124 312,126 324,128 336,127 348,128 360,125 372,127
+                384,128 396,126 408,127 420,128 432,125 444,127 456,128 468,126 480,128"/>
+              <!-- peaks -->
+              <g stroke="#b41414" stroke-width="1.2">
+                <line x1="78" y1="128" x2="78" y2="38"/>
+                <line x1="146" y1="128" x2="146" y2="62"/>
+                <line x1="212" y1="128" x2="212" y2="84"/>
+                <line x1="284" y1="128" x2="284" y2="48"/>
+                <line x1="352" y1="128" x2="352" y2="96"/>
+                <line x1="420" y1="128" x2="420" y2="74"/>
+              </g>
+              <g font-family="IBM Plex Mono, monospace" font-size="8" fill="#0a0a0a">
+                <text x="60" y="34">12.84</text>
+                <text x="128" y="58">11.62</text>
+                <text x="194" y="80">10.74</text>
+                <text x="266" y="44">10.12</text>
+                <text x="334" y="92">9.91</text>
+                <text x="402" y="70">9.71</text>
+              </g>
+            </svg>
+            <div class="axis"><span>8.0 MeV</span><span>10.0</span><span>12.0</span><span>14.0 MeV</span></div>
+          </div>
+
+          <div>
+            <div class="label">Fig. 3C · Chain Summary</div>
+            <table class="tabular">
+              <thead><tr><th>#</th><th>Parent</th><th>Daughter</th><th>Mode</th><th class="num">Eα (MeV)</th><th class="num">t½</th></tr></thead>
+              <tbody>
+                <tr><td>01</td><td>²⁹⁶Uue</td><td>²⁹²Ts</td><td>α</td><td class="num">12.84</td><td class="num">0.71 ms</td></tr>
+                <tr><td>02</td><td>²⁹²Ts</td><td>²⁸⁸Mc</td><td>α</td><td class="num">11.62</td><td class="num">18 ms</td></tr>
+                <tr><td>03</td><td>²⁸⁸Mc</td><td>²⁸⁴Nh</td><td>α</td><td class="num">10.74</td><td class="num">87 ms</td></tr>
+                <tr><td>04</td><td>²⁸⁴Nh</td><td>²⁸⁰Rg</td><td>α</td><td class="num">10.12</td><td class="num">0.48 s</td></tr>
+                <tr><td>05</td><td>²⁸⁰Rg</td><td>²⁷⁶Mt</td><td>α</td><td class="num">9.91</td><td class="num">3.6 s</td></tr>
+                <tr><td>06</td><td>²⁷⁶Mt</td><td>²⁷²Bh</td><td>α</td><td class="num">9.71</td><td class="num">0.72 s</td></tr>
+                <tr><td>07</td><td>²⁷²Bh</td><td>—</td><td>SF</td><td class="num">—</td><td class="num">9.8 s</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- WARNING -->
+      <div class="panel" style="padding:14px">
+        <div class="warning-bar">
+          <div class="sym">⚠</div>
+          <div class="txt">
+            <b>Hazard Class IV-R · Inhalation &amp; Neutron Risk</b><br>
+            Specimen emits prompt γ &gt; 1.4 MeV and uncorrelated neutron bursts during SF events. Handle exclusively
+            within Glovebox Series B-12 under negative pressure (–35 Pa). Refer to <a href="#">App. K · §7.2</a> before
+            any transfer between containment sleeves.
+          </div>
+          <div class="sig">
+            REV 17<br>
+            APPROVED · K.OSEI<br>
+            2026-05-02 / 09:14Z
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 04 -->
+      <div class="sec-h">
+        <span class="num">SEC. 04</span>
+        <span class="ttl">Observation Log · Recorded Synthesis Events</span>
+        <span class="meta">TBL. 4A</span>
+      </div>
+      <div class="panel">
+        <table class="tabular">
+          <thead>
+            <tr>
+              <th style="width:54px">EVT-ID</th>
+              <th>Timestamp (UTC)</th>
+              <th>Facility</th>
+              <th>Run</th>
+              <th class="num">Eα₁ (MeV)</th>
+              <th class="num">Δt → α₂ (ms)</th>
+              <th>Chain Length</th>
+              <th>Result</th>
+              <th>Observer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0001</td><td>2024-09-14 03:42:11.084</td><td>JINR / DGFRS-2</td><td>R-118.4</td>
+              <td class="num">12.81</td><td class="num">0.69</td><td>6 α + SF</td>
+              <td><span class="tag ok">CONFIRMED</span></td><td>OGANESSIAN, Y.</td>
+            </tr>
+            <tr>
+              <td>0002</td><td>2025-02-02 19:08:54.612</td><td>RIKEN / GARIS-III</td><td>R-118.4</td>
+              <td class="num">12.86</td><td class="num">0.74</td><td>5 α + SF</td>
+              <td><span class="tag haz">PARTIAL</span></td><td>MORITA, K.</td>
+            </tr>
+            <tr>
+              <td>0003</td><td>2025-11-19 11:23:09.221</td><td>LBNL / BGS</td><td>R-119.0</td>
+              <td class="num">12.84</td><td class="num">0.72</td><td>6 α + SF</td>
+              <td><span class="tag ok">CONFIRMED</span></td><td>NITSCHE, H.</td>
+            </tr>
+            <tr>
+              <td>0004</td><td>2026-03-04 02:55:36.770</td><td>JINR / DGFRS-2</td><td>R-119.0</td>
+              <td class="num">12.85</td><td class="num">0.70</td><td>4 α + SF</td>
+              <td><span class="tag warn">DEGRADED</span></td><td>HALDEN, M.</td>
+            </tr>
+            <tr>
+              <td>0005</td><td>2026-04-29 22:01:17.044</td><td>GSI / SHIP</td><td>R-119.1</td>
+              <td class="num">—</td><td class="num">—</td><td>VETOED</td>
+              <td><span class="tag red">REJECTED</span></td><td>HOFMANN, S.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- SECTION 05 -->
+      <div class="sec-h">
+        <span class="num">SEC. 05</span>
+        <span class="ttl">Containment Sleeve · Mechanical Specification</span>
+        <span class="meta">FIG. 5A · TBL. 5B</span>
+      </div>
+      <div class="panel">
+        <div class="row-split-3">
+          <div>
+            <div class="label">Fig. 5A — Sleeve cross-section</div>
+            <svg viewBox="0 0 240 200" style="width:100%;height:180px;border:1px solid #0a0a0a;background:linear-gradient(rgba(29,59,138,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(29,59,138,.06) 1px,transparent 1px) #f1ede2;background-size:10px 10px,10px 10px">
+              <g stroke="#0a0a0a" fill="none">
+                <rect x="20" y="40" width="200" height="120"/>
+                <rect x="30" y="50" width="180" height="100"/>
+                <rect x="45" y="65" width="150" height="70"/>
+                <rect x="70" y="80" width="100" height="40" fill="#ffd400"/>
+                <circle cx="120" cy="100" r="6" fill="#0a0a0a"/>
+              </g>
+              <g font-family="IBM Plex Mono, monospace" font-size="8" fill="#0a0a0a">
+                <text x="22" y="36">[1] OUTER · 316L SS</text>
+                <text x="32" y="58" fill="#1d3b8a">[2] BORATED HDPE</text>
+                <text x="47" y="78">[3] W-ALLOY LINER</text>
+                <text x="72" y="76">[4] SPECIMEN WELL</text>
+                <text x="22" y="178">SCALE 1:4 · UNITS mm</text>
+                <text x="160" y="178">DRG TIR-5A-119</text>
+              </g>
+              <g stroke="#b41414" stroke-width="0.6">
+                <line x1="120" y1="105" x2="120" y2="190"/>
+                <line x1="116" y1="186" x2="124" y2="186"/>
+              </g>
+            </svg>
+          </div>
+          <div>
+            <div class="label">Tbl. 5B — Material stack</div>
+            <table class="tabular">
+              <thead><tr><th>Lyr</th><th>Material</th><th class="num">Thk (mm)</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>316L Stainless</td><td class="num">4.0</td></tr>
+                <tr><td>2</td><td>Borated HDPE (5% B)</td><td class="num">22.0</td></tr>
+                <tr><td>3</td><td>W-Re alloy liner</td><td class="num">12.0</td></tr>
+                <tr><td>4</td><td>Vacuum gap (10⁻⁶ mbar)</td><td class="num">3.0</td></tr>
+                <tr><td>5</td><td>Au-plated specimen well</td><td class="num">1.5</td></tr>
+                <tr><td>—</td><td><b>Σ wall</b></td><td class="num"><b>42.5</b></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <div class="label">Operating envelope</div>
+            <table class="tabular">
+              <tbody>
+                <tr><td>Temp range</td><td class="num">77 – 320 K</td></tr>
+                <tr><td>Internal P</td><td class="num">≤ 10⁻⁶ mbar</td></tr>
+                <tr><td>Ext. dose at 30 cm</td><td class="num">0.42 mSv/h</td></tr>
+                <tr><td>Sleeve mass</td><td class="num">18.7 kg</td></tr>
+                <tr><td>Serial range</td><td class="num">B-12 / 001–048</td></tr>
+                <tr><td>Recert. cycle</td><td class="num">90 d</td></tr>
+                <tr><td>Last recert.</td><td class="num">2026-05-22</td></tr>
+                <tr><td>Next recert.</td><td class="num">2026-08-20</td></tr>
+                <tr><td>Class</td><td><span class="tag blu">IV-R · A</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 06 -->
+      <div class="sec-h">
+        <span class="num">SEC. 06</span>
+        <span class="ttl">Annotations · Custodial Marginalia</span>
+        <span class="meta">APP. N</span>
+      </div>
+      <div class="panel" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div>
+          <div class="label">N.1 — Halden, M. · 2026-03-05</div>
+          <p class="mono tiny" style="font-size:11px;line-height:1.5">
+            Event 0004 returned a truncated chain (4 α + SF). Cross-checked with veto array — coincident
+            BGO trigger at t=+0.31 ms suggests stray cosmic. Recommend re-weighting branching ratio at next
+            audit; do not yet revise published Q-value.
+          </p>
+        </div>
+        <div>
+          <div class="label">N.2 — Osei, K. · 2026-04-30</div>
+          <p class="mono tiny" style="font-size:11px;line-height:1.5">
+            GSI rejection (0005) traced to target oxidation (BkO₂ → Bk₂O₃ at 412 °C). Sleeve B-12/019
+            cleared for transfer pending He-leak retest. See <a href="#">App. K · §7.2</a> and
+            <a href="#">Errata 4A.7-E-014</a>.
+          </p>
+        </div>
+      </div>
+
+    </article>
+
+    <!-- RIGHT RAIL -->
+    <aside class="col rail" aria-label="Sidebar instruments">
+      <div class="rail-h">Instrument · Live</div>
+      <div class="rail-block">
+        <dl>
+          <dt>Beam</dt><dd>OFF · 00:00:00</dd>
+          <dt>Vacuum</dt><dd>8.4×10⁻⁹ mbar</dd>
+          <dt>Target T</dt><dd>302.1 K</dd>
+          <dt>Det. bias</dt><dd>+85.0 V</dd>
+          <dt>Veto rate</dt><dd>112 Hz</dd>
+          <dt>Live time</dt><dd>0 / 512 h</dd>
+        </dl>
+      </div>
+
+      <div class="rail-h">Cross-Section σ(E)</div>
+      <div class="rail-block">
+        <svg viewBox="0 0 240 100" style="width:100%;height:100px;border:1px solid #0a0a0a;background:#f1ede2">
+          <g stroke="#c9c2b1" stroke-width="0.5">
+            <line x1="0" y1="25" x2="240" y2="25"/>
+            <line x1="0" y1="50" x2="240" y2="50"/>
+            <line x1="0" y1="75" x2="240" y2="75"/>
+            <line x1="60" y1="0" x2="60" y2="100"/>
+            <line x1="120" y1="0" x2="120" y2="100"/>
+            <line x1="180" y1="0" x2="180" y2="100"/>
+          </g>
+          <polyline fill="none" stroke="#1d3b8a" stroke-width="1.4" points="
+            0,96 20,92 40,80 60,58 80,34 100,22 120,30 140,52 160,72 180,86 200,94 220,98 240,99"/>
+          <circle cx="100" cy="22" r="2.2" fill="#b41414"/>
+          <text x="104" y="20" font-family="IBM Plex Mono, monospace" font-size="8" fill="#b41414">238.4 MeV</text>
+        </svg>
+        <div class="mono tiny" style="display:flex;justify-content:space-between;margin-top:4px;color:#2a2a2a">
+          <span>200 MeV</span><span>238</span><span>260</span><span>280</span>
+        </div>
+      </div>
+
+      <div class="rail-h">Console · Tail</div>
+      <div class="rail-block">
+        <div class="log" aria-live="polite">
+          <div class="row"><span class="t">04:17:02.118</span><span class="l I">[I]</span><span>vault: sleeve B-12/019 mounted</span></div>
+          <div class="row"><span class="t">04:17:02.341</span><span class="l O">[O]</span><span>seal: torque 18.4 N·m ✓</span></div>
+          <div class="row"><span class="t">04:17:05.902</span><span class="l I">[I]</span><span>detector: bias ramp +0→+85 V</span></div>
+          <div class="row"><span class="t">04:17:11.044</span><span class="l W">[W]</span><span>veto: BGO ch.04 rate 612 Hz</span></div>
+          <div class="row"><span class="t">04:17:12.660</span><span class="l O">[O]</span><span>veto: ch.04 re-zeroed</span></div>
+          <div class="row"><span class="t">04:18:01.000</span><span class="l I">[I]</span><span>cryo: LN₂ fill 92% / nom. 90%</span></div>
+          <div class="row"><span class="t">04:18:44.213</span><span class="l E">[E]</span><span>iface: TIR/IX checksum drift (0x4A→0x4B)</span></div>
+          <div class="row"><span class="t">04:18:46.880</span><span class="l O">[O]</span><span>iface: checksum re-synced</span></div>
+          <div class="row"><span class="t">04:19:30.000</span><span class="l I">[I]</span><span>auth: HALDEN, M. · session ✓</span></div>
+          <div class="row"><span class="t">04:19:30.044</span><span class="l I">[I]</span><span>doc: TIR-IX/4A.7-00382 opened</span></div>
+        </div>
+      </div>
+
+      <div class="rail-h">Sheet Map</div>
+      <div class="rail-block">
+        <pre class="ascii">+----+----+----+----+
+| 01 | 02 | 03 | 04 |
++----+----+----+----+
+| 05 | 06 | 07 | 08 |
++----+----+----+----+
+  ^ you are here (01)
+</pre>
+        <div class="mono tiny" style="margin-top:6px;color:#2a2a2a">
+          NEXT · §02 Decay Atlas <span class="kbd">PGDN</span>&nbsp; PREV <span class="kbd">PGUP</span>
+        </div>
+      </div>
+
+      <div class="rail-h">References</div>
+      <div class="rail-block">
+        <ol class="mono tiny" style="padding-left:14px;line-height:1.55">
+          <li>Oganessian Y. et al., Phys. Rev. C 109, 054307 (2024)</li>
+          <li>Morita K. et al., J. Phys. Soc. Jpn. 93, 081002 (2025)</li>
+          <li>Hofmann S., Eur. Phys. J. A 61, 219 (2025)</li>
+          <li>Internal: TIR-IX App. K §7.2 (Containment)</li>
+          <li>Internal: Errata 4A.7-E-014 (Target oxidation)</li>
+        </ol>
+      </div>
+    </aside>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div><b>Classification</b><br>CONTROLLED · Tier-2 · Excerpt cleared 2026-05-02</div>
+    <div><b>Retention</b><br>Indefinite · Vault B-12 · Re-audit 2027-Q2</div>
+    <div><b>Cross-Ref</b><br>TIR-VIII §11; TIR-X §02; ICAP-2025 Tbl. 9</div>
+    <div><b>Page</b><br>001 / 008 · printed 2026-06-07 · plate 17 of 24</div>
+  </footer>
+</main>
+
+<script>
+  // Minimal interactivity: index selection + filter chips
+  (function(){
+    const items = document.querySelectorAll('.index-list li');
+    items.forEach(li=>{
+      li.addEventListener('click',()=>{
+        items.forEach(x=>x.classList.remove('sel'));
+        li.classList.add('sel');
+      });
+    });
+    document.querySelectorAll('.chip').forEach(c=>{
+      c.addEventListener('click',()=>c.classList.toggle('on'));
+    });
+    // Live clock in the console tail (purely cosmetic)
+    const log = document.querySelector('.log');
+    if(log){
+      setInterval(()=>{
+        const d = new Date();
+        const hh = String(d.getUTCHours()).padStart(2,'0');
+        const mm = String(d.getUTCMinutes()).padStart(2,'0');
+        const ss = String(d.getUTCSeconds()).padStart(2,'0');
+        const ms = String(d.getUTCMilliseconds()).padStart(3,'0');
+        const row = document.createElement('div');
+        row.className='row';
+        row.innerHTML = `<span class="t">${hh}:${mm}:${ss}.${ms}</span><span class="l I">[I]</span><span>hb: link OK · drift 0.${(Math.random()*99|0).toString().padStart(2,'0')} ppm</span>`;
+        log.insertBefore(row, log.firstChild);
+        if(log.childElementCount>14) log.removeChild(log.lastChild);
+      }, 4000);
+    }
+  })();
+</script>
+</body>
+</html>

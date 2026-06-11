@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pith — Sparkling citrus, no apologies</title>
+<meta name="description" content="A small-batch sparkling soda made from real cold-pressed citrus. Three flavors. Zero sugar. Honest fizz." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Geist:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --peel:   oklch(72% 0.21 58);
+    --pith:   oklch(97% 0.008 75);
+    --rind:   oklch(22% 0.04 50);
+    --zest:   oklch(91% 0.18 102);
+    --cherry: oklch(58% 0.21 28);
+    --grove:  oklch(48% 0.12 145);
+    --line:   oklch(22% 0.04 50 / 0.18);
+
+    --display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+    --body:    "Geist", ui-sans-serif, system-ui, sans-serif;
+
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--body);
+    font-size: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
+    line-height: 1.55;
+    color: var(--rind);
+    background: var(--pith);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; border: 0; background: 0; cursor: pointer; }
+
+  .wrap { width: min(100% - 2.5rem, 1320px); margin-inline: auto; }
+
+  /* ---------- nav ---------- */
+  .nav {
+    position: absolute; inset: 0 0 auto 0; z-index: 5;
+    padding: 1.4rem 0;
+  }
+  .nav-row {
+    display: flex; align-items: baseline; justify-content: space-between;
+    color: var(--rind);
+  }
+  .mark {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.01em;
+  }
+  .mark::after {
+    content: "·"; margin-left: 0.45rem; color: var(--cherry);
+    font-size: 1.3em; line-height: 0;
+  }
+  .nav-links {
+    display: flex; gap: 1.75rem;
+    font-size: 0.875rem;
+  }
+  .nav-links a { opacity: 0.78; transition: opacity 200ms var(--ease-out-expo); }
+  .nav-links a:hover { opacity: 1; }
+  .nav-cta {
+    font-family: var(--display); font-weight: 600;
+    background: var(--rind); color: var(--pith);
+    padding: 0.55rem 1.1rem; border-radius: 999px;
+    font-size: 0.875rem;
+    transition: transform 280ms var(--ease-out-expo);
+  }
+  .nav-cta:hover { transform: translateY(-1px); }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    min-height: min(96vh, 980px);
+    background: var(--peel);
+    color: var(--rind);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(2rem, 4vw, 4rem);
+    padding: clamp(7rem, 12vh, 11rem) 0 clamp(3rem, 6vh, 5rem);
+    align-items: end;
+  }
+  @media (min-width: 880px) {
+    .hero-grid { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+  }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.8125rem; font-weight: 500;
+    padding: 0.35rem 0.7rem 0.35rem 0.55rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: oklch(97% 0.02 75 / 0.55);
+    margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  }
+  .hero-eyebrow .dot {
+    width: 0.5rem; height: 0.5rem; border-radius: 999px;
+    background: var(--cherry);
+  }
+
+  .wordmark {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(5.5rem, 19vw, 19rem);
+    line-height: 0.82;
+    letter-spacing: -0.045em;
+    color: var(--rind);
+    display: flex;
+    overflow: hidden;
+  }
+  .wordmark span {
+    display: inline-block;
+    transform: translateY(110%);
+    animation: rise 1100ms var(--ease-out-expo) forwards;
+  }
+  .wordmark span:nth-child(1) { animation-delay: 80ms; }
+  .wordmark span:nth-child(2) { animation-delay: 180ms; }
+  .wordmark span:nth-child(3) { animation-delay: 280ms; }
+  .wordmark span:nth-child(4) { animation-delay: 380ms; }
+  .wordmark .accent { color: var(--cherry); }
+
+  @keyframes rise { to { transform: translateY(0); } }
+
+  .hero-lede {
+    max-width: 30ch;
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin-top: clamp(1.5rem, 3vw, 2rem);
+    opacity: 0; transform: translateY(14px);
+    animation: fadeUp 900ms var(--ease-out-expo) 700ms forwards;
+  }
+  .hero-lede em {
+    font-style: italic;
+    background: var(--zest);
+    padding: 0 0.25rem;
+    border-radius: 4px;
+  }
+
+  .hero-actions {
+    display: flex; gap: 0.8rem; flex-wrap: wrap;
+    margin-top: clamp(1.75rem, 3vw, 2.5rem);
+    opacity: 0; transform: translateY(14px);
+    animation: fadeUp 900ms var(--ease-out-expo) 820ms forwards;
+  }
+  .btn {
+    font-family: var(--display); font-weight: 600;
+    padding: 0.95rem 1.5rem;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    transition: transform 280ms var(--ease-out-expo), background 280ms;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+  }
+  .btn-primary { background: var(--rind); color: var(--pith); }
+  .btn-primary:hover { transform: translateY(-2px); }
+  .btn-ghost { background: transparent; color: var(--rind); border: 1px solid var(--rind); }
+  .btn-ghost:hover { background: var(--rind); color: var(--pith); }
+  .btn .arrow { transition: transform 280ms var(--ease-out-expo); }
+  .btn:hover .arrow { transform: translateX(3px); }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+  /* hero illustration */
+  .hero-fruit {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    max-width: 560px;
+    justify-self: end;
+    opacity: 0;
+    transform: translateY(30px) rotate(-6deg);
+    animation: fruitIn 1400ms var(--ease-out-expo) 250ms forwards;
+  }
+  .hero-fruit svg { width: 100%; height: 100%; display: block; }
+  .hero-fruit.spin svg { animation: spin 24s linear infinite; transform-origin: center; }
+
+  @keyframes fruitIn {
+    to { opacity: 1; transform: translateY(0) rotate(0); }
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* fizz bubbles */
+  .fizz {
+    position: absolute; inset: 0;
+    pointer-events: none; z-index: -1;
+  }
+  .bubble {
+    position: absolute; bottom: -20px;
+    border-radius: 999px;
+    background: oklch(97% 0.02 75 / 0.45);
+    border: 1px solid oklch(97% 0.02 75 / 0.65);
+    animation: rise-up linear infinite;
+  }
+  @keyframes rise-up {
+    0%   { transform: translateY(0)     scale(0.6); opacity: 0; }
+    15%  { opacity: 0.9; }
+    100% { transform: translateY(-110vh) scale(1);   opacity: 0; }
+  }
+
+  .hero-meta {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 1.25rem 0;
+    border-top: 1px solid oklch(22% 0.04 50 / 0.2);
+    background: oklch(97% 0.04 75 / 0.35);
+  }
+  .hero-meta .row {
+    display: flex; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap;
+    font-size: 0.8125rem; font-weight: 500;
+    color: var(--rind);
+  }
+  .hero-meta span:last-child { opacity: 0.6; }
+
+  /* ---------- flavors ---------- */
+  .flavors { padding: clamp(6rem, 11vw, 10rem) 0 0; }
+
+  .section-head {
+    display: flex; align-items: end; justify-content: space-between;
+    gap: 2rem; flex-wrap: wrap;
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+  .section-kicker {
+    font-family: var(--display);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--cherry);
+  }
+  .section-title {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(2.5rem, 5.5vw, 5.25rem);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    max-width: 14ch;
+    margin-top: 0.5rem;
+  }
+  .section-aside {
+    max-width: 32ch;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    opacity: 0.78;
+  }
+
+  .flavor {
+    position: relative;
+    padding: clamp(3rem, 6vw, 5rem) 0;
+    border-top: 1px solid var(--line);
+    transition: background 380ms var(--ease-out-expo);
+  }
+  .flavor:last-child { border-bottom: 1px solid var(--line); }
+
+  .flavor-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(2rem, 4vw, 3rem);
+    align-items: center;
+  }
+  @media (min-width: 720px) {
+    .flavor-row { grid-template-columns: 6rem minmax(0, 1fr) minmax(0, 1.2fr) 9rem; }
+  }
+
+  .flavor-num {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1rem;
+    opacity: 0.5;
+  }
+  .flavor-name {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    transition: transform 480ms var(--ease-out-expo), color 380ms;
+  }
+  .flavor-desc {
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    max-width: 42ch;
+  }
+  .flavor-desc small {
+    display: block;
+    margin-top: 0.6rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    opacity: 0.55;
+    letter-spacing: 0.02em;
+  }
+  .flavor-fruit {
+    width: 100%; max-width: 9rem;
+    justify-self: end;
+    transition: transform 600ms var(--ease-out-expo);
+  }
+  .flavor:hover .flavor-fruit { transform: rotate(18deg) scale(1.05); }
+  .flavor:hover .flavor-name { transform: translateX(6px); }
+
+  .flavor[data-tone="peel"]:hover   { background: oklch(94% 0.06 65); }
+  .flavor[data-tone="cherry"]:hover { background: oklch(93% 0.06 28); }
+  .flavor[data-tone="grove"]:hover  { background: oklch(94% 0.05 145); }
+
+  /* ---------- manifesto ---------- */
+  .manifesto {
+    margin-top: clamp(6rem, 12vw, 11rem);
+    padding: clamp(5rem, 10vw, 9rem) 0;
+    background: var(--rind);
+    color: var(--pith);
+    border-radius: clamp(1rem, 2vw, 2rem) clamp(1rem, 2vw, 2rem) 0 0;
+  }
+  .manifesto-body {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(1.875rem, 4.5vw, 4rem);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    max-width: 22ch;
+  }
+  .manifesto-body strong { font-weight: 800; color: var(--zest); }
+  .manifesto-body .cherry { color: var(--cherry); }
+
+  .manifesto-foot {
+    display: flex; justify-content: space-between; align-items: end;
+    gap: 2rem; flex-wrap: wrap;
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-top: clamp(2rem, 3vw, 2.5rem);
+    border-top: 1px solid oklch(97% 0.008 75 / 0.2);
+    font-size: 0.875rem;
+    opacity: 0.7;
+  }
+
+  /* ---------- buy band ---------- */
+  .buy {
+    background: var(--zest);
+    color: var(--rind);
+    padding: clamp(4rem, 7vw, 6rem) 0;
+  }
+  .buy-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: end;
+  }
+  @media (min-width: 720px) {
+    .buy-row { grid-template-columns: 1.5fr auto; }
+  }
+  .buy h2 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(2rem, 5vw, 4rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+  }
+  .buy h2 sup {
+    font-size: 0.4em;
+    font-weight: 500;
+    vertical-align: super;
+    margin-left: 0.5rem;
+    opacity: 0.6;
+  }
+
+  /* ---------- footer ---------- */
+  .foot {
+    background: var(--pith);
+    color: var(--rind);
+    padding: clamp(3rem, 5vw, 4rem) 0 clamp(2rem, 3vw, 2.5rem);
+  }
+  .foot-row {
+    display: flex; justify-content: space-between; gap: 2rem; flex-wrap: wrap;
+    font-size: 0.875rem;
+    opacity: 0.78;
+  }
+  .foot-row a:hover { opacity: 1; }
+  .foot-row strong { font-family: var(--display); font-weight: 800; font-size: 1rem; opacity: 1; }
+
+  /* ---------- a11y ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+    .wordmark span { transform: none; }
+    .hero-fruit { opacity: 1; transform: none; }
+    .hero-lede, .hero-actions { opacity: 1; transform: none; }
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--cherry);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="wrap nav-row">
+    <a class="mark" href="#" aria-label="Pith home">PITH</a>
+    <div class="nav-links" aria-label="Primary">
+      <a href="#flavors">Flavors</a>
+      <a href="#story">Story</a>
+      <a href="#shop">Stockists</a>
+    </div>
+    <a class="nav-cta" href="#shop">Get a case →</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <!-- background fizz -->
+  <div class="fizz" aria-hidden="true" id="fizz"></div>
+
+  <div class="wrap hero-grid">
+    <div>
+      <span class="hero-eyebrow">
+        <span class="dot"></span>
+        New: Blood Orange · summer release
+      </span>
+
+      <h1 class="wordmark" aria-label="Pith">
+        <span>P</span><span>I</span><span>T</span><span class="accent">H</span>
+      </h1>
+
+      <p class="hero-lede">
+        Sparkling soda made from <em>real cold-pressed citrus</em>. No syrups, no apologies, no thirty-ingredient back label.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#shop">
+          Shop a case <span class="arrow">→</span>
+        </a>
+        <a class="btn btn-ghost" href="#flavors">
+          Taste the three
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-fruit spin" aria-hidden="true">
+      <!-- citrus cross-section -->
+      <svg viewBox="0 0 400 400" role="img" aria-label="Citrus cross-section">
+        <defs>
+          <radialGradient id="flesh" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"  stop-color="oklch(96% 0.14 60)"/>
+            <stop offset="100%" stop-color="oklch(82% 0.18 55)"/>
+          </radialGradient>
+        </defs>
+        <!-- outer peel -->
+        <circle cx="200" cy="200" r="195" fill="oklch(64% 0.20 50)" />
+        <!-- pith ring -->
+        <circle cx="200" cy="200" r="172" fill="oklch(97% 0.02 75)" />
+        <!-- flesh -->
+        <circle cx="200" cy="200" r="158" fill="url(#flesh)" />
+
+        <!-- segments -->
+        <g stroke="oklch(97% 0.02 75)" stroke-width="4" fill="oklch(88% 0.16 58)">
+          <!-- 8 segments via rotated paths -->
+          <g id="seg">
+            <path d="M200,200 L200,50 A150,150 0 0,1 306,94 Z" />
+          </g>
+          <use href="#seg" transform="rotate(45 200 200)" />
+          <use href="#seg" transform="rotate(90 200 200)" />
+          <use href="#seg" transform="rotate(135 200 200)" />
+          <use href="#seg" transform="rotate(180 200 200)" />
+          <use href="#seg" transform="rotate(225 200 200)" />
+          <use href="#seg" transform="rotate(270 200 200)" />
+          <use href="#seg" transform="rotate(315 200 200)" />
+        </g>
+
+        <!-- center pith -->
+        <circle cx="200" cy="200" r="22" fill="oklch(97% 0.02 75)" />
+        <!-- seeds -->
+        <g fill="oklch(95% 0.05 90)">
+          <ellipse cx="200" cy="120" rx="6" ry="11" />
+          <ellipse cx="200" cy="280" rx="6" ry="11" />
+          <ellipse cx="120" cy="200" rx="11" ry="6" />
+          <ellipse cx="280" cy="200" rx="11" ry="6" />
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="hero-meta">
+    <div class="wrap row">
+      <span>Est. 2024 · Lisbon</span>
+      <span>3 flavors · 0g sugar · 35 cal</span>
+      <span>Made in small batches, then sold out</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ FLAVORS ============ -->
+<section class="flavors" id="flavors">
+  <div class="wrap section-head">
+    <div>
+      <div class="section-kicker">The lineup</div>
+      <h2 class="section-title">Three flavors. That&rsquo;s the whole menu.</h2>
+    </div>
+    <p class="section-aside">
+      We pick three citrus varieties a season, press them cold, and bottle them with sparkling water from a single Portuguese source. That&rsquo;s it.
+    </p>
+  </div>
+
+  <!-- flavor 01 -->
+  <article class="flavor" data-tone="peel">
+    <div class="wrap flavor-row">
+      <div class="flavor-num">01 / Peel</div>
+      <h3 class="flavor-name">Bitter Mandarin</h3>
+      <p class="flavor-desc">
+        Hand-pressed Setubal mandarins with their peel still on. Dry finish, faint marmalade hum, the kind of bitter you actually want.
+        <small>Best at 4°C · Pairs with salty almonds</small>
+      </p>
+      <svg class="flavor-fruit" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="48" fill="oklch(72% 0.21 58)"/>
+        <circle cx="50" cy="50" r="42" fill="oklch(97% 0.02 75)"/>
+        <circle cx="50" cy="50" r="38" fill="oklch(88% 0.18 60)"/>
+        <g stroke="oklch(97% 0.02 75)" stroke-width="1.5" fill="none">
+          <line x1="50" y1="12" x2="50" y2="88"/>
+          <line x1="12" y1="50" x2="88" y2="50"/>
+          <line x1="23" y1="23" x2="77" y2="77"/>
+          <line x1="77" y1="23" x2="23" y2="77"/>
+        </g>
+      </svg>
+    </div>
+  </article>
+
+  <!-- flavor 02 -->
+  <article class="flavor" data-tone="cherry">
+    <div class="wrap flavor-row">
+      <div class="flavor-num">02 / Cherry</div>
+      <h3 class="flavor-name">Blood Orange</h3>
+      <p class="flavor-desc">
+        Sicilian Moro oranges, the deep-purple kind that stain everything they touch. Tart up front, sweet on the back, no sugar added at any step.
+        <small>Best at 4°C · Pairs with a salt rim and mezcal</small>
+      </p>
+      <svg class="flavor-fruit" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="48" fill="oklch(48% 0.16 25)"/>
+        <circle cx="50" cy="50" r="42" fill="oklch(97% 0.02 75)"/>
+        <circle cx="50" cy="50" r="38" fill="oklch(58% 0.21 28)"/>
+        <g stroke="oklch(97% 0.02 75)" stroke-width="1.5" fill="none">
+          <line x1="50" y1="12" x2="50" y2="88"/>
+          <line x1="12" y1="50" x2="88" y2="50"/>
+          <line x1="23" y1="23" x2="77" y2="77"/>
+          <line x1="77" y1="23" x2="23" y2="77"/>
+        </g>
+      </svg>
+    </div>
+  </article>
+
+  <!-- flavor 03 -->
+  <article class="flavor" data-tone="grove">
+    <div class="wrap flavor-row">
+      <div class="flavor-num">03 / Grove</div>
+      <h3 class="flavor-name">Yuzu &amp; Lime</h3>
+      <p class="flavor-desc">
+        Japanese yuzu blended with Persian lime. Aggressive, sharp, a little floral. The bottle that makes everything else taste flat.
+        <small>Best at 4°C · Pairs with raw fish and bad days</small>
+      </p>
+      <svg class="flavor-fruit" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="48" fill="oklch(58% 0.16 130)"/>
+        <circle cx="50" cy="50" r="42" fill="oklch(97% 0.02 75)"/>
+        <circle cx="50" cy="50" r="38" fill="oklch(78% 0.18 130)"/>
+        <g stroke="oklch(97% 0.02 75)" stroke-width="1.5" fill="none">
+          <line x1="50" y1="12" x2="50" y2="88"/>
+          <line x1="12" y1="50" x2="88" y2="50"/>
+          <line x1="23" y1="23" x2="77" y2="77"/>
+          <line x1="77" y1="23" x2="23" y2="77"/>
+        </g>
+      </svg>
+    </div>
+  </article>
+</section>
+
+<!-- ============ MANIFESTO ============ -->
+<section class="manifesto" id="story">
+  <div class="wrap">
+    <p class="manifesto-body">
+      We started Pith because the soda aisle had become a <strong>chemistry set</strong>. Ours has three ingredients: <span class="cherry">water, fruit, fizz.</span> If a kid can&rsquo;t read the back label, we don&rsquo;t bottle it.
+    </p>
+
+    <div class="manifesto-foot">
+      <span>— Marta &amp; João, founders</span>
+      <span>Lisbon · Small batch · Glass only</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BUY ============ -->
+<section class="buy" id="shop">
+  <div class="wrap buy-row">
+    <h2>
+      Find us in <em>62</em> shops across Iberia. Or get a case at your door, every Friday.<sup>*</sup>
+    </h2>
+    <a class="btn btn-primary" href="#" style="background: var(--rind); color: var(--zest);">
+      Order a case <span class="arrow">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="foot">
+  <div class="wrap foot-row">
+    <strong>PITH</strong>
+    <a href="#">Instagram</a>
+    <a href="#">Wholesale</a>
+    <a href="#">Press</a>
+    <a href="#">hello@pith.pt</a>
+    <span>© 2026 Pith Lda.</span>
+  </div>
+</footer>
+
+<script>
+  // generate a handful of fizz bubbles
+  (function () {
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
+    const fizz = document.getElementById('fizz');
+    if (!fizz) return;
+    const count = 18;
+    for (let i = 0; i < count; i++) {
+      const b = document.createElement('div');
+      const size = 6 + Math.random() * 22;
+      b.className = 'bubble';
+      b.style.width = b.style.height = size + 'px';
+      b.style.left = (Math.random() * 100) + '%';
+      b.style.animationDuration = (10 + Math.random() * 14) + 's';
+      b.style.animationDelay = (-Math.random() * 14) + 's';
+      fizz.appendChild(b);
+    }
+  })();
+</script>
+
+</body>
+</html>

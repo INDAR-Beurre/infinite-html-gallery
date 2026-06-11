@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register® — Tactile Type-01 Mechanical Keyboard</title>
+  <meta name="description" content="An instrument for the digital canvas. The Register Type-01 combines a CNC-milled aluminum chassis, bespoke tactile switches, and an integrated precision rotary encoder.">
+
+  <!-- Google Fonts: Syne (audacious display) & Plus Jakarta Sans (premium body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ----------------------------------
+       THE "REGISTER" EDITORIAL SYSTEM
+       ---------------------------------- */
+    :root {
+      --ink: #120f0a;
+      --muted: #5e5548;
+      --paper: #fff7e6;
+      --cream: #ffeec5;
+      --red: #ff4d2e;
+      --blue: #1d4dff;
+      --violet: #7b3dff;
+      --lime: #d8ff38;
+      --rose: #ff8ab3;
+      --charcoal: #17130f;
+      
+      --bezier: cubic-bezier(0.32, 0.72, 0, 1);
+      --display: 'Syne', 'Plus Jakarta Sans', system-ui, sans-serif;
+      --body: 'Plus Jakarta Sans', system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Fixed Noise / Grain Overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      opacity: 0.04;
+      z-index: 9999;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    body {
+      background: radial-gradient(circle at 12% 12%, rgba(255, 77, 46, 0.28), transparent 28rem), 
+                  radial-gradient(circle at 88% 8%, rgba(29, 77, 255, 0.22), transparent 30rem), 
+                  linear-gradient(135deg, #fff7e6 0%, #ffedbc 54%, #ffd7bd 100%);
+      font-family: var(--body);
+      color: var(--ink);
+      overflow-x: hidden;
+      min-height: 100vh;
+      line-height: 1.4;
+    }
+
+    /* ----------------------------------
+       FLOATING pill-shaped NAV
+       ---------------------------------- */
+    .floating-nav {
+      position: fixed;
+      top: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(720px, calc(100% - 32px));
+      height: 64px;
+      background: rgba(255, 238, 197, 0.7); /* translucent cream */
+      backdrop-filter: blur(20px) saturate(140%);
+      border: 1px solid rgba(18, 15, 10, 0.08);
+      border-radius: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1rem 0.5rem 1.5rem;
+      z-index: 1000;
+      box-shadow: 0 16px 32px rgba(18, 15, 10, 0.08);
+    }
+
+    .brand-pill {
+      background: var(--ink);
+      color: var(--paper);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 0.95rem;
+      text-decoration: none;
+      letter-spacing: -0.02em;
+      transition: transform 0.2s ease;
+    }
+
+    .brand-pill:hover {
+      transform: scale(1.03);
+    }
+
+    .nav-links-desktop {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links-desktop a {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links-desktop a:hover {
+      color: var(--ink);
+    }
+
+    .nav-cta {
+      background: var(--ink);
+      color: var(--paper);
+      border: none;
+      font-family: var(--body);
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 8px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .nav-cta:hover {
+      background: var(--violet);
+      transform: scale(1.02);
+    }
+
+    .mobile-menu-toggle-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+    }
+
+    /* Full-screen dark overlay menu */
+    .mobile-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: var(--ink);
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s var(--bezier);
+    }
+
+    .mobile-menu-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .close-menu-btn {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      background: none;
+      border: none;
+      color: var(--paper);
+      font-size: 2.5rem;
+      cursor: pointer;
+    }
+
+    .mobile-links {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2.5rem;
+    }
+
+    .mobile-links a {
+      font-family: var(--display);
+      color: var(--paper);
+      font-size: 2.5rem;
+      font-weight: 800;
+      text-decoration: none;
+      letter-spacing: -0.05em;
+      transition: color 0.3s ease;
+    }
+
+    .mobile-links a:hover {
+      color: var(--lime);
+    }
+
+    /* ----------------------------------
+       HERO COMPOSITION
+       ---------------------------------- */
+    .hero-section {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 180px 0 128px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-display {
+      position: relative;
+      z-index: 2;
+      max-width: 980px;
+    }
+
+    h1 {
+      font-family: var(--display);
+      font-size: clamp(3rem, 9.5vw, 8.5rem);
+      font-weight: 800;
+      letter-spacing: -0.06em;
+      line-height: 0.82;
+      color: var(--ink);
+      margin-bottom: 2.5rem;
+      text-transform: uppercase;
+    }
+
+    h1 span.accent-text {
+      color: var(--violet); /* Primary accent */
+    }
+
+    .hero-subtext {
+      font-family: var(--body);
+      color: var(--muted);
+      font-size: clamp(1.1rem, 2vw, 1.45rem);
+      max-width: 580px;
+      margin: 0 auto 2.5rem auto;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    /* Tactile CTA Button */
+    .hero-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.5rem;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 0.75rem 0.75rem 0.75rem 2.2rem;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: transform 0.3s var(--bezier), box-shadow 0.3s var(--bezier);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 16px 32px rgba(18, 15, 10, 0.15);
+    }
+
+    .hero-cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 24px 40px rgba(18, 15, 10, 0.25);
+    }
+
+    .arrow-chip {
+      background: var(--lime);
+      color: var(--ink);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s var(--bezier);
+    }
+
+    .arrow-chip svg {
+      width: 20px;
+      height: 20px;
+      transition: transform 0.3s var(--bezier);
+    }
+
+    .hero-cta-btn:hover .arrow-chip {
+      transform: scale(1.05);
+    }
+
+    .hero-cta-btn:hover .arrow-chip svg {
+      transform: translate(3px, -3px);
+    }
+
+    /* Floating outer cards (composition) */
+    .hero-float-card {
+      position: absolute;
+      width: 200px;
+      padding: 10px;
+      background: rgba(255, 238, 197, 0.4);
+      border: 1px solid rgba(18, 15, 10, 0.08);
+      border-radius: 20px;
+      transform: rotate(var(--rotation));
+      z-index: 1;
+      pointer-events: none;
+      animation: float 6s infinite ease-in-out;
+    }
+
+    .hero-float-card:nth-child(2) { animation-delay: 1.5s; }
+    .hero-float-card:nth-child(3) { animation-delay: 3s; }
+    .hero-float-card:nth-child(4) { animation-delay: 4.5s; }
+
+    .float-card-inner {
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .shape-red .float-card-inner { background: var(--red); color: var(--paper); }
+    .shape-lime .float-card-inner { background: var(--lime); color: var(--ink); }
+    .shape-violet .float-card-inner { background: var(--violet); color: var(--paper); }
+    .shape-rose .float-card-inner { background: var(--rose); color: var(--ink); }
+
+    .float-tag {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    
+    .float-emoji {
+      font-size: 2rem;
+      align-self: flex-end;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(var(--rotation)); }
+      50% { transform: translateY(-15px) rotate(calc(var(--rotation) + 2deg)); }
+      100% { transform: translateY(0px) rotate(var(--rotation)); }
+    }
+
+    @media (min-width: 992px) {
+      .card-top-left { top: 10%; left: -6%; }
+      .card-bottom-left { bottom: 15%; left: -8%; }
+      .card-top-right { top: 8%; right: -6%; }
+      .card-bottom-right { bottom: 12%; right: -8%; }
+    }
+
+    @media (max-width: 991px) {
+      .hero-float-card {
+        display: none;
+      }
+    }
+
+    /* ----------------------------------
+       TICKER STRIP
+       ---------------------------------- */
+    .ticker-strip {
+      background: var(--ink);
+      color: var(--paper);
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      margin-left: -50vw;
+      margin-right: -50vw;
+      overflow: hidden;
+      padding: 1.8rem 0;
+      border-top: 2px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .ticker-content {
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      gap: 3rem;
+      animation: marquee 25s linear infinite;
+      width: max-content;
+    }
+
+    .ticker-content span {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 2rem;
+      letter-spacing: -0.03em;
+    }
+
+    .ticker-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--lime);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    @keyframes marquee {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
+    }
+
+    /* ----------------------------------
+       WORK / BENTO GRID
+       ---------------------------------- */
+    .bento-section {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 128px 0;
+    }
+
+    .section-title {
+      font-family: var(--display);
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      line-height: 0.9;
+      margin-bottom: 3rem;
+      text-transform: uppercase;
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 2rem;
+    }
+
+    .double-bezel-card {
+      background: rgba(255, 238, 197, 0.5); /* cream translucent outer */
+      border: 1px solid rgba(18, 15, 10, 0.08);
+      border-radius: 32px;
+      padding: 14px;
+      display: flex;
+      transition: transform 0.4s var(--bezier);
+    }
+
+    .double-bezel-card:hover {
+      transform: scale(1.008);
+    }
+
+    .inner-core {
+      border-radius: 20px;
+      padding: 3rem;
+      flex: 1;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.25), 0 8px 32px rgba(18, 15, 10, 0.06);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 320px;
+    }
+
+    .inner-core h3 {
+      font-family: var(--display);
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .inner-core p {
+      font-size: 1.05rem;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .inner-icon {
+      font-size: 3rem;
+      align-self: flex-end;
+    }
+
+    /* Bento Color Accents */
+    .core-violet { background: var(--violet); color: var(--paper); }
+    .core-lime { background: var(--lime); color: var(--ink); }
+    .core-blue { background: var(--blue); color: var(--paper); }
+    .core-rose { background: var(--rose); color: var(--ink); }
+
+    .core-violet p, .core-blue p { color: rgba(255, 247, 230, 0.8); }
+    .core-lime p, .core-rose p { color: var(--muted); }
+
+    @media (min-width: 769px) {
+      .card-1 { grid-column: 1 / 8; }
+      .card-2 { grid-column: 8 / 13; }
+      .card-3 { grid-column: 1 / 5; }
+      .card-4 { grid-column: 5 / 13; }
+    }
+
+    @media (max-width: 768px) {
+      .bento-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .inner-core {
+        padding: 2rem;
+        min-height: 260px;
+      }
+    }
+
+    /* ----------------------------------
+       METHOD SECTION
+       ---------------------------------- */
+    .method-section {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 128px 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+    }
+
+    .method-sticky {
+      position: sticky;
+      top: 120px;
+      align-self: start;
+    }
+
+    .method-sticky h2 {
+      font-family: var(--display);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 850;
+      line-height: 0.9;
+      letter-spacing: -0.05em;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+    }
+
+    .method-sticky p {
+      color: var(--muted);
+      font-size: 1.15rem;
+      line-height: 1.6;
+      max-width: 480px;
+    }
+
+    .proof-cards-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    .proof-card {
+      border: 1px solid rgba(18, 15, 10, 0.08);
+      border-radius: 28px;
+      padding: 3rem;
+      transform: rotate(var(--rotate));
+      box-shadow: 0 16px 40px rgba(18, 15, 10, 0.08);
+      transition: transform 0.4s var(--bezier), box-shadow 0.4s var(--bezier);
+    }
+
+    .proof-card:hover {
+      transform: rotate(0deg) translateY(-8px);
+      box-shadow: 0 24px 48px rgba(18, 15, 10, 0.15);
+    }
+
+    .bg-red { background: var(--red); color: var(--paper); }
+    .bg-violet { background: var(--violet); color: var(--paper); }
+    .bg-lime { background: var(--lime); color: var(--ink); }
+
+    .bg-red p, .bg-violet p { color: rgba(255, 247, 230, 0.85); }
+    .bg-lime p { color: var(--muted); }
+
+    .proof-num {
+      font-family: var(--display);
+      font-size: 1.3rem;
+      font-weight: 800;
+      display: block;
+      margin-bottom: 2rem;
+      opacity: 0.8;
+    }
+
+    .proof-card h3 {
+      font-family: var(--display);
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .proof-card p {
+      font-size: 1.05rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 991px) {
+      .method-section {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+      }
+      .method-sticky {
+        position: static;
+      }
+      .proof-card {
+        transform: none !important;
+      }
+    }
+
+    /* ----------------------------------
+       PROOF QUOTE
+       ---------------------------------- */
+    .proof-quote-section {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 128px 0;
+    }
+
+    .quote-bezel {
+      padding: 16px;
+      background: rgba(255, 238, 197, 0.4);
+    }
+
+    .quote-inner {
+      background: var(--ink);
+      color: var(--paper);
+      border-radius: 24px;
+      padding: 5rem 3rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: auto;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2);
+    }
+
+    .quote-mark {
+      font-family: var(--display);
+      font-size: 6rem;
+      color: var(--lime);
+      line-height: 1;
+      margin-bottom: -1rem;
+    }
+
+    .quote-inner blockquote {
+      font-family: var(--display);
+      font-size: clamp(1.8rem, 4vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      margin-bottom: 2.5rem;
+      max-width: 900px;
+    }
+
+    .quote-inner cite {
+      font-family: var(--body);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      font-style: normal;
+    }
+
+    /* ----------------------------------
+       FINAL CTA
+       ---------------------------------- */
+    .final-cta-section {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 128px 0;
+    }
+
+    .cta-outer {
+      background: rgba(255, 238, 197, 0.4);
+      border: 1px solid rgba(18, 15, 10, 0.08);
+      border-radius: 40px;
+      padding: 16px;
+    }
+
+    .cta-inner {
+      background: linear-gradient(135deg, var(--red) 0%, var(--blue) 100%);
+      border-radius: 28px;
+      padding: 6rem 3rem;
+      text-align: center;
+      color: var(--paper);
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 2px 8px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Gradient Background blobs */
+    .cta-inner::before {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      background: var(--lime);
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.3;
+      top: -100px;
+      left: -100px;
+    }
+
+    .cta-inner::after {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      background: var(--rose);
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.3;
+      bottom: -100px;
+      right: -100px;
+    }
+
+    .cta-inner h2 {
+      font-family: var(--display);
+      font-size: clamp(2.5rem, 6.5vw, 5rem);
+      font-weight: 800;
+      line-height: 0.9;
+      letter-spacing: -0.05em;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 1;
+      text-transform: uppercase;
+    }
+
+    .cta-inner p {
+      font-family: var(--body);
+      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      max-width: 550px;
+      margin: 0 auto 3rem;
+      line-height: 1.5;
+      color: rgba(255, 247, 230, 0.85);
+      position: relative;
+      z-index: 1;
+      font-weight: 500;
+    }
+
+    .cta-form {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 600px) {
+      .cta-form {
+        flex-direction: column;
+      }
+    }
+
+    .cta-input {
+      flex: 1;
+      background: rgba(18, 15, 10, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 30px;
+      padding: 1.1rem 1.6rem;
+      color: var(--paper);
+      font-family: var(--body);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .cta-input::placeholder {
+      color: rgba(255, 247, 230, 0.5);
+    }
+
+    .cta-input:focus {
+      border-color: var(--lime);
+    }
+
+    .cta-submit-btn {
+      background: var(--lime);
+      color: var(--ink);
+      border: none;
+      font-family: var(--body);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.8rem 0.8rem 0.8rem 1.8rem;
+      border-radius: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      transition: transform 0.3s var(--bezier);
+    }
+
+    .cta-submit-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-arrow {
+      background: var(--ink);
+      color: var(--lime);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s var(--bezier);
+    }
+
+    .btn-arrow svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.3s var(--bezier);
+    }
+
+    .cta-submit-btn:hover .btn-arrow svg {
+      transform: translateX(4px);
+    }
+
+    /* ----------------------------------
+       FOOTER
+       ---------------------------------- */
+    footer {
+      border-top: 1px solid rgba(18, 15, 10, 0.08);
+      background: var(--cream);
+      padding: 5rem 0;
+    }
+
+    .footer-container {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .footer-brand {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--ink);
+    }
+
+    .footer-copy {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .footer-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .footer-links {
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+    }
+
+    /* ----------------------------------
+       MOTION & REVEAL SYSTEM
+       ---------------------------------- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(54px);
+      filter: blur(10px);
+      transition: opacity 1.2s var(--bezier), transform 1.2s var(--bezier), filter 1.2s var(--bezier);
+    }
+
+    .reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal {
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+      }
+      .hero-float-card {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Nav Menu -->
+  <nav class="floating-nav">
+    <a href="#" class="brand-pill">Register®</a>
+    <div class="nav-links-desktop">
+      <a href="#bento">Features</a>
+      <a href="#method">The Method</a>
+      <a href="#cta">Pre-order</a>
+    </div>
+    <a href="#cta" class="nav-cta">Type-01</a>
+    
+    <button class="mobile-menu-toggle-btn" id="mobile-toggle" aria-label="Toggle menu">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; stroke: var(--ink); stroke-width: 2.5;">
+        <path d="M4 6H20M4 12H20M4 18H20" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Mobile Full-Screen Overlay Menu -->
+  <div class="mobile-menu-overlay" id="mobile-menu-overlay">
+    <button class="close-menu-btn" id="close-mobile-menu">✕</button>
+    <div class="mobile-links">
+      <a href="#bento" onclick="toggleMenu()">Features</a>
+      <a href="#method" onclick="toggleMenu()">The Method</a>
+      <a href="#cta" onclick="toggleMenu()">Pre-order</a>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="hero">
+    
+    <!-- Erratic floating cards (Typography centered poster paradigm) -->
+    <div class="hero-float-card card-top-left shape-violet" style="--rotation: -4deg;">
+      <div class="float-card-inner">
+        <span class="float-tag">SOLID CORE</span>
+        <span class="float-emoji">⌨️</span>
+      </div>
+    </div>
+    <div class="hero-float-card card-bottom-left shape-lime" style="--rotation: 3deg;">
+      <div class="float-card-inner">
+        <span class="float-tag">FINE SCRUBBER</span>
+        <span class="float-emoji">🎛️</span>
+      </div>
+    </div>
+    <div class="hero-float-card card-top-right shape-red" style="--rotation: 5deg;">
+      <div class="float-card-inner">
+        <span class="float-tag">BESPOKE FONTS</span>
+        <span class="float-emoji">🎨</span>
+      </div>
+    </div>
+    <div class="hero-float-card card-bottom-right shape-rose" style="--rotation: -3deg;">
+      <div class="float-card-inner">
+        <span class="float-tag">TACTILE FEEDBACK</span>
+        <span class="float-emoji">⚡</span>
+      </div>
+    </div>
+
+    <!-- Centered Typography stage -->
+    <div class="hero-display reveal">
+      <h1>An Instrument for <br>the Digital <span class="accent-text">Canvas</span>.</h1>
+      <p class="hero-subtext">
+        Designed for designers, filmmakers, and typographers. The Register Type-01 Keyboard integrates custom mechanical tactility with a precision color-grading rotary dial.
+      </p>
+      <a href="#cta" class="hero-cta-btn">
+        <span>Reserve Slot</span>
+        <span class="arrow-chip">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 19L19 5M19 5H9M19 5V15" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </a>
+    </div>
+
+  </section>
+
+  <!-- Continuous Marquee strip -->
+  <div class="ticker-strip">
+    <div class="ticker-content">
+      <span>DESIGNED FOR DESIGNERS</span>
+      <span class="ticker-dot"></span>
+      <span>PROPRIETARY KEYCAP GLYPHS</span>
+      <span class="ticker-dot"></span>
+      <span>PRECISION ROTARY DIAL</span>
+      <span class="ticker-dot"></span>
+      <span>SOLID CNC ALUMINUM BLOCK</span>
+      <span class="ticker-dot"></span>
+      <span>THE DIAL IS KEY</span>
+      <span class="ticker-dot"></span>
+      <!-- Loop mirror -->
+      <span>DESIGNED FOR DESIGNERS</span>
+      <span class="ticker-dot"></span>
+      <span>PROPRIETARY KEYCAP GLYPHS</span>
+      <span class="ticker-dot"></span>
+      <span>PRECISION ROTARY DIAL</span>
+      <span class="ticker-dot"></span>
+      <span>SOLID CNC ALUMINUM BLOCK</span>
+      <span class="ticker-dot"></span>
+      <span>THE DIAL IS KEY</span>
+      <span class="ticker-dot"></span>
+    </div>
+  </div>
+
+  <!-- Bento Section -->
+  <section class="bento-section" id="bento">
+    <h2 class="section-title reveal">Designed without compromise.</h2>
+    <div class="bento-grid">
+      
+      <!-- Card 1 (Violet core) -->
+      <div class="double-bezel-card card-1 reveal">
+        <div class="inner-core core-violet">
+          <div>
+            <h3>HAND-MACHINED FRAME</h3>
+            <p>Monolithic 6063 aluminum, bead-blasted and anodized. Built to survive generations of studio sprints.</p>
+          </div>
+          <span class="inner-icon">🧊</span>
+        </div>
+      </div>
+
+      <!-- Card 2 (Lime core) -->
+      <div class="double-bezel-card card-2 reveal">
+        <div class="inner-core core-lime">
+          <div>
+            <h3>THE ROTARY ENCODER</h3>
+            <p>Magnetically balanced dial. Map it directly to scrub timelines, color wheels, or font sizing presets.</p>
+          </div>
+          <span class="inner-icon">🎛️</span>
+        </div>
+      </div>
+
+      <!-- Card 3 (Rose core) -->
+      <div class="double-bezel-card card-3 reveal">
+        <div class="inner-core core-rose">
+          <div>
+            <h3>RAINDROP SWITCHES</h3>
+            <p>Hand-lubed linear stems. A sound signature tuned to replicate heavy raindrops hitting mahogany panels.</p>
+          </div>
+          <span class="inner-icon">💧</span>
+        </div>
+      </div>
+
+      <!-- Card 4 (Blue core) -->
+      <div class="double-bezel-card card-4 reveal">
+        <div class="inner-core core-blue">
+          <div>
+            <h3>FOUNDRY TYPOGRAPHY KEYCAPS</h3>
+            <p>No system fallback fonts. Every legend features custom typefaces crafted by our partner typography foundry, dye-sublimated onto durable PBT keycaps.</p>
+          </div>
+          <span class="inner-icon">🔤</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Method Section -->
+  <section class="method-section" id="method">
+    <div class="method-sticky reveal">
+      <h2>The Method behind the movement.</h2>
+      <p>We do not construct peripherals. We forge creative interfaces. Register Type-01 exists for those who notice when a pixel shifts or when a mechanical key lacks precise dampening feedback.</p>
+    </div>
+    <div class="proof-cards-stack">
+      
+      <!-- Proof Card 1 (Red) -->
+      <div class="proof-card bg-red reveal" style="--rotate: -2.5deg;">
+        <span class="proof-num">01 / WEIGHT</span>
+        <h3>Solid Foundation</h3>
+        <p>A static weight of 2.1 kilograms guarantees complete desk stability. Your keyboard will not shift, bend, or vibrate during rapid creative sprints.</p>
+      </div>
+
+      <!-- Proof Card 2 (Violet) -->
+      <div class="proof-card bg-violet reveal" style="--rotate: 3deg;">
+        <span class="proof-num">02 / CALIBRATION</span>
+        <h3>Click-Step Tension</h3>
+        <p>Thirty-six subtle magnetic clicks per revolution. Perfect tactile feedback designed specifically for frame-accurate timeline navigation.</p>
+      </div>
+
+      <!-- Proof Card 3 (Lime) -->
+      <div class="proof-card bg-lime reveal" style="--rotate: -1.5deg;">
+        <span class="proof-num">03 / ERGONOMIC</span>
+        <h3>Strict Geometry</h3>
+        <p>A native six-degree typing profile with a high-edge bezel. Engineered to optimize wrist angles and support extended typing sessions.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Proof Quote -->
+  <section class="proof-quote-section reveal">
+    <div class="double-bezel-card quote-bezel">
+      <div class="quote-inner">
+        <span class="quote-mark">“</span>
+        <blockquote>
+          The Type-01 does not feel like a computer peripheral. It feels like a premium instrument. My hands aren't just typing; they are performing.
+        </blockquote>
+        <cite>— MARCUS AURELIUS, CREATIVE DIRECTOR AT MONOLITH</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="final-cta-section reveal" id="cta">
+    <div class="cta-outer">
+      <div class="cta-inner">
+        <h2>Make the next visitor feel something.</h2>
+        <p>Pre-orders for Batch 01 are now officially open. Limited to 250 units globally. Shipped in premium bespoke wooden crates.</p>
+        
+        <form class="cta-form" onsubmit="event.preventDefault(); alert('Your pre-order slot is reserved.');">
+          <input type="email" placeholder="Enter your creative email" required class="cta-input">
+          <button type="submit" class="cta-submit-btn">
+            <span>Reserve Slot</span>
+            <span class="btn-arrow">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <a href="#" class="footer-brand">Register®</a>
+      <div class="footer-links">
+        <a href="#bento">Features</a>
+        <a href="#method">Method</a>
+        <a href="#cta">Pre-order</a>
+      </div>
+      <span class="footer-copy">&copy; 2026 Register Systems. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <!-- Interactivity & IntersectionObserver Reveals -->
+  <script>
+    // Intersection Observer Reveal Logic
+    document.addEventListener("DOMContentLoaded", () => {
+      const reveals = document.querySelectorAll(".reveal");
+
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("revealed");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px"
+      });
+
+      reveals.forEach(el => revealObserver.observe(el));
+    });
+
+    // Mobile Menu Toggle logic
+    const mobileToggle = document.getElementById("mobile-toggle");
+    const closeMobileMenu = document.getElementById("close-mobile-menu");
+    const mobileMenuOverlay = document.getElementById("mobile-menu-overlay");
+
+    function toggleMenu() {
+      mobileMenuOverlay.classList.toggle("active");
+    }
+
+    mobileToggle.addEventListener("click", toggleMenu);
+    closeMobileMenu.addEventListener("click", toggleMenu);
+  </script>
+</body>
+</html>

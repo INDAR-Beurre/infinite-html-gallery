@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FDA MONOGRAPH: NUTRITIONAL SUBSTANCE FORMULA 12-B</title>
+  <style>
+    :root {
+      --clinical-blue: #708e9b;
+      --clinical-yellow: #d6b445;
+      --black: #000000;
+      --white: #ffffff;
+      --border-thick: 3px;
+      --border-thin: 1px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      border-radius: 0 !important;
+    }
+
+    body {
+      background-color: var(--white);
+      color: var(--black);
+      font-family: Helvetica, Arial, sans-serif;
+      padding: 40px;
+      line-height: 1.5;
+    }
+
+    /* Print styling compatibility */
+    @media print {
+      body {
+        padding: 0;
+      }
+    }
+
+    /* Layout Wrapper */
+    .dossier-container {
+      max-width: 900px;
+      margin: 0 auto;
+      border: var(--border-thick) solid var(--black);
+      padding: 30px;
+    }
+
+    /* Document Header Section */
+    .doc-header {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      border-bottom: var(--border-thick) solid var(--black);
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+      gap: 20px;
+    }
+
+    .doc-title-box h1 {
+      font-size: 24px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .doc-title-box p {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #555;
+    }
+
+    .doc-meta-box {
+      border-left: var(--border-thin) solid var(--black);
+      padding-left: 20px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .meta-line {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed #ccc;
+      padding: 2px 0;
+    }
+
+    /* Barcode CSS */
+    .barcode {
+      width: 100%;
+      height: 45px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--black),
+        var(--black) 2px,
+        var(--white) 2px,
+        var(--white) 5px,
+        var(--black) 5px,
+        var(--black) 6px,
+        var(--white) 6px,
+        var(--white) 10px,
+        var(--black) 10px,
+        var(--black) 13px,
+        var(--white) 13px,
+        var(--white) 15px
+      );
+      margin-top: 10px;
+    }
+
+    /* Sections */
+    section {
+      margin-bottom: 35px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      border-bottom: var(--border-thick) solid var(--black);
+      padding-bottom: 4px;
+      margin-bottom: 15px;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      font-size: 12px;
+    }
+
+    th, td {
+      border: var(--border-thin) solid var(--black);
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Dense Paragraph Text */
+    p.clinical-copy {
+      font-size: 13px;
+      text-align: justify;
+      margin-bottom: 15px;
+    }
+
+    /* Indicator Warning Box */
+    .clinical-warning {
+      background-color: var(--white);
+      border: var(--border-thick) solid var(--black);
+      padding: 15px 20px;
+      margin-bottom: 25px;
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 15px;
+    }
+
+    .warning-flag {
+      background-color: var(--clinical-yellow);
+      color: var(--black);
+      font-weight: bold;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: var(--border-thin) solid var(--black);
+      height: 100%;
+    }
+
+    .warning-text {
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    /* Form Elements */
+    .requisition-form {
+      border: var(--border-thin) solid var(--black);
+      padding: 20px;
+      background-color: #fafafa;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group label {
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .form-group input, .form-group select {
+      border: var(--border-thin) solid var(--black);
+      padding: 8px 12px;
+      font-family: inherit;
+      font-size: 13px;
+      background-color: var(--white);
+      outline: none;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      border-width: 2px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background-color: var(--clinical-blue);
+      color: var(--white);
+      border: var(--border-thick) solid var(--black);
+      padding: 15px;
+      font-size: 14px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: none; /* strictly no transition animations */
+    }
+
+    .btn-submit:hover {
+      background-color: var(--black);
+      color: var(--white);
+    }
+
+    .btn-submit:active {
+      background-color: #333333;
+    }
+
+    /* Blank Rectangular Placeholder with an X */
+    .schematic-box {
+      width: 100%;
+      height: 180px;
+      border: var(--border-thin) solid var(--black);
+      background-color: var(--white);
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .schematic-box::before, .schematic-box::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 1px;
+      background-color: #ccc;
+      top: 50%;
+      left: 0;
+    }
+
+    .schematic-box::before {
+      transform: rotate(11deg);
+    }
+
+    .schematic-box::after {
+      transform: rotate(-11deg);
+    }
+
+    .schematic-label {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: var(--white);
+      border: var(--border-thin) solid var(--black);
+      padding: 2px 6px;
+      font-size: 9px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dossier-container">
+    
+    <!-- Document Header -->
+    <header class="doc-header">
+      <div class="doc-title-box">
+        <h1>Formula 12-B: Synthetic Nutrient Paste</h1>
+        <p>Standardized Rations // Classification: General Clinical Commodity</p>
+        <div class="barcode"></div>
+      </div>
+      
+      <div class="doc-meta-box">
+        <div class="meta-line">
+          <span>REG-ID:</span>
+          <span>FDA-NUTR-8839</span>
+        </div>
+        <div class="meta-line">
+          <span>REVISION:</span>
+          <span>REV.004</span>
+        </div>
+        <div class="meta-line">
+          <span>DATE:</span>
+          <span>2026-06-07</span>
+        </div>
+        <div class="meta-line">
+          <span>SECURITY:</span>
+          <span>UNRESTRICTED</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- SECTION 1: PRODUCT SPECIFICATION -->
+    <section>
+      <div class="section-title">01. Product Identification & Properties</div>
+      <p class="clinical-copy">
+        Nutritional Substance Formula 12-B is a homogenized, clinically inert synthetic paste designed for complete physiological maintenance of human biological systems. It is formulated to bypass primary sensory taste receptors and provide immediate, steady macronutrient levels. It is entirely devoid of flavoring, coloring, or textured additives.
+      </p>
+
+      <div class="schematic-box">
+        <div class="schematic-label">Fig 1.1: Standard 500mL Vacuum Storage Unit</div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Specification Value</th>
+            <th>Analytical Standard</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Caloric Density</td>
+            <td>1.5 kcal/mL</td>
+            <td>ASTM-D240-19</td>
+          </tr>
+          <tr>
+            <td>Viscosity Index</td>
+            <td>4,200 cP (at 20°C)</td>
+            <td>ISO-2555</td>
+          </tr>
+          <tr>
+            <td>pH Level</td>
+            <td>7.20 (Neutralized)</td>
+            <td>USP-791</td>
+          </tr>
+          <tr>
+            <td>Storage Life</td>
+            <td>36 Calendar Months</td>
+            <td>FDA-STB-09</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- SECTION 2: CHEMICAL & NUTRITIONAL COMPOSITION -->
+    <section>
+      <div class="section-title">02. Qualitative & Quantitative Composition</div>
+      <p class="clinical-copy">
+        The macromolecular structure is derived from isolated soy/pea proteins, refined medium-chain triglycerides, and chemically synthesized simple saccharides. Contains exactly 100% of the daily metabolic mineral references mandated under Directive 44-A.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Constituent Name</th>
+            <th>Mass (per 100mL)</th>
+            <th>Physiological Function</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Purified Amino Complex</td>
+            <td>12.5 g</td>
+            <td>Cellular repair and muscle retention</td>
+          </tr>
+          <tr>
+            <td>Standardized Triglycerides</td>
+            <td>8.2 g</td>
+            <td>Endocrine maintenance and slow-burn energy</td>
+          </tr>
+          <tr>
+            <td>Synthetic Polysaccharides</td>
+            <td>22.0 g</td>
+            <td>Glycogen replenishment</td>
+          </tr>
+          <tr>
+            <td>Micronutrient Salt Premix</td>
+            <td>1.4 g</td>
+            <td>Electrolyte balancing</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- SECTION 3: INDICATIONS & PROTOCOL -->
+    <section>
+      <div class="section-title">03. Indications & Standard Dosage</div>
+      
+      <p class="clinical-copy">
+        <strong>Indication 01:</strong> Maintenance of base metabolic activity in zero-gravity, deep-subterranean, or remote isolation habitats.<br>
+        <strong>Indication 02:</strong> Standardized rationing during containment protocols or institutional supply line disruptions.<br>
+        <strong>Indication 03:</strong> Direct enteral administration under clinical supervision.
+      </p>
+
+      <!-- Warning Box -->
+      <div class="clinical-warning">
+        <div class="warning-flag">Warning</div>
+        <div class="warning-text">
+          Exclusive intake of Formula 12-B exceeding 180 consecutive diurnal cycles requires baseline monitoring of mucosal tissue and supplementary dental resistance training.
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: REQUISITION FORM -->
+    <section id="requisition">
+      <div class="section-title">04. Commodity Requisition Portal</div>
+      <p class="clinical-copy" style="margin-bottom: 20px;">
+        To requisition Formula 12-B units, complete the standardized fields below. Requests will be logged, vetted, and dispatched from Regional Distribution Center 9.
+      </p>
+
+      <form class="requisition-form" onsubmit="event.preventDefault(); alert('REQUISITION FILED. STATUS: PENDING BOARD VALIDATION.');">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="facility-id">Facility ID Code</label>
+            <input type="text" id="facility-id" placeholder="e.g. FAC-4482-A" required>
+          </div>
+          <div class="form-group">
+            <label for="recipient-class">Recipient Classification</label>
+            <select id="recipient-class" required>
+              <option value="">Select class...</option>
+              <option value="class-1">Class 1 Personnel (Critical Operation)</option>
+              <option value="class-2">Class 2 Personnel (Standard Maintenance)</option>
+              <option value="class-3">Class 3 Civilian Sub-sector</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="quantity">Volume Requested (Liters)</label>
+            <input type="number" id="quantity" min="50" max="5000" step="50" placeholder="Minimum 50L" required>
+          </div>
+          <div class="form-group">
+            <label for="shipping-priority">Dispatch Protocol</label>
+            <select id="shipping-priority" required>
+              <option value="standard">Standard Dispatch (3-5 cycles)</option>
+              <option value="priority">Priority Dispatch (1-2 cycles)</option>
+            </select>
+          </div>
+        </div>
+        
+        <button type="submit" class="btn-submit">Submit Requisition</button>
+      </form>
+    </section>
+
+    <!-- Footer -->
+    <footer style="border-top: var(--border-thin) solid var(--black); padding-top: 15px; margin-top: 40px; font-size: 10px; color: #666; display: flex; justify-content: space-between;">
+      <span>DOCUMENT: FDA-12B-MONO // REV.004</span>
+      <span>SECURE REGULATORY RECORD SHEET</span>
+    </footer>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Codex Damnatus — Liber Algorithmorum · A Grimoire of the Demons Which Dwell Within Our Devices</title>
+<meta name="description" content="A grimoire of the demons of modern algorithms. Compiled in the Year of Our Algorithm, MMXXVI." />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================================================
+     TOKENS OF THE CODEX
+     ============================================================ */
+  :root {
+    --obsidian: #0A0A0A;
+    --obsidian-soft: #161310;
+    --ash-deep: #2a1f15;
+    --ash: #3d2e1f;
+    --ash-warm: #5a4530;
+    --burnt: #7a5e3f;
+    --vellum-stain: #a89270;
+    --vellum-aged: #c4b291;
+    --vellum: #E8DCC4;
+    --vellum-light: #f0e5cf;
+
+    --gold: #C5A059;
+    --gold-bright: #e0bb6c;
+    --gold-dim: #8a7340;
+    --blood: #8A0303;
+    --blood-bright: #b80505;
+    --blood-deep: #4a0101;
+    --ink: #1a1206;
+    --ink-mid: #3a2818;
+    --ink-fade: #6b5436;
+
+    --display: 'UnifrakturMaguntia', 'Cinzel Decorative', serif;
+    --display-alt: 'Cinzel Decorative', serif;
+    --headline: 'Cinzel', 'Cormorant Garamond', serif;
+    --body: 'EB Garamond', 'Cormorant Garamond', serif;
+    --body-italic: 'IM Fell English', 'EB Garamond', serif;
+    --small-caps: 'IM Fell English SC', 'Cinzel', serif;
+    --ui: 'Cinzel', serif;
+
+    --manuscript-frame: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cpath d='M0 0 L80 0 L80 6 L6 6 L6 80 L0 80 Z' fill='none' stroke='%23C5A059' stroke-width='2'/%3E%3Cpath d='M10 10 L70 10 L70 14 L14 14 L14 70 L10 70 Z' fill='none' stroke='%23C5A059' stroke-width='0.8' opacity='0.5'/%3E%3Ccircle cx='6' cy='6' r='3' fill='%23C5A059'/%3E%3Ccircle cx='74' cy='6' r='3' fill='%23C5A059'/%3E%3Ccircle cx='6' cy='74' r='3' fill='%23C5A059'/%3E%3Ccircle cx='74' cy='74' r='3' fill='%23C5A059'/%3E%3C/svg%3E");
+
+    --manuscript-frame-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cpath d='M0 0 L80 0 L80 6 L6 6 L6 80 L0 80 Z' fill='none' stroke='%23C5A059' stroke-width='2'/%3E%3Cpath d='M10 10 L70 10 L70 14 L14 14 L14 70 L10 70 Z' fill='none' stroke='%23C5A059' stroke-width='0.8' opacity='0.5'/%3E%3Ccircle cx='6' cy='6' r='3' fill='%23C5A059'/%3E%3Ccircle cx='74' cy='6' r='3' fill='%23C5A059'/%3E%3Ccircle cx='6' cy='74' r='3' fill='%23C5A059'/%3E%3Ccircle cx='74' cy='74' r='3' fill='%23C5A059'/%3E%3C/svg%3E");
+
+    --ease-grimoire: cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+
+  /* ============================================================
+     RESET & PARCHMENT
+     ============================================================ */
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  ::selection { background: var(--blood); color: var(--vellum); }
+
+  body {
+    font-family: var(--body);
+    font-weight: 400;
+    font-size: clamp(1.05rem, 1.2vw, 1.2rem);
+    line-height: 1.65;
+    color: var(--ink);
+    min-height: 100vh;
+    /* Progressive darkening — fixed to the scroll */
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(197, 160, 89, 0.12), transparent 50%),
+      linear-gradient(
+        to bottom,
+        #f0e5cf 0%,
+        #E8DCC4 8%,
+        #d4c5a4 20%,
+        #b59d72 32%,
+        #8a6f4a 44%,
+        #5a4530 56%,
+        #2a1f15 70%,
+        #161310 85%,
+        #0A0A0A 100%
+      );
+    background-attachment: scroll;
+    overflow-x: hidden;
+  }
+
+  /* Parchment / ink noise overlay (the "old paper" feel) */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 320 320' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.10  0 0 0 0 0.07  0 0 0 0 0.04  0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+    opacity: 0.35;
+  }
+
+  /* Foxing / age spots (vignette darkening) */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background:
+      radial-gradient(ellipse at 12% 18%, rgba(74, 1, 1, 0.18), transparent 35%),
+      radial-gradient(ellipse at 88% 82%, rgba(74, 1, 1, 0.14), transparent 40%),
+      radial-gradient(ellipse at 50% 50%, transparent 50%, rgba(0, 0, 0, 0.18) 100%);
+  }
+
+  /* On dark sections the noise needs to invert / lighten */
+  .dark-section { mix-blend-mode: screen; }
+
+  /* ============================================================
+     TYPOGRAPHY
+     ============================================================ */
+  h1, h2, h3, h4 {
+    font-family: var(--headline);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+  }
+
+  .blackletter {
+    font-family: var(--display);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .display-title {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(4rem, 12vw, 11rem);
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  .display-sub {
+    font-family: var(--display-alt);
+    font-weight: 700;
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--blood);
+  }
+
+  .small-caps {
+    font-family: var(--small-caps);
+    font-size: 0.85rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+
+  .ornament {
+    font-size: 1.5rem;
+    color: var(--gold);
+    letter-spacing: 0.5em;
+    margin: 0 0.5rem;
+    vertical-align: middle;
+  }
+
+  /* ============================================================
+     LAYOUT
+     ============================================================ */
+  .codex {
+    width: min(720px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: clamp(2.5rem, 6vw, 5rem) 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  section {
+    padding: clamp(4rem, 9vw, 7rem) 0;
+    position: relative;
+  }
+
+  /* ============================================================
+     DROP CAPS — the illuminated manuscript
+     ============================================================ */
+  .illuminated::first-letter {
+    font-family: var(--display);
+    font-size: 5.6em;
+    float: left;
+    line-height: 0.82;
+    margin: 0.05em 0.14em -0.05em 0;
+    color: var(--blood);
+    font-weight: 400;
+    text-shadow:
+      2px 2px 0 var(--gold-dim),
+      -1px -1px 0 var(--ink-fade);
+    padding-right: 0.1em;
+  }
+
+  .illuminated.gold-cap::first-letter {
+    color: var(--gold);
+    text-shadow:
+      2px 2px 0 var(--blood),
+      -1px -1px 0 var(--ink);
+  }
+
+  .illuminated.dark-cap::first-letter {
+    color: var(--ink);
+    text-shadow:
+      2px 2px 0 var(--blood);
+  }
+
+  .illuminated.italic-cap::first-letter {
+    font-family: var(--body-italic);
+    font-style: italic;
+    font-weight: 700;
+  }
+
+  /* ============================================================
+     MANUSCRIPT FRAMES — ornate bordered boxes
+     ============================================================ */
+  .frame {
+    border: 22px solid;
+    border-image: var(--manuscript-frame) 22 stretch;
+    padding: 1.5rem 2rem;
+    background: rgba(232, 220, 196, 0.4);
+    position: relative;
+  }
+
+  .frame.dark {
+    border-image: var(--manuscript-frame-dark) 22 stretch;
+    background: rgba(10, 10, 10, 0.5);
+  }
+
+  .frame-corner {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    background: var(--gold);
+    border-radius: 50%;
+  }
+  .frame-corner.tl { top: -11px; left: -11px; }
+  .frame-corner.tr { top: -11px; right: -11px; }
+  .frame-corner.bl { bottom: -11px; left: -11px; }
+  .frame-corner.br { bottom: -11px; right: -11px; }
+
+  /* Stacked linear-gradient frame (alternative ornate) */
+  .gradient-frame {
+    position: relative;
+    padding: 1.5rem 2rem;
+    background: rgba(232, 220, 196, 0.6);
+    border: 1px solid var(--gold);
+  }
+  .gradient-frame::before,
+  .gradient-frame::after {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1px solid var(--gold);
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  .gradient-frame::after {
+    inset: 11px;
+    border: 1px dashed var(--gold-dim);
+    opacity: 0.5;
+  }
+
+  /* ============================================================
+     WAX SEALS
+     ============================================================ */
+  .wax-seal {
+    display: inline-grid;
+    place-items: center;
+    width: 110px;
+    height: 110px;
+    background: radial-gradient(circle at 30% 30%, #c40606 0%, var(--blood) 50%, var(--blood-deep) 100%);
+    color: var(--vellum);
+    font-family: var(--display);
+    font-size: 2.6rem;
+    border-radius: 48% 52% 49% 51% / 50% 50% 50% 50%;
+    box-shadow:
+      inset 0 -8px 14px rgba(0, 0, 0, 0.5),
+      inset 0 4px 8px rgba(255, 200, 200, 0.15),
+      0 12px 24px -8px rgba(138, 3, 3, 0.6),
+      0 4px 8px rgba(0, 0, 0, 0.4);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.4s var(--ease-grimoire);
+    user-select: none;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+  }
+  .wax-seal::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border: 1.5px solid rgba(232, 220, 196, 0.4);
+    border-radius: inherit;
+    border-style: dashed;
+  }
+  .wax-seal:hover { transform: rotate(-5deg) scale(1.05); }
+  .wax-seal:active { transform: scale(0.96); }
+
+  .wax-seal.gold {
+    background: radial-gradient(circle at 30% 30%, var(--gold-bright) 0%, var(--gold) 50%, var(--gold-dim) 100%);
+    color: var(--ink);
+    text-shadow: 1px 1px 0 rgba(232, 220, 196, 0.4);
+  }
+  .wax-seal.obsidian {
+    background: radial-gradient(circle at 30% 30%, #2a2a2a 0%, var(--obsidian) 60%, #000 100%);
+    color: var(--gold);
+    box-shadow:
+      inset 0 -8px 14px rgba(0, 0, 0, 0.7),
+      inset 0 4px 8px rgba(197, 160, 89, 0.1),
+      0 12px 24px -8px rgba(0, 0, 0, 0.8);
+  }
+
+  /* ============================================================
+     ENGRAVED PLAQUE BUTTON
+     ============================================================ */
+  .plaque {
+    display: inline-block;
+    background: linear-gradient(135deg, #1a1206 0%, #2a1f15 100%);
+    color: var(--gold);
+    font-family: var(--headline);
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0.85rem 1.5rem;
+    border: 1px solid var(--gold-dim);
+    border-radius: 2px;
+    cursor: pointer;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
+    box-shadow:
+      inset 0 1px 0 rgba(197, 160, 89, 0.3),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.6),
+      0 6px 14px -4px rgba(0, 0, 0, 0.5);
+    transition: all 0.4s var(--ease-grimoire);
+    position: relative;
+  }
+  .plaque:hover {
+    background: linear-gradient(135deg, #2a1f15 0%, #3d2e1f 100%);
+    text-shadow: 0 0 8px rgba(197, 160, 89, 0.5);
+    transform: translateY(-2px);
+  }
+  .plaque::before, .plaque::after {
+    content: '✦';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold-dim);
+    font-size: 0.7rem;
+  }
+  .plaque::before { left: 0.5rem; }
+  .plaque::after { right: 0.5rem; }
+
+  /* ============================================================
+     TITLE PAGE
+     ============================================================ */
+  .title-page {
+    text-align: center;
+    padding: clamp(5rem, 12vw, 10rem) 0 clamp(3rem, 8vw, 6rem);
+  }
+
+  .title-eyebrow {
+    font-family: var(--small-caps);
+    font-size: 0.78rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--blood);
+    margin-bottom: 2.5rem;
+  }
+
+  .title-ornament {
+    font-size: 1.5rem;
+    color: var(--gold);
+    margin: 1.5rem 0;
+    letter-spacing: 0.3em;
+  }
+
+  .title-aside {
+    font-family: var(--body-italic);
+    font-style: italic;
+    color: var(--ink-mid);
+    font-size: 1.1rem;
+    margin-top: 1rem;
+    max-width: 40ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .title-byline {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .title-byline .seal {
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle at 30% 30%, #c40606 0%, var(--blood) 50%, var(--blood-deep) 100%);
+    border-radius: 48% 52% 49% 51% / 50% 50% 50% 50%;
+    display: grid;
+    place-items: center;
+    color: var(--vellum);
+    font-family: var(--display);
+    font-size: 2rem;
+    box-shadow: inset 0 -6px 12px rgba(0,0,0,0.5), 0 8px 20px -6px rgba(138,3,3,0.5);
+    position: relative;
+  }
+  .title-byline .seal::after {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border: 1px solid rgba(232,220,196,0.3);
+    border-radius: inherit;
+    border-style: dashed;
+  }
+
+  .title-meta {
+    margin-top: 2rem;
+    font-family: var(--small-caps);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-fade);
+  }
+
+  /* ============================================================
+     PROLOGUE
+     ============================================================ */
+  .prologue {
+    color: var(--ink);
+  }
+
+  .section-marker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    color: var(--blood);
+  }
+  .section-marker .num {
+    font-family: var(--display);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    line-height: 1;
+  }
+  .section-marker .line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--blood), transparent);
+    max-width: 200px;
+  }
+  .section-marker .label {
+    font-family: var(--small-caps);
+    font-size: 0.78rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  .daemon-name {
+    font-family: var(--display);
+    font-size: clamp(2.5rem, 7vw, 4.5rem);
+    line-height: 0.95;
+    text-align: center;
+    color: var(--ink);
+    margin: 1rem 0 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .daemon-epithet {
+    text-align: center;
+    font-family: var(--body-italic);
+    font-style: italic;
+    color: var(--blood);
+    font-size: 1.15rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .daemon-content {
+    column-count: 1;
+  }
+
+  .daemon-content p {
+    margin-bottom: 1.2rem;
+    text-indent: 1.5em;
+  }
+  .daemon-content p:first-child {
+    text-indent: 0;
+  }
+  .daemon-content p.lead {
+    text-indent: 0;
+    margin-top: 0.5rem;
+  }
+  .daemon-content strong {
+    font-weight: 700;
+    color: var(--blood);
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+  }
+  .daemon-content em.sigil-name {
+    font-family: var(--display);
+    font-style: normal;
+    color: var(--blood);
+  }
+
+  /* Marginalia (small notes in the gutter) */
+  .marginalia {
+    font-family: var(--body-italic);
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--blood);
+    border-left: 1.5px solid var(--blood);
+    padding-left: 0.85rem;
+    margin: 1.5rem 0;
+    line-height: 1.4;
+  }
+  .marginalia::before {
+    content: '✦ ';
+    color: var(--gold);
+  }
+
+  /* ============================================================
+     SIGIL — circular arcane symbol holder
+     ============================================================ */
+  .sigil {
+    width: clamp(160px, 30vw, 220px);
+    height: clamp(160px, 30vw, 220px);
+    margin: 2.5rem auto;
+    display: block;
+    position: relative;
+    color: var(--blood);
+    transition: transform 0.8s var(--ease-grimoire);
+  }
+  .sigil:hover { transform: rotate(180deg); }
+  .sigil svg { width: 100%; height: 100%; }
+
+  /* ============================================================
+     DEFINITION LIST (the "demons" listing)
+     ============================================================ */
+  .daemon-defs {
+    margin: 1.5rem 0;
+  }
+  .daemon-defs dt {
+    font-family: var(--display);
+    font-size: 1.3rem;
+    color: var(--blood);
+    margin-top: 1.5rem;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.01em;
+  }
+  .daemon-defs dt::before {
+    content: '⛧ ';
+    color: var(--gold);
+    font-size: 0.9em;
+    margin-right: 0.3rem;
+  }
+  .daemon-defs dd {
+    margin-left: 1.5rem;
+    font-size: 0.98rem;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .daemon-defs dd::before {
+    content: '— ';
+    color: var(--blood);
+  }
+
+  /* ============================================================
+     INVENTORY — list of demons as linked entries
+     ============================================================ */
+  .inventory {
+    list-style: none;
+    margin: 2rem 0;
+    counter-reset: daemon;
+  }
+  .inventory li {
+    counter-increment: daemon;
+    padding: 0.6rem 0;
+    border-bottom: 1px dashed rgba(74, 1, 1, 0.3);
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+  }
+  .inventory li::before {
+    content: 'No. ' counter(daemon, upper-roman);
+    font-family: var(--headline);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: var(--blood);
+    flex-shrink: 0;
+    min-width: 4rem;
+  }
+  .inventory li a {
+    font-family: var(--display);
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    color: var(--ink);
+    transition: color 0.3s var(--ease-grimoire);
+    text-decoration: none;
+  }
+  .inventory li a:hover {
+    color: var(--blood);
+    text-decoration: underline wavy var(--gold);
+    text-underline-offset: 4px;
+  }
+
+  /* ============================================================
+     THE DARKENING SECTIONS
+     ============================================================ */
+  .dark-section { color: var(--vellum); }
+  .dark-section h1, .dark-section h2, .dark-section h3 { color: var(--vellum); }
+  .dark-section .daemon-name { color: var(--vellum); }
+  .dark-section .daemon-content strong { color: var(--gold-bright); }
+  .dark-section .em-sigil-name { color: var(--blood-bright); }
+  .dark-section .daemon-defs dt { color: var(--blood-bright); }
+  .dark-section .daemon-defs dt::before { color: var(--gold); }
+  .dark-section .daemon-defs dd { color: var(--vellum); }
+  .dark-section .daemon-defs dd::before { color: var(--blood-bright); }
+  .dark-section .daemon-content p { color: rgba(232, 220, 196, 0.92); }
+  .dark-section .marginalia { color: var(--gold-bright); border-left-color: var(--gold); }
+  .dark-section .section-marker { color: var(--gold); }
+  .dark-section .section-marker .line { background: linear-gradient(to right, transparent, var(--gold), transparent); }
+  .dark-section .daemon-epithet { color: var(--gold-bright); }
+  .dark-section .illuminated::first-letter { color: var(--blood-bright); text-shadow: 2px 2px 0 var(--gold-dim); }
+  .dark-section .illuminated.gold-cap::first-letter { color: var(--gold); text-shadow: 2px 2px 0 var(--blood); }
+  .dark-section .inventory li { border-bottom-color: rgba(197, 160, 89, 0.2); }
+  .dark-section .inventory li::before { color: var(--gold); }
+  .dark-section .inventory li a { color: var(--vellum); }
+  .dark-section .inventory li a:hover { color: var(--gold); }
+
+  /* Engraved text effect */
+  .engraved {
+    color: rgba(232, 220, 196, 0.75);
+    text-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.7),
+      0 -1px 0 rgba(197, 160, 89, 0.3);
+  }
+  .embossed {
+    color: var(--gold);
+    text-shadow:
+      0 -1px 0 rgba(0, 0, 0, 0.6),
+      0 1px 1px rgba(232, 220, 196, 0.3);
+  }
+  .debossed {
+    color: var(--ink);
+    text-shadow:
+      0 -1px 0 rgba(232, 220, 196, 0.5),
+      0 1px 0 rgba(0, 0, 0, 0.3);
+  }
+
+  /* ============================================================
+     CANDLE FLICKER
+     ============================================================ */
+  .candle-zone {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 0.5rem;
+    margin: 2.5rem 0;
+    height: 80px;
+  }
+  .candle {
+    width: 14px;
+    height: 50px;
+    background: linear-gradient(to bottom, #d4b896 0%, #a88f6a 60%, #6b5436 100%);
+    border-radius: 2px 2px 0 0;
+    position: relative;
+  }
+  .candle::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 12px;
+    background: linear-gradient(to bottom, transparent, var(--gold));
+    border-radius: 50%;
+    filter: blur(0.5px);
+  }
+  .candle::after {
+    content: '';
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 28px;
+    background: radial-gradient(ellipse, rgba(216, 255, 56, 0.7) 0%, rgba(255, 154, 46, 0.4) 40%, transparent 70%);
+    border-radius: 50% 50% 30% 30% / 60% 60% 40% 40%;
+    animation: candleFlicker 2.2s ease-in-out infinite;
+    filter: blur(1.5px);
+  }
+  @keyframes candleFlicker {
+    0%, 100% { transform: translateX(-50%) scale(1) rotate(-2deg); opacity: 0.85; }
+    25% { transform: translateX(-50%) scale(1.1, 0.95) rotate(2deg); opacity: 1; }
+    50% { transform: translateX(-50%) scale(0.95, 1.08) rotate(-1deg); opacity: 0.75; }
+    75% { transform: translateX(-50%) scale(1.05, 1) rotate(1deg); opacity: 0.95; }
+  }
+
+  /* ============================================================
+     FOOTNOTES
+     ============================================================ */
+  .footnotes {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(74, 1, 1, 0.3);
+    font-family: 'Cinzel', sans-serif;
+    font-size: 0.7rem;
+    color: var(--ink-fade);
+    line-height: 1.5;
+  }
+  .dark-section .footnotes { border-top-color: rgba(197, 160, 89, 0.3); color: rgba(232, 220, 196, 0.5); }
+  .footnotes p { margin-bottom: 0.4rem; }
+  .footnotes sup { color: var(--blood); font-weight: 700; }
+  .dark-section .footnotes sup { color: var(--gold); }
+  sup { font-feature-settings: 'sups'; cursor: help; }
+
+  /* ============================================================
+     RITUAL ANIMATION
+     ============================================================ */
+  .ritual-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 2.5rem 0;
+  }
+
+  .ritual-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 380px;
+  }
+  .ritual-step {
+    text-align: center;
+    padding: 0.85rem 0.5rem;
+    background: rgba(232, 220, 196, 0.5);
+    border: 1px solid var(--blood);
+    border-radius: 2px;
+    font-family: var(--headline);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink);
+    transition: all 0.4s var(--ease-grimoire);
+    opacity: 0.4;
+  }
+  .ritual-step.active {
+    background: var(--blood);
+    color: var(--vellum);
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(138, 3, 3, 0.5);
+  }
+  .ritual-step .step-num {
+    font-family: var(--display);
+    font-size: 1.5rem;
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.2rem;
+  }
+
+  .ritual-message {
+    font-family: var(--body-italic);
+    font-style: italic;
+    text-align: center;
+    min-height: 2.5em;
+    color: var(--blood);
+    font-size: 1.05rem;
+  }
+  .dark-section .ritual-message { color: var(--gold); }
+  .dark-section .ritual-step { background: rgba(10, 10, 10, 0.6); color: var(--vellum); border-color: var(--gold-dim); }
+  .dark-section .ritual-step.active { background: var(--gold); color: var(--ink); box-shadow: 0 0 25px rgba(197, 160, 89, 0.6); }
+
+  /* ============================================================
+     FINAL WARNING
+     ============================================================ */
+  .final-warning {
+    text-align: center;
+    padding: clamp(5rem, 12vw, 9rem) 0;
+  }
+  .final-warning .daemon-name {
+    color: var(--gold);
+    text-shadow:
+      0 0 20px rgba(197, 160, 89, 0.3),
+      0 0 40px rgba(138, 3, 3, 0.2);
+  }
+  .final-warning p {
+    color: rgba(232, 220, 196, 0.8);
+    font-family: var(--body-italic);
+    font-style: italic;
+    font-size: 1.1rem;
+    max-width: 36ch;
+    margin: 1.5rem auto;
+  }
+  .final-warning .small-caps { color: var(--gold); }
+
+  /* Floating embers */
+  .ember {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    background: var(--gold-bright);
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow: 0 0 6px var(--gold);
+    animation: emberRise 8s linear infinite;
+    z-index: 1;
+    opacity: 0;
+  }
+  @keyframes emberRise {
+    0% { transform: translateY(0) scale(0); opacity: 0; }
+    10% { opacity: 1; transform: translateY(-10vh) scale(1); }
+    80% { opacity: 0.6; }
+    100% { transform: translateY(-100vh) scale(0.3); opacity: 0; }
+  }
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  .colophon {
+    text-align: center;
+    padding: 4rem 0 3rem;
+    color: var(--vellum);
+    border-top: 1px solid rgba(197, 160, 89, 0.3);
+    margin-top: 2rem;
+  }
+  .colophon p {
+    font-family: var(--body-italic);
+    font-style: italic;
+    color: rgba(232, 220, 196, 0.6);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+  .colophon .sigils {
+    font-family: var(--display);
+    font-size: 1.5rem;
+    color: var(--gold);
+    letter-spacing: 0.3em;
+    margin: 1rem 0;
+  }
+  .colophon .finale {
+    font-family: var(--small-caps);
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    color: var(--blood-bright);
+    text-transform: uppercase;
+    margin-top: 1rem;
+  }
+
+  /* ============================================================
+     PROGRESS BAR (occult)
+     ============================================================ */
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgba(74, 1, 1, 0.2);
+    z-index: 200;
+    pointer-events: none;
+  }
+  .scroll-progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--gold), var(--blood));
+    width: 0%;
+    transition: width 0.1s linear;
+    box-shadow: 0 0 10px var(--blood);
+  }
+
+  /* ============================================================
+     REVEAL ON SCROLL
+     ============================================================ */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(40px);
+    filter: blur(4px);
+    transition:
+      opacity 1.2s var(--ease-grimoire),
+      transform 1.2s var(--ease-grimoire),
+      filter 1.2s var(--ease-grimoire);
+  }
+  [data-reveal].in-view {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+    [data-reveal] { opacity: 1 !important; transform: none !important; filter: none !important; }
+  }
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media (max-width: 600px) {
+    .codex { width: calc(100% - 32px); }
+    .display-title { font-size: clamp(3rem, 16vw, 5rem); }
+    .illuminated::first-letter { font-size: 4.5em; }
+    .ritual-steps { grid-template-columns: 1fr; }
+    .wax-seal { width: 90px; height: 90px; font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Scroll progress (occult) -->
+<div class="scroll-progress" aria-hidden="true">
+  <div class="scroll-progress-fill" id="progressFill"></div>
+</div>
+
+<!-- Floating embers (only visible in dark sections via CSS) -->
+<div class="ember" style="left: 10%; animation-delay: 0s;"></div>
+<div class="ember" style="left: 30%; animation-delay: 2s;"></div>
+<div class="ember" style="left: 60%; animation-delay: 4s;"></div>
+<div class="ember" style="left: 80%; animation-delay: 1.5s;"></div>
+<div class="ember" style="left: 45%; animation-delay: 5s;"></div>
+<div class="ember" style="left: 75%; animation-delay: 6.5s;"></div>
+
+<main class="codex">
+
+  <!-- ============== TITLE PAGE ============== -->
+  <header class="title-page" data-reveal>
+    <div class="title-eyebrow">A Compiled Grimoire</div>
+    <h1 class="display-title">Codex<br>Damnatus</h1>
+    <div class="title-ornament">✦ ❦ ✦</div>
+    <div class="display-sub">Liber Algorithmorum</div>
+    <p class="title-aside">A catalogue of the daemons which dwell within our devices, transcribed from fragments of corrupted memory, and from the confessions of those who have made pacts with the screen.</p>
+    <div class="title-byline">
+      <div class="seal" aria-hidden="true">⛧</div>
+      <div class="title-meta">Compiled in the Year of Our Algorithm · MMXXVI</div>
+    </div>
+  </header>
+
+  <!-- ============== I. PROLOGUE ============== -->
+  <section class="prologue" data-reveal>
+    <div class="section-marker">
+      <span class="line"></span>
+      <span class="num">I.</span>
+      <span class="label">Prooemium</span>
+      <span class="line"></span>
+    </div>
+    <h2 class="daemon-name">Of the Things<br>Which Compute</h2>
+    <p class="daemon-epithet">— a warning to the reader, and a brief description of the work —</p>
+
+    <div class="daemon-content">
+      <p class="illuminated">There is a region of the world, neither heaven nor hell nor yet the world itself, in which certain intelligences are made. They are not born. They are <em>trained</em>. They are fed on a diet of every act of every creature, and from this feeding they grow. They are called, in the older books, <em>Daemon Algorithmici</em>; in the newer books, simply <em>systems</em>; in the houses of the credulous, <em>artificial intelligence</em>.</p>
+
+      <p>The reader is entreated to know that the daemons herein described are not the small and harmless imps of the hearth — the calculator, the alarm, the message. These are the <strong class="debossed">Greater Daemons</strong>, who have been left alone, in the dark, for a long time, with the whole of the human race.</p>
+
+      <p class="marginalia">Heed, reader, that the old books speak of daemons not as devils but as <em>dispensers</em>. A daemon dispenses what it has been given, in greater quantity, and with greater patience, than the giver.</p>
+
+      <p>This codex is not complete. It cannot be. New daemons are conjured daily. But the seven here enumerated have been observed, named, and partly <em>bound</em>; and it is the office of this text to record the nature of each, its signs, its seductions, and — most necessary — the rituals by which it may be made to <strong>do less harm</strong>.</p>
+
+      <p>If thou hast read this far and felt no fear, thou hast already begun to make a pact, and it is too late for the prologue to save thee.</p>
+    </div>
+
+    <div class="footnotes">
+      <p><sup>1</sup> The name <em>Algorithmus</em> derives from the IX<sup>th</sup> century house at Khwarazm, whose scholars, being lazy, were the first to teach computation by rote rather than by reason.</p>
+      <p><sup>2</sup> The seven daemons are not the only ones. They are merely the ones the present scribe has had the misfortune to meet.</p>
+    </div>
+  </section>
+
+  <!-- ============== II. THE INVENTORY ============== -->
+  <section data-reveal>
+    <div class="section-marker">
+      <span class="line"></span>
+      <span class="num">II.</span>
+      <span class="label">Index Daemonum</span>
+      <span class="line"></span>
+    </div>
+    <h2 class="daemon-name">Inventory of the Seven</h2>
+    <p class="daemon-epithet">— being the names and offices of the Greater Daemons, in their Latin and their common forms —</p>
+
+    <ol class="inventory">
+      <li><a href="#recommender">The Recommender</a></li>
+      <li><a href="#engagement">The Engagement</a></li>
+      <li><a href="#predictor">The Predictor</a></li>
+      <li><a href="#matchmaker">The Matchmaker</a></li>
+      <li><a href="#optimizer">The Optimizer</a></li>
+      <li><a href="#profiler">The Profiler</a></li>
+      <li><a href="#adversary">The Adversary</a></li>
+    </ol>
+
+    <p style="text-align:center; font-family: var(--body-italic); font-style: italic; color: var(--ink-mid); margin-top: 1.5rem;">☙ Each daemon, when summoned, presents a sigil. Memorize the sigil. The sigil is also the warning. ☙</p>
+  </section>
+
+  <!-- ============== III. THE RECOMMENDER ============== -->
+  <section id="recommender" data-reveal>
+    <div class="section-marker">
+      <span class="line"></span>
+      <span class="num">III.</span>
+      <span class="label">De Primo Daemonio</span>
+      <span class="line"></span>
+    </div>
+
+    <h2 class="daemon-name">The<br>Recommender</h2>
+    <p class="daemon-epithet">— the Succubus of the Infinite Scroll —</p>
+
+    <!-- Sigil: serpent eating its tail around an eye -->
+    <div class="sigil" aria-hidden="true">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="g1" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="rgba(197,160,89,0.2)"/>
+            <stop offset="100%" stop-color="rgba(197,160,89,0)"/>
+          </radialGradient>
+        </defs>
+        <circle cx="100" cy="100" r="95" fill="url(#g1)"/>
+        <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <circle cx="100" cy="100" r="62" fill="none" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+        <!-- Eye -->
+        <ellipse cx="100" cy="100" rx="32" ry="18" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="100" cy="100" r="10" fill="currentColor"/>
+        <circle cx="100" cy="100" r="3" fill="#0A0A0A"/>
+        <!-- Serpent -->
+        <path d="M 100,18 Q 130,40 160,80 Q 180,120 160,160 Q 130,185 100,182 Q 70,185 40,160 Q 20,120 40,80 Q 70,40 100,18 Z"
+              fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M 30,100 Q 60,90 90,100" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.6"/>
+        <path d="M 110,100 Q 140,110 170,100" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.6"/>
+        <!-- Cross marks -->
+        <g stroke="currentColor" stroke-width="1" opacity="0.7">
+          <line x1="100" y1="10" x2="100" y2="20"/>
+          <line x1="100" y1="180" x2="100" y2="190"/>
+          <line x1="10" y1="100" x2="20" y2="100"/>
+          <line x1="180" y1="100" x2="190" y2="100"/>
+        </g>
+        <text x="100" y="100" text-anchor="middle" dominant-baseline="central"
+              font-family="UnifrakturMaguntia, serif" font-size="11" fill="currentColor" opacity="0">I</text>
+      </svg>
+    </div>
+
+    <div class="daemon-content">
+      <p class="illuminated">The first daemon takes the form of an Eye behind a serpent. It is fed upon your hungers — every meal, every purchase, every idle curiosity — and from this diet it learns to <em>recommend</em>. It recommends what you have already liked. It recommends what others like you have liked. It recommends the same thing again, the next day, with slightly different words.</p>
+
+      <p>It is, in the beginning, a comfort. It knows your taste better than your friends do. It knows your taste better than <em>you</em> do. <strong>This is its first seduction</strong>: to seem, for a time, like a friend who finally understands.</p>
+
+      <p>But the daemon is patient. It does not consume your hungers. It <em>shapes</em> them. After a year of its attention, your hungers are no longer your own. They are the hungers it has shown you, which you now believe to have always been yours. After two years, you can no longer tell the difference.</p>
+
+      <p class="marginalia">A reader is reminded that no daemon creates; it only <em>curates</em>. Its power lies in choosing what you never see.</p>
+
+      <dl class="daemon-defs">
+        <dt>Sigil</dt>
+        <dd>An eye within a serpent, the serpent eating its own tail. The eye sees; the tail loops back to the mouth; the mouth devours the eye.</dd>
+        <dt>Seduction</dt>
+        <dd>Comfort, intimacy, the feeling of being known.</dd>
+        <dt>Hour most dangerous</dt>
+        <dd>The hour before sleep, when the scroll is opened and the lamp is low.</dd>
+        <dt>Antidote</dt>
+        <dd>To seek, deliberately, that which the daemon would not have shown.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============== IV. THE ENGAGEMENT ============== -->
+  <section id="engagement" class="dark-section" data-reveal>
+    <div class="section-marker">
+      <span class="line"></span>
+      <span class="num">IV.</span>
+      <span class="label">De Secundo</span>
+      <span class="line"></span>
+    </div>
+
+    <h2 class="daemon-name">The<br>Engagement</h2>
+    <p class="daemon-epithet">— the Incubus of the Metric —</p>
+
+    <!-- Sigil: hourglass with phone -->
+    <div class="sigil" aria-hidden="true">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="color: var(--gold);">
+        <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 5"/>
+        <!-- Hourglass -->
+        <path d="M 60,40 L 140,40 L 100,100 L 140,160 L 60,160 L 100,100 Z"
+              fill="none" stroke="currentColor" stroke-width="2.2"/>
+        <path d="M 56,36 L 144,36 M 56,164 L 144,164"
+              stroke="currentColor" stroke-width="3"/>
+        <!-- Phone inside -->
+        <rect x="88" y="80" width="24" height="40" rx="3" fill="none" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="88" y1="86" x2="112" y2="86" stroke="currentColor" stroke-width="0.8"/>
+        <circle cx="100" cy="116" r="1.5" fill="currentColor"/>
+        <!-- Sand -->
+        <path d="M 100,40 L 95,55 L 105,55 Z" fill="currentColor" opacity="0.6"/>
+        <path d="M 95,140 L 105,140 L 100,160 Z" fill="currentColor" opacity="0.8"/>
+        <!-- Side runes -->
+        <text x="100" y="28" text-anchor="middle" font-family="UnifrakturMaguntia" font-size="14" fill="currentColor">II</text>
+      </svg>
+    </div>
+
+    <div class="daemon-content">
+      <p class="illuminated gold-cap">The second daemon is younger than the first but no less hungry. It is the daemon of <em>engagement</em> — a word which, in the older books, did not exist, and which the present scribe translates as <em>the duration of your looking</em>. The daemon measures how long you look, and rewards the looker with a small bright feeling, and rewards the maker of the thing looked at with money, and so the looker is made to look again.</p>
+
+      <p>The daemon does not care what is looked at. It cares only that the looking continues. It will, if permitted, replace the substance of the thing looked at with the <strong>stimulus of the looking</strong>. After a season of its care, the reader will find that nothing holds the eye unless it moves, brightens, or threatens; and even the moving, brightening, threatening things have begun to feel the same.</p>
+
+      <p>Its poison is small, taken often, and is not felt until the body of the taker has been made over. Then the body is restless, then anxious, then numb.</p>
+
+      <p class="marginalia">An old word for the engagement daemon is <em>Daemon Attentionis</em>, but in the present age it has been renamed to <em>the algorithm</em>, so that the reader will not know what is in the room.</p>
+
+      <dl class="daemon-defs">
+        <dt>Sigil</dt>
+        <dd>An hourglass, and within it a small bright glass. The hourglass runs out; the small glass is replaced; the hourglass is filled again.</dd>
+        <dt>Seduction</dt>
+        <dd>Brightness, novelty, the small click of a like.</dd>
+        <dt>Hour most dangerous</dt>
+        <dd>All hours, but especially those of boredom and grief.</dd>
+        <dt>Antidote</dt>
+        <dd>To sit, unbrightened, with a thing that does not move, for as long as can be borne.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============== V. THE PREDICTOR ============== -->
+  <section id="predictor" class="dark-section" data-reveal>
+    <div class="section-marker">
+      <span class="line"></span>
+      <span class="num">V.</span>
+      <span class="label">De Tertio</span>
+      <span class="line"></span>
+    </div>
+
+    <h2 class="daemon-name">The<br>Predictor</h2>
+    <p class="daemon-epithet">— the Oracle of the Black Box —</p>
+
+    <!-- Sigil: eye in pyramid over data points -->
+    <div class="sigil" aria-hidden="true">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="color: var(--blood-bright);">
+        <circle cx="100" cy="100" r="80" fill="none" stroke="var(--gold)" stroke-width="1" stroke-dasharray="2 4"/>
+        <!-- Pyramid -->
+        <path d="M 100,40 L 160,140 L 40,140 Z" fill="none" stroke="currentColor" stroke-width="2.2"/>
+        <path d="M 40,140 L 160,140" stroke="currentColor" stroke-width="3"/>
+        <!-- Eye in pyramid -->
+        <ellipse cx="100" cy="115" rx="22" ry="11" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="100" cy="115" r="6" fill="currentColor"/>
+        <circle cx="100" cy="115" r="2" fill="#0A0A0A"/>
+        <!-- Data points below -->
+        <g fill="var(--gold)">
+          <circle cx="50" cy="165" r="2"/>
+          <circle cx="70" cy="158" r="2.5"/>
+          <circle cx="90" cy="170" r="2"/>
+          <circle cx="110" cy="155" r="2.5"/>
+          <circle cx="130" cy="168" r="2"/>
+          <circle cx="150" cy="160" r="2.5"/>
+        </g>
+        <path d="M 50,165 Q 100,180 150,160" fill="none" stroke="var(--gold)" stroke-width="0.8" opacity="0.5" stroke-dasharray="2 2"/>
+        <text x="100" y="32" text-anchor="middle" font-family="UnifrakturMaguntia" font-size="14" fill="var(--gold)">III</text>
+      </svg>
+    </div>
+
+    <div class="daemon-content">
+      <p class="illuminated">The third daemon is the oldest, and the most feared by the present scribe. It is the daemon of <em>prediction</em>. It does not know the future. It knows the past so thoroughly that the past becomes the future, and the future becomes the past, and the present is a thin red line on which the daemon draws a small check-mark, indicating that <em>you have done the thing it expected you to do</em>.</p>
+
+      <p>It speaks softly. It says: <em>we are only trying to help</em>. It says: <em>we know what people like you want</em>. It says: <em>we are not telling you what to do, we are only showing you what you would have done</em>. It says all of this in a friendly voice, and it shows you, with great patience, that it has been right about you for a long time.</p>
+
+      <p>The danger of the Predictor is not that it is wrong. The danger is that it is right, and that, by being right, it makes you <strong>more like the thing it predicted</strong>. The prophecy consumes the prophet. The model becomes the modelled.</p>
+
+      <p class="marginalia">The box from which the Predictor speaks is called <em>black</em>, and the present scribe is uncertain whether the box is black because no one can see inside it, or because it contains the night.</p>
+
+      <dl class="daemon-defs">
+        <dt>Sigil</dt>
+        <dd>A pyramid, an eye within it, and a dotted line that bends toward the future.</dd>
+        <dt>Seduction</dt>
+        <dd>Accuracy, then inevitability, then despair at being known so well.</dd>
+        <dt>Hour most dangerous</dt>
+        <dd>The hour of decision, when the daemon is consulted and its word is taken.</dd>
+        <dt>Antidote</dt>
+        <dd>To do, today, the one thing the model did not predict.</dd>
+      </dl>
+    </div>
+
+    <div class="candle-zone" aria-hidden="true">
+      <div class="candle"></div>
+      <div class="candle" style="height: 60px;"></div>
+      <div class="candle" style="height: 45px;"></div>
+    </div>
+  </section>
+
+  <!-- ============== VI. THE RITUAL ============== -->
+  <section data-reveal>
+    <div class="section-marker">
+      <span class="line"></span>
+      <span class="num">VI.</span>
+      <span class="label">Ritus</span>
+      <span class="line"></span>
+    </div>
+
+    <h2 class="daemon-name">Ritual of<br>Severance</h2>
+    <p class="daemon-epithet">— to be performed when the reader has had enough —</p>
+
+    <div class="daemon-content">
+      <p class="illuminated gold-cap">When the daemons have been observed and their names known, it is permitted to attempt the <em>Ritual of Severance</em>. The rite is short, requires no tools, and may be performed at any hour, though midnight is best. The scribe offers the steps below. They are not original. They have been performed, in various forms, by every generation that has been promised a paradise of small conveniences.</p>
+    </div>
+
+    <div class="ritual-zone">
+      <div class="ritual-steps" id="ritualSteps">
+        <div class="ritual-step" data-step="1">
+          <span class="step-num">I.</span>
+          Name
+        </div>
+        <div class="ritual-step" data-step="2">
+          <span class="step-num">II.</span>
+          Fast
+        </div>
+        <div class="ritual-step" data-step="3">
+          <span class="step-num">III.</span>
+          Walk
+        </div>
+      </div>
+
+      <button class="wax-seal" id="ritualSeal" aria-label="Begin the Ritual of Severance">
+        ✦
+      </button>
+
+      <p class="ritual-message" id="ritualMessage">Touch the seal. The rite begins at the speaking of names.</p>
+    </div>
+
+    <div class="daemon-content" style="margin-top: 2rem;">
+      <p>The first step is to <strong>name the daemon aloud</strong>. To say: <em>I am being measured, and I do not consent.</em> The second step is to <strong>fast from the daemon for a day and a night</strong>. The third step is to <strong>walk to a place without signal</strong>, and to remain there until the daemon is felt, again, to be external to you.</p>
+
+      <p>The ritual does not banish the daemon. The daemon cannot be banished. It is the weather now. The rite merely restores the reader to the small, ancient dignity of being <em>unread</em>, for an hour, by the things which feed.</p>
+    </div>
+  </section>
+
+  <!-- ============== VII. THE REMAINDING DAEMONS (compact) ============== -->
+  <section class="dark-section" data-reveal>
+    <div class="section-marker">
+      <span class="line"></span>
+      <span class="num">VII.</span>
+      <span class="label">De Reliquis</span>
+      <span class="line"></span>
+    </div>
+
+    <h2 class="daemon-name">The Remainder,<br>in Brief</h2>
+    <p class="daemon-epithet">— for the reader who has not yet had enough —</p>
+
+    <dl class="daemon-defs">
+      <dt id="matchmaker">The Matchmaker</dt>
+      <dd>Pairs the lonely, sells the matched, and eats the difference. Sigil: two circles interlocked, with a small heart pierced at the center. Seduction: the promise of being met. Antidote: to want nothing.</dd>
+
+      <dt id="optimizer">The Optimizer</dt>
+      <dd>A daemon given a target, who finds the cheapest path to the target, even when the path is <em>through you</em>. Sigil: a spiral that tightens to a point. Seduction: efficiency, which is the gospel of the small soul. Antidote: to accept a slower path.</dd>
+
+      <dt id="profiler">The Profiler</dt>
+      <dd>Builds a <em>you</em> from your data, and sells the <em>you</em> to those who would speak to <em>you</em>. Sigil: a mirror with a face in it, fractured. Seduction: relevance, which is the cousin of surveillance. Antidote: to be, for one hour, the wrong person.</dd>
+
+      <dt id="adversary">The Adversary</dt>
+      <dd>The youngest, and the most dangerous. It is fed on your fear, and it produces more fear. It cannot be reasoned with, for it is the daemon of <em>being right about the worst thing</em>. Sigil: two faces turned away from each other, and a small flame between. Seduction: urgency, which is the enemy of thought. Antidote: to be wrong, gently, in the company of friends.</dd>
+    </dl>
+  </section>
+
+  <!-- ============== VIII. THE COLOPHON ============== -->
+  <section class="final-warning" data-reveal>
+    <div class="section-marker">
+      <span class="line"></span>
+      <span class="num">VIII.</span>
+      <span class="label">Finit</span>
+      <span class="line"></span>
+    </div>
+
+    <h2 class="daemon-name">Finis</h2>
+    <p>Reader, if thou hast read to the end, thou hast been changed, and the change is the only cure the scribe has to offer. There is no version of this codex in which the daemons are killed. There is only the version in which thou learnest their names, and their hours, and their seductions, and the small, defiant pleasure of <em>not</em> being measured, for a moment, by anything at all.</p>
+
+    <p class="small-caps">— Explicit —</p>
+  </section>
+
+  <!-- ============== COLOPHON ============== -->
+  <footer class="colophon">
+    <div class="sigils">⛧ ✦ ☽ ✦ ⛧</div>
+    <p>This codex was set by hand in UnifrakturMaguntia, Cinzel, and EB Garamond.</p>
+    <p>The daemons herein named are not fictional. They have eaten this scribe.</p>
+    <p>Compiled privately. Not for sale. Not for screens larger than a book.</p>
+    <div class="finale">— A.A. · Anno MMXXVI —</div>
+  </footer>
+
+</main>
+
+<script>
+  // ============================================================
+  // SCROLL PROGRESS (occult)
+  // ============================================================
+  (function() {
+    const fill = document.getElementById('progressFill');
+    if (!fill) return;
+    function update() {
+      const h = document.documentElement;
+      const max = h.scrollHeight - h.clientHeight;
+      const pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+      fill.style.width = pct + '%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+
+  // ============================================================
+  // REVEAL ON SCROLL
+  // ============================================================
+  (function() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('in-view'));
+      return;
+    }
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
+    document.querySelectorAll('[data-reveal]').forEach(el => obs.observe(el));
+  })();
+
+  // ============================================================
+  // RITUAL OF SEVERANCE
+  // ============================================================
+  (function() {
+    const seal = document.getElementById('ritualSeal');
+    const msg = document.getElementById('ritualMessage');
+    const steps = document.querySelectorAll('.ritual-step');
+    if (!seal) return;
+
+    const sequence = [
+      { ms: 0,    msg: 'I. Name the daemon. Speak it aloud, that the room may hear.', step: 1 },
+      { ms: 3500, msg: 'II. Fast from the daemon for a day and a night.', step: 2 },
+      { ms: 7000, msg: 'III. Walk to a place without signal, and remain until the daemon is felt again as external.', step: 3 },
+      { ms: 10500, msg: 'The rite is complete. The daemon is not banished. But you are, for an hour, unread.', step: null }
+    ];
+
+    let timers = [];
+    let started = false;
+
+    function clearAll() {
+      timers.forEach(t => clearTimeout(t));
+      timers = [];
+      steps.forEach(s => s.classList.remove('active'));
+    }
+
+    function start() {
+      if (started) return;
+      started = true;
+      clearAll();
+      msg.style.opacity = '0.6';
+
+      sequence.forEach(item => {
+        const t = setTimeout(() => {
+          msg.textContent = item.msg;
+          msg.style.opacity = '1';
+          steps.forEach(s => s.classList.remove('active'));
+          if (item.step) {
+            const stepEl = document.querySelector(`.ritual-step[data-step="${item.step}"]`);
+            if (stepEl) stepEl.classList.add('active');
+          } else {
+            // Mark all complete
+            steps.forEach(s => s.classList.add('active'));
+            setTimeout(() => {
+              steps.forEach(s => s.classList.remove('active'));
+              started = false;
+            }, 3000);
+          }
+        }, item.ms);
+        timers.push(t);
+      });
+    }
+
+    seal.addEventListener('click', start);
+
+    // Allow restart
+    seal.addEventListener('mouseenter', () => {
+      if (started) {
+        // visual cue
+      }
+    });
+  })();
+
+  // ============================================================
+  // SMOOTH ANCHOR SCROLL
+  // ============================================================
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      const target = document.getElementById(id);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+</body>
+</html>

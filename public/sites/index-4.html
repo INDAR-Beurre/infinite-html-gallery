@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus — Edge compute, zero compromise</title>
+  <meta name="description" content="Deploy globally in under 50ms. Nexus is the edge compute platform built for teams that ship fast.">
+
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@900,800,700,500&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: oklch(0.14 0.006 75);
+      --bg-elevated: oklch(0.19 0.008 75);
+      --bg-surface: oklch(0.24 0.01 75);
+      --bg-heavy: oklch(0.28 0.012 75);
+      --text: oklch(0.93 0.004 75);
+      --text-muted: oklch(0.62 0.006 75);
+      --text-subtle: oklch(0.42 0.005 75);
+      --accent: oklch(0.72 0.18 185);
+      --accent-hover: oklch(0.62 0.20 185);
+      --accent-dim: oklch(0.72 0.18 185 / 0.15);
+      --warm: oklch(0.75 0.16 65);
+      --border: oklch(1 0 0 / 0.06);
+      --border-strong: oklch(1 0 0 / 0.12);
+      --radius: 6px;
+      --radius-lg: 10px;
+      --space-xs: clamp(0.5rem, 0.5rem + 0.5vw, 0.75rem);
+      --space-sm: clamp(0.75rem, 0.75rem + 0.5vw, 1rem);
+      --space-md: clamp(1.5rem, 1.5rem + 1vw, 2.5rem);
+      --space-lg: clamp(3rem, 3rem + 2vw, 5rem);
+      --space-xl: clamp(5rem, 5rem + 4vw, 10rem);
+      --space-2xl: clamp(8rem, 8rem + 8vw, 16rem);
+      --max-width: 1400px;
+      --nav-height: 72px;
+    }
+
+    [data-theme="light"] {
+      --bg: oklch(0.96 0.004 75);
+      --bg-elevated: oklch(0.92 0.006 75);
+      --bg-surface: oklch(0.88 0.008 75);
+      --bg-heavy: oklch(0.84 0.01 75);
+      --text: oklch(0.18 0.006 75);
+      --text-muted: oklch(0.42 0.006 75);
+      --text-subtle: oklch(0.58 0.005 75);
+      --accent: oklch(0.52 0.16 185);
+      --accent-hover: oklch(0.45 0.18 185);
+      --accent-dim: oklch(0.52 0.16 185 / 0.12);
+      --warm: oklch(0.62 0.16 65);
+      --border: oklch(0 0 0 / 0.06);
+      --border-strong: oklch(0 0 0 / 0.12);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: 'Satoshi', system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text);
+      background: var(--bg);
+      transition: background 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
+    }
+
+    /* Noise texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4 {
+      font-family: 'Cabinet Grotesk', system-ui, sans-serif;
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+    }
+
+    h1 {
+      font-size: clamp(3.5rem, 10vw + 1rem, 9rem);
+      font-weight: 900;
+    }
+
+    h2 {
+      font-size: clamp(2.5rem, 5vw + 1rem, 5rem);
+      font-weight: 800;
+    }
+
+    h3 {
+      font-size: clamp(1.25rem, 2vw + 0.5rem, 1.75rem);
+    }
+
+    p {
+      max-width: 65ch;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Layout */
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-md);
+    }
+
+    .container--wide {
+      max-width: 1600px;
+    }
+
+    /* Grid lines background */
+    .grid-bg {
+      position: relative;
+    }
+
+    .grid-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      z-index: 100;
+      background: oklch(from var(--bg) l c h / 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-md);
+    }
+
+    .nav__logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-weight: 800;
+      font-size: 1.375rem;
+      letter-spacing: -0.03em;
+    }
+
+    .nav__logo svg {
+      flex-shrink: 0;
+    }
+
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+      list-style: none;
+    }
+
+    .nav__link {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: color 180ms ease-out;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .nav__link::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 180ms ease-out;
+    }
+
+    .nav__link:hover::after,
+    .nav__link:focus-visible::after {
+      width: 100%;
+    }
+
+    .nav__link:hover,
+    .nav__link:focus-visible {
+      color: var(--text);
+    }
+
+    .nav__link:focus-visible {
+      outline: none;
+    }
+
+    .nav__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-radius: var(--radius);
+      transition: color 180ms ease-out, background 180ms ease-out, border-color 180ms ease-out;
+    }
+
+    .theme-toggle:hover {
+      color: var(--text);
+      background: var(--bg-elevated);
+      border-color: var(--border-strong);
+    }
+
+    .theme-toggle:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .theme-toggle svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .theme-toggle .icon-moon {
+      display: none;
+    }
+
+    [data-theme="dark"] .theme-toggle .icon-sun {
+      display: none;
+    }
+
+    [data-theme="dark"] .theme-toggle .icon-moon {
+      display: block;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 28px;
+      font-family: 'Satoshi', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 180ms ease-out;
+      min-height: 48px;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .btn--primary {
+      background: var(--accent);
+      color: oklch(0.12 0.006 75);
+    }
+
+    .btn--primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px oklch(from var(--accent) l c h / 0.25);
+    }
+
+    .btn--secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border-strong);
+    }
+
+    .btn--secondary:hover {
+      border-color: var(--text);
+      background: var(--bg-elevated);
+    }
+
+    .btn--large {
+      padding: 18px 36px;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .btn--ghost {
+      background: transparent;
+      color: var(--text);
+      padding: 14px 16px;
+    }
+
+    .btn--ghost:hover {
+      color: var(--accent);
+    }
+
+    .btn--ghost svg {
+      width: 18px;
+      height: 18px;
+      transition: transform 180ms ease-out;
+    }
+
+    .btn--ghost:hover svg {
+      transform: translateX(4px);
+    }
+
+    /* Hero */
+    .hero {
+      padding-top: calc(var(--nav-height) + var(--space-2xl));
+      padding-bottom: var(--space-xl);
+      position: relative;
+      overflow: hidden;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero__accent-line {
+      position: absolute;
+      top: 0;
+      left: 15%;
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(180deg, transparent, var(--accent-dim), transparent);
+      pointer-events: none;
+    }
+
+    .hero__accent-line:nth-child(2) {
+      left: 45%;
+      opacity: 0.5;
+    }
+
+    .hero__accent-line:nth-child(3) {
+      left: 75%;
+      opacity: 0.3;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero__kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: var(--space-md);
+      padding: 8px 16px;
+      border: 1px solid var(--accent-dim);
+      border-radius: 100px;
+      background: var(--accent-dim);
+    }
+
+    .hero__kicker::before {
+      content: '';
+      display: block;
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero__title {
+      margin-bottom: var(--space-md);
+      max-width: 14ch;
+    }
+
+    .hero__title span {
+      color: var(--accent);
+    }
+
+    .hero__description {
+      font-size: clamp(1.125rem, 1.5vw + 0.5rem, 1.375rem);
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: var(--space-md);
+      max-width: 50ch;
+    }
+
+    .hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+
+    .hero__below {
+      margin-top: var(--space-xl);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero__code {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.8125rem;
+      line-height: 1.7;
+      overflow-x: auto;
+    }
+
+    .code-dots {
+      display: flex;
+      gap: 6px;
+      margin-bottom: var(--space-sm);
+    }
+
+    .code-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--text-subtle);
+      opacity: 0.4;
+    }
+
+    .code-comment { color: var(--text-subtle); }
+    .code-keyword { color: var(--accent); }
+    .code-string { color: oklch(0.82 0.12 145); }
+    .code-func { color: oklch(0.80 0.10 250); }
+
+    .hero__stats {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: var(--space-md);
+      padding: var(--space-md);
+    }
+
+    .hero__stat {
+      padding: var(--space-sm) 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero__stat:last-child {
+      border-bottom: none;
+    }
+
+    .hero__stat-value {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .hero__stat-value--accent {
+      color: var(--accent);
+    }
+
+    .hero__stat-value--warm {
+      color: var(--warm);
+    }
+
+    .hero__stat-label {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    /* Feature section */
+    .features {
+      padding: var(--space-2xl) 0;
+    }
+
+    .features__header {
+      margin-bottom: var(--space-xl);
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--space-lg);
+      align-items: end;
+    }
+
+    .features__header h2 {
+      margin-bottom: var(--space-sm);
+    }
+
+    .features__header p {
+      color: var(--text-muted);
+      font-size: 1.125rem;
+    }
+
+    .features__header .features__cta {
+      text-align: right;
+    }
+
+    /* Feature list - not cards */
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feature-list__item {
+      display: grid;
+      grid-template-columns: 80px 1fr 1fr;
+      gap: var(--space-md);
+      padding: var(--space-lg) 0;
+      border-top: 1px solid var(--border);
+      align-items: start;
+      transition: border-color 180ms ease-out;
+    }
+
+    .feature-list__item:last-child {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .feature-list__item:hover {
+      border-color: var(--border-strong);
+    }
+
+    .feature-list__number {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-subtle);
+      padding-top: 4px;
+    }
+
+    .feature-list__content h3 {
+      margin-bottom: var(--space-xs);
+    }
+
+    .feature-list__content p {
+      color: var(--text-muted);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    .feature-list__visual {
+      display: flex;
+      align-items: end;
+      justify-content: flex-end;
+    }
+
+    .feature-list__metric {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .feature-list__metric--accent {
+      color: var(--accent);
+    }
+
+    .feature-list__code {
+      padding: var(--space-sm) var(--space-md);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.75rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    /* Full-bleed section */
+    .fullbleed {
+      padding: var(--space-2xl) 0;
+      background: var(--bg-elevated);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fullbleed::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--accent-dim), transparent 70%);
+      pointer-events: none;
+    }
+
+    .fullbleed__inner {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: var(--space-xl);
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .fullbleed__content h2 {
+      margin-bottom: var(--space-md);
+    }
+
+    .fullbleed__content p {
+      color: var(--text-muted);
+      font-size: 1.125rem;
+      margin-bottom: var(--space-md);
+    }
+
+    .fullbleed__visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-sm);
+    }
+
+    .fullbleed__stat {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+      transition: border-color 180ms ease-out, transform 180ms ease-out;
+    }
+
+    .fullbleed__stat:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-2px);
+    }
+
+    .fullbleed__stat-value {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      margin-bottom: 4px;
+    }
+
+    .fullbleed__stat-label {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    /* CTA section */
+    .cta {
+      padding: var(--space-2xl) 0;
+      text-align: left;
+    }
+
+    .cta__inner {
+      position: relative;
+      overflow: hidden;
+      padding: var(--space-xl) 0;
+    }
+
+    .cta__bg {
+      position: absolute;
+      inset: 0;
+      background: var(--accent);
+      border-radius: var(--radius-lg);
+    }
+
+    .cta__bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    .cta__content {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+    }
+
+    .cta h2 {
+      color: oklch(0.12 0.006 75);
+      margin-bottom: var(--space-sm);
+    }
+
+    .cta p {
+      color: oklch(0.25 0.01 75);
+      font-size: 1.25rem;
+      margin-bottom: var(--space-md);
+      max-width: 50ch;
+    }
+
+    .cta__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .cta .btn--primary {
+      background: oklch(0.12 0.006 75);
+      color: var(--text);
+    }
+
+    .cta .btn--primary:hover {
+      background: oklch(0.18 0.008 75);
+      transform: translateY(-2px);
+    }
+
+    .cta .btn--secondary {
+      border-color: oklch(0.12 0.006 75 / 0.3);
+      color: oklch(0.12 0.006 75);
+    }
+
+    .cta .btn--secondary:hover {
+      border-color: oklch(0.12 0.006 75);
+      background: oklch(0.12 0.006 75 / 0.1);
+    }
+
+    /* Footer */
+    .footer {
+      padding: var(--space-lg) 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer__inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: var(--space-lg);
+    }
+
+    .footer__brand {
+      max-width: 300px;
+    }
+
+    .footer__brand .nav__logo {
+      margin-bottom: var(--space-sm);
+    }
+
+    .footer__brand p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .footer__links {
+      display: flex;
+      gap: var(--space-xl);
+    }
+
+    .footer__col h4 {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-subtle);
+      margin-bottom: var(--space-sm);
+    }
+
+    .footer__col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer__col a {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      transition: color 180ms ease-out;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .footer__col a:hover {
+      color: var(--text);
+    }
+
+    .footer__bottom {
+      margin-top: var(--space-lg);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8125rem;
+      color: var(--text-subtle);
+    }
+
+    /* Scroll animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 700ms cubic-bezier(0.16, 1, 0.3, 1), transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 80ms; }
+    .reveal-delay-2 { transition-delay: 160ms; }
+    .reveal-delay-3 { transition-delay: 240ms; }
+    .reveal-delay-4 { transition-delay: 320ms; }
+
+    /* Page load animation */
+    .page-load {
+      opacity: 0;
+      animation: pageIn 800ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .page-load-delay-1 { animation-delay: 100ms; }
+    .page-load-delay-2 { animation-delay: 200ms; }
+    .page-load-delay-3 { animation-delay: 300ms; }
+    .page-load-delay-4 { animation-delay: 400ms; }
+
+    @keyframes pageIn {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .feature-list__item {
+        grid-template-columns: 60px 1fr;
+      }
+
+      .feature-list__visual {
+        display: none;
+      }
+
+      .hero__below {
+        grid-template-columns: 1fr;
+      }
+
+      .fullbleed__inner {
+        grid-template-columns: 1fr;
+      }
+
+      .features__header {
+        grid-template-columns: 1fr;
+      }
+
+      .features__header .features__cta {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav__links {
+        display: none;
+      }
+
+      .fullbleed__visual {
+        order: -1;
+      }
+
+      .footer__links {
+        flex-direction: column;
+        gap: var(--space-md);
+      }
+
+      .footer__bottom {
+        flex-direction: column;
+        gap: var(--space-sm);
+        text-align: center;
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: calc(var(--nav-height) + var(--space-xl));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero__actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .hero__actions .btn {
+        width: 100%;
+      }
+
+      .cta__actions {
+        flex-direction: column;
+      }
+
+      .cta__actions .btn {
+        width: 100%;
+      }
+    }
+
+    /* Focus visible */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* Skip link */
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: var(--space-sm);
+      padding: 12px 24px;
+      background: var(--accent);
+      color: oklch(0.12 0.006 75);
+      border-radius: var(--radius);
+      font-weight: 500;
+      z-index: 200;
+      transition: top 180ms ease-out;
+    }
+
+    .skip-link:focus {
+      top: var(--space-sm);
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- Navigation -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav__inner">
+      <a href="/" class="nav__logo" aria-label="Nexus home">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M14 8L20 11V17L14 20L8 17V11L14 8Z" fill="currentColor" opacity="0.15"/>
+          <path d="M14 8L20 11V17L14 20L8 17V11L14 8Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="14" cy="14" r="2" fill="currentColor"/>
+        </svg>
+        Nexus
+      </a>
+
+      <ul class="nav__links">
+        <li><a href="#features" class="nav__link">Features</a></li>
+        <li><a href="#platform" class="nav__link">Platform</a></li>
+        <li><a href="#docs" class="nav__link">Docs</a></li>
+        <li><a href="#pricing" class="nav__link">Pricing</a></li>
+      </ul>
+
+      <div class="nav__actions">
+        <button class="theme-toggle" aria-label="Toggle theme" type="button">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+        <a href="#signup" class="btn btn--primary">Get started</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero grid-bg">
+      <div class="hero__accent-line"></div>
+      <div class="hero__accent-line"></div>
+      <div class="hero__accent-line"></div>
+
+      <div class="container container--wide">
+        <div class="hero__content">
+          <span class="hero__kicker page-load">Now in general availability</span>
+          <h1 class="hero__title page-load page-load-delay-1">
+            Deploy globally<br>in under <span>50ms</span>
+          </h1>
+          <p class="hero__description page-load page-load-delay-2">
+            Nexus is the edge compute platform built for teams that ship fast.
+            Run code close to your users, scale automatically, and forget about infrastructure.
+          </p>
+          <div class="hero__actions page-load page-load-delay-3">
+            <a href="#signup" class="btn btn--primary btn--large">Start building free</a>
+            <a href="#docs" class="btn btn--ghost">
+              Read the docs
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero__below page-load page-load-delay-4">
+          <div class="hero__code">
+            <div class="code-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <pre><code><span class="code-comment">// Deploy to 300+ edge locations</span>
+<span class="code-keyword">import</span> { <span class="code-func">edge</span> } <span class="code-keyword">from</span> <span class="code-string">'@nexus/runtime'</span>;
+
+<span class="code-keyword">export default</span> <span class="code-func">edge</span>({
+  <span class="code-func">regions</span>: [<span class="code-string">'global'</span>],
+  <span class="code-func">cache</span>: <span class="code-string">'stale-while-revalidate'</span>,
+
+  <span class="code-keyword">async</span> <span class="code-func">handler</span>(req) {
+    <span class="code-keyword">const</span> data = <span class="code-keyword">await</span> <span class="code-func">fetch</span>(<span class="code-string">'/api/data'</span>);
+    <span class="code-keyword">return</span> <span class="code-func">Response</span>.<span class="code-func">json</span>(<span class="code-keyword">await</span> data.<span class="code-func">json</span>());
+  }
+});</code></pre>
+          </div>
+
+          <div class="hero__stats">
+            <div class="hero__stat">
+              <div class="hero__stat-value hero__stat-value--accent">312</div>
+              <div class="hero__stat-label">Edge locations</div>
+            </div>
+            <div class="hero__stat">
+              <div class="hero__stat-value">&lt;50ms</div>
+              <div class="hero__stat-label">p99 latency</div>
+            </div>
+            <div class="hero__stat">
+              <div class="hero__stat-value hero__stat-value--warm">99.99%</div>
+              <div class="hero__stat-label">Uptime SLA</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+      <div class="container">
+        <div class="features__header">
+          <div>
+            <h2 class="reveal">Built for the way<br>you work</h2>
+            <p class="reveal reveal-delay-1">
+              Every feature designed to remove friction between your code and your users.
+            </p>
+          </div>
+          <div class="features__cta reveal reveal-delay-2">
+            <a href="#docs" class="btn btn--secondary">View all features</a>
+          </div>
+        </div>
+
+        <div class="feature-list">
+          <div class="feature-list__item reveal">
+            <div class="feature-list__number">01</div>
+            <div class="feature-list__content">
+              <h3>Global by default</h3>
+              <p>
+                Deploy to 300+ edge locations with a single command. Your code runs within
+                milliseconds of every user, automatically. No region selection, no configuration.
+              </p>
+            </div>
+            <div class="feature-list__visual">
+              <div class="feature-list__metric feature-list__metric--accent">300+</div>
+            </div>
+          </div>
+
+          <div class="feature-list__item reveal">
+            <div class="feature-list__number">02</div>
+            <div class="feature-list__content">
+              <h3>Scale to zero</h3>
+              <p>
+                Pay only for what you use. Functions scale from zero to millions of requests
+                without cold starts or configuration.
+              </p>
+            </div>
+            <div class="feature-list__visual">
+              <div class="feature-list__code">
+                <span class="code-comment">$ nexus deploy</span><br>
+                <span class="code-keyword">Deployed</span> to 312 regions in 4.2s
+              </div>
+            </div>
+          </div>
+
+          <div class="feature-list__item reveal">
+            <div class="feature-list__number">03</div>
+            <div class="feature-list__content">
+              <h3>Type-safe APIs</h3>
+              <p>
+                End-to-end type safety from your edge functions to your frontend.
+                Generated clients, zero boilerplate.
+              </p>
+            </div>
+            <div class="feature-list__visual">
+              <div class="feature-list__metric">TS</div>
+            </div>
+          </div>
+
+          <div class="feature-list__item reveal">
+            <div class="feature-list__number">04</div>
+            <div class="feature-list__content">
+              <h3>Instant rollbacks</h3>
+              <p>
+                Every deployment is versioned. Rollback to any previous version
+                in under a second, globally.
+              </p>
+            </div>
+            <div class="feature-list__visual">
+              <div class="feature-list__metric feature-list__metric--accent">&lt;1s</div>
+            </div>
+          </div>
+
+          <div class="feature-list__item reveal">
+            <div class="feature-list__number">05</div>
+            <div class="feature-list__content">
+              <h3>Observability built in</h3>
+              <p>
+                Real-time metrics, distributed tracing, and structured logging across every
+                edge location. No additional setup required.
+              </p>
+            </div>
+            <div class="feature-list__visual">
+              <div class="feature-list__metric">99.99%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Full-bleed platform section -->
+    <section class="fullbleed" id="platform">
+      <div class="container">
+        <div class="fullbleed__inner">
+          <div class="fullbleed__content">
+            <h2 class="reveal">The platform<br>disappears</h2>
+            <p class="reveal reveal-delay-1">
+              You write code. Nexus handles the rest: routing, caching, SSL,
+              DDoS protection, and global distribution. Infrastructure that
+              works the way you think about your product.
+            </p>
+            <a href="#docs" class="btn btn--secondary reveal reveal-delay-2">Explore the platform</a>
+          </div>
+
+          <div class="fullbleed__visual reveal reveal-delay-2">
+            <div class="fullbleed__stat">
+              <div class="fullbleed__stat-value" style="color: var(--accent);">4.2s</div>
+              <div class="fullbleed__stat-label">Average deploy time</div>
+            </div>
+            <div class="fullbleed__stat">
+              <div class="fullbleed__stat-value">12M+</div>
+              <div class="fullbleed__stat-label">Requests per day</div>
+            </div>
+            <div class="fullbleed__stat">
+              <div class="fullbleed__stat-value">312</div>
+              <div class="fullbleed__stat-label">Edge locations</div>
+            </div>
+            <div class="fullbleed__stat">
+              <div class="fullbleed__stat-value" style="color: var(--warm);">0</div>
+              <div class="fullbleed__stat-label">Config files needed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" id="signup">
+      <div class="container">
+        <div class="cta__inner">
+          <div class="cta__bg"></div>
+          <div class="cta__content">
+            <h2 class="reveal">Start building today</h2>
+            <p class="reveal reveal-delay-1">
+              Free tier includes 100,000 requests per month. No credit card required.
+              Deploy your first function in under two minutes.
+            </p>
+            <div class="cta__actions reveal reveal-delay-2">
+              <a href="#" class="btn btn--primary btn--large">Create free account</a>
+              <a href="#" class="btn btn--secondary btn--large">Talk to sales</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__brand">
+          <a href="/" class="nav__logo" aria-label="Nexus home">
+            <svg width="24" height="24" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M14 8L20 11V17L14 20L8 17V11L14 8Z" fill="currentColor" opacity="0.15"/>
+              <path d="M14 8L20 11V17L14 20L8 17V11L14 8Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <circle cx="14" cy="14" r="2" fill="currentColor"/>
+            </svg>
+            Nexus
+          </a>
+          <p>Edge compute platform for teams that ship fast. Deploy globally in under 50ms.</p>
+        </div>
+
+        <div class="footer__links">
+          <div class="footer__col">
+            <h4>Product</h4>
+            <ul>
+              <li><a href="#">Features</a></li>
+              <li><a href="#">Pricing</a></li>
+              <li><a href="#">Changelog</a></li>
+              <li><a href="#">Roadmap</a></li>
+            </ul>
+          </div>
+
+          <div class="footer__col">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="#">Documentation</a></li>
+              <li><a href="#">API reference</a></li>
+              <li><a href="#">Guides</a></li>
+              <li><a href="#">Community</a></li>
+            </ul>
+          </div>
+
+          <div class="footer__col">
+            <h4>Company</h4>
+            <ul>
+              <li><a href="#">About</a></li>
+              <li><a href="#">Blog</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <span>2026 Nexus. All rights reserved.</span>
+        <span>
+          <a href="#" style="margin-right: var(--space-sm);">Privacy</a>
+          <a href="#">Terms</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Theme toggle
+    const themeToggle = document.querySelector('.theme-toggle');
+    const html = document.documentElement;
+
+    const savedTheme = localStorage.getItem('nexus-theme');
+    if (savedTheme) {
+      html.setAttribute('data-theme', savedTheme);
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('nexus-theme', next);
+    });
+
+    // Scroll reveal
+    const revealElements = document.querySelectorAll('.reveal');
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -60px 0px'
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+  </script>
+</body>
+</html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadence — Ship faster, break nothing</title>
+<style>
+  /* ============ DESIGN IDENTITY (fixed across all generations) ============ */
+  :root {
+    --charcoal: #222222;
+    --blue: #0052FF;
+    --white: #FFFFFF;
+    --font: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font);
+    background: var(--charcoal);
+    color: var(--white);
+    font-weight: 400;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-weight: 800; line-height: 1.02; letter-spacing: -0.03em; }
+  .eyebrow { font-weight: 700; line-height: 1.2; letter-spacing: 0.18em; text-transform: uppercase; font-size: 0.72rem; }
+
+  /* ============ BRUTALIST ASYMMETRIC LAYOUT ============ */
+  .frame {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* --- Raw nav bar with hard rule --- */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 28px 0 22px;
+    border-bottom: 3px solid var(--white);
+  }
+  .logo { font-weight: 800; font-size: 1.4rem; letter-spacing: -0.04em; }
+  .logo span { color: var(--blue); }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a { color: var(--white); text-decoration: none; font-weight: 700; font-size: 0.85rem; }
+  .nav-links a:hover { color: var(--blue); }
+
+  /* --- Hero: deliberately off-grid --- */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-bottom: 3px solid var(--white);
+  }
+  .hero-left {
+    padding: 70px 40px 70px 0;
+  }
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 6.8rem);
+    text-transform: uppercase;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--blue);
+    display: block;
+    margin-left: 1.6em;
+  }
+  .hero-tag {
+    margin-top: 32px;
+    max-width: 30ch;
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.72);
+    border-left: 4px solid var(--blue);
+    padding-left: 18px;
+  }
+  .hero-right {
+    background: var(--white);
+    color: var(--charcoal);
+    padding: 46px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-left: 3px solid var(--white);
+  }
+  .stat-block { margin-bottom: 28px; }
+  .stat-block .num { font-size: 3.4rem; font-weight: 800; color: var(--blue); letter-spacing: -0.04em; }
+  .stat-block .lbl { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; }
+  .cta {
+    display: inline-block;
+    background: var(--blue);
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 20px 34px;
+    text-align: center;
+    border: 3px solid var(--charcoal);
+    transition: transform 0.08s ease;
+  }
+  .cta:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--charcoal); }
+
+  /* --- Marquee strip --- */
+  .strip {
+    border-bottom: 3px solid var(--white);
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 14px 0;
+  }
+  .strip-track {
+    display: inline-block;
+    animation: scroll 22s linear infinite;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 1.1rem;
+  }
+  .strip-track span { color: var(--blue); margin: 0 14px; }
+  @keyframes scroll { to { transform: translateX(-50%); } }
+
+  /* --- Feature blocks: irregular spans --- */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: minmax(120px, auto);
+    gap: 0;
+  }
+  .cell {
+    border-right: 3px solid var(--white);
+    border-bottom: 3px solid var(--white);
+    padding: 34px 28px;
+  }
+  .cell:nth-child(1) { grid-column: span 4; }
+  .cell:nth-child(2) { grid-column: span 2; background: var(--blue); }
+  .cell:nth-child(3) { grid-column: span 2; }
+  .cell:nth-child(4) { grid-column: span 2; }
+  .cell:nth-child(5) { grid-column: span 2; background: var(--white); color: var(--charcoal); }
+  .cell .eyebrow { color: var(--blue); margin-bottom: 14px; }
+  .cell.invert .eyebrow, .cell.blue .eyebrow { color: var(--charcoal); }
+  .cell h3 { font-size: 1.6rem; margin-bottom: 10px; }
+  .cell p { color: rgba(255,255,255,0.68); font-size: 0.95rem; }
+  .cell.invert p { color: rgba(34,34,34,0.7); }
+  .cell.blue p { color: rgba(255,255,255,0.85); }
+  .cell .big-num { font-size: 4rem; font-weight: 800; letter-spacing: -0.05em; }
+
+  /* --- Pricing slab --- */
+  .pricing {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    border-bottom: 3px solid var(--white);
+  }
+  .pricing-head { padding: 60px 40px; }
+  .pricing-head h2 { font-size: clamp(2rem,4vw,3.4rem); text-transform: uppercase; }
+  .pricing-head p { margin-top: 18px; color: rgba(255,255,255,0.65); max-width: 26ch; }
+  .plans { display: grid; grid-template-columns: 1fr 1fr; border-left: 3px solid var(--white); }
+  .plan { padding: 40px 32px; border-right: 3px solid var(--white); }
+  .plan:last-child { border-right: none; background: var(--blue); }
+  .plan .price { font-size: 3rem; font-weight: 800; letter-spacing: -0.04em; }
+  .plan .price small { font-size: 1rem; font-weight: 700; color: rgba(255,255,255,0.6); }
+  .plan ul { list-style: none; margin: 22px 0; }
+  .plan li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.18); font-size: 0.9rem; font-weight: 500; }
+  .plan .cta { width: 100%; margin-top: 10px; }
+  .plan:last-child .cta { background: var(--white); color: var(--blue); }
+
+  /* --- Footer --- */
+  footer {
+    padding: 50px 0 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+  footer .logo { font-size: 2.4rem; }
+  .foot-cols { display: flex; gap: 60px; }
+  .foot-col h4 { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
+  .foot-col a { display: block; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; padding: 4px 0; font-weight: 500; }
+  .foot-col a:hover { color: var(--white); }
+
+  @media (max-width: 860px) {
+    .hero, .pricing { grid-template-columns: 1fr; }
+    .hero-right { border-left: none; border-top: 3px solid var(--white); }
+    .hero h1 em { margin-left: 0; }
+    .features { grid-template-columns: 1fr; }
+    .cell { grid-column: 1 / -1 !important; }
+    .plans { grid-template-columns: 1fr; border-left: none; }
+    .plan:last-child { border-right: none; }
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <nav>
+    <div class="logo">CA<span>/</span>DENCE</div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#docs">Docs</a>
+      <a href="#login">Log in</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-left">
+      <p class="eyebrow" style="color:var(--blue); margin-bottom:24px;">Deployment Infrastructure</p>
+      <h1>Ship faster <em>break nothing</em></h1>
+      <p class="hero-tag">Cadence catches the regression before your users do. Zero-downtime deploys, instant rollback, no incident channel required.</p>
+    </div>
+    <div class="hero-right">
+      <div>
+        <div class="stat-block">
+          <div class="num">11s</div>
+          <div class="lbl">Median deploy time</div>
+        </div>
+        <div class="stat-block">
+          <div class="num">99.99%</div>
+          <div class="lbl">Pipeline uptime</div>
+        </div>
+      </div>
+      <a href="#start" class="cta">Start deploying free</a>
+    </div>
+  </header>
+
+  <div class="strip">
+    <div class="strip-track">
+      Zero-downtime <span>///</span> Instant rollback <span>///</span> Preview environments <span>///</span> Audit trails <span>///</span> Zero-downtime <span>///</span> Instant rollback <span>///</span> Preview environments <span>///</span> Audit trails <span>///</span>
+    </div>
+  </div>
+
+  <section class="features" id="features">
+    <div class="cell">
+      <p class="eyebrow">Pipeline</p>
+      <h3>Every commit gets its own isolated preview environment</h3>
+      <p>Open a PR, get a live URL in seconds. Tear-down is automatic when you merge.</p>
+    </div>
+    <div class="cell blue">
+      <div class="big-num">0</div>
+      <p class="eyebrow">Seconds of downtime per release</p>
+    </div>
+    <div class="cell">
+      <p class="eyebrow">Safety</p>
+      <h3>One-click rollback</h3>
+      <p>Revert to any prior release instantly — no re-build, no waiting.</p>
+    </div>
+    <div class="cell">
+      <p class="eyebrow">Visibility</p>
+      <h3>Full audit trail</h3>
+      <p>Who shipped what, when, and why. Exportable for compliance.</p>
+    </div>
+    <div class="cell invert">
+      <p class="eyebrow">Scale</p>
+      <h3>From 1 to 1,000 services without rewriting a single YAML file.</h3>
+      <p>Cadence grows with your team. Same config, any size.</p>
+    </div>
+  </section>
+
+  <section class="pricing" id="pricing">
+    <div class="pricing-head">
+      <p class="eyebrow" style="color:var(--blue); margin-bottom:18px;">Pricing</p>
+      <h2>Pay for what you ship</h2>
+      <p>No seat tax. No surprise overages. Cancel from the dashboard in two clicks.</p>
+    </div>
+    <div class="plans">
+      <div class="plan">
+        <p class="eyebrow" style="color:var(--blue);">Starter</p>
+        <div class="price">$0<small>/mo</small></div>
+        <ul>
+          <li>3 services</li>
+          <li>Preview environments</li>
+          <li>Community support</li>
+        </ul>
+        <a href="#start" class="cta">Get started</a>
+      </div>
+      <div class="plan">
+        <p class="eyebrow">Team</p>
+        <div class="price">$49<small>/mo</small></div>
+        <ul>
+          <li>Unlimited services</li>
+          <li>Instant rollback + audit logs</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="#start" class="cta">Start trial</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>
+      <div class="logo">CA<span>/</span>DENCE</div>
+      <p style="color:rgba(255,255,255,0.5); margin-top:14px; font-size:0.85rem;">© 2026 Cadence Systems Inc.</p>
+    </div>
+    <div class="foot-cols">
+      <div class="foot-col">
+        <h4>Product</h4>
+        <a href="#">Features</a>
+        <a href="#">Pricing</a>
+        <a href="#">Changelog</a>
+      </div>
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Careers</a>
+        <a href="#">Blog</a>
+      </div>
+      <div class="foot-col">
+        <h4>Legal</h4>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Security</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

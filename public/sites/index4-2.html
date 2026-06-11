@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GLOOMI POP! — Bioluminescent Bubble Fuel</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    :root {
+      --bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      --ink: #3b005f;
+      --frost: rgba(255, 255, 255, 0.28);
+      --frost-hot: rgba(255, 255, 255, 0.42);
+      --mag: rgba(255, 0, 188, 0.62);
+      --cyan: rgba(0, 247, 255, 0.62);
+      --lime: rgba(67, 255, 0, 0.58);
+      --sun: rgba(255, 132, 0, 0.62);
+      --violet: rgba(132, 0, 255, 0.62);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: white;
+      font-family: ui-rounded, "SF Pro Rounded", "Arial Rounded MT Bold", system-ui, sans-serif;
+      background-color: #ff00c8;
+      background-image:
+        radial-gradient(circle at 8% 18%, rgba(255, 238, 0, 0.95) 0 10%, transparent 27%),
+        radial-gradient(circle at 88% 10%, rgba(0, 255, 234, 0.95) 0 12%, transparent 32%),
+        radial-gradient(circle at 55% 3%, rgba(255, 0, 199, 0.88) 0 18%, transparent 40%),
+        radial-gradient(circle at 18% 75%, rgba(86, 255, 0, 0.9) 0 14%, transparent 38%),
+        radial-gradient(circle at 95% 80%, rgba(103, 0, 255, 0.94) 0 18%, transparent 42%),
+        radial-gradient(circle at 45% 52%, rgba(255, 103, 0, 0.78) 0 20%, transparent 48%),
+        linear-gradient(135deg, #ff00c8 0%, #00f7ff 28%, #72ff00 50%, #7e00ff 74%, #ff8a00 100%);
+      background-attachment: fixed;
+      animation: auroraSwim 12s ease-in-out infinite alternate;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: -20vmax;
+      pointer-events: none;
+      z-index: -2;
+      border-radius: 50% 20% 45% 30% / 30% 55% 20% 60%;
+      background-image:
+        radial-gradient(circle at 25% 20%, rgba(255,255,255,0.5), transparent 18%),
+        radial-gradient(circle at 70% 40%, rgba(0,255,179,0.45), transparent 22%),
+        radial-gradient(circle at 48% 78%, rgba(255,0,236,0.5), transparent 26%);
+      filter: blur(18px) saturate(1.5);
+      mix-blend-mode: screen;
+      animation: jellyOrbit 18s linear infinite;
+    }
+
+    body::after {
+      z-index: -1;
+      opacity: 0.65;
+      animation-direction: reverse;
+      animation-duration: 23s;
+      transform: scale(0.8) rotate(20deg);
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .page {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 18px 0 48px;
+    }
+
+    .blob-nav {
+      position: sticky;
+      top: 14px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 14px 12px 18px;
+      border-radius: 999px 44% 999px 38% / 999px 68% 999px 52%;
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(24px) saturate(1.5);
+      -webkit-backdrop-filter: blur(24px) saturate(1.5);
+      box-shadow: 0 18px 70px rgba(255,0,200,0.38), inset 0 0 35px rgba(255,255,255,0.26);
+      border: 2px solid rgba(255,255,255,0.34);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 1000;
+      letter-spacing: -0.06em;
+      font-size: clamp(1.05rem, 2.8vw, 1.55rem);
+      text-shadow: 0 6px 24px rgba(128,0,255,0.75);
+    }
+
+    .logo-pop {
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 42% 58% 38% 62% / 60% 36% 64% 40%;
+      background-image: radial-gradient(circle at 35% 25%, #fff 0 9%, transparent 10%), linear-gradient(135deg, #fff700, #ff00cc 35%, #00fff0 68%, #79ff00);
+      box-shadow: 0 0 35px rgba(0,255,240,0.95), 0 0 55px rgba(255,0,204,0.75);
+      animation: squish 2.9s ease-in-out infinite;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a, .pill-button {
+      border: 0;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 12px 18px;
+      color: white;
+      font-weight: 950;
+      letter-spacing: -0.03em;
+      background-image: linear-gradient(135deg, rgba(255,255,255,0.32), rgba(255,255,255,0.08)), radial-gradient(circle at 20% 0%, rgba(255,255,0,0.86), transparent 45%);
+      box-shadow: 0 12px 36px rgba(0,255,255,0.38), inset 0 0 22px rgba(255,255,255,0.28);
+      transition: var(--bounce);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav-links a:hover, .pill-button:hover {
+      transform: translateY(-6px) scale(1.08) rotate(-2deg);
+      box-shadow: 0 18px 50px rgba(255,0,204,0.62), 0 0 45px rgba(0,255,120,0.42), inset 0 0 26px rgba(255,255,255,0.38);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      align-items: center;
+      gap: clamp(18px, 4vw, 52px);
+      padding: clamp(58px, 9vw, 112px) 0 clamp(30px, 6vw, 78px);
+    }
+
+    .hero-copy {
+      position: relative;
+      padding: clamp(22px, 4vw, 44px);
+      border-radius: 18% 42% 24% 52% / 32% 18% 45% 22%;
+      background: rgba(255,255,255,0.21);
+      backdrop-filter: blur(25px) saturate(1.6);
+      -webkit-backdrop-filter: blur(25px) saturate(1.6);
+      box-shadow: 0 30px 90px rgba(126,0,255,0.5), inset 0 0 80px rgba(255,255,255,0.18);
+      border: 2px solid rgba(255,255,255,0.33);
+      animation: drift 6s ease-in-out infinite;
+    }
+
+    .zap-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 15px;
+      margin-bottom: 18px;
+      border-radius: 999px;
+      font-weight: 1000;
+      background-image: linear-gradient(90deg, rgba(255, 247, 0, 0.78), rgba(255, 0, 205, 0.72), rgba(0, 255, 240, 0.72));
+      box-shadow: 0 10px 34px rgba(255,247,0,0.48);
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: clamp(4rem, 12vw, 10.5rem);
+      line-height: 0.78;
+      letter-spacing: -0.13em;
+      text-transform: uppercase;
+      text-wrap: balance;
+      text-shadow: 0 10px 0 rgba(0,255,240,0.38), 0 24px 68px rgba(255,0,188,0.78), 0 -10px 45px rgba(112,255,0,0.62);
+    }
+
+    .lead {
+      max-width: 56ch;
+      font-size: clamp(1.08rem, 2.2vw, 1.48rem);
+      line-height: 1.35;
+      font-weight: 820;
+      text-shadow: 0 8px 28px rgba(59,0,95,0.5);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 13px;
+      margin-top: 28px;
+    }
+
+    .pill-button {
+      font-size: 1rem;
+      padding: 16px 24px;
+      background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.75), transparent 24%), linear-gradient(135deg, #ff00c8, #00f7ff 42%, #77ff00 100%);
+    }
+
+    .pill-button.secondary {
+      background-image: radial-gradient(circle at 15% 20%, rgba(255,255,255,0.66), transparent 20%), linear-gradient(135deg, #fff700, #ff8a00 38%, #7e00ff 100%);
+    }
+
+    .orb-stage {
+      min-height: 620px;
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+
+    .mega-can {
+      width: min(420px, 78vw);
+      aspect-ratio: 0.78;
+      position: relative;
+      display: grid;
+      place-items: center;
+      border-radius: 46% 54% 39% 61% / 15% 17% 83% 85%;
+      background-image:
+        radial-gradient(circle at 32% 18%, rgba(255,255,255,0.95) 0 7%, transparent 14%),
+        radial-gradient(circle at 70% 76%, rgba(120,255,0,0.85) 0 12%, transparent 30%),
+        linear-gradient(145deg, rgba(255,255,255,0.48), rgba(255,255,255,0.04) 21%, rgba(255,0,220,0.66) 45%, rgba(0,255,244,0.76) 68%, rgba(255,255,0,0.7));
+      backdrop-filter: blur(18px) saturate(1.8);
+      box-shadow: 0 38px 100px rgba(0,247,255,0.62), 0 0 90px rgba(255,0,204,0.68), inset 0 0 58px rgba(255,255,255,0.42);
+      border: 3px solid rgba(255,255,255,0.48);
+      animation: floatCan 4.2s ease-in-out infinite;
+    }
+
+    .mega-can::before {
+      content: "GLOOMI\A POP!";
+      white-space: pre;
+      text-align: center;
+      font-size: clamp(3.2rem, 9vw, 6rem);
+      line-height: 0.78;
+      font-weight: 1000;
+      letter-spacing: -0.12em;
+      text-shadow: 0 8px 0 rgba(255,0,204,0.5), 0 18px 38px rgba(126,0,255,0.8);
+      transform: rotate(-8deg);
+    }
+
+    .mega-can::after {
+      content: "synthetic algae bubble rocket juice!!!";
+      position: absolute;
+      bottom: 13%;
+      left: 11%;
+      right: 11%;
+      text-align: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 950;
+      background: rgba(255,255,255,0.28);
+      box-shadow: inset 0 0 24px rgba(255,255,255,0.34), 0 10px 40px rgba(255,247,0,0.45);
+    }
+
+    .bubble {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: var(--size);
+      height: var(--size);
+      border-radius: 45% 55% 65% 35% / 40% 35% 65% 60%;
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(15px);
+      box-shadow: 0 18px 55px var(--glow), inset 0 0 26px rgba(255,255,255,0.42);
+      font-size: calc(var(--size) * 0.38);
+      animation: bob var(--speed) ease-in-out infinite alternate;
+    }
+
+    .b1 { --size: 92px; --glow: rgba(255,0,204,0.68); --speed: 3.6s; top: 7%; left: 3%; }
+    .b2 { --size: 132px; --glow: rgba(0,255,240,0.7); --speed: 4.3s; top: 2%; right: 2%; animation-delay: -1.2s; }
+    .b3 { --size: 105px; --glow: rgba(118,255,0,0.7); --speed: 3.1s; bottom: 10%; left: 6%; animation-delay: -0.7s; }
+    .b4 { --size: 78px; --glow: rgba(255,138,0,0.75); --speed: 4.8s; bottom: 17%; right: 10%; animation-delay: -2s; }
+
+    .section-title {
+      width: fit-content;
+      max-width: 100%;
+      margin: 0 auto 26px;
+      padding: 16px 26px;
+      border-radius: 999px 44% 999px 52% / 70% 999px 52% 999px;
+      background: rgba(255,255,255,0.28);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 22px 65px rgba(255,0,204,0.45), inset 0 0 24px rgba(255,255,255,0.28);
+      font-size: clamp(2rem, 5.8vw, 5.3rem);
+      line-height: 0.88;
+      letter-spacing: -0.1em;
+      text-align: center;
+      text-transform: uppercase;
+      text-shadow: 0 8px 0 rgba(0,255,240,0.32), 0 18px 40px rgba(126,0,255,0.6);
+    }
+
+    .gloop-river {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin: 44px 0 72px;
+    }
+
+    .gloop-card {
+      min-height: 285px;
+      padding: 26px;
+      border-radius: 38% 18% 44% 22% / 18% 42% 24% 46%;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255,255,255,0.68), transparent 22%),
+        radial-gradient(circle at 90% 85%, rgba(255,247,0,0.46), transparent 28%),
+        rgba(255,255,255,0.24);
+      backdrop-filter: blur(22px) saturate(1.7);
+      -webkit-backdrop-filter: blur(22px) saturate(1.7);
+      box-shadow: 0 24px 75px rgba(0,255,240,0.38), inset 0 0 55px rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.33);
+      transition: var(--bounce);
+      animation: cardDrip 5.5s ease-in-out infinite;
+    }
+
+    .gloop-card:nth-child(2) { border-radius: 22% 46% 20% 40% / 46% 19% 48% 22%; animation-delay: -1.5s; box-shadow: 0 24px 75px rgba(255,0,204,0.42), inset 0 0 55px rgba(255,255,255,0.2); }
+    .gloop-card:nth-child(3) { border-radius: 54% 20% 42% 28% / 24% 50% 20% 44%; animation-delay: -2.7s; box-shadow: 0 24px 75px rgba(118,255,0,0.38), inset 0 0 55px rgba(255,255,255,0.2); }
+    .gloop-card:hover { transform: translateY(-18px) rotate(2deg) scale(1.04); }
+
+    .emoji-drop {
+      width: 76px;
+      height: 76px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 20px;
+      border-radius: 40% 60% 55% 45% / 54% 36% 64% 46%;
+      background-image: linear-gradient(135deg, #fff700, #ff00c8, #00f7ff);
+      box-shadow: 0 14px 42px rgba(255,247,0,0.55);
+      font-size: 2.3rem;
+    }
+
+    .gloop-card h3 {
+      margin-bottom: 11px;
+      font-size: clamp(1.65rem, 3vw, 2.65rem);
+      letter-spacing: -0.08em;
+      line-height: 0.92;
+      text-transform: uppercase;
+    }
+
+    .gloop-card p, .marquee-pill span, .flavor p, .footer-burst p {
+      font-weight: 820;
+      line-height: 1.42;
+      text-shadow: 0 7px 20px rgba(59,0,95,0.42);
+    }
+
+    .marquee-zone {
+      display: flex;
+      gap: 14px;
+      overflow: hidden;
+      padding: 8px 0 54px;
+      mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 14px;
+      min-width: max-content;
+      animation: zoomWords 22s linear infinite;
+    }
+
+    .marquee-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 24px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.28);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 14px 42px rgba(126,0,255,0.36), inset 0 0 22px rgba(255,255,255,0.2);
+      font-size: 1.2rem;
+      font-weight: 1000;
+      white-space: nowrap;
+    }
+
+    .flavor-lab {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 20px;
+      align-items: stretch;
+      margin-bottom: 70px;
+    }
+
+    .flavor, .meter-blob {
+      padding: clamp(24px, 4vw, 44px);
+      background: rgba(255,255,255,0.24);
+      border: 2px solid rgba(255,255,255,0.32);
+      backdrop-filter: blur(24px) saturate(1.7);
+      box-shadow: 0 26px 90px rgba(255,138,0,0.42), inset 0 0 60px rgba(255,255,255,0.18);
+    }
+
+    .flavor {
+      border-radius: 22% 44% 26% 38% / 34% 20% 48% 26%;
+    }
+
+    .meter-blob {
+      border-radius: 42% 20% 48% 24% / 22% 48% 20% 42%;
+      display: grid;
+      align-content: center;
+      gap: 18px;
+    }
+
+    .flavor h2 {
+      font-size: clamp(2.6rem, 6vw, 6.2rem);
+      line-height: 0.82;
+      letter-spacing: -0.12em;
+      text-transform: uppercase;
+      text-shadow: 0 9px 0 rgba(255,247,0,0.35), 0 22px 55px rgba(255,0,204,0.65);
+    }
+
+    .goo-meter {
+      height: 38px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.22);
+      box-shadow: inset 0 0 26px rgba(255,255,255,0.25), 0 12px 38px rgba(0,255,240,0.32);
+    }
+
+    .goo-fill {
+      height: 100%;
+      width: var(--w);
+      border-radius: 999px;
+      background-image: linear-gradient(90deg, #fff700, #ff00c8, #00f7ff, #76ff00);
+      box-shadow: 0 0 32px rgba(255,255,0,0.8);
+      animation: fillWobble 2.8s ease-in-out infinite alternate;
+    }
+
+    .meter-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-weight: 1000;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+    }
+
+    .footer-burst {
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      padding: clamp(32px, 6vw, 68px);
+      border-radius: 18% 44% 20% 48% / 40% 18% 50% 22%;
+      background:
+        radial-gradient(circle at 22% 15%, rgba(255,255,255,0.65), transparent 18%),
+        radial-gradient(circle at 75% 80%, rgba(0,255,240,0.48), transparent 28%),
+        rgba(255,255,255,0.25);
+      backdrop-filter: blur(24px) saturate(1.7);
+      box-shadow: 0 36px 110px rgba(255,0,204,0.52), inset 0 0 70px rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.34);
+    }
+
+    .footer-burst h2 {
+      margin-bottom: 14px;
+      font-size: clamp(3rem, 8vw, 8rem);
+      line-height: 0.82;
+      letter-spacing: -0.13em;
+      text-transform: uppercase;
+      text-shadow: 0 10px 0 rgba(0,255,240,0.35), 0 25px 64px rgba(126,0,255,0.68);
+    }
+
+    .footer-burst p { max-width: 680px; margin-inline: auto; font-size: clamp(1.05rem, 2vw, 1.35rem); }
+
+    .spark {
+      position: fixed;
+      width: 18px;
+      height: 18px;
+      pointer-events: none;
+      border-radius: 54% 46% 38% 62% / 42% 60% 40% 58%;
+      background-image: linear-gradient(135deg, #fff700, #ff00c8, #00f7ff);
+      box-shadow: 0 0 24px rgba(255,255,0,0.8), 0 0 38px rgba(255,0,204,0.65);
+      transform: translate(-50%, -50%);
+      animation: popSpark 700ms ease-out forwards;
+      z-index: 50;
+    }
+
+    @keyframes auroraSwim {
+      0% { background-position: 0% 0%, 100% 0%, 50% 0%, 0% 100%, 100% 100%, 50% 50%, 0% 0%; filter: saturate(1.24) hue-rotate(0deg); }
+      100% { background-position: 18% 8%, 82% 20%, 60% 10%, 10% 88%, 85% 70%, 40% 58%, 100% 100%; filter: saturate(1.75) hue-rotate(18deg); }
+    }
+
+    @keyframes jellyOrbit { to { transform: rotate(360deg) scale(1.1); } }
+    @keyframes squish { 0%,100% { transform: scale(1) rotate(-4deg); border-radius: 42% 58% 38% 62% / 60% 36% 64% 40%; } 50% { transform: scale(1.12,0.9) rotate(7deg); border-radius: 62% 38% 58% 42% / 36% 60% 40% 64%; } }
+    @keyframes drift { 0%,100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-14px) rotate(1deg); } }
+    @keyframes floatCan { 0%,100% { transform: translateY(0) rotate(2deg); } 50% { transform: translateY(-24px) rotate(-3deg) scale(1.02); } }
+    @keyframes bob { to { transform: translateY(-30px) rotate(10deg) scale(1.08); } }
+    @keyframes cardDrip { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    @keyframes zoomWords { to { transform: translateX(calc(-50% - 7px)); } }
+    @keyframes fillWobble { from { filter: hue-rotate(0deg); transform: scaleX(0.94); transform-origin: left; } to { filter: hue-rotate(45deg); transform: scaleX(1.02); transform-origin: left; } }
+    @keyframes popSpark { 0% { opacity: 1; transform: translate(-50%, -50%) scale(0.2) rotate(0deg); } 100% { opacity: 0; transform: translate(-50%, -160%) scale(2.8) rotate(180deg); } }
+
+    @media (max-width: 880px) {
+      .blob-nav { align-items: flex-start; border-radius: 38px 58px 42px 64px / 56px 36px 62px 44px; }
+      .nav-links a { display: none; }
+      .hero, .flavor-lab { grid-template-columns: 1fr; }
+      .orb-stage { min-height: 500px; }
+      .gloop-river { grid-template-columns: 1fr; }
+      .gloop-card { min-height: 230px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <nav class="blob-nav" aria-label="Primary navigation">
+      <a class="brand" href="#top" aria-label="Gloomi Pop home"><span class="logo-pop">💧</span><span>GLOOMI POP!</span></a>
+      <div class="nav-links">
+        <a href="#fizz">Fizz Ritual</a>
+        <a href="#lab">Flavor Lab</a>
+        <a href="#blast">Blast Off</a>
+      </div>
+    </nav>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <span class="zap-label">🌟 NEW!!! fermented starlight bubbles detected</span>
+          <h1 id="hero-title">Drink the Glow Storm!!!</h1>
+          <p class="lead">Meet <strong>GLOOMI POP!</strong> — a synthetic bioluminescent algae soda that fizzes like a tiny rave in a moon puddle. Crack it open and your taste buds start doing backflips in chrome sneakers.</p>
+          <div class="hero-actions">
+            <a class="pill-button" href="#blast">SUMMON A 12-PACK!!!</a>
+            <a class="pill-button secondary" href="#lab">LICK THE FLAVOR MAP 🌀</a>
+          </div>
+        </div>
+
+        <div class="orb-stage" aria-label="Floating Gloomi Pop can with bubbles">
+          <div class="bubble b1" aria-hidden="true">🔥</div>
+          <div class="bubble b2" aria-hidden="true">🌀</div>
+          <div class="bubble b3" aria-hidden="true">🌟</div>
+          <div class="bubble b4" aria-hidden="true">💧</div>
+          <div class="mega-can" role="img" aria-label="A glowing surreal can of Gloomi Pop"></div>
+        </div>
+      </section>
+
+      <section id="fizz" aria-labelledby="fizz-title">
+        <h2 class="section-title" id="fizz-title">Three tiny explosions, one enormous grin.</h2>
+        <div class="gloop-river">
+          <article class="gloop-card">
+            <div class="emoji-drop" aria-hidden="true">🫧</div>
+            <h3>Pop the cap, awaken the blob.</h3>
+            <p>The algae pearls blink awake, yell “WHEEEE,” and release a neon bouquet of pineapple thunder, cucumber lasers, and suspiciously confident kiwi.</p>
+          </article>
+          <article class="gloop-card">
+            <div class="emoji-drop" aria-hidden="true">⚡</div>
+            <h3>Fizz goes vertical.</h3>
+            <p>Every bubble has bounce physics. Every sip feels like jumping on a trampoline made from electric cotton candy and friendly chaos.</p>
+          </article>
+          <article class="gloop-card">
+            <div class="emoji-drop" aria-hidden="true">🛸</div>
+            <h3>Your aura gets louder.</h3>
+            <p>Side effects may include spontaneous hallway dancing, optimistic shouting, and seeing snack cabinets as portals to greatness.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="marquee-zone" aria-label="Scrolling product exclamations">
+        <div class="marquee-track">
+          <span class="marquee-pill">🌈 GLUG GLUG HYPERJOY</span>
+          <span class="marquee-pill">💥 ZERO BORING MOLECULES</span>
+          <span class="marquee-pill">🧪 LAB-RAISED LUMINOSITY</span>
+          <span class="marquee-pill">🍍 PINEAPPLE PLASMA SPARK</span>
+          <span class="marquee-pill">🫧 BUBBLES WITH MAIN-CHARACTER ENERGY</span>
+          <span class="marquee-pill">🌈 GLUG GLUG HYPERJOY</span>
+          <span class="marquee-pill">💥 ZERO BORING MOLECULES</span>
+          <span class="marquee-pill">🧪 LAB-RAISED LUMINOSITY</span>
+          <span class="marquee-pill">🍍 PINEAPPLE PLASMA SPARK</span>
+          <span class="marquee-pill">🫧 BUBBLES WITH MAIN-CHARACTER ENERGY</span>
+        </div>
+      </section>
+
+      <section id="lab" class="flavor-lab" aria-labelledby="lab-title">
+        <article class="flavor">
+          <h2 id="lab-title">Flavor Lab: illegal levels of yum velocity.</h2>
+          <p>Choose your gloop frequency: <strong>Magenta Melon Comet</strong>, <strong>Cyan Citrus Screech</strong>, <strong>Neon Pickle Stardust</strong>, or the dangerously cuddly <strong>Orange Cream Wormhole</strong>. They all glow. They all wiggle. They all demand applause!!!</p>
+          <button class="pill-button" id="chaosButton" type="button">SHAKE THE PAGE!!!</button>
+        </article>
+        <aside class="meter-blob" aria-label="Gloomi Pop energy meter">
+          <div>
+            <div class="meter-label"><span>Glow</span><span>999%</span></div>
+            <div class="goo-meter"><div class="goo-fill" style="--w: 96%"></div></div>
+          </div>
+          <div>
+            <div class="meter-label"><span>Bubble Swagger</span><span>MAXXX</span></div>
+            <div class="goo-meter"><div class="goo-fill" style="--w: 88%"></div></div>
+          </div>
+          <div>
+            <div class="meter-label"><span>Snack Telepathy</span><span>UH-OH</span></div>
+            <div class="goo-meter"><div class="goo-fill" style="--w: 73%"></div></div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="blast" class="footer-burst" aria-labelledby="blast-title">
+        <h2 id="blast-title">Ready to become carbonated?</h2>
+        <p>Preorder the first crate of GLOOMI POP! and receive a squishy glow charm, a tiny ceremonial spoon, and permission to shout “BUBBLE ROCKET!!!” at breakfast.</p>
+        <a class="pill-button" href="mailto:hello@gloomipop.example?subject=BUBBLE%20ROCKET!!!">GET THE GLOOP!!!</a>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const button = document.querySelector('#chaosButton');
+    const page = document.querySelector('.page');
+
+    function popSpark(x, y) {
+      const spark = document.createElement('span');
+      spark.className = 'spark';
+      spark.style.left = `${x}px`;
+      spark.style.top = `${y}px`;
+      document.body.appendChild(spark);
+      spark.addEventListener('animationend', () => spark.remove());
+    }
+
+    button.addEventListener('click', (event) => {
+      page.animate([
+        { transform: 'translateX(0) rotate(0deg)' },
+        { transform: 'translateX(-10px) rotate(-0.7deg)' },
+        { transform: 'translateX(12px) rotate(0.8deg)' },
+        { transform: 'translateX(-7px) rotate(-0.4deg)' },
+        { transform: 'translateX(0) rotate(0deg)' }
+      ], { duration: 620, easing: 'cubic-bezier(0.68, -0.55, 0.27, 1.55)' });
+
+      for (let i = 0; i < 18; i++) {
+        setTimeout(() => {
+          popSpark(
+            event.clientX + (Math.random() - 0.5) * 180,
+            event.clientY + (Math.random() - 0.5) * 140
+          );
+        }, i * 28);
+      }
+    });
+
+    document.addEventListener('pointermove', (event) => {
+      if (Math.random() > 0.88) popSpark(event.clientX, event.clientY);
+    }, { passive: true });
+  </script>
+</body>
+</html>

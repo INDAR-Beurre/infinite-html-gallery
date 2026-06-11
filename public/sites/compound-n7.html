@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>COMPOUND N-7 / TOTAL NUTRITIVE SUBSTRATE — PRODUCT DOSSIER · REV 14.3</title>
+<style>
+  :root{
+    --ink:#000;
+    --paper:#fff;
+    --hazard:#c9a92a;        /* iodine yellow — restricted use */
+    --rule: 2px;
+    --rule-thick: 3px;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace;
+    --sans: Helvetica, Arial, "Helvetica Neue", system-ui, sans-serif;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;border-radius:0;}
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:14px;
+    line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+  button, input{
+    font-family:inherit;
+    font-size:inherit;
+    color:inherit;
+    background:none;
+    border:none;
+  }
+
+  /* page frame */
+  .doc{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 24px;
+    border-left: var(--rule) solid var(--ink);
+    border-right: var(--rule) solid var(--ink);
+    background:var(--paper);
+  }
+
+  /* === HEADER STRIP === */
+  .strip{
+    border-top: var(--rule-thick) solid var(--ink);
+    border-bottom: var(--rule) solid var(--ink);
+    display:flex;
+    justify-content:space-between;
+    align-items:stretch;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .strip > div{
+    padding:6px 10px;
+    border-right: var(--rule) solid var(--ink);
+    white-space:nowrap;
+    display:flex; align-items:center; gap:6px;
+  }
+  .strip > div:last-child{ border-right:0; }
+  .strip .dot{
+    display:inline-block;
+    width:8px; height:8px;
+    background:var(--ink);
+  }
+  .strip .haz{
+    background:var(--hazard);
+    color:var(--ink);
+  }
+
+  /* === DOCUMENT HEADER === */
+  header.title{
+    border-bottom: var(--rule-thick) solid var(--ink);
+    padding: 28px 0 22px;
+    display:grid;
+    grid-template-columns: 2.6fr 1fr;
+    gap:32px;
+    align-items:end;
+  }
+  header.title .meta{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    border:var(--rule) solid var(--ink);
+    padding:10px 12px;
+    display:grid;
+    grid-template-columns: auto 1fr;
+    gap:4px 14px;
+  }
+  header.title .meta dt{ opacity:.6; }
+  header.title .meta dd{ text-align:right; }
+  h1.compound{
+    font-family:var(--sans);
+    font-weight:900;
+    font-size: clamp(40px, 6.4vw, 88px);
+    line-height:.92;
+    letter-spacing:-0.02em;
+    text-transform:uppercase;
+  }
+  .compound-sub{
+    margin-top:14px;
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    border-top: 1px solid var(--ink);
+    padding-top:10px;
+    max-width:60ch;
+  }
+
+  /* === NAV ROW === */
+  nav.toc{
+    display:flex;
+    border-bottom: var(--rule) solid var(--ink);
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    overflow-x:auto;
+  }
+  nav.toc a{
+    text-decoration:none;
+    padding:10px 14px;
+    border-right: var(--rule) solid var(--ink);
+    white-space:nowrap;
+  }
+  nav.toc a:last-child{ border-right:0; }
+  nav.toc a:hover{ background:var(--ink); color:var(--paper); }
+  nav.toc a.active{ background:var(--ink); color:var(--paper); }
+
+  /* === SECTION === */
+  section{
+    border-bottom: var(--rule-thick) solid var(--ink);
+    padding: 32px 0;
+  }
+  section.no-pad{ padding:0; }
+  .section-head{
+    display:grid;
+    grid-template-columns: 110px 1fr auto;
+    gap:24px;
+    align-items:baseline;
+    border-bottom: var(--rule) solid var(--ink);
+    padding-bottom:14px;
+    margin-bottom:22px;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+  }
+  .section-head .num{
+    font-weight:700;
+  }
+  .section-head h2{
+    font-family:var(--sans);
+    font-size: 22px;
+    font-weight:900;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+  .section-head .ref{ opacity:.6; }
+
+  /* === BODY GRID === */
+  .grid-2{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:0;
+    border-top: var(--rule) solid var(--ink);
+    border-bottom: var(--rule) solid var(--ink);
+  }
+  .grid-2 > div{
+    padding:18px 18px;
+    border-right: var(--rule) solid var(--ink);
+  }
+  .grid-2 > div:last-child{ border-right:0; }
+
+  /* === INDICATION SECTION === */
+  .indication{
+    display:grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap:0;
+    border-top: var(--rule) solid var(--ink);
+  }
+  .indication > div{ padding: 22px 22px; }
+  .indication .body{
+    border-right: var(--rule) solid var(--ink);
+    font-size:15px;
+    line-height:1.55;
+  }
+  .indication .body p + p{ margin-top:12px;}
+  .indication .body p:first-of-type{
+    font-size:16px;
+    font-weight:700;
+  }
+  .placeholder{
+    width:100%;
+    aspect-ratio: 4/3;
+    border:var(--rule) solid var(--ink);
+    position:relative;
+    background:
+      repeating-linear-gradient(0deg, transparent 0 11px, rgba(0,0,0,0.08) 11px 12px);
+  }
+  .placeholder::before,
+  .placeholder::after{
+    content:"";
+    position:absolute;
+    left:0; right:0;
+    height:var(--rule);
+    background:var(--ink);
+  }
+  .placeholder::before{ top:50%; transform:rotate(28deg); transform-origin: center;}
+  .placeholder::after{ top:50%; transform:rotate(-28deg); transform-origin:center;}
+  .placeholder .lbl{
+    position:absolute;
+    bottom: -1px; left:-1px;
+    background:var(--ink); color:var(--paper);
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    padding:4px 8px;
+  }
+
+  /* === BARCODE === */
+  .barcode{
+    height:54px;
+    display:flex; align-items:stretch;
+    border:var(--rule) solid var(--ink);
+    padding:6px;
+    background:var(--paper);
+    gap:0;
+  }
+  .barcode i{
+    display:block;
+    background:var(--ink);
+    margin-right:1px;
+  }
+  .barcode .label{
+    margin-left:8px;
+    align-self:center;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.18em;
+  }
+
+  /* === SPECIFICATIONS TABLE === */
+  table.spec{
+    width:100%;
+    border-collapse: collapse;
+    font-family:var(--mono);
+    font-size:12px;
+  }
+  table.spec th, table.spec td{
+    border: var(--rule) solid var(--ink);
+    padding:8px 10px;
+    text-align:left;
+    vertical-align:top;
+    letter-spacing:.04em;
+  }
+  table.spec th{
+    background:var(--ink);
+    color:var(--paper);
+    text-transform:uppercase;
+    font-weight:700;
+    letter-spacing:.16em;
+    font-size:11px;
+  }
+  table.spec td.k{
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    width:34%;
+    background:#f4f4f4;
+  }
+  table.spec td.v{ font-weight:700; }
+  table.spec tr:nth-child(odd) td:not(.k){ background:#fafafa; }
+
+  /* === MECHANISMS === */
+  .mechs{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: var(--rule) solid var(--ink);
+    border-bottom: var(--rule) solid var(--ink);
+  }
+  .mech{
+    border-right: var(--rule) solid var(--ink);
+    padding:20px 20px 24px;
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .mech:last-child{ border-right:0; }
+  .mech .id{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom:6px;
+    display:flex; justify-content:space-between;
+  }
+  .mech h3{
+    font-family:var(--sans);
+    font-weight:900;
+    text-transform:uppercase;
+    font-size:18px;
+    letter-spacing:.02em;
+    line-height:1.05;
+  }
+  .mech p{
+    font-size:13.5px;
+    line-height:1.5;
+  }
+  .mech ul{
+    list-style:none;
+    border-top: 1px solid var(--ink);
+    padding-top:10px;
+    margin-top:auto;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .mech ul li{
+    display:grid;
+    grid-template-columns: 1fr auto;
+    gap:10px;
+    padding:3px 0;
+    border-bottom: 1px dotted var(--ink);
+  }
+  .mech ul li:last-child{ border-bottom:0; }
+  .mech ul li span:last-child{ font-weight:700; }
+
+  /* === DOSAGE GRID === */
+  .dosage-grid{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: var(--rule) solid var(--ink);
+    border-bottom: var(--rule) solid var(--ink);
+  }
+  .dose{
+    border-right: var(--rule) solid var(--ink);
+    padding:18px;
+    display:flex; flex-direction:column; gap:8px;
+  }
+  .dose:last-child{ border-right:0; }
+  .dose .cohort{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+  }
+  .dose .amt{
+    font-family:var(--sans);
+    font-weight:900;
+    font-size:38px;
+    line-height:1;
+    letter-spacing:-0.01em;
+  }
+  .dose .unit{
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    border-top: 1px solid var(--ink);
+    padding-top:8px;
+  }
+  .dose .note{
+    font-family:var(--mono);
+    font-size:11px;
+    line-height:1.4;
+    letter-spacing:.04em;
+    opacity:.85;
+  }
+
+  /* === WARNINGS === */
+  .warning{
+    display:grid;
+    grid-template-columns: 200px 1fr;
+    gap:0;
+    border-top: var(--rule) solid var(--ink);
+  }
+  .warning .flag{
+    background: var(--hazard);
+    color:var(--ink);
+    border-right: var(--rule) solid var(--ink);
+    padding: 18px;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    display:flex; flex-direction:column; gap:8px;
+    align-items:flex-start;
+  }
+  .warning .flag .glyph{
+    font-family:var(--sans);
+    font-weight:900;
+    font-size:32px;
+    line-height:1;
+    border: var(--rule) solid var(--ink);
+    padding: 4px 10px 6px;
+    background: var(--hazard);
+  }
+  .warning .text{
+    padding: 18px;
+    font-size:13.5px;
+    line-height:1.55;
+  }
+  .warning .text ol{
+    margin-top:8px;
+    padding-left:22px;
+  }
+  .warning .text ol li{ padding:2px 0; }
+
+  /* === REQUISITION FORM === */
+  .reqform{
+    border-top: var(--rule) solid var(--ink);
+    display:grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap:0;
+  }
+  .reqform .form{
+    border-right: var(--rule) solid var(--ink);
+    padding: 22px;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:0;
+  }
+  .field{
+    padding:10px 12px;
+    border:var(--rule) solid var(--ink);
+    margin:-1px 0 0 -1px;
+    display:flex; flex-direction:column; gap:4px;
+  }
+  .field label{
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+  }
+  .field input,
+  .field select{
+    background: transparent;
+    border:none;
+    border-bottom: 1px solid var(--ink);
+    padding: 4px 0;
+    font-family:var(--mono);
+    font-size:13px;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    outline:none;
+  }
+  .field input:focus{
+    border-bottom-color: var(--hazard);
+    background: #fbf6df;
+  }
+  .field.full{ grid-column: 1 / -1; }
+
+  .submit-col{
+    padding: 22px;
+    display:flex; flex-direction:column; gap:14px;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+  }
+  .submit-col .summary{
+    border: var(--rule) solid var(--ink);
+    padding:12px;
+    display:grid;
+    grid-template-columns: 1fr auto;
+    gap:6px 12px;
+  }
+  .submit-col .summary b{ font-weight:700; }
+  .submit-col .summary .total{
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--ink);
+    padding-top:8px;
+    margin-top:4px;
+    display:grid;
+    grid-template-columns: 1fr auto;
+    font-size:14px;
+    font-weight:700;
+  }
+  .check{
+    display:flex; gap:10px; align-items:flex-start;
+    font-size:11px;
+    line-height:1.5;
+  }
+  .check input{
+    width:14px; height:14px;
+    border: var(--rule) solid var(--ink);
+    appearance:none;
+    background:var(--paper);
+    flex:0 0 14px;
+    margin-top:1px;
+    cursor:pointer;
+  }
+  .check input:checked{
+    background:
+      linear-gradient(45deg, transparent 40%, var(--ink) 40% 60%, transparent 60%),
+      linear-gradient(-45deg, transparent 40%, var(--ink) 40% 60%, transparent 60%),
+      var(--paper);
+  }
+  .btn{
+    display:block;
+    width:100%;
+    padding:18px 16px;
+    background: var(--hazard);
+    color:var(--ink);
+    border:var(--rule-thick) solid var(--ink);
+    font-family:var(--sans);
+    font-weight:900;
+    font-size:15px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    text-align:center;
+    cursor:pointer;
+  }
+  .btn:disabled{
+    background:var(--paper);
+    color:#999;
+    cursor:not-allowed;
+  }
+  .btn.secondary{
+    background:var(--paper);
+    color:var(--ink);
+  }
+
+  /* === FOOTER === */
+  footer.legal{
+    border-top: var(--rule-thick) solid var(--ink);
+    padding: 22px 0 30px;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    line-height:1.6;
+  }
+  footer.legal .row{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap:0;
+    border-bottom: var(--rule) solid var(--ink);
+    padding-bottom:16px;
+    margin-bottom:16px;
+  }
+  footer.legal .row > div{
+    padding: 0 14px;
+    border-right: var(--rule) solid var(--ink);
+  }
+  footer.legal .row > div:first-child{ padding-left:0; }
+  footer.legal .row > div:last-child{ border-right:0; padding-right:0; }
+  footer.legal p{ font-size:11px; }
+  footer.legal .dl{ margin-top:8px; display:grid; grid-template-columns:auto 1fr; gap:2px 12px; }
+  footer.legal .dl dt{ opacity:.6;}
+  footer.legal .dl dd{ text-align:right; font-weight:700; }
+  footer.legal .colophon{
+    display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+    opacity:.85;
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 880px){
+    .doc{ border-left:0; border-right:0; padding:0 14px;}
+    header.title{ grid-template-columns: 1fr; gap:18px;}
+    .indication{ grid-template-columns: 1fr; }
+    .indication .body{ border-right:0; border-bottom: var(--rule) solid var(--ink); }
+    .mechs{ grid-template-columns: 1fr; }
+    .mech{ border-right:0; border-bottom: var(--rule) solid var(--ink); }
+    .mech:last-child{ border-bottom:0; }
+    .dosage-grid{ grid-template-columns: 1fr 1fr; }
+    .dose{ border-bottom: var(--rule) solid var(--ink); }
+    .dose:nth-last-child(-n+2){ border-bottom:0; }
+    .dose:nth-child(even){ border-right:0; }
+    .reqform{ grid-template-columns:1fr; }
+    .reqform .form{ border-right:0; border-bottom: var(--rule) solid var(--ink); grid-template-columns: 1fr; }
+    .warning{ grid-template-columns: 1fr;}
+    .warning .flag{ border-right:0; border-bottom: var(--rule) solid var(--ink); }
+    footer.legal .row{ grid-template-columns: 1fr;}
+    footer.legal .row > div{ border-right:0; border-bottom: 1px solid var(--ink); padding:8px 0;}
+    .grid-2{ grid-template-columns: 1fr; }
+    .grid-2 > div{ border-right:0; border-bottom: var(--rule) solid var(--ink);}
+    .grid-2 > div:last-child{ border-bottom:0; }
+    .section-head{ grid-template-columns: auto 1fr; }
+    .section-head .ref{ display:none; }
+  }
+  @media (max-width: 520px){
+    body{ font-size:13px; }
+    .strip{ flex-wrap:wrap;}
+    .strip > div{ border-right:0; border-bottom: 1px solid var(--ink); flex:1 0 50%;}
+  }
+</style>
+</head>
+<body>
+
+<div class="doc" role="document">
+
+  <!-- ===== TOP CLASSIFICATION STRIP ===== -->
+  <div class="strip" role="banner">
+    <div><span class="dot"></span> FORM N7 / 14.3</div>
+    <div>DOC ID&nbsp;·&nbsp;0000-N7-0014-R3</div>
+    <div class="haz">CLASSIFICATION&nbsp;·&nbsp;TIER II / CONTROLLED</div>
+    <div>ISSUED&nbsp;·&nbsp;06 / 06 / 2026</div>
+    <div>SUPERSEDES&nbsp;·&nbsp;14.2</div>
+  </div>
+
+  <!-- ===== TITLE BLOCK ===== -->
+  <header class="title">
+    <div>
+      <h1 class="compound">Compound&nbsp;N-7<br/>Total&nbsp;Nutritive&nbsp;Substrate</h1>
+      <p class="compound-sub">
+        Standardized synthetic nutrient paste. For complete enteral substitution in adult human subjects. Regulated under Subsection 14(c). Distribution restricted to credentialed requisition.
+      </p>
+    </div>
+    <dl class="meta" aria-label="document metadata">
+      <dt>Substance</dt><dd>N-7</dd>
+      <dt>Form</dt><dd>Paste, 410g</dd>
+      <dt>Lot Prefix</dt><dd>N7-26-XX</dd>
+      <dt>Reg. Code</dt><dd>TNS-II / B14</dd>
+      <dt>Shelf Life</dt><dd>730 days</dd>
+      <dt>Storage</dt><dd>4° – 22° C</dd>
+    </dl>
+  </header>
+
+  <!-- ===== NAV / TOC ===== -->
+  <nav class="toc" aria-label="contents">
+    <a href="#s01" class="active">§01 Indication</a>
+    <a href="#s02">§02 Composition</a>
+    <a href="#s03">§03 Active Mechanisms</a>
+    <a href="#s04">§04 Dosage / Administration</a>
+    <a href="#s05">§05 Contraindications</a>
+    <a href="#s06">§06 Requisition</a>
+    <a href="#s07">§07 Legal &amp; Distribution</a>
+  </nav>
+
+  <!-- ===== §01 INDICATION ===== -->
+  <section id="s01">
+    <div class="section-head">
+      <span class="num">§01</span>
+      <h2>Indication / Statement of Purpose</h2>
+      <span class="ref">REF&nbsp;·&nbsp;ANNEX&nbsp;A</span>
+    </div>
+
+    <div class="indication">
+      <div class="body">
+        <p>Compound N-7 is a sterile, shelf-stable nutritive substrate engineered to provide the complete adult human caloric, macronutrient, micronutrient, and electrolytic requirement in a single 410-gram daily dose.</p>
+        <p>The product is not a meal replacement. It is a meal substitute. Use is intended for environments in which the preparation, acquisition, or social consumption of conventional food is impractical, contraindicated, or operationally prohibited.</p>
+        <p>Subjects under continuous N-7 administration require no supplementary food, water below daily threshold, or additional micronutrient sources. Long-term sole-source consumption has been observed in clinical cohorts for periods exceeding 1,840 consecutive days without recorded deficiency events.</p>
+      </div>
+      <div>
+        <div class="placeholder" aria-hidden="true">
+          <span class="lbl">FIG. 01 — UNIT, 410G</span>
+        </div>
+        <div class="barcode" aria-hidden="true" style="margin-top:14px;" id="bc">
+          <span class="label">N7&nbsp;·&nbsp;26&nbsp;·&nbsp;A14-0093</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== §02 COMPOSITION (SPEC TABLE) ===== -->
+  <section id="s02">
+    <div class="section-head">
+      <span class="num">§02</span>
+      <h2>Composition / Nutritional Specification</h2>
+      <span class="ref">PER 410G UNIT&nbsp;·&nbsp;100% RDI</span>
+    </div>
+
+    <table class="spec" aria-label="composition table">
+      <thead>
+        <tr>
+          <th style="width:34%;">Parameter</th>
+          <th>Quantity</th>
+          <th>Tolerance</th>
+          <th>% Daily Reference</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="k">Energy</td><td class="v">2,000 kcal</td><td>± 0.4%</td><td>100%</td></tr>
+        <tr><td class="k">Protein, isolate (soy / pea, 3:1)</td><td class="v">90.0 g</td><td>± 0.6%</td><td>180%</td></tr>
+        <tr><td class="k">Carbohydrate, complex</td><td class="v">220.0 g</td><td>± 0.5%</td><td>80%</td></tr>
+        <tr><td class="k">— of which sugars</td><td class="v">2.4 g</td><td>± 0.2%</td><td>2.7%</td></tr>
+        <tr><td class="k">Lipid, MCT / LCT blend</td><td class="v">66.5 g</td><td>± 0.4%</td><td>85%</td></tr>
+        <tr><td class="k">— of which Ω-3 (DHA/EPA)</td><td class="v">1.6 g</td><td>± 0.1%</td><td>145%</td></tr>
+        <tr><td class="k">Dietary fiber, soluble</td><td class="v">38.0 g</td><td>± 0.8%</td><td>136%</td></tr>
+        <tr><td class="k">Sodium, as chloride</td><td class="v">1,440 mg</td><td>± 1.5%</td><td>62%</td></tr>
+        <tr><td class="k">Potassium</td><td class="v">3,400 mg</td><td>± 1.2%</td><td>72%</td></tr>
+        <tr><td class="k">Vitamin complex A–K (full)</td><td class="v">14 species</td><td>± 0.5%</td><td>100 – 220%</td></tr>
+        <tr><td class="k">Mineral matrix (Fe / Zn / Mg / I / Se / Cr)</td><td class="v">17 species</td><td>± 0.7%</td><td>100 – 180%</td></tr>
+        <tr><td class="k">Inactive carrier (purified H₂O)</td><td class="v">balance to 410 g</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ===== §03 MECHANISMS / FEATURES ===== -->
+  <section id="s03">
+    <div class="section-head">
+      <span class="num">§03</span>
+      <h2>Active Mechanisms / Functional Components</h2>
+      <span class="ref">SUBSECTIONS&nbsp;A&nbsp;–&nbsp;C</span>
+    </div>
+
+    <div class="mechs">
+      <div class="mech">
+        <div class="id"><span>03.A</span><span>STRUCTURAL</span></div>
+        <h3>Stabilized Protein Matrix</h3>
+        <p>A heat-stable isolate of soy and pea protein cross-linked under low-shear extrusion. Provides 90 g of complete amino acid coverage per unit with no detectable allergenic fraction above 0.001%. Digestible coefficient ≥ 0.98.</p>
+        <ul>
+          <li><span>Amino completeness</span><span>9 / 9 EAA</span></li>
+          <li><span>PDCAAS</span><span>1.00</span></li>
+          <li><span>Allergen load</span><span>&lt; 0.001%</span></li>
+        </ul>
+      </div>
+
+      <div class="mech">
+        <div class="id"><span>03.B</span><span>METABOLIC</span></div>
+        <h3>Stable Glycemic Carrier</h3>
+        <p>Complex carbohydrate derived from low-gelatinization tapioca and resistant starch fractions. Engineered to elicit a postprandial glucose response below 7.4 mmol/L in healthy adult subjects at the indicated dose.</p>
+        <ul>
+          <li><span>Glycemic index</span><span>22</span></li>
+          <li><span>Insulin index</span><span>30</span></li>
+          <li><span>Onset</span><span>~ 35 min</span></li>
+        </ul>
+      </div>
+
+      <div class="mech">
+        <div class="id"><span>03.C</span><span>REGULATORY</span></div>
+        <h3>Micronutrient Lock</h3>
+        <p>Lipid-encapsulated vitamin and mineral matrix delivering 100 – 220% of the adult daily reference intake for all required species. Encapsulation prevents oxidative loss across the 730-day shelf interval at indicated storage range.</p>
+        <ul>
+          <li><span>Species delivered</span><span>31</span></li>
+          <li><span>Stability</span><span>730 d</span></li>
+          <li><span>Oxidative loss</span><span>≤ 1.4%</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== §04 DOSAGE ===== -->
+  <section id="s04">
+    <div class="section-head">
+      <span class="num">§04</span>
+      <h2>Dosage / Administration</h2>
+      <span class="ref">PER 24-HR CYCLE</span>
+    </div>
+
+    <div class="dosage-grid">
+      <div class="dose">
+        <div class="cohort">Cohort A · Sedentary Adult</div>
+        <div class="amt">410 g</div>
+        <div class="unit">1 Unit / 24h · 2,000 kcal</div>
+        <div class="note">Single-pouch administration. Ambient temperature acceptable. Mastication not required.</div>
+      </div>
+      <div class="dose">
+        <div class="cohort">Cohort B · Moderate Activity</div>
+        <div class="amt">512 g</div>
+        <div class="unit">1.25 Units / 24h · 2,500 kcal</div>
+        <div class="note">Distribute across two intervals. Second interval not later than 4h pre-rest.</div>
+      </div>
+      <div class="dose">
+        <div class="cohort">Cohort C · High Output</div>
+        <div class="amt">615 g</div>
+        <div class="unit">1.5 Units / 24h · 3,000 kcal</div>
+        <div class="note">Distribute across three intervals. Hydration: minimum 2.4 L H₂O / 24h.</div>
+      </div>
+      <div class="dose">
+        <div class="cohort">Cohort D · Restricted Mass</div>
+        <div class="amt">308 g</div>
+        <div class="unit">0.75 Units / 24h · 1,500 kcal</div>
+        <div class="note">Clinician supervision required. Not for sole-source administration &gt; 60 days.</div>
+      </div>
+    </div>
+
+    <!-- two-up info block -->
+    <div class="grid-2" style="margin-top:24px;">
+      <div>
+        <h3 style="font-size:13px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px;">04.1 Preparation</h3>
+        <p style="font-size:13.5px;line-height:1.55;">Tear pouch at indicated notch. Extrude full contents directly into oral cavity or sanitary receptacle. No mixing, heating, or dilution is required or recommended. Once opened, the unit must be consumed within 30 minutes at ambient temperature.</p>
+      </div>
+      <div>
+        <h3 style="font-size:13px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px;">04.2 Adjacent Intake</h3>
+        <p style="font-size:13.5px;line-height:1.55;">Concurrent consumption of conventional food is permitted but redundant. Caloric overlap should not exceed 15% of the indicated cohort dose over any 72-hour interval. Caffeine, ethanol, and pharmacological agents are not contraindicated.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== §05 CONTRAINDICATIONS / WARNING ===== -->
+  <section id="s05">
+    <div class="section-head">
+      <span class="num">§05</span>
+      <h2>Contraindications / Required Notices</h2>
+      <span class="ref">MANDATORY&nbsp;·&nbsp;DO NOT REMOVE</span>
+    </div>
+
+    <div class="warning">
+      <div class="flag">
+        <span class="glyph">!</span>
+        <span>Warning<br/>Tier II</span>
+        <span>Read in full prior to acknowledgment.</span>
+      </div>
+      <div class="text">
+        <p>The following conditions constitute absolute or relative contraindication. Subjects matching any criterion shall not initiate Compound N-7 administration without prior written authorization from a registered clinician of record.</p>
+        <ol>
+          <li>Subjects below 18 years of chronological age. Pediatric formulation pending review.</li>
+          <li>Subjects with diagnosed renal insufficiency (eGFR &lt; 45 mL/min/1.73 m²).</li>
+          <li>Pregnancy, lactation, or planned conception within 90 days of cycle initiation.</li>
+          <li>Documented hypersensitivity to soy, pea, or encapsulating lipid carriers.</li>
+          <li>Concurrent administration of MAO inhibitors or anticoagulant regimens above standard prophylactic dose.</li>
+          <li>Long-term sole-source administration exceeding 1,840 consecutive days without quarterly serum panel review.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== §06 REQUISITION ===== -->
+  <section id="s06">
+    <div class="section-head">
+      <span class="num">§06</span>
+      <h2>Requisition / Acknowledgment</h2>
+      <span class="ref">SUBMIT TO REGISTRAR</span>
+    </div>
+
+    <form class="reqform" onsubmit="event.preventDefault(); document.getElementById('ack-out').hidden = false; this.querySelector('.btn').textContent='ACKNOWLEDGED · 0000-N7-' + Math.floor(Math.random()*9000+1000); this.querySelector('.btn').disabled = true;">
+      <div class="form">
+        <div class="field full">
+          <label for="f-name">06.01 · Registered Subject Designation</label>
+          <input id="f-name" type="text" placeholder="LAST, FIRST M." required>
+        </div>
+        <div class="field">
+          <label for="f-id">06.02 · Subject ID</label>
+          <input id="f-id" type="text" placeholder="XXX-XX-XXXX" required>
+        </div>
+        <div class="field">
+          <label for="f-cohort">06.03 · Cohort</label>
+          <select id="f-cohort" required>
+            <option value="A">A — Sedentary (410g/d)</option>
+            <option value="B">B — Moderate (512g/d)</option>
+            <option value="C">C — High Output (615g/d)</option>
+            <option value="D">D — Restricted (308g/d)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-cycle">06.04 · Cycle Length</label>
+          <select id="f-cycle" required>
+            <option value="30">30 days</option>
+            <option value="90">90 days</option>
+            <option value="180">180 days</option>
+            <option value="365">365 days</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-station">06.05 · Distribution Station</label>
+          <input id="f-station" type="text" placeholder="STATION CODE">
+        </div>
+        <div class="field full">
+          <label for="f-clin">06.06 · Clinician of Record</label>
+          <input id="f-clin" type="text" placeholder="REG. ID + SURNAME" required>
+        </div>
+      </div>
+
+      <div class="submit-col">
+        <div class="summary" aria-label="requisition summary">
+          <span>Unit price</span><b>USD 11.40 / unit</b>
+          <span>Daily allocation</span><b>1.00 unit</b>
+          <span>Cycle duration</span><b>30 d</b>
+          <span>Shipping / handling</span><b>included</b>
+          <div class="total">
+            <span>Estimated cycle total</span><b>USD 342.00</b>
+          </div>
+        </div>
+
+        <label class="check">
+          <input type="checkbox" required>
+          <span>I acknowledge the contents of §05 (Contraindications) and confirm absence of disqualifying criteria.</span>
+        </label>
+        <label class="check">
+          <input type="checkbox" required>
+          <span>I consent to distribution of requisition data to the Registrar of Record per Subsection 14(c).</span>
+        </label>
+
+        <button class="btn" type="submit">Acknowledge &amp; Submit Requisition</button>
+        <button class="btn secondary" type="button" onclick="window.print();">Download / Print Dossier</button>
+        <span id="ack-out" hidden style="font-size:11px; letter-spacing:.16em; text-transform:uppercase;">Requisition queued. Confirmation issued to registrar of record. No further action required.</span>
+      </div>
+    </form>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="legal">
+    <div class="row">
+      <div>
+        <strong>§07 Legal Notice</strong>
+        <p>Compound N-7 is a regulated nutritive substance. Possession, distribution, and administration are governed by Subsection 14(c) of the Standardized Nutritive Substrate Act. Unauthorized reproduction of this dossier is prohibited.</p>
+      </div>
+      <div>
+        <strong>§08 Document Control</strong>
+        <dl class="dl">
+          <dt>Revision</dt><dd>14.3</dd>
+          <dt>Effective</dt><dd>06 / 06 / 2026</dd>
+          <dt>Next Review</dt><dd>06 / 12 / 2026</dd>
+          <dt>Owner</dt><dd>Registrar, Div. N</dd>
+        </dl>
+      </div>
+      <div>
+        <strong>§09 Distribution</strong>
+        <p>Approved channels: credentialed clinician, registered distribution station, and Registrar of Record. Public retail distribution is not authorized.</p>
+      </div>
+    </div>
+
+    <div class="colophon">
+      <span>Form N7 / Revision 14.3 · Page 1 of 1</span>
+      <span>Issuing Authority · Bureau of Nutritive Substrates, Div. N</span>
+      <span>Document ID · 0000-N7-0014-R3</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // Generate barcode bars deterministically
+  (function(){
+    const bc = document.getElementById('bc');
+    if (!bc) return;
+    const seq = "N7-26-A14-0093-TIER-II-CONTROLLED";
+    const frag = document.createDocumentFragment();
+    let widths = [];
+    for (let i = 0; i < seq.length; i++){
+      // 2-4px wide black bars, 1-3px gaps
+      const c = seq.charCodeAt(i);
+      for (let j = 0; j < 3; j++){
+        const w = ((c + j*7) % 4) + 1;
+        const g = ((c + j*3) % 3) + 1;
+        const bar = document.createElement('i');
+        bar.style.width = w + 'px';
+        bar.style.marginRight = g + 'px';
+        frag.appendChild(bar);
+      }
+    }
+    bc.insertBefore(frag, bc.firstChild);
+  })();
+
+  // TOC active state on scroll
+  (function(){
+    const links = [...document.querySelectorAll('nav.toc a')];
+    const targets = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    function update(){
+      let activeIdx = 0;
+      const y = window.scrollY + 80;
+      targets.forEach((t, i) => { if (t.offsetTop <= y) activeIdx = i; });
+      links.forEach((l, i) => l.classList.toggle('active', i === activeIdx));
+    }
+    window.addEventListener('scroll', update, {passive:true});
+    update();
+  })();
+
+  // Recompute requisition total on cohort/cycle change
+  (function(){
+    const cohort = document.getElementById('f-cohort');
+    const cycle = document.getElementById('f-cycle');
+    const summary = document.querySelector('.submit-col .summary');
+    if (!cohort || !cycle || !summary) return;
+    const cohortAlloc = { A:1.0, B:1.25, C:1.5, D:0.75 };
+    const unitPrice = 11.40;
+    function fmt(n){ return 'USD ' + n.toFixed(2); }
+    function update(){
+      const days = parseInt(cycle.value, 10);
+      const alloc = cohortAlloc[cohort.value] || 1.0;
+      const total = days * alloc * unitPrice;
+      summary.innerHTML =
+        '<span>Unit price</span><b>' + fmt(unitPrice) + ' / unit</b>' +
+        '<span>Daily allocation</span><b>' + alloc.toFixed(2) + ' unit</b>' +
+        '<span>Cycle duration</span><b>' + days + ' d</b>' +
+        '<span>Shipping / handling</span><b>included</b>' +
+        '<div class="total"><span>Estimated cycle total</span><b>' + fmt(total) + '</b></div>';
+    }
+    cohort.addEventListener('change', update);
+    cycle.addEventListener('change', update);
+  })();
+</script>
+</body>
+</html>

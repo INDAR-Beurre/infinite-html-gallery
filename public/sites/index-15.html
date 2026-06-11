@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logoipsum - Launch Your SaaS With Clarity</title>
+  <meta name="description" content="Launch your SaaS with clarity. AI-powered automation platform for modern teams." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          background: '#0B0B0B',
+          foreground: '#ffffff',
+          card: '#0E0E0E',
+          'card-foreground': '#0B0B0B',
+          primary: '#ffffff',
+          'primary-foreground': '#0B0B0B',
+          secondary: '#1A1A1A',
+          'secondary-foreground': '#ffffff',
+          muted: '#262626',
+          'muted-foreground': '#A6A6A6',
+          accent: '#262626',
+          'accent-foreground': '#ffffff',
+          destructive: '#ef4444',
+        },
+        borderRadius: {
+          DEFAULT: '0.75rem',
+          sm: 'calc(0.75rem - 4px)',
+          md: 'calc(0.75rem - 2px)',
+          lg: '0.75rem',
+          xl: '0.75rem',
+          '2xl': '1rem',
+          '3xl': '1.5rem',
+        },
+        fontFamily: {
+          sans: ['Inter', 'sans-serif'],
+        },
+        animation: {
+          'marquee-left': 'marquee-left 30s linear infinite',
+          'marquee-right': 'marquee-right 30s linear infinite',
+        },
+        keyframes: {
+          'marquee-left': {
+            '0%': { transform: 'translateX(0)' },
+            '100%': { transform: 'translateX(-33.333%)' },
+          },
+          'marquee-right': {
+            '0%': { transform: 'translateX(-33.333%)' },
+            '100%': { transform: 'translateX(0)' },
+          },
+        },
+      },
+    },
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { border-color: rgba(255,255,255,0.1); }
+    body { background: #0B0B0B; color: #fff; font-family: Inter, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    /* ===== Scroll Reveal ===== */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== Staggered children ===== */
+    .stagger > * { opacity: 0; transform: translateY(20px); transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+    .stagger > *.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== Video card hover flex grow/shrink ===== */
+    .video-grid { display: flex; gap: 1.5rem; }
+    .video-card-wrap { flex: 1; transition: flex 0.4s cubic-bezier(0.4, 0, 0.2, 1); min-width: 0; }
+    .video-card-wrap:hover { flex: 2; }
+    .video-grid:has(.video-card-wrap:hover) .video-card-wrap:not(:hover) { flex: 0.8; }
+
+    /* ===== Card hover lift ===== */
+    .card-lift { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .card-lift:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+
+    /* ===== Marquee ===== */
+    .marquee-wrap { width: 100%; overflow: hidden; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
+    .marquee-track { display: flex; gap: 1.5rem; width: max-content; }
+    .marquee-wrap:hover .marquee-track { animation-play-state: paused; }
+
+    /* ===== Solution card bg gradient ===== */
+    .solution-card { position: relative; overflow: hidden; }
+    .solution-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, transparent 60%, rgba(255,255,255,0.02)); pointer-events: none; }
+
+    /* ===== Pricing popular gradient overlay ===== */
+    .gradient-card { position: relative; }
+    .gradient-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.03), transparent 50%); pointer-events: none; border-radius: inherit; }
+
+    /* ===== Pricing card bg image ===== */
+    .pricing-popular-bg { background-image: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.06) 0%, transparent 60%); }
+
+    /* ===== Video grayscale + overlay ===== */
+    .video-card video { filter: grayscale(1); }
+
+    /* ===== Tab system ===== */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ===== FAQ ===== */
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease; opacity: 0; padding-top: 0; }
+    .faq-a.open { max-height: 500px; opacity: 1; padding-top: 0.75rem; }
+
+    /* ===== Scrollbar hide ===== */
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* ===== Header ===== */
+    .header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: rgba(11,11,11,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; max-width: 1224px; margin: 0 auto; padding: 0 2rem; }
+    @media (max-width: 768px) { .header-inner { padding: 0 1.25rem; } }
+
+    /* ===== Skip link ===== */
+    .skip-link { position: absolute; top: -100%; left: 1rem; padding: 0.5rem 1rem; background: #fff; color: #0B0B0B; border-radius: 0.5rem; z-index: 100; font-weight: 500; text-decoration: none; }
+    .skip-link:focus { top: 1rem; }
+
+    /* ===== Form fields ===== */
+    .form-input { width: 100%; padding: 0.75rem 1rem; background: linear-gradient(to bottom, #0F0F0F, #1B1B1B); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; color: #fff; font-size: 0.875rem; outline: none; transition: border-color 0.2s; font-family: inherit; }
+    .form-input:focus { border-color: rgba(255,255,255,0.3); }
+    .form-input::placeholder { color: #6B6B8D; }
+    textarea.form-input { resize: vertical; min-height: 120px; }
+
+    /* ===== Toast ===== */
+    .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: #fff; color: #0B0B0B; padding: 1rem 1.5rem; border-radius: 0.75rem; box-shadow: 0 8px 32px rgba(0,0,0,0.4); z-index: 1000; transform: translateY(120%); opacity: 0; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast-title { font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem; }
+    .toast-desc { font-size: 0.8125rem; color: rgba(11,11,11,0.6); }
+
+    /* ===== Reduced motion ===== */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .stagger > * { opacity: 1; transform: none; transition: none; }
+      .video-card-wrap { flex: 1 !important; transition: none !important; }
+      .video-grid:has(.video-card-wrap:hover) .video-card-wrap:not(:hover) { flex: 1 !important; }
+      .marquee-track { animation: none !important; }
+      .header { backdrop-filter: none; }
+      .card-lift:hover { transform: none; box-shadow: none; }
+      .faq-a { transition: none; }
+    }
+
+    /* ===== Mobile nav ===== */
+    @media (max-width: 768px) {
+      .nav-desktop { display: none; }
+      .nav-desktop.open { display: flex; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: rgba(11,11,11,0.98); backdrop-filter: blur(12px); padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); gap: 0.25rem; }
+      .video-grid { flex-direction: column; }
+      .video-card-wrap { flex: none !important; width: 100%; }
+      .video-card-wrap:hover { flex: none !important; }
+      .video-grid:has(.video-card-wrap:hover) .video-card-wrap:not(:hover) { flex: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <div class="header-inner">
+    <a href="/" class="flex items-center gap-2 text-foreground font-semibold text-xl no-underline">
+      <svg width="28" height="28" viewBox="0 0 28 28"><rect width="28" height="28" rx="6" fill="#fff"/><text x="14" y="19" text-anchor="middle" font-size="14" font-weight="bold" fill="#0B0B0B">L</text></svg>
+    </a>
+    <nav class="nav-desktop flex items-center gap-1" id="nav">
+      <a href="/" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-foreground/60 hover:text-foreground hover:bg-white/5 transition-all no-underline active">Home</a>
+      <a href="/about" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-foreground/60 hover:text-foreground hover:bg-white/5 transition-all no-underline">About</a>
+      <a href="/features" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-foreground/60 hover:text-foreground hover:bg-white/5 transition-all no-underline">Features</a>
+      <a href="/blog" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-foreground/60 hover:text-foreground hover:bg-white/5 transition-all no-underline">Blog</a>
+      <a href="/contact" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-foreground/60 hover:text-foreground hover:bg-white/5 transition-all no-underline">Contact</a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <button onclick="window.location.href='/contact'" class="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-foreground border border-white/20 hover:border-white/50 transition-all bg-transparent cursor-pointer">Start creating</button>
+      <button class="mobile-toggle lg:hidden p-2 text-foreground cursor-pointer bg-transparent border-none" id="mobileToggle" aria-label="Toggle menu">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 5h16M2 10h16M2 15h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ===== ANNOUNCEMENT ===== -->
+<div style="margin-top:64px">
+  <div class="border-b border-white/10 py-2">
+    <div class="max-w-[1224px] mx-auto px-4 md:px-8">
+      <div class="flex items-center justify-center gap-3 flex-wrap">
+        <span class="inline-flex px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-zinc-300">New Update</span>
+        <a href="#" class="text-stone-300 text-xs sm:text-sm font-medium no-underline hover:opacity-80 transition-opacity">Introducing v3 — Try It</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HERO ===== -->
+<section class="py-20 md:py-32 text-center">
+  <div class="max-w-[1224px] mx-auto px-4 md:px-8">
+    <div class="reveal visible" style="transition-delay:0.1s">
+      <h1 class="text-4xl md:text-5xl lg:text-7xl font-bold leading-tight lg:leading-[1.1] tracking-tight mb-6 max-w-[900px] mx-auto">Launch Your SaaS With Clarity.</h1>
+    </div>
+    <div class="reveal visible" style="transition-delay:0.2s">
+      <p class="max-w-[542px] mx-auto opacity-70 text-foreground text-base sm:text-lg md:text-xl font-normal leading-7 md:leading-8 mb-10">Lorem ipsum dolor sit amet consectetur convallis ut et in id enim tempus quis amet consequat ut rhoncus morbi.</p>
+    </div>
+    <div class="reveal visible flex items-center justify-center gap-4 flex-wrap" style="transition-delay:0.3s">
+      <button onclick="window.location.href='/contact'" class="inline-flex items-center gap-2 h-14 px-8 rounded-xl text-base font-medium bg-primary text-primary-foreground hover:opacity-90 transition-all cursor-pointer border-none">Get Started</button>
+      <button onclick="window.location.href='/about'" class="inline-flex items-center gap-2 h-14 px-8 rounded-xl text-base font-medium border border-white/20 bg-transparent text-foreground hover:border-white/50 transition-all cursor-pointer">Let's Connect</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SOLUTIONS TABS ===== -->
+<section class="py-20 bg-secondary">
+  <div class="max-w-[1224px] mx-auto px-4 md:px-8 text-center">
+    <div class="reveal"><span class="inline-block text-xs font-semibold tracking-widest uppercase text-muted-foreground mb-3">Solutions</span></div>
+    <div class="reveal"><h2 class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight lg:leading-[1.15] tracking-tight mb-4 max-w-[888px] mx-auto">Don't waste hours switching between tools.</h2></div>
+    <div class="reveal"><p class="max-w-[604px] mx-auto text-muted-foreground text-base leading-7 mb-10">Lorem ipsum dolor sit amet consectetur lobortis sed ut urna orci libero eu laoreet sed augue leo placerat posuere scelerisque feugiat et eget ac morbi sit faucibus.</p></div>
+  </div>
+  <div class="max-w-[1224px] mx-auto px-4 md:px-8">
+    <div class="flex items-center justify-center gap-2 flex-wrap mb-8">
+      <button class="tab-btn active px-5 py-2 rounded-full text-sm font-medium border border-white/20 bg-white/5 text-foreground cursor-pointer transition-all" data-tab="automations">Smart Automations</button>
+      <button class="tab-btn px-5 py-2 rounded-full text-sm font-medium border border-white/10 bg-transparent text-muted-foreground hover:text-foreground hover:border-white/20 hover:bg-white/5 cursor-pointer transition-all" data-tab="collaboration">Team Collaboration</button>
+      <button class="tab-btn px-5 py-2 rounded-full text-sm font-medium border border-white/10 bg-transparent text-muted-foreground hover:text-foreground hover:border-white/20 hover:bg-white/5 cursor-pointer transition-all" data-tab="analytics">Live Analytics</button>
+    </div>
+    <div class="tab-content active" id="tab-automations">
+      <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+        <div class="w-full lg:flex-1 bg-card rounded-2xl border border-white/10 p-5 aspect-[4/3] flex flex-col gap-4">
+          <div class="flex gap-1.5 pb-3 border-b border-white/10"><span class="w-2 h-2 rounded-full bg-red-500"></span><span class="w-2 h-2 rounded-full bg-amber-500"></span><span class="w-2 h-2 rounded-full bg-green-500"></span></div>
+          <div class="flex-1 flex flex-col gap-2"><div class="h-3 rounded bg-white/5"></div><div class="h-3 rounded bg-white/5"></div><div class="h-3 rounded bg-white/5 w-3/5"></div><div class="h-3 rounded bg-white/5"></div><div class="h-3 rounded bg-white/5 w-2/5"></div></div>
+        </div>
+        <div class="w-full lg:flex-1">
+          <p class="text-xs font-semibold tracking-widest uppercase text-muted-foreground mb-2">DASHBOARDS</p>
+          <p class="text-muted-foreground text-base leading-7 max-w-[450px]">Lorem ipsum dolor sit amet consectetur lobortis sed ut urna orci libero eu laoreet sed augue leo placerat.</p>
+        </div>
+      </div>
+    </div>
+    <div class="tab-content" id="tab-collaboration">
+      <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+        <div class="w-full lg:flex-1 bg-card rounded-2xl border border-white/10 p-5 aspect-[4/3] flex flex-col gap-4">
+          <div class="flex gap-1.5 pb-3 border-b border-white/10"><span class="w-2 h-2 rounded-full bg-red-500"></span><span class="w-2 h-2 rounded-full bg-amber-500"></span><span class="w-2 h-2 rounded-full bg-green-500"></span></div>
+          <div class="flex-1 flex flex-col gap-2"><div class="h-3 rounded bg-white/5"></div><div class="h-3 rounded bg-white/5"></div><div class="h-3 rounded bg-white/5 w-3/5"></div></div>
+        </div>
+        <div class="w-full lg:flex-1">
+          <p class="text-xs font-semibold tracking-widest uppercase text-muted-foreground mb-2">COLLABORATION HUB</p>
+          <p class="text-muted-foreground text-base leading-7 max-w-[450px]">Seamlessly work together with your team in real-time. Share insights, track progress, and stay aligned on goals.</p>
+        </div>
+      </div>
+    </div>
+    <div class="tab-content" id="tab-analytics">
+      <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+        <div class="w-full lg:flex-1 bg-card rounded-2xl border border-white/10 p-5 aspect-[4/3] flex flex-col gap-4">
+          <div class="flex gap-1.5 pb-3 border-b border-white/10"><span class="w-2 h-2 rounded-full bg-red-500"></span><span class="w-2 h-2 rounded-full bg-amber-500"></span><span class="w-2 h-2 rounded-full bg-green-500"></span></div>
+          <div class="flex-1 flex flex-col gap-2"><div class="h-3 rounded bg-white/5"></div><div class="h-3 rounded bg-white/5"></div><div class="h-3 rounded bg-white/5 w-3/5"></div><div class="h-3 rounded bg-white/5"></div></div>
+        </div>
+        <div class="w-full lg:flex-1">
+          <p class="text-xs font-semibold tracking-widest uppercase text-muted-foreground mb-2">REAL-TIME INSIGHTS</p>
+          <p class="text-muted-foreground text-base leading-7 max-w-[450px]">Monitor your performance metrics in real-time. Get actionable insights and make data-driven decisions faster.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURE CARDS ===== -->
+<section class="py-20 bg-background">
+  <div class="max-w-[1224px] mx-auto px-4 md:px-8 text-center">
+    <div class="reveal"><span class="inline-block text-xs font-semibold tracking-widest uppercase text-muted-foreground mb-3">Solutions</span></div>
+    <div class="reveal"><h2 class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight lg:leading-[1.15] tracking-tight">Built for Ambitious Teams.</h2></div>
+  </div>
+  <div class="max-w-[1224px] mx-auto px-4 md:px-8 mt-10">
+    <div class="stagger grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="solution-card card-lift bg-card rounded-2xl border border-white/10 p-6 flex flex-col gap-4">
+        <div class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-foreground"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
+        <div><h3 class="text-lg font-semibold mb-2">Finance Focused</h3><p class="text-muted-foreground text-sm leading-6">Lorem ipsum dolor sit amet consectetur nec quuis suspendisse nulla amet viverra tortor.</p></div>
+      </div>
+      <div class="solution-card card-lift bg-card rounded-2xl border border-white/10 p-6 flex flex-col gap-4">
+        <div class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-foreground"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l7 4-7 4-7-4 7-4zM5 12l7-4 7 4M5 18l7-4 7 4"/></svg></div>
+        <div><h3 class="text-lg font-semibold mb-2">Innovative Approach</h3><p class="text-muted-foreground text-sm leading-6">Lorem ipsum dolor sit amet consectetur nec quuis suspendisse nulla amet viverra tortor.</p></div>
+      </div>
+      <div class="solution-card card-lift bg-card rounded-2xl border border-white/10 p-6 flex flex-col gap-4">
+        <div class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-foreground"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <div><h3 class="text-lg font-semibold mb-2">Experienced Team</h3><p class="text-muted-foreground text-sm leading-6">Lorem ipsum dolor sit amet consectetur nec quuis suspendisse nulla amet viverra tortor.</p></div>
+      </div>
+      <div class="solution-card card-lift bg-card rounded-2xl border border-white/10 p-6 flex flex-col gap-4">
+        <div class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-foreground"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+        <div><h3 class="text-lg font-semibold mb-2">Global Reach</h3><p class="text-muted-foreground text-sm leading-6">Lorem ipsum dolor sit amet consectetur nec quuis suspendisse nulla amet viverra tortor.</p></div>
+      </div>
+      <div class="solution-card card-lift bg-card rounded-2xl border border-white/10 p-6 flex flex-col gap-4">
+        <div class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-foreground"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div><h3 class="text-lg font-semibold mb-2">AI Innovation</h3><p class="text-muted-foreground text-sm leading-6">Lorem ipsum dolor sit amet consectetur nec quuis suspendisse nulla amet viverra tortor.</p></div>
+      </div>
+      <div class="solution-card card-lift bg-card rounded-2xl border border-white/10 p-6 flex flex-col gap-4">
+        <div class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-foreground"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l7 4-7 4-7-4 7-4zM5 12l7-4 7 4M5 18l7-4 7 4"/></svg></div>
+        <div><h3 class="text-lg font-semibold mb-2">Commitment to Quality</h3><p class="text-muted-foreground text-sm leading-6">Lorem ipsum dolor sit amet consectetur nec quuis suspendisse nulla amet viverra tortor.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURE BLOCKS ===== -->
+<section class="py-20 bg-secondary">
+  <div class="max-w-[1224px] mx-auto px-4 md:px-8">
+    <div class="reveal flex flex-col lg:flex-row items-center gap-12 lg:gap-16 mb-16 lg:mb-20">
+      <div class="w-full lg:flex-1 bg-card rounded-2xl border border-white/10 p-5 aspect-[4/3] flex flex-col gap-4">
+        <div class="flex gap-1.5 pb-3 border-b border-white/10"><span class="w-2 h-2 rounded-full bg-red-500"></span><span class="w-2 h-2 rounded-full bg-amber-500"></span><span class="w-2 h-2 rounded-full bg-green-500"></span></div>
+        <div class="flex-1 flex flex-col gap-2"><div class="h-3 rounded bg-white/5"></div><div class="h-3 rounded bg-white/5"></div><div class="h-3 rounded bg-white/5 w-3/5"></div><div class="h-3 rounded bg-white/5"></div><div class="h-3 rounded bg-white/5 w-2/5"></div></div>
+      </div>
+      <div class="w-full lg:flex-1">
+        <span class="inline-flex px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-foreground mb-4">Features</span>
+        <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight lg:leading-[1.2] tracking-tight mb-4">Works With the Tools You Already Use</h2>
+        <p class="text-muted-foreground text-base leading-7">Lorem ipsum dolor sit amet consectetur eget sollicitudin maecenas ut eget in odio odio velit amet erat id ultrices ut. Imperdiet feugiat mattis est id blandit risus enim.</p>
+        <div class="flex flex-wrap gap-2 mt-4"><span class="text-muted-foreground text-sm flex items-center gap-1.5"><svg class="w-4 h-4 text-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Technology</span></div>
+      </div>
+    </div>
+    <div class="reveal flex flex-col lg:flex-row-reverse items-center gap-12 lg:gap-16">
+      <div class="w-full lg:flex-1 aspect-video rounded-2xl border border-white/10 bg-card relative overflow-hidden flex items-end p-5" style="background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.05), transparent 60%), radial-gradient(circle at 70% 60%, rgba(255,255,255,0.03), transparent 50%);">
+        <div class="flex items-center gap-3 px-3 py-2 rounded-lg backdrop-blur-sm w-full" style="background:rgba(0,0,0,0.4)">
+          <div class="w-7 h-7 rounded-full bg-white flex items-center justify-center flex-shrink-0"><svg class="w-3.5 h-3.5 text-background ml-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="flex-1 h-1 rounded-full bg-white/10 relative"><span class="absolute left-0 top-0 bottom-0 w-2/5 rounded-full bg-white"></span></div>
+          <span class="text-xs text-white/40 font-mono tabular-nums">14:22</span>
+        </div>
+      </div>
+      <div class="w-full lg:flex-1">
+        <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight lg:leading-[1.2] tracking-tight mb-4">Loved by Teams That Scale Fast</h2>
+        <p class="text-muted-foreground text-base leading-7">Lorem ipsum dolor sit amet consectetur eget sollicitudin maecenas ut eget in odio odio velit amet erat id ultrices ut. Imperdiet feugiat mattis est id blandit risus enim.</p>
+        <button onclick="window.location.href='/contact'" class="mt-4 inline-flex items-center gap-2 h-10 px-5 rounded-lg text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 transition-all cursor-pointer border-none">Get Started</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INTEGRATIONS MARQUEE ===== -->
+<section class="py-20 bg-background text-center">
+  <div class="max-w-[1224px] mx-auto px-4 md:px-8">
+    <div class="reveal"><span class="inline-block text-xs font-semibold tracking-widest uppercase text-muted-foreground mb-3">Integrations</span></div>
+    <div class="reveal"><h2 class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight lg:leading-[1.15] tracking-tight max-w-3xl mx-auto">Works Seamlessly With the Tools You Already Use</h2></div>
+  </div>
+  <div class="marquee-wrap mt-12">
+    <div class="marquee-track animate-marquee-left" id="marqueeTrack">
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Browser extension</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Container platform</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Cloud storage</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Spreadsheet</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Design tool</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Mobile framework</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Version control</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Project management</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Issue tracking</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Crypto wallet</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Documentation</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Frontend framework</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Code editor</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">IDE</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">CMS</span>
+      <!-- Duplicate for seamless loop -->
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Browser extension</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Container platform</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Cloud storage</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Spreadsheet</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Design tool</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Mobile framework</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Version control</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Project management</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Issue tracking</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Crypto wallet</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Documentation</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Frontend framework</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">Code editor</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">IDE</span>
+      <span class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground text-sm whitespace-nowrap">CMS</span>
+    </div>
+  </div>
+  <div class="max-w-[1224px] mx-auto px-4 md:px-8 mt-10">
+    <button onclick="window.location.href='/contact'" class="inline-flex items-center gap-2 h-11 px-6 rounded-xl text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 transition-all cursor-pointer border-none">Get Started</button>
+  </div>
+</section>
+
+<!-- ===== VIDEO TESTIMONIALS ===== -->
+<section class="py-20 bg-secondary">
+  <div class="max-w-[1224px] mx-auto px-4 md:px-8">
+    <div class="video-grid">
+      <div class="video-card-wrap">
+        <div class="video-card relative h-[400px] md:h-[500px] lg:h-[623px] rounded-3xl overflow-hidden cursor-pointer bg-card">
+          <video class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline>
+            <source src="https://customer-cbeadsgr09pnsezs.cloudflarestream.com/408ad52e3f15bc8f01ae69d194a8cf3a/manifest/video.m3u8" type="application/x-mpegURL" />
+          </video>
+          <div class="absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/40 to-transparent z-10"></div>
+          <div class="absolute inset-0 bg-black/30 z-20"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 flex flex-col gap-6 z-30">
+            <p class="text-foreground text-sm md:text-base leading-6 md:leading-7">Finally, a way to turn complex workflows into simple, automated solutions that actually improve our productivity.</p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-xs font-semibold text-foreground flex-shrink-0">RP</div>
+              <div><div class="text-sm font-semibold text-foreground">Raj Patel</div><div class="text-xs text-white/50">Product Manager at InnovateX</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="video-card-wrap">
+        <div class="video-card relative h-[400px] md:h-[500px] lg:h-[623px] rounded-3xl overflow-hidden cursor-pointer bg-card">
+          <video class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline>
+            <source src="https://customer-cbeadsgr09pnsezs.cloudflarestream.com/dd17599dfa77f41517133fa7a4967535/manifest/video.m3u8" type="application/x-mpegURL" />
+          </video>
+          <div class="absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/40 to-transparent z-10"></div>
+          <div class="absolute inset-0 bg-black/30 z-20"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 flex flex-col gap-6 z-30">
+            <p class="text-foreground text-sm md:text-base leading-6 md:leading-7">We deliver features faster while keeping quality consistently high, which our clients and team both appreciate.</p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-xs font-semibold text-foreground flex-shrink-0">RP</div>
+              <div><div class="text-sm font-semibold text-foreground">Raj Patel</div><div class="text-xs text-white/50">Product Manager at InnovateX</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="video-card-wrap">
+        <div class="video-card relative h-[400px] md:h-[500px] lg:h-[623px] rounded-3xl overflow-hidden cursor-pointer bg-card">
+          <video class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline>
+            <source src="https://customer-cbeadsgr09pnsezs.cloudflarestream.com/df176a2fb2ea2b64bd21ae1c10d3af6a/manifest/video.m3u8" type="application/x-mpegURL" />
+          </video>
+          <div class="absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/40 to-transparent z-10"></div>
+          <div class="absolute inset-0 bg-black/30 z-20"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 flex flex-col gap-6 z-30">
+            <p class="text-foreground text-sm md:text-base leading-6 md:leading-7">Complex processes that once drained resources now run smoothly, saving us both time and operational costs.</p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-xs font-semibold text-foreground flex-shrink-0">RP</div>
+              <div><div class="text-sm font-semibold text-foreground">Raj Patel</div><div class="text-xs text-white/50">Product Manager at InnovateX</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRICING ===== -->
+<section class="py-20 bg-background">
+  <div class="max-w-[1224px] mx-auto px-4 md:px-8 text-center">
+    <div class="reveal"><span class="inline-block text-xs font-semibold tracking-widest uppercase text-muted-foreground mb-3">Pricing</span></div>
+    <div class="reveal"><h2 class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight lg:leading-[1.15] tracking-tight">Simple, Unified Pricing</h2></div>
+    <div class="reveal"><p class="max-w-md mx-auto text-muted-foreground text-base leading-7 mt-2">Lorem ipsum dolor sit amet consectetur lobortis sed ut urna orci libero eu laoreet.</p></div>
+  </div>
+  <div class="max-w-[1224px] mx-auto px-4 md:px-8 mt-12">
+    <div class="stagger grid grid-cols-1 md:grid-cols-3 gap-6 max-w-[400px] md:max-w-none mx-auto">
+      <!-- Pro -->
+      <div class="gradient-card card-lift bg-card border border-white/10 rounded-2xl p-8 flex flex-col">
+        <div class="text-lg font-semibold mb-2">Pro</div>
+        <div class="flex items-baseline gap-0 mb-2"><span class="text-2xl font-semibold align-super">$</span><span class="text-5xl font-bold leading-none">50</span><span class="text-sm text-muted-foreground ml-1">/mo</span></div>
+        <p class="text-muted-foreground text-sm mb-6">Essential automation to get started.</p>
+        <div class="w-full h-px bg-zinc-800 mb-6"></div>
+        <div class="text-sm font-medium text-foreground mb-3">What's included?</div>
+        <div class="flex flex-col gap-3 flex-1 mb-6">
+          <span class="text-muted-foreground text-sm pl-5 relative before:content-['\2713'] before:absolute before:left-0 before:text-foreground before:font-bold">5 Projects</span>
+          <span class="text-muted-foreground text-sm pl-5 relative before:content-['\2713'] before:absolute before:left-0 before:text-foreground before:font-bold">5 GB Storage</span>
+          <span class="text-muted-foreground text-sm pl-5 relative before:content-['\2713'] before:absolute before:left-0 before:text-foreground before:font-bold">Email Support</span>
+          <span class="text-muted-foreground text-sm pl-5 relative before:content-['\2713'] before:absolute before:left-0 before:text-foreground before:font-bold">Basic Analytics</span>
+        </div>
+        <button onclick="window.location.href='/contact'" class="w-full inline-flex items-center justify-center gap-2 h-10 px-4 rounded-lg text-sm font-medium border border-white/20 bg-transparent text-foreground hover:border-white/50 transition-all cursor-pointer">Get in Touch</button>
+      </div>
+      <!-- Premium (Popular) -->
+      <div class="gradient-card card-lift bg-card border border-white/20 rounded-2xl p-8 flex flex-col pricing-popular-bg relative">
+        <span class="inline-flex px-4 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-medium w-fit mb-4">Most Popular</span>
+        <div class="text-lg font-semibold mb-2">Premium</div>
+        <div class="flex items-baseline gap-0 mb-2"><span class="text-2xl font-semibold align-super">$</span><span class="text-5xl font-bold leading-none">80</span><span class="text-sm text-muted-foreground ml-1">/mo</span></div>
+        <p class="text-muted-foreground text-sm mb-6">Advanced tools for growing teams.</p>
+        <div class="w-full h-px bg-zinc-800 mb-6"></div>
+        <div class="text-sm font-medium text-foreground mb-3">What's included?</div>
+        <div class="flex flex-col gap-3 flex-1 mb-6">
+          <span class="text-muted-foreground text-sm pl-5 relative before:content-['\2713'] before:absolute before:left-0 before:text-foreground before:font-bold">25 Projects</span>
+          <span class="text-muted-foreground text-sm pl-5 relative before:content-['\2713'] before:absolute before:left-0 before:text-foreground before:font-bold">50 GB Storage</span>
+          <span class="text-muted-foreground text-sm pl-5 relative before:content-['\2713'] before:absolute before:left-0 before:text-foreground before:font-bold">Priority Support</span>
+          <span class="text-muted-foreground text-sm pl-5 relative before:content-['\2713'] before:absolute before:left-0 before:text-foreground before:font-bold">Up to 5 users</span>
+        </div>
+        <button onclick="window.location.href='/contact'" class="w-full inline-flex items-center justify-center gap-2 h-10 px-4 rounded-lg text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 transition-all cursor-pointer border-none">Get in Touch</button>
+      </div>
+      <!-- Enterprise -->
+      <div class="gradient-card card-lift bg-card border border-white/10 rounded-2xl p-8 flex flex-col">
+        <div class="text-lg font-semibold mb-2">Enterprise</div>
+        <div class="flex items-baseline gap-0 mb-2"><span class="text-2xl font-semibold align-super">$</span><span class="text-5xl font-bold leading-none">150</span><span class="text-sm text-muted-foreground ml-1">/mo</span></div>
+        <p class="text-muted-foreground text-sm mb-6">Full-scale automation without limits.</p>
+        <div class="w-full h-px bg-zinc-800 mb-6"></div>
+        <div class="text-sm font-medium text-foreground mb-3">What's included?</div>
+        <div class="flex flex-col gap-3 flex-1 mb-6">
+          <span class="text-muted-foreground text-sm pl-5 relative before:content-['\2713'] before:absolute before:left-0 before:text-foreground before:font-bold">All Professional Plan features</span>
+          <span class="text-muted-foreground text-sm pl-5 relative before:content-['\2713'] before:absolute before:left-0 before:text-foreground before:font-bold">Advanced analytics and reporting</span>
+          <span class="text-muted-foreground text-sm pl-5 relative before:content-['\2713'] before:absolute before:left-0 before:text-foreground before:font-bold">Unlimited user accounts</span>
+          <span class="text-muted-foreground text-sm pl-5 relative before:content-['\2713'] before:absolute before:left-0 before:text-foreground before:font-bold">Dedicated account manager</span>
+        </div>
+        <button onclick="window.location.href='/contact'" class="w-full inline-flex items-center justify-center gap-2 h-10 px-4 rounded-lg text-sm font-medium border border-white/20 bg-transparent text-foreground hover:border-white/50 transition-all cursor-pointer">Get in Touch</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="py-20 bg-secondary">
+  <div class="max-w-[704px] mx-auto px-4 md:px-8">
+    <div class="reveal text-center mb-12"><h2 class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight lg:leading-[1.15] tracking-tight">Frequently Asked Questions</h2></div>
+    <div class="reveal">
+      <div class="border-b border-white/10 py-5">
+        <div class="faq-q flex justify-between items-center cursor-pointer gap-4 text-base font-medium" onclick="toggleFaq(this)">What is Logoipsum and what services do you offer?<span class="text-lg flex-shrink-0 transition-transform duration-200">+</span></div>
+        <div class="faq-a text-muted-foreground text-sm leading-6">Blockchain technology is a decentralized digital ledger that records transactions across multiple computers in a way that is secure, transparent, and immutable. Each block in the blockchain contains a cryptographic hash of the previous block.</div>
+      </div>
+      <div class="border-b border-white/10 py-5">
+        <div class="faq-q flex justify-between items-center cursor-pointer gap-4 text-base font-medium" onclick="toggleFaq(this)">How does Logoipsum protect my business from cyber threats?<span class="text-lg flex-shrink-0 transition-transform duration-200">+</span></div>
+        <div class="faq-a text-muted-foreground text-sm leading-6">We provide comprehensive security solutions including real-time monitoring, threat detection, and automated response systems to keep your business safe from evolving cyber threats.</div>
+      </div>
+      <div class="border-b border-white/10 py-5">
+        <div class="faq-q flex justify-between items-center cursor-pointer gap-4 text-base font-medium" onclick="toggleFaq(this)">Do I need cybersecurity services if I have antivirus software?<span class="text-lg flex-shrink-0 transition-transform duration-200">+</span></div>
+        <div class="faq-a text-muted-foreground text-sm leading-6">While antivirus software is important, it only covers one aspect of cybersecurity. Our services provide multi-layered protection including network security, data encryption, and employee training.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="py-20 bg-background">
+  <div class="max-w-[1224px] mx-auto px-4 md:px-8 text-center">
+    <div class="reveal"><h2 class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight lg:leading-[1.15] tracking-tight max-w-[700px] mx-auto mb-3">Everything you need to unlock excellence</h2></div>
+    <div class="reveal"><p class="text-muted-foreground text-base leading-7 max-w-[604px] mx-auto">Lorem ipsum dolor sit amet consectetur lobortis sed ut urna orci libero eu laoreet</p></div>
+    <div class="reveal" style="margin-top:2rem">
+      <button onclick="window.location.href='/contact'" class="inline-flex items-center gap-2 h-14 px-8 rounded-xl text-base font-medium bg-primary text-primary-foreground hover:opacity-90 transition-all cursor-pointer border-none">Get Started for Free</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="bg-background border-t border-white/10 py-20">
+  <div class="max-w-[1224px] mx-auto px-4 md:px-8">
+    <div class="flex flex-wrap gap-16">
+      <div class="flex-1 min-w-[240px]">
+        <a href="/" class="flex items-center gap-2 text-foreground font-semibold text-xl no-underline mb-4">
+          <svg width="28" height="28" viewBox="0 0 28 28"><rect width="28" height="28" rx="6" fill="#fff"/><text x="14" y="19" text-anchor="middle" font-size="14" font-weight="bold" fill="#0B0B0B">L</text></svg>
+        </a>
+        <p class="text-slate-50/50 text-base font-medium leading-6 mb-4">Follow our journey on social media</p>
+        <div class="flex items-center gap-4">
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="text-foreground hover:opacity-80 transition-opacity"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="text-foreground hover:opacity-80 transition-opacity"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="text-foreground hover:opacity-80 transition-opacity"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></a>
+        </div>
+      </div>
+      <div class="flex gap-16">
+        <div class="flex flex-col gap-3">
+          <span class="text-sm font-semibold text-muted-foreground mb-1">Pages</span>
+          <a href="/" class="text-muted-foreground text-sm no-underline hover:text-foreground transition-colors">Home</a>
+          <a href="/about" class="text-muted-foreground text-sm no-underline hover:text-foreground transition-colors">About</a>
+          <a href="/features" class="text-muted-foreground text-sm no-underline hover:text-foreground transition-colors">Features</a>
+          <a href="/blog" class="text-muted-foreground text-sm no-underline hover:text-foreground transition-colors">Blog</a>
+          <a href="/contact" class="text-muted-foreground text-sm no-underline hover:text-foreground transition-colors">Contact</a>
+        </div>
+        <div class="flex flex-col gap-3">
+          <span class="text-sm font-semibold text-muted-foreground mb-1">Legal</span>
+          <a href="/terms" class="text-muted-foreground text-sm no-underline hover:text-foreground transition-colors">Terms &amp; Conditions</a>
+          <a href="/privacy" class="text-muted-foreground text-sm no-underline hover:text-foreground transition-colors">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="max-w-[1224px] mx-auto px-4 md:px-8 mt-16 pt-8 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+    <p class="text-muted-foreground text-xs">&copy; 2024 Logoipsum. Designed by <a href="#" class="text-muted-foreground hover:text-foreground transition-opacity no-underline">Designrocket</a> - Powered by Lovable</p>
+    <div class="flex items-center gap-4">
+      <a href="https://lovable.dev" target="_blank" rel="noopener noreferrer" class="text-muted-foreground text-xs no-underline hover:text-foreground transition-colors">More Lovable Templates</a>
+      <a href="#" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/10 text-muted-foreground text-xs no-underline hover:text-foreground transition-colors">Edit with Lovable</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Mobile menu
+  var toggle = document.getElementById('mobileToggle');
+  var nav = document.getElementById('nav');
+  if (toggle && nav) {
+    toggle.addEventListener('click', function() { nav.classList.toggle('open'); });
+    nav.querySelectorAll('.nav-link').forEach(function(l) { l.addEventListener('click', function() { nav.classList.remove('open'); }); });
+  }
+
+  // Scroll reveal with IntersectionObserver
+  var revealEls = document.querySelectorAll('.reveal, .stagger > *');
+  if (revealEls.length) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function(el) { observer.observe(el); });
+  }
+
+  // Stagger grid children with delays
+  var staggerGrids = document.querySelectorAll('.stagger');
+  staggerGrids.forEach(function(grid) {
+    var items = Array.from(grid.children);
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          items.forEach(function(item, i) {
+            setTimeout(function() { item.classList.add('visible'); }, i * 80);
+          });
+          obs.unobserve(grid);
+        }
+      });
+    }, { threshold: 0.1 });
+    obs.observe(grid);
+  });
+
+  // Tabs
+  var tabBtns = document.querySelectorAll('.tab-btn');
+  tabBtns.forEach(function(b) {
+    b.addEventListener('click', function() {
+      tabBtns.forEach(function(x) { x.classList.remove('active'); x.classList.remove('bg-white/5'); x.classList.remove('text-foreground'); x.classList.remove('border-white/20'); x.classList.add('bg-transparent'); x.classList.add('text-muted-foreground'); x.classList.add('border-white/10'); });
+      b.classList.add('active'); b.classList.add('bg-white/5'); b.classList.add('text-foreground'); b.classList.add('border-white/20'); b.classList.remove('bg-transparent'); b.classList.remove('text-muted-foreground'); b.classList.remove('border-white/10');
+      document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+      var tab = document.getElementById('tab-' + b.getAttribute('data-tab'));
+      if (tab) tab.classList.add('active');
+    });
+  });
+});
+
+// FAQ toggle
+function toggleFaq(el) {
+  el.classList.toggle('open');
+  var span = el.querySelector('span');
+  if (span) span.style.transform = el.classList.contains('open') ? 'rotate(45deg)' : 'rotate(0deg)';
+  var answer = el.nextElementSibling;
+  if (answer) answer.classList.toggle('open');
+}
+</script>
+</body>
+</html>

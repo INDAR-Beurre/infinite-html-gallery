@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hydra Riot Umbrellas</title>
+<style>
+  :root {
+    --black: #050505;
+    --white: #fffdf4;
+    --acid: #d7ff00;
+    --magenta: #ff1cb8;
+    --cyan: #00e5ff;
+    --orange: #ff5a00;
+    --purple: #7b2cff;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background:
+      linear-gradient(90deg, transparent 0 18px, rgba(0,0,0,.18) 18px 20px),
+      linear-gradient(0deg, transparent 0 18px, rgba(0,0,0,.18) 18px 20px),
+      var(--acid);
+    background-size: 20px 20px;
+    color: var(--black);
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  button,
+  .button {
+    border: 4px solid var(--black);
+    background: var(--magenta);
+    color: var(--black);
+    font-weight: 950;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    text-decoration: none;
+    box-shadow: 8px 8px 0 var(--black);
+    cursor: pointer;
+    transition: transform .12s linear, box-shadow .12s linear;
+  }
+
+  button:hover,
+  .button:hover {
+    transform: translate(4px, 4px);
+    box-shadow: 4px 4px 0 var(--black);
+  }
+
+  button:active,
+  .button:active {
+    transform: translate(8px, 8px);
+    box-shadow: 0 0 0 var(--black);
+  }
+
+  .page {
+    min-height: 100vh;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .marquee {
+    width: 100%;
+    overflow: hidden;
+    border-top: 4px solid var(--black);
+    border-bottom: 4px solid var(--black);
+    background: var(--black);
+    color: var(--acid);
+    font-weight: 950;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .marquee span {
+    display: inline-block;
+    padding: 12px 0;
+    font-size: clamp(18px, 2vw, 30px);
+    animation: belt 18s linear infinite;
+  }
+
+  @keyframes belt {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 14px clamp(14px, 4vw, 42px);
+    background: var(--white);
+    border-bottom: 4px solid var(--black);
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 950;
+    font-size: clamp(18px, 2vw, 28px);
+    text-transform: uppercase;
+    letter-spacing: -.03em;
+  }
+
+  .logo-mark {
+    width: 38px;
+    height: 38px;
+    border: 4px solid var(--black);
+    background:
+      linear-gradient(45deg, transparent 0 39%, var(--black) 39% 46%, transparent 46%),
+      radial-gradient(circle at 50% 20%, var(--cyan) 0 30%, transparent 31%),
+      var(--orange);
+    box-shadow: 5px 5px 0 var(--black);
+    transform: rotate(-6deg);
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  nav a {
+    padding: 8px 10px;
+    border: 3px solid transparent;
+    text-decoration: none;
+  }
+
+  nav a:hover {
+    border-color: var(--black);
+    background: var(--cyan);
+  }
+
+  .nav-cta {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(280px, .95fr);
+    gap: clamp(20px, 4vw, 52px);
+    align-items: center;
+    min-height: calc(100vh - 122px);
+    padding: clamp(28px, 6vw, 70px) clamp(14px, 4vw, 54px);
+    background:
+      radial-gradient(circle at 18% 22%, var(--cyan) 0 9%, transparent 9.2%),
+      radial-gradient(circle at 92% 72%, var(--magenta) 0 11%, transparent 11.2%),
+      linear-gradient(135deg, var(--acid) 0 55%, var(--orange) 55% 100%);
+  }
+
+  .hero::before {
+    content: "NO FLIMSY TINY WEATHER APOLOGIES";
+    position: absolute;
+    top: 74px;
+    right: -34px;
+    z-index: 1;
+    width: 330px;
+    padding: 10px;
+    border: 4px solid var(--black);
+    background: var(--magenta);
+    color: var(--black);
+    font-size: 18px;
+    font-weight: 950;
+    text-align: center;
+    transform: rotate(9deg);
+    box-shadow: 8px 8px 0 var(--black);
+  }
+
+  .hero-copy {
+    position: relative;
+    z-index: 2;
+  }
+
+  .tag {
+    display: inline-block;
+    margin-bottom: 18px;
+    padding: 9px 12px;
+    border: 4px solid var(--black);
+    background: var(--cyan);
+    font-weight: 950;
+    text-transform: uppercase;
+    box-shadow: 7px 7px 0 var(--black);
+    transform: rotate(-2deg);
+  }
+
+  h1 {
+    margin: 0;
+    max-width: 930px;
+    font-size: clamp(54px, 10vw, 142px);
+    line-height: .82;
+    letter-spacing: -.08em;
+    font-weight: 950;
+    text-transform: uppercase;
+    text-shadow:
+      5px 5px 0 var(--white),
+      10px 10px 0 var(--black);
+  }
+
+  .hero p {
+    max-width: 670px;
+    margin: 34px 0 28px;
+    padding: 16px;
+    border: 4px solid var(--black);
+    background: var(--white);
+    font-size: clamp(18px, 2vw, 25px);
+    line-height: 1.14;
+    font-weight: 850;
+    box-shadow: 8px 8px 0 var(--black);
+    transform: rotate(.7deg);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .hero-actions .button {
+    padding: 16px 22px;
+    font-size: clamp(18px, 2vw, 24px);
+  }
+
+  .button.secondary {
+    background: var(--white);
+  }
+
+  .product-card {
+    position: relative;
+    z-index: 2;
+    min-height: 520px;
+    border: 5px solid var(--black);
+    background: var(--white);
+    box-shadow: 14px 14px 0 var(--black);
+    transform: rotate(2deg);
+    overflow: hidden;
+  }
+
+  .product-card::before {
+    content: "INDESTRUCTIBLE-ish";
+    position: absolute;
+    top: 24px;
+    left: -32px;
+    z-index: 3;
+    padding: 9px 48px;
+    border: 4px solid var(--black);
+    background: var(--acid);
+    font-weight: 950;
+    transform: rotate(-15deg);
+    box-shadow: 6px 6px 0 var(--black);
+  }
+
+  .umbrella-art {
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(135deg, transparent 0 18px, rgba(0,0,0,.14) 18px 22px),
+      var(--cyan);
+  }
+
+  .umbrella-dome {
+    position: absolute;
+    left: 50%;
+    top: 78px;
+    width: min(82%, 430px);
+    aspect-ratio: 1.55;
+    transform: translateX(-50%);
+    border: 5px solid var(--black);
+    border-bottom-width: 10px;
+    border-radius: 260px 260px 24px 24px;
+    background:
+      linear-gradient(90deg, var(--magenta) 0 20%, var(--acid) 20% 40%, var(--orange) 40% 60%, var(--purple) 60% 80%, var(--white) 80% 100%);
+    box-shadow: 10px 10px 0 var(--black);
+    overflow: hidden;
+  }
+
+  .umbrella-dome::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(90deg, transparent 0 18%, var(--black) 18% 19%, transparent 19% 20%),
+      radial-gradient(circle at 50% 0, rgba(255,255,255,.38), transparent 45%);
+  }
+
+  .umbrella-stick {
+    position: absolute;
+    left: calc(50% - 8px);
+    top: 245px;
+    width: 16px;
+    height: 205px;
+    border: 4px solid var(--black);
+    background: var(--white);
+    box-shadow: 8px 0 0 var(--black);
+  }
+
+  .umbrella-handle {
+    position: absolute;
+    left: calc(50% - 8px);
+    bottom: 42px;
+    width: 96px;
+    height: 76px;
+    border: 14px solid var(--black);
+    border-top: 0;
+    border-radius: 0 0 60px 60px;
+    background: transparent;
+  }
+
+  .sticker {
+    position: absolute;
+    right: 18px;
+    bottom: 22px;
+    width: 190px;
+    padding: 14px;
+    border: 4px solid var(--black);
+    background: var(--orange);
+    font-weight: 950;
+    text-transform: uppercase;
+    box-shadow: 8px 8px 0 var(--black);
+    transform: rotate(-4deg);
+  }
+
+  section {
+    padding: clamp(36px, 7vw, 90px) clamp(14px, 4vw, 54px);
+  }
+
+  .features {
+    background: var(--black);
+    color: var(--white);
+    border-top: 5px solid var(--black);
+    border-bottom: 5px solid var(--black);
+  }
+
+  .section-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    align-items: start;
+    margin-bottom: 34px;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(44px, 7vw, 104px);
+    line-height: .85;
+    letter-spacing: -.07em;
+    font-weight: 950;
+    text-transform: uppercase;
+  }
+
+  .stamp {
+    max-width: 260px;
+    padding: 14px;
+    border: 4px solid var(--black);
+    background: var(--acid);
+    color: var(--black);
+    font-weight: 950;
+    text-transform: uppercase;
+    box-shadow: 8px 8px 0 var(--magenta);
+    transform: rotate(5deg);
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+  }
+
+  .feature {
+    min-height: 270px;
+    padding: 18px;
+    border: 4px solid var(--black);
+    background: var(--white);
+    color: var(--black);
+    box-shadow: 9px 9px 0 var(--acid);
+  }
+
+  .feature:nth-child(2) {
+    background: var(--cyan);
+    transform: translateY(24px) rotate(1.5deg);
+    box-shadow: 9px 9px 0 var(--orange);
+  }
+
+  .feature:nth-child(3) {
+    background: var(--magenta);
+    transform: translateY(-10px) rotate(-1.5deg);
+    box-shadow: 9px 9px 0 var(--cyan);
+  }
+
+  .feature:nth-child(4) {
+    background: var(--orange);
+    transform: translateY(16px) rotate(2deg);
+    box-shadow: 9px 9px 0 var(--white);
+  }
+
+  .feature-number {
+    display: inline-block;
+    margin-bottom: 18px;
+    padding: 5px 8px;
+    border: 3px solid var(--black);
+    background: var(--black);
+    color: var(--acid);
+    font-size: 20px;
+    font-weight: 950;
+  }
+
+  .feature h3 {
+    margin: 0 0 12px;
+    font-size: 30px;
+    line-height: .9;
+    letter-spacing: -.04em;
+    text-transform: uppercase;
+    font-weight: 950;
+  }
+
+  .feature p {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.22;
+    font-weight: 800;
+  }
+
+  .about {
+    background:
+      linear-gradient(90deg, var(--white) 0 49%, var(--black) 49% 51%, var(--magenta) 51% 100%);
+  }
+
+  .about-wrap {
+    display: grid;
+    grid-template-columns: 1fr .78fr;
+    gap: 28px;
+    align-items: center;
+  }
+
+  .manifesto {
+    padding: clamp(18px, 3vw, 34px);
+    border: 5px solid var(--black);
+    background: var(--acid);
+    box-shadow: 12px 12px 0 var(--black);
+    transform: rotate(-1deg);
+  }
+
+  .manifesto p {
+    margin: 20px 0 0;
+    font-size: clamp(19px, 2vw, 27px);
+    line-height: 1.13;
+    font-weight: 850;
+  }
+
+  .forum-post {
+    padding: 18px;
+    border: 4px solid var(--black);
+    background: var(--white);
+    box-shadow: 10px 10px 0 var(--cyan);
+    transform: rotate(3deg);
+  }
+
+  .forum-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 4px solid var(--black);
+    font-family: "Courier New", Courier, monospace;
+    font-weight: 900;
+  }
+
+  .forum-post blockquote {
+    margin: 0;
+    font-size: clamp(20px, 2.5vw, 34px);
+    line-height: 1.02;
+    font-weight: 950;
+    letter-spacing: -.04em;
+    text-transform: uppercase;
+  }
+
+  .pricing {
+    background: var(--cyan);
+  }
+
+  .price-card {
+    max-width: 980px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: .9fr 1.1fr;
+    border: 5px solid var(--black);
+    background: var(--white);
+    box-shadow: 14px 14px 0 var(--black);
+  }
+
+  .price {
+    display: grid;
+    place-items: center;
+    padding: 28px;
+    border-right: 5px solid var(--black);
+    background:
+      repeating-linear-gradient(-45deg, var(--orange) 0 18px, var(--acid) 18px 36px);
+  }
+
+  .price strong {
+    display: block;
+    font-size: clamp(64px, 9vw, 128px);
+    line-height: .8;
+    letter-spacing: -.08em;
+    font-weight: 950;
+    text-shadow: 5px 5px 0 var(--white);
+  }
+
+  .price span {
+    display: block;
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: 950;
+    text-transform: uppercase;
+  }
+
+  .price-copy {
+    padding: clamp(22px, 4vw, 42px);
+  }
+
+  .price-copy h2 {
+    font-size: clamp(42px, 6vw, 86px);
+  }
+
+  .price-copy p {
+    margin: 18px 0 24px;
+    font-size: clamp(18px, 2vw, 25px);
+    line-height: 1.12;
+    font-weight: 850;
+  }
+
+  .email-box {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+  }
+
+  input {
+    min-width: 0;
+    padding: 16px;
+    border: 4px solid var(--black);
+    border-radius: 0;
+    background: var(--acid);
+    color: var(--black);
+    font: 900 18px Arial, Helvetica, sans-serif;
+    box-shadow: 8px 8px 0 var(--black);
+    outline: none;
+  }
+
+  input:focus {
+    background: var(--white);
+  }
+
+  .email-box button {
+    padding: 14px 18px;
+    font-size: 18px;
+    background: var(--magenta);
+  }
+
+  .result {
+    min-height: 28px;
+    margin-top: 16px;
+    font-weight: 950;
+    text-transform: uppercase;
+  }
+
+  footer {
+    padding: 20px clamp(14px, 4vw, 54px);
+    border-top: 5px solid var(--black);
+    background: var(--black);
+    color: var(--acid);
+    font-weight: 950;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 980px) {
+    .hero,
+    .about-wrap,
+    .price-card {
+      grid-template-columns: 1fr;
+    }
+
+    .product-card {
+      min-height: 460px;
+      transform: rotate(-1deg);
+    }
+
+    .feature-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .price {
+      border-right: 0;
+      border-bottom: 5px solid var(--black);
+    }
+
+    .section-head {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 680px) {
+    header {
+      position: relative;
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    nav {
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .nav-cta {
+      width: 100%;
+      text-align: center;
+    }
+
+    .hero {
+      min-height: 0;
+    }
+
+    .hero::before {
+      position: relative;
+      top: auto;
+      right: auto;
+      display: block;
+      width: auto;
+      margin-bottom: 20px;
+      grid-column: 1;
+    }
+
+    h1 {
+      text-shadow:
+        3px 3px 0 var(--white),
+        6px 6px 0 var(--black);
+    }
+
+    .hero-actions,
+    .email-box {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    .feature-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .feature,
+    .feature:nth-child(2),
+    .feature:nth-child(3),
+    .feature:nth-child(4) {
+      transform: none;
+    }
+
+    .umbrella-dome {
+      top: 88px;
+    }
+
+    .umbrella-stick {
+      top: 230px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="marquee" aria-hidden="true">
+    <span>HYDRA RIOT UMBRELLAS // RAIN IS A COWARD // WIND GETS ONE WARNING // HYDRA RIOT UMBRELLAS // RAIN IS A COWARD // WIND GETS ONE WARNING // </span>
+  </div>
+
+  <header>
+    <a class="logo" href="#top" aria-label="Hydra Riot home">
+      <span class="logo-mark"></span>
+      <span>Hydra Riot</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#features">Weapons</a>
+      <a href="#about">Manifesto</a>
+      <a class="button nav-cta" href="#buy">Buy the storm stick</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <span class="tag">Streetwear umbrellas for hostile weather</span>
+        <h1 id="hero-title">Open Carry Rain Defiance.</h1>
+        <p>
+          Hydra Riot sells one thing: an overbuilt, skull-thick umbrella that refuses to fold like a cheap lobby gift.
+          It blocks rain, bad vibes, and the spiritual collapse of tiny travel umbrellas.
+        </p>
+        <div class="hero-actions">
+          <a class="button" href="#buy">Claim the canopy</a>
+          <a class="button secondary" href="#features">Inspect the damage</a>
+        </div>
+      </div>
+
+      <div class="product-card" aria-label="Illustration of the Hydra Riot umbrella">
+        <div class="umbrella-art">
+          <div class="umbrella-dome"></div>
+          <div class="umbrella-stick"></div>
+          <div class="umbrella-handle"></div>
+          <div class="sticker">Rated for side-eye, sleet, and sidewalk chaos.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="marquee" aria-hidden="true">
+      <span>CARBON RIBS // RUBBER FIST GRIP // NO DAINTY COLORS // 72-HOUR DROP // CARBON RIBS // RUBBER FIST GRIP // NO DAINTY COLORS // 72-HOUR DROP // </span>
+    </div>
+
+    <section class="features" id="features" aria-labelledby="features-title">
+      <div class="section-head">
+        <h2 id="features-title">Built Like a Public Argument.</h2>
+        <div class="stamp">Not compact. Not polite. Not sorry.</div>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature">
+          <span class="feature-number">01</span>
+          <h3>Ribs With Bad Intentions</h3>
+          <p>Carbon-fiber skeleton. Reinforced hinges. The canopy does not do interpretive dance in a mild gust.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-number">02</span>
+          <h3>Grip Like a Brick</h3>
+          <p>Chunky rubber handle with knuckle grooves, because drizzle should not make you hold a wet pencil.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-number">03</span>
+          <h3>Loud Enough to Be Seen</h3>
+          <p>Acid panels and black hardware. Cars notice you. Exes notice you. Weather apps file a complaint.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-number">04</span>
+          <h3>One-Button Violence</h3>
+          <p>Spring-loaded open mechanism with a satisfying snap. Dramatic entrances are infrastructure.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="about" id="about" aria-labelledby="about-title">
+      <div class="about-wrap">
+        <article class="manifesto">
+          <h2 id="about-title">The Forecast Is Disrespect.</h2>
+          <p>
+            Tiny umbrellas are apology machines. Hydra Riot is for people who walk into sideways rain like they have
+            somewhere to be and no interest in looking defeated on a crosswalk camera.
+          </p>
+          <p>
+            We drop one colorway at a time, refuse beige, and overbuild the hardware until the accountants get nervous.
+          </p>
+        </article>
+
+        <aside class="forum-post" aria-label="Social proof note">
+          <div class="forum-top">
+            <span>@bus_stop_menace</span>
+            <span>03:41 AM</span>
+          </div>
+          <blockquote>
+            "Mine survived a scooter crash, a hailstorm, and my roommate borrowing it. The roommate did not."
+          </blockquote>
+        </aside>
+      </div>
+    </section>
+
+    <section class="pricing" id="buy" aria-labelledby="buy-title">
+      <div class="price-card">
+        <div class="price">
+          <div>
+            <strong>$89</strong>
+            <span>Launch drop / 500 units / no restock promise</span>
+          </div>
+        </div>
+        <div class="price-copy">
+          <h2 id="buy-title">Get Wet or Get Armed.</h2>
+          <p>
+            Join the drop list. We'll send one ugly-loud email when the umbrellas hit the warehouse.
+            No wellness newsletter. No founder journey. Just the link.
+          </p>
+          <form class="email-box" id="dropForm">
+            <label for="email" class="visually-hidden">Email address</label>
+            <input id="email" type="email" placeholder="your@email.com" required />
+            <button type="submit">Join Drop</button>
+          </form>
+          <div class="result" id="result" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Hydra Riot Umbrellas</span>
+    <span>Weather loses. You walk.</span>
+  </footer>
+</div>
+
+<script>
+  const form = document.getElementById("dropForm");
+  const result = document.getElementById("result");
+  const email = document.getElementById("email");
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!email.checkValidity()) {
+      result.textContent = "Type a real email. The storm is judging.";
+      return;
+    }
+
+    result.textContent = "Locked. Watch your inbox before the clouds unionize.";
+    form.reset();
+  });
+</script>
+</body>
+</html>

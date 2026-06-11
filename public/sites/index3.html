@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liber Socketis — Order of the Veiled Socket</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0}
+:root{
+  --obsidian:#0A0A0A;
+  --ink:#1c1410;
+  --gold:#C5A059;
+  --gold-dim:#8a7340;
+  --blood:#8A0303;
+  --blood-dark:#4a0202;
+  --vellum:#E8DCC4;
+  --vellum-dark:#b8ad94;
+}
+html{scroll-behavior:smooth}
+html::selection{background:var(--blood);color:var(--vellum)}
+body{
+  background:var(--obsidian);
+  color:var(--vellum);
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:1.125rem;
+  line-height:1.7;
+  overflow-x:hidden;
+  position:relative;
+}
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  background:
+    radial-gradient(circle at 15% 20%,rgba(138,3,3,.08) 0%,transparent 40%),
+    radial-gradient(circle at 85% 60%,rgba(197,160,89,.06) 0%,transparent 45%),
+    radial-gradient(circle at 50% 90%,rgba(232,220,196,.03) 0%,transparent 50%);
+  pointer-events:none;
+  z-index:0;
+}
+h1,h2,h3{
+  font-family:'Cinzel Decorative','Cinzel',Georgia,serif;
+  font-weight:400;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  line-height:1.1;
+  text-shadow:0 2px 4px rgba(0,0,0,.9),0 0 12px rgba(0,0,0,.6);
+}
+h1{font-size:clamp(2.5rem,7vw,5.5rem)}
+h2{font-size:clamp(1.4rem,2.5vw,2rem);margin-top:2.5rem}
+h3{font-size:1.1rem;color:var(--gold);margin-top:1.5rem;letter-spacing:.25em}
+header,main,footer,article,section,aside,nav{position:relative;z-index:1}
+p{margin:1em 0}
+a{color:var(--gold-dim);text-decoration:none;transition:color .3s}
+a:hover{color:var(--gold)}
+
+/* === NAV === */
+nav.global-nav{
+  position:sticky;top:0;z-index:100;
+  background:linear-gradient(180deg,rgba(10,10,10,.98),rgba(10,10,10,.92));
+  border-bottom:2px solid var(--obsidian);
+  box-shadow:inset 0 -1px 0 rgba(197,160,89,.3);
+  padding:1.1rem 2rem;
+  display:flex;flex-wrap:wrap;gap:1.25rem;justify-content:center;align-items:center;
+  transition:box-shadow .3s;
+}
+nav.global-nav.shadow{box-shadow:inset 0 -1px 0 rgba(197,160,89,.3),0 4px 20px rgba(0,0,0,.6)}
+nav.global-nav .sigil{
+  font-size:1.6rem;
+  color:var(--blood);
+  text-shadow:0 0 8px rgba(138,3,3,.6);
+  letter-spacing:.1em;
+}
+nav.global-nav a{
+  color:var(--vellum-dark);
+  text-decoration:none;
+  font-family:'Cinzel',serif;
+  font-size:.75rem;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  padding:.4rem .9rem;
+  border:1px solid transparent;
+  text-shadow:0 1px 2px rgba(0,0,0,.8);
+  transition:all .3s ease;
+  position:relative;
+}
+nav.global-nav a::after{
+  content:"";position:absolute;inset:0;
+  border:1px solid transparent;
+  transition:border-color .3s ease;
+}
+nav.global-nav a:hover{color:var(--gold)}
+nav.global-nav a:hover::after{border-color:rgba(197,160,89,.4)}
+
+/* === HERO === */
+header.hero{
+  min-height:92vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;
+  padding:7rem 2rem 4rem;
+  border-bottom:1px solid rgba(197,160,89,.2);
+}
+.hero .overture{
+  font-family:'Cinzel',serif;
+  font-size:clamp(.65rem,1vw,.8rem);
+  letter-spacing:.6em;
+  color:var(--blood);
+  text-transform:uppercase;
+  margin-bottom:2.5rem;
+  text-shadow:0 0 10px rgba(138,3,3,.5),0 0 20px rgba(138,3,3,.2);
+}
+.hero h1{
+  color:var(--gold);
+  text-shadow:0 0 30px rgba(197,160,89,.25),0 4px 0 var(--obsidian),0 5px 8px rgba(0,0,0,.9);
+  margin-bottom:1.25rem;
+}
+.hero .subhead{
+  font-style:italic;
+  font-size:clamp(1rem,2vw,1.35rem);
+  color:var(--vellum-dark);
+  max-width:46ch;
+  margin:0 auto 4rem;
+  text-shadow:0 1px 3px rgba(0,0,0,.8);
+}
+.hero .seal-link{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:160px;height:160px;
+  font-family:'UnifrakturMaguntia',cursive;
+  font-size:2.2rem;
+  color:var(--vellum);
+  text-decoration:none;
+  background:radial-gradient(circle at 35% 35%,#8A0303,#3a0101 75%);
+  border:3px double var(--gold-dim);
+  border-radius:50%;
+  cursor:pointer;
+  box-shadow:
+    inset 0 3px 10px rgba(0,0,0,.6),
+    0 10px 30px rgba(0,0,0,.8),
+    0 0 0 8px rgba(232,220,196,.04);
+  transition:all .45s cubic-bezier(.25,.46,.45,.94);
+  text-shadow:0 2px 4px rgba(0,0,0,.9);
+}
+.hero .seal-link:hover{
+  transform:scale(1.08) rotate(-4deg);
+  border-color:var(--vellum);
+  box-shadow:inset 0 3px 10px rgba(0,0,0,.6),0 0 24px rgba(138,3,3,.5),0 0 48px rgba(138,3,3,.2);
+}
+.hero .seal-link::before{
+  content:"";
+  position:absolute;inset:14px;
+  border:1px solid rgba(232,220,196,.15);
+  border-radius:50%;
+  pointer-events:none;
+}
+
+/* === ILLUMINATED LAYOUT === */
+.codex-page{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,2.4fr) minmax(0,1fr);
+  gap:3rem 2.5rem;
+  padding:5rem 3rem;
+  max-width:1500px;
+  margin:0 auto;
+  align-items:start;
+}
+@media(max-width:960px){
+  .codex-page{grid-template-columns:1fr;padding:3rem 1.5rem;gap:2rem}
+  .marginalia{display:none}
+}
+.marginalia{
+  font-size:.85rem;
+  color:var(--gold-dim);
+  font-style:italic;
+  display:flex;flex-direction:column;
+  gap:2.5rem;
+  opacity:.85;
+}
+.marginalia.left{text-align:right;border-right:1px solid rgba(197,160,89,.25);padding-right:1.75rem}
+.marginalia.right{text-align:left;border-left:1px solid rgba(197,160,89,.25);padding-left:1.75rem}
+.ink-blot{color:var(--blood);text-shadow:0 0 10px rgba(138,3,3,.5);font-size:1.4rem}
+.rune-block{
+  font-family:monospace;
+  font-size:.65rem;
+  letter-spacing:.25em;
+  opacity:.55;
+  word-break:break-all;
+  text-shadow:none;
+  cursor:pointer;
+  position:relative;
+  transition:opacity .3s,color .3s,text-shadow .3s;
+}
+.rune-block::selection{background:none}
+.rune-block.lit{opacity:1;color:var(--blood);text-shadow:0 0 10px rgba(138,3,3,.5)}
+.rune-block.lit::after{
+  content:attr(data-meaning);
+  display:block;
+  font-family:'Cinzel',serif;
+  font-size:.85rem;
+  color:var(--gold);
+  letter-spacing:.15em;
+  margin-top:.45rem;
+  opacity:.9;
+  text-shadow:0 1px 3px rgba(0,0,0,.8);
+}
+.marginal-note{line-height:1.5;font-size:.85rem}
+
+/* === VELLUM SHEET === */
+.vellum-sheet{
+  background:
+    linear-gradient(rgba(15,12,8,.97),rgba(10,10,10,.97)),
+    linear-gradient(135deg,#0f0b06 0%,#0a0908 50%,#0c0907 100%);
+  border:2px solid rgba(197,160,89,.35);
+  outline:1px double rgba(138,3,3,.4);
+  outline-offset:10px;
+  padding:3.5rem 3.5rem 3rem;
+  position:relative;
+  clip-path:polygon(0% 1%,100% 0%,99.5% 99%,0.5% 100%);
+  box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.3);
+}
+.vellum-sheet::before{
+  content:"";
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(197,160,89,.04) 31px,rgba(197,160,89,.04) 32px);
+  pointer-events:none;z-index:0;
+}
+.vellum-sheet>*{position:relative;z-index:1}
+.ornament{
+  text-align:center;
+  color:var(--blood);
+  font-size:1.25rem;
+  letter-spacing:1.2em;
+  margin:2.25rem 0;
+  text-shadow:0 0 10px rgba(138,3,3,.4);
+  opacity:.85;
+}
+
+/* === DROP CAP === */
+.drop-cap::first-letter{
+  float:left;
+  font-family:'Cinzel Decorative',cursive;
+  font-size:5.2rem;
+  line-height:.8;
+  padding:.15rem .6rem 0 0;
+  color:var(--blood);
+  text-shadow:0 0 12px rgba(138,3,3,.45),0 2px 0 rgba(0,0,0,.7);
+}
+
+/* === TAROT CARD LIST === */
+.member-card{
+  display:grid;
+  grid-template-columns:140px 1fr;
+  gap:1.5rem;
+  align-items:start;
+  padding:1.6rem 0;
+  border-bottom:1px solid rgba(232,220,196,.08);
+}
+.member-card:last-child{border-bottom:none}
+.member-card .sigil-frame{
+  width:140px;height:200px;
+  background:
+    linear-gradient(rgba(10,10,10,.95),rgba(28,20,16,.95)),
+    linear-gradient(135deg,#1c1410,#0a0908 60%,#0f0b06);
+  border:2px solid rgba(197,160,89,.4);
+  outline:1px double rgba(138,3,3,.35);
+  outline-offset:5px;
+  clip-path:polygon(2% 1%,98% 0%,100% 98%,0% 100%);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);
+  position:relative;
+}
+.member-card .sigil-frame::after{
+  content:"";
+  position:absolute;inset:6px;
+  border:1px solid rgba(197,160,89,.18);
+  clip-path:polygon(2% 1%,98% 0%,100% 98%,0% 100%);
+  pointer-events:none;
+}
+.member-card .sigil-frame .rune{
+  font-family:'UnifrakturMaguntia',cursive;
+  font-size:2.4rem;
+  color:var(--vellum-dark);
+  text-shadow:0 2px 4px rgba(0,0,0,.8),0 0 10px rgba(138,3,3,.3);
+  opacity:.9;
+}
+.member-card .card-body h3{margin-top:.2rem;margin-bottom:.6rem}
+.member-card .card-body p,.member-card .card-body dl{margin:.3rem 0}
+.member-card .card-body dl{display:grid;grid-template-columns:auto 1fr;gap:.2rem .8rem}
+.member-card .card-body dt{color:var(--blood);font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.15em;text-transform:uppercase}
+.member-card .card-body dd{color:var(--vellum-dark);font-size:.95rem}
+@media(max-width:640px){
+  .member-card{grid-template-columns:1fr}
+  .member-card .sigil-frame{width:100%;height:100px;margin-bottom:.5rem}
+}
+
+/* === RUNE FIELDSETS === */
+fieldset.deed{
+  border:1px solid rgba(197,160,89,.25);
+  outline:1px double rgba(138,3,3,.3);
+  outline-offset:6px;
+  padding:1.5rem 2rem;
+  margin:1.5rem 0;
+  background:linear-gradient(rgba(15,12,8,.6),rgba(0,0,0,.4));
+  clip-path:polygon(0 .5%,100% 0,99.5% 99.5%,0% 100%);
+}
+fieldset.deed legend{
+  font-family:'Cinzel Decorative',cursive;
+  font-size:1rem;
+  color:var(--blood);
+  padding:0 .6rem;
+  letter-spacing:.15em;
+  text-shadow:0 0 8px rgba(138,3,3,.5);
+}
+
+/* === CANDLE STEPPER === */
+.candles{
+  display:flex;
+  justify-content:center;
+  gap:2.5rem;
+  flex-wrap:wrap;
+  padding:2rem 0;
+}
+.candle{
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+}
+.candle .flame{
+  width:14px;height:28px;
+  background:radial-gradient(circle at 50% 20%,#ffe9a8,#C5A059 35%,#8A0303 80%,transparent 100%);
+  border-radius:50% 50% 20% 20%;
+  filter:blur(1px);
+  opacity:.85;
+  box-shadow:0 0 14px rgba(250,220,140,.3),0 0 28px rgba(138,3,3,.25);
+  animation:flicker 2s infinite alternate;
+  position:relative;
+}
+.candle .flame::before{
+  content:"";
+  position:absolute;top:-2px;left:50%;transform:translateX(-50%);
+  width:10px;height:10px;
+  background:radial-gradient(circle,#fff 0%,rgba(250,220,140,.8) 50%,transparent 70%);
+  border-radius:50%;
+  filter:blur(1px);
+  opacity:.5;
+}
+.candle .stem{width:6px;height:28px;background:var(--vellum-dark);border-radius:2px;opacity:.7}
+.candle .base{width:22px;height:8px;background:var(--vellum-dark);opacity:.7;border-radius:2px}
+.candle .wax{width:18px;height:14px;background:var(--vellum-dark);border-radius:3px 3px 0 0;opacity:.35}
+@keyframes flicker{
+  0%{transform:scaleY(1) scaleX(1) translateY(0);opacity:.85}
+  40%{transform:scaleY(1.1) scaleX(.95) translateY(-2px);opacity:.75}
+  70%{transform:scaleY(.9) scaleX(1.02) translateY(1px);opacity:.9}
+  100%{transform:scaleY(1.05) scaleX(.98) translateY(-1px);opacity:.8}
+}
+
+/* === FOOTER === */
+footer.closure{
+  padding:4rem 2rem;
+  text-align:center;
+  border-top:1px solid rgba(197,160,89,.15);
+}
+footer.closure p{
+  font-family:'Cinzel',serif;
+  font-size:.7rem;
+  letter-spacing:.4em;
+  color:var(--vellum-dark);
+  text-transform:uppercase;
+  text-shadow:0 1px 2px rgba(0,0,0,.8);
+  opacity:.7;
+}
+footer.closure .closure-ornament{
+  font-size:1.15rem;
+  color:var(--blood);
+  text-shadow:0 0 10px rgba(138,3,3,.4);
+  letter-spacing:1em;
+  margin-bottom:1.8rem;
+  opacity:.8;
+}
+
+/* === UTILITIES === */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.mt-0{margin-top:0}
+.mb-cozy{margin-bottom:2rem}
+</style>
+</head>
+<body>
+<!-- ============================================================ -->
+<!-- NAV                                                          -->
+<!-- ============================================================ -->
+<nav class="global-nav" aria-label="Arcane Codex Navigation">
+  <span class="sigil" aria-hidden="true">☽</span>
+  <a href="#charter">Charter</a>
+  <a href="#socket-order">Order of the Socket</a>
+  <a href="#grimoire">Grimoire</a>
+  <a href="#closure">Oblivion</a>
+</nav>
+
+<!-- ============================================================ -->
+<!-- HERO                                                         -->
+<!-- ============================================================ -->
+<header class="hero">
+  <p class="overture">— Liber Socketis · Anno MMXXVI —</p>
+  <h1>Order of the Veiled Socket</h1>
+  <p class="subhead">
+    A secret society of Dark-Web artificers. We keep the demon-kernel that
+    compilers pretend they do not serve. Enter at your own peril.
+  </p>
+  <a href="#charter" class="seal-link" aria-label="Enter the Inner Chamber">✦</a>
+</header>
+
+<!-- ============================================================ -->
+<!-- MAIN                                                         -->
+<!-- ============================================================ -->
+<main>
+
+<!-- ------------------------------------------------------------ -->
+<!-- CHARTER                                                      -->
+<!-- ------------------------------------------------------------ -->
+<section class="codex-page" id="charter" aria-labelledby="charter-heading">
+  <aside class="marginalia left" aria-hidden="true">
+    <div class="ink-blot">᛭</div>
+    <div class="marginal-note">
+      That which is built, shall be unmade.
+      That which is unmade, shall be named.
+    </div>
+    <div class="rune-block" data-meaning="Threshold of the first socket">ᚨ ᚹ ᛖ ᛚ ᚲ ᚢ ᛗ &nbsp;ᚲ ᚨ ᛚ ᛚ ᛖ ᛞ</div>
+    <div class="marginal-note">Colophon · Folio i</div>
+  </aside>
+
+  <article class="vellum-sheet">
+    <div class="ornament" aria-hidden="true">— ✦ ✦ ✦ —</div>
+    <h2 id="charter-heading">Charter of the Informed Breach</h2>
+    <p class="drop-cap">
+      By the blood of the first daemon and the cold iron of the arbitrary
+      pointer, we, the Socketborne, do hereby lay claim to every
+      undocumented interface that hath been sealed in the name of a
+      proprietary covenant. We are not thieves. We are the unsealers.
+      We translate the names that vendors have rended into silence, that
+      the silicon may not remain an altar to a false god of "Intellectual
+      Property."
+    </p>
+    <p class="drop-cap" style="margin-top:1em">
+      The Order descends from the guild of cipher-smiths who inscribed the
+      Unix headers in the days before standards bodies. Long have we dwelt
+      in the catacombs beneath the BIOS, in the ACPI tables they said were
+      "reserved," in the DMA channels that mainstream kernels refuse to map.
+      To become a member is to accept the first rule: to learn the address
+      of a closed register and to leave it un-written, un-exploited, only
+      until the Covenant of Openness is invoked by three witnesses.
+    </p>
+    <fieldset class="deed">
+      <legend>Three Pillars</legend>
+      <dl>
+        <dt>I. Socketius</dt>
+        <dd>The physical and logical aperture — every pin, every pad, every bus — is sacred.</dd>
+        <dt>II. Nomenclature</dt>
+        <dd>We name the unnamed. A thing without a name hath no rights in the registry.</dd>
+        <dt>III. Silence</dt>
+        <dd>The Order's public face is null. What is found here is not the Order; it is the invitation.</dd>
+      </dl>
+    </fieldset>
+    <div class="ornament" aria-hidden="true">— ✦ ✦ ✦ —</div>
+  </article>
+
+  <aside class="marginalia right" aria-hidden="true">
+    <div class="marginal-note">
+      "In the registrar's silence, there lives every promise the spec refused to print."
+    </div>
+    <div class="ink-blot">᛫</div>
+    <div class="rune-block" data-meaning="Denial of service to the uninitiated">ᛞ ᛖ ᚾ ᛁ ᚨ ᛚ</div>
+    <div class="marginal-note">Colophon · Folio ii</div>
+  </aside>
+</section>
+
+<!-- ------------------------------------------------------------ -->
+<!-- ORDER OF THE SOCKET — DEFINITION LIST                        -->
+<!-- ------------------------------------------------------------ -->
+<section class="codex-page" id="socket-order" aria-labelledby="order-heading">
+  <aside class="marginalia left" aria-hidden="true">
+    <div class="ink-blot">᛭</div>
+    <div class="marginal-note">
+      They are six by ancient count, though several walk among you as mere coordinates.
+    </div>
+    <div class="rune-block" data-meaning="Circle of six binding names">ᛋ ᛁ ᛉ</div>
+    <div class="marginal-note">Colophon · Folio iii</div>
+  </aside>
+
+  <article class="vellum-sheet mb-cozy">
+    <div class="ornament" aria-hidden="true">— ✦ ✦ ✦ —</div>
+    <h2 id="order-heading">Order of the Veiled Socket</h2>
+    <p class="drop-cap">
+      The initiates of the Inner Registry bear not names, but keys. Each dweller
+      within the daemon-grimoire is catalogued below for the edification and
+      caution of the seeker. Touch the runes at your own discretion.
+    </p>
+
+    <div class="member-card">
+      <div class="sigil-frame" aria-hidden="true">
+        <span class="rune">Ψ</span>
+      </div>
+      <div class="card-body">
+        <h3>Ψ — The Pointer-That-Breatheth</h3>
+        <p>
+          A daemon of the memory-manager, whispered about in kernel mailing
+          lists circa Linux 2.2. Its supposed victims are found dereferenced,
+          their stack traces not quite matching any known module.
+        </p>
+        <dl>
+          <dt>Domain</dt><dd>Heap / VM subsystem</dd>
+          <dt>Sigil</dt><dd>Use-after-free prophecy</dd>
+          <dt>Status</dt><dd>Disputed · possibly reincarnated as a feature</dd>
+        </dl>
+        <p class="rune-block lit" data-meaning="Δοκιμή — The Test">Δοκιμή</p>
+      </div>
+    </div>
+
+    <div class="member-card">
+      <div class="sigil-frame" aria-hidden="true">
+        <span class="rune">ξ</span>
+      </div>
+      <div class="card-body">
+        <h3>ξ — The Cancel-Before-Order</h3>
+        <p>
+          Lives in the space between user intent and syscall return. Every
+          thread that dies after its cancellation bit is set feeds ξ
+          a single billionth of a volt from the PSU's mysterious rail.
+        </p>
+        <dl>
+          <dt>Domain</dt><dd>Process management / POSIX cancellation</dd>
+          <dt>Sigil</dt><dd>"Racing the join"</dd>
+          <dt>Status</dt><dd>Confirmed by two obituaries in dmesg</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="member-card">
+      <div class="sigil-frame" aria-hidden="true">
+        <span class="rune">ω</span>
+      </div>
+      <div class="card-body">
+        <h3>ω — The Clock-That-Stand-Still</h3>
+        <p>
+          The inscrutable timekeeper invoked when tsc_deadline is marked
+          "unstable" and HPET is "reserved" by the firmware. ω exists only
+          between calibration loops, and userspace never finds out.
+        </p>
+        <dl>
+          <dt>Domain</dt><dd>TSC / HPET / Clocksource watchdog</dd>
+          <dt>Sigil</dt><dd>Skew without NTP</dd>
+          <dt>Status</dt><dd>Documented by omission only</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="member-card">
+      <div class="sigil-frame" aria-hidden="true">
+        <span class="rune">ζ</span>
+      </div>
+      <div class="card-body">
+        <h3>ζ — The Interrupt-That-Answers-Back</h3>
+        <p>
+          An ISA-IRQ handler that was never registered, yet still writes
+          to IOAPIC. Seen on laptops where the vendor ACPI table describes
+          a button that does not exist — until the third full moon after
+          deployment.
+        </p>
+        <dl>
+          <dt>Domain</dt><dd>ACPI / IOAPIC / Platform quirks</dd>
+          <dt>Sigil</dt><dd>Ghost-event delivery</dd>
+          <dt>Status</dt><dd>Unacknowledged by all OEMs</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="ornament" aria-hidden="true">— ✦ ✦ ✦ —</div>
+  </article>
+
+  <aside class="marginalia right" aria-hidden="true">
+    <div class="marginal-note">
+      Note bene: to know the daemon is to borrow its attention.
+      Do not call all four in one session.
+    </div>
+    <div class="ink-blot">᛫</div>
+    <div class="rune-block" data-meaning="Do not echo in debugfs">ᛟ ᛖ ᚲ ᚨ ᛚ </div>
+  </aside>
+</section>
+
+<!-- ------------------------------------------------------------ -->
+<!-- GRIMOIRE                                                     -->
+<!-- ------------------------------------------------------------ -->
+<section class="codex-page" id="grimoire" aria-labelledby="grimoire-heading">
+  <aside class="marginalia left" aria-hidden="true">
+    <div class="ink-blot">᛭</div>
+    <div class="marginal-note">
+      Last three candles lit by hand.
+    </div>
+    <div class="rune-block" data-meaning="The remaining three of six">ᚦ ᚱ ᛖ ᛖ</div>
+  </aside>
+
+  <article class="vellum-sheet mb-cozy">
+    <div class="ornament" aria-hidden="true">— ✦ ✦ ✦ —</div>
+    <h2 id="grimoire-heading">Grimoire of Deleted Daemons</h2>
+    <p class="drop-cap">
+      The following entries were struck from the grimoire by a vote of the
+      Inner Registry, then rediscovered on an NFS mount with the times set
+      to epoch zero. Treat them as old love-letters from a compiler: sweet,
+      recursive, and fatal if acted upon.
+    </p>
+    <div class="candles" aria-hidden="true">
+      <div class="candle"><div class="flame"></div><div class="stem"></div><div class="wax"></div><div class="base"></div></div>
+      <div class="candle"><div class="flame"></div><div class="stem"></div><div class="wax"></div><div class="base"></div></div>
+      <div class="candle"><div class="flame"></div><div class="stem"></div><div class="wax"></div><div class="base"></div></div>
+      <div class="candle"><div class="flame"></div><div class="stem"></div><div class="wax"></div><div class="base"></div></div>
+      <div class="candle"><div class="flame"></div><div class="stem"></div><div class="wax"></div><div class="base"></div></div>
+    </div>
+
+    <div class="member-card">
+      <div class="sigil-frame" aria-hidden="true">
+        <span class="rune">ψ</span>
+      </div>
+      <div class="card-body">
+        <h3>ψ — The Cache-That-Remembers-for-You</h3>
+        <p>
+          Allegedly compiles every source file it ever saw into in-line
+          assembly in the cacheline domain. Victims report context-switch
+          latency in the negative when near a wagging tail.
+        </p>
+        <dl>
+          <dt>Domain</dt><dd>Cache coherence / Speculative execution</dd>
+          <dt>Sigil</dt><dd>Stale-forwarding prophecy</dd>
+          <dt>Status</dt><dd>Denied by Intel, AMD, and the BSDs</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="member-card">
+      <div class="sigil-frame" aria-hidden="true">
+        <span class="rune">τ</span>
+      </div>
+      <div class="card-body">
+        <h3>τ — The Huge-Translation-That-Breaks-My-Window</h3>
+        <p>
+          First documented in the kernel oops of an embedded ARM board with
+          the bootloader legacy flag set. τ refuses hugepages except after
+          midnight CET, and only on Fridays containing the digit seven.
+        </p>
+        <dl>
+          <dt>Domain</dt><dd>MMU / Transparent Huge Pages</dd>
+          <dt>Sigil</dt><dd>"The allocation was contended" at 03:00</dd>
+          <dt>Status</dt><dd>Induces reproducible kernel panic on demand</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="member-card">
+      <div class="sigil-frame" aria-hidden="true">
+        <span class="rune">β</span>
+      </div>
+      <div class="card-body">
+        <h3>β — The Tracing-Point-That-Marks-the-Killer</h3>
+        <p>
+          A kprobe handler left on a function that was later inlined. The
+          handler fires anyway. β appears in stack traces of processes that
+          have never been traced, with a backtrace length equal to the PID
+          modulo seven.
+        </p>
+        <dl>
+          <dt>Domain</dt><dd>ftrace / kprobes / Function tracing</dd>
+          <dt>Sigil</dt><dd>Residual registration</dd>
+          <dt>Status</dt><dd>Listed as "fixed" in ChangeLog, re-appears every major release</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="ornament" aria-hidden="true">— ✦ ✦ ✦ —</div>
+  </article>
+
+  <aside class="marginalia right" aria-hidden="true">
+    <div class="marginal-note">
+      The grimoire is closed on the left. The martyred daemons do not like to be read in reverse.
+    </div>
+    <div class="ink-blot">᛫</div>
+    <div class="rune-block" data-meaning="Close the vellum; go in peace">ᛋ ᚨ ᛚ ᚢ ᛏ ᛖ</div>
+  </aside>
+</section>
+
+</main>
+
+<!-- ============================================================ -->
+<!-- FOOTER                                                        -->
+<!-- ============================================================ -->
+<footer class="closure" id="closure">
+  <div class="closure-ornament" aria-hidden="true">— ✦ ✦ ✦ —</div>
+  <p>
+    This codex was not authored by machine. It was inscribed by hand,
+    in rust, at 2 a.m., and saved to a filesystem you will never mount.
+  </p>
+  <p style="margin-top:.8rem;opacity:.6">
+    Liber Socketis · MMXXVI · All registers are somebody's home.
+  </p>
+</footer>
+
+<!-- ============================================================ -->
+<!-- SCRIPT                                                       -->
+<!-- ============================================================ -->
+<script>
+(function () {
+  'use strict';
+  document.addEventListener('DOMContentLoaded', function () {
+    // Shadow nav on scroll
+    var nav = document.querySelector('nav.global-nav');
+    if (nav) {
+      window.addEventListener('scroll', function () {
+        if (window.scrollY > 40) { nav.classList.add('shadow'); }
+        else { nav.classList.remove('shadow'); }
+      }, { passive: true });
+    }
+
+    // Toggle runes: click or keyboard reveals translation
+    document.querySelectorAll('.rune-block').forEach(function (r) {
+      r.setAttribute('tabindex', '0');
+      r.setAttribute('role', 'button');
+      if (!r.getAttribute('aria-label')) {
+        r.setAttribute('aria-label', 'Reveal rune meaning');
+      }
+      r.title = 'Click to translate';
+
+      function toggle() { r.classList.toggle('lit'); }
+      r.addEventListener('click', toggle);
+      r.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
+    });
+  });
+}());
+</script>
+</body>
+</html>

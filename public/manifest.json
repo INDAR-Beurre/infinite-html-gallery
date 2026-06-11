@@ -1,0 +1,565 @@
+{
+  "sites": [
+    {
+      "slug": "a-1",
+      "title": "the rain library / forest precipitation register",
+      "url": "/sites/a-1.html",
+      "thumb": "/thumbs/a-1.png",
+      "source": "sites"
+    },
+    {
+      "slug": "a",
+      "title": "REGISTRY-828 // TECTONIC FAULT INJECTION LOGGER",
+      "url": "/sites/a.html",
+      "thumb": "/thumbs/a.png",
+      "source": "sites"
+    },
+    {
+      "slug": "about",
+      "title": "About - Logoipsum",
+      "url": "/sites/about.html",
+      "thumb": "/thumbs/about.png",
+      "source": "sites"
+    },
+    {
+      "slug": "ai-settings-dashboard",
+      "title": "AI Settings & Preferences",
+      "url": "/sites/ai-settings-dashboard.html",
+      "thumb": "/thumbs/ai-settings-dashboard.png",
+      "source": "sites"
+    },
+    {
+      "slug": "app",
+      "title": "ForgeRoom",
+      "url": "/sites/app.html",
+      "thumb": "/thumbs/app.png",
+      "source": "sites"
+    },
+    {
+      "slug": "bac-francais-complet-index",
+      "title": "Bac de Français - Alexandre Galke | Méthodologie & 15 Textes",
+      "url": "/sites/bac-francais-complet-index.html",
+      "thumb": "/thumbs/bac-francais-complet-index.png",
+      "source": "sites"
+    },
+    {
+      "slug": "blog",
+      "title": "Blog - Logoipsum",
+      "url": "/sites/blog.html",
+      "thumb": "/thumbs/blog.png",
+      "source": "sites"
+    },
+    {
+      "slug": "bureau",
+      "title": "BUREAU//01 — An agent that does the work",
+      "url": "/sites/bureau.html",
+      "thumb": "/thumbs/bureau.png",
+      "source": "sites"
+    },
+    {
+      "slug": "c-1",
+      "title": "The Rainfall Archive — Recordings from Distant Forests",
+      "url": "/sites/c-1.html",
+      "thumb": "/thumbs/c-1.png",
+      "source": "sites"
+    },
+    {
+      "slug": "c",
+      "title": "CRYO-MAG VALVE INDEX / CMV-17B",
+      "url": "/sites/c.html",
+      "thumb": "/thumbs/c.png",
+      "source": "sites"
+    },
+    {
+      "slug": "cl",
+      "title": "TIR-IX // Transuranic Isotope Registry — Ledger 4A.7",
+      "url": "/sites/cl.html",
+      "thumb": "/thumbs/cl.png",
+      "source": "sites"
+    },
+    {
+      "slug": "clih-1",
+      "title": "HOLLAND &amp; VERSE — Private Counsel since MCMLXXXI",
+      "url": "/sites/clih-1.html",
+      "thumb": "/thumbs/clih-1.png",
+      "source": "sites"
+    },
+    {
+      "slug": "clih",
+      "title": "Feral Cartography — Survey №47",
+      "url": "/sites/clih.html",
+      "thumb": "/thumbs/clih.png",
+      "source": "sites"
+    },
+    {
+      "slug": "clinical",
+      "title": "FDA MONOGRAPH: NUTRITIONAL SUBSTANCE FORMULA 12-B",
+      "url": "/sites/clinical.html",
+      "thumb": "/thumbs/clinical.png",
+      "source": "sites"
+    },
+    {
+      "slug": "compound-n7",
+      "title": "COMPOUND N-7 / TOTAL NUTRITIVE SUBSTRATE — PRODUCT DOSSIER · REV 14.3",
+      "url": "/sites/compound-n7.html",
+      "thumb": "/thumbs/compound-n7.png",
+      "source": "sites"
+    },
+    {
+      "slug": "contact",
+      "title": "Contact — Logoipsum",
+      "url": "/sites/contact.html",
+      "thumb": "/thumbs/contact.png",
+      "source": "sites"
+    },
+    {
+      "slug": "d-1",
+      "title": "Forest Rainfall Archive",
+      "url": "/sites/d-1.html",
+      "thumb": "/thumbs/d-1.png",
+      "source": "sites"
+    },
+    {
+      "slug": "d-2",
+      "title": "DEATH WISH — Caffeinated Hot Sauce",
+      "url": "/sites/d-2.html",
+      "thumb": "/thumbs/d-2.png",
+      "source": "sites"
+    },
+    {
+      "slug": "d",
+      "title": "ISC-7 // SYNTHETIC ISOTOPE CATALOG TERMINAL",
+      "url": "/sites/d.html",
+      "thumb": "/thumbs/d.png",
+      "source": "sites"
+    },
+    {
+      "slug": "dad",
+      "title": "LogDrop Deluxe Compost Club",
+      "url": "/sites/dad.html",
+      "thumb": "/thumbs/dad.png",
+      "source": "sites"
+    },
+    {
+      "slug": "daddy",
+      "title": "VÆRK — Identity & Interactive Studio · Copenhagen",
+      "url": "/sites/daddy.html",
+      "thumb": "/thumbs/daddy.png",
+      "source": "sites"
+    },
+    {
+      "slug": "dih-1",
+      "title": "MONOLITH // RAW CLIFFSIDE OBJECTS",
+      "url": "/sites/dih-1.html",
+      "thumb": "/thumbs/dih-1.png",
+      "source": "sites"
+    },
+    {
+      "slug": "dih-2",
+      "title": "DIH: Department of Inaudible Histories",
+      "url": "/sites/dih-2.html",
+      "thumb": "/thumbs/dih-2.png",
+      "source": "sites"
+    },
+    {
+      "slug": "dih",
+      "title": "RIFT/AGENT",
+      "url": "/sites/dih.html",
+      "thumb": "/thumbs/dih.png",
+      "source": "sites"
+    },
+    {
+      "slug": "documents-index",
+      "title": "Chroma — Design Studio",
+      "url": "/sites/documents-index.html",
+      "thumb": "/thumbs/documents-index.png",
+      "source": "sites"
+    },
+    {
+      "slug": "documents-saas-landing",
+      "title": "Cadence — Ship faster, break nothing",
+      "url": "/sites/documents-saas-landing.html",
+      "thumb": "/thumbs/documents-saas-landing.png",
+      "source": "sites"
+    },
+    {
+      "slug": "downloads-qwen-html-20260524-oazsvmt8j",
+      "title": "Voxelcraft",
+      "url": "/sites/downloads-qwen-html-20260524-oazsvmt8j.html",
+      "thumb": "/thumbs/downloads-qwen-html-20260524-oazsvmt8j.png",
+      "source": "sites"
+    },
+    {
+      "slug": "fangsauce",
+      "title": "FANGSAUCE™ — Wake Up Screaming. Caffeinated Hot Sauce.",
+      "url": "/sites/fangsauce.html",
+      "thumb": "/thumbs/fangsauce.png",
+      "source": "sites"
+    },
+    {
+      "slug": "features",
+      "title": "Features — Logoipsum",
+      "url": "/sites/features.html",
+      "thumb": "/thumbs/features.png",
+      "source": "sites"
+    },
+    {
+      "slug": "fih",
+      "title": "ATELIER GAGARINE — Orbital Salvage & Reissue / Est. 2014, Baikonur-adjacent",
+      "url": "/sites/fih.html",
+      "thumb": "/thumbs/fih.png",
+      "source": "sites"
+    },
+    {
+      "slug": "g",
+      "title": "The Lamp Dust Ledger",
+      "url": "/sites/g.html",
+      "thumb": "/thumbs/g.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index-1",
+      "title": "Portfolio — Designer",
+      "url": "/sites/index-1.html",
+      "thumb": "/thumbs/index-1.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index-11",
+      "title": "Digital Creative Agency in Malta, Paris &amp; Lyon : Digital Cover",
+      "url": "/sites/index-11.html",
+      "thumb": "/thumbs/index-11.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index-14",
+      "title": "CACAUX — Fine Dining, Literally",
+      "url": "/sites/index-14.html",
+      "thumb": "/thumbs/index-14.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index-15",
+      "title": "Logoipsum - Launch Your SaaS With Clarity",
+      "url": "/sites/index-15.html",
+      "thumb": "/thumbs/index-15.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index-16",
+      "title": "Minecraft Clone",
+      "url": "/sites/index-16.html",
+      "thumb": "/thumbs/index-16.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index-17",
+      "title": "LOGOS 💩 — The AI-Powered Toilet Operating System",
+      "url": "/sites/index-17.html",
+      "thumb": "/thumbs/index-17.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index-18",
+      "title": "Pith — Sparkling citrus, no apologies",
+      "url": "/sites/index-18.html",
+      "thumb": "/thumbs/index-18.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index-19",
+      "title": "Register — Audacious frontend craft for brands with taste",
+      "url": "/sites/index-19.html",
+      "thumb": "/thumbs/index-19.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index-2",
+      "title": "DesignCraft — Interactive UX/UI Playground & Design Systems Lab",
+      "url": "/sites/index-2.html",
+      "thumb": "/thumbs/index-2.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index-3",
+      "title": "Minecraft Clone",
+      "url": "/sites/index-3.html",
+      "thumb": "/thumbs/index-3.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index-4",
+      "title": "Nexus — Edge compute, zero compromise",
+      "url": "/sites/index-4.html",
+      "thumb": "/thumbs/index-4.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index-5",
+      "title": "Puter.js AI Playground - Free Access to Qwen Models",
+      "url": "/sites/index-5.html",
+      "thumb": "/thumbs/index-5.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index-7",
+      "title": "digital-cover.com mirror",
+      "url": "/sites/index-7.html",
+      "thumb": "/thumbs/index-7.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index",
+      "title": "Aura DB — The Local-First Sync Engine for Modern Apps",
+      "url": "/sites/index.html",
+      "thumb": "/thumbs/index.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index1",
+      "title": "TurdBrain OS™ - The Smart-Toilet OS Powered by bowel-intelligence AI",
+      "url": "/sites/index1.html",
+      "thumb": "/thumbs/index1.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index2-1",
+      "title": "Register® — Tactile Type-01 Mechanical Keyboard",
+      "url": "/sites/index2-1.html",
+      "thumb": "/thumbs/index2-1.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index2-2",
+      "title": "Register — A type foundry with teeth",
+      "url": "/sites/index2-2.html",
+      "thumb": "/thumbs/index2-2.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index2",
+      "title": "Register — The Keyboard Designed for Designers",
+      "url": "/sites/index2.html",
+      "thumb": "/thumbs/index2.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index3-1",
+      "title": "Liber Algorithmi — The Grimoire of Computational Daemons",
+      "url": "/sites/index3-1.html",
+      "thumb": "/thumbs/index3-1.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index3-2",
+      "title": "Daemonum Algorithmica — An Occult Archive",
+      "url": "/sites/index3-2.html",
+      "thumb": "/thumbs/index3-2.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index3-3",
+      "title": "Codex Damnatus — Liber Algorithmorum · A Grimoire of the Demons Which Dwell Within Our Devices",
+      "url": "/sites/index3-3.html",
+      "thumb": "/thumbs/index3-3.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index3",
+      "title": "Liber Socketis — Order of the Veiled Socket",
+      "url": "/sites/index3.html",
+      "thumb": "/thumbs/index3.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index4-1",
+      "title": "LUMEN™ — The Bioluminescent Algae Energy Elixir",
+      "url": "/sites/index4-1.html",
+      "thumb": "/thumbs/index4-1.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index4-2",
+      "title": "GLOOMI POP! — Bioluminescent Bubble Fuel",
+      "url": "/sites/index4-2.html",
+      "thumb": "/thumbs/index4-2.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index4-3",
+      "title": "BIOLUM™ — Drink the Glow · Bioluminescent Algae Energy",
+      "url": "/sites/index4-3.html",
+      "thumb": "/thumbs/index4-3.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index4",
+      "title": "GLOWH2O — Bioluminescent Energy from the Abyss!!!",
+      "url": "/sites/index4.html",
+      "thumb": "/thumbs/index4.png",
+      "source": "sites"
+    },
+    {
+      "slug": "index5",
+      "title": "Sphere Gallery — Inside Out",
+      "url": "/sites/index5.html",
+      "thumb": "/thumbs/index5.png",
+      "source": "sites"
+    },
+    {
+      "slug": "kid",
+      "title": "DOOMBRELLA // Apocalypse-Grade Rain Shields",
+      "url": "/sites/kid.html",
+      "thumb": "/thumbs/kid.png",
+      "source": "sites"
+    },
+    {
+      "slug": "kih",
+      "title": "K I H // KINETIC INTERFACE HEURISTICS",
+      "url": "/sites/kih.html",
+      "thumb": "/thumbs/kih.png",
+      "source": "sites"
+    },
+    {
+      "slug": "logclub",
+      "title": "LOG.CLUB — Artisanal Heirloom Compost, Delivered Wet & Wriggling.",
+      "url": "/sites/logclub.html",
+      "thumb": "/thumbs/logclub.png",
+      "source": "sites"
+    },
+    {
+      "slug": "nutristaple-9",
+      "title": "NutriStaple-9™ — Standardized Synthetic Nutrient Suspension | Regulatory Dossier",
+      "url": "/sites/nutristaple-9.html",
+      "thumb": "/thumbs/nutristaple-9.png",
+      "source": "sites"
+    },
+    {
+      "slug": "obol-foundry",
+      "title": "Obol Foundry - Bells for the Unquiet Dead",
+      "url": "/sites/obol-foundry.html",
+      "thumb": "/thumbs/obol-foundry.png",
+      "source": "sites"
+    },
+    {
+      "slug": "portfolio",
+      "title": "NØVA — Creative Agency",
+      "url": "/sites/portfolio.html",
+      "thumb": "/thumbs/portfolio.png",
+      "source": "sites"
+    },
+    {
+      "slug": "privacy",
+      "title": "Privacy Policy - Logoipsum",
+      "url": "/sites/privacy.html",
+      "thumb": "/thumbs/privacy.png",
+      "source": "sites"
+    },
+    {
+      "slug": "puter-ai-gateway-index",
+      "title": "Puter AI Gateway",
+      "url": "/sites/puter-ai-gateway-index.html",
+      "thumb": "/thumbs/puter-ai-gateway-index.png",
+      "source": "sites"
+    },
+    {
+      "slug": "register-1",
+      "title": "Register — Websites that feel impossible to ignore, effortless to trust.",
+      "url": "/sites/register-1.html",
+      "thumb": "/thumbs/register-1.png",
+      "source": "sites"
+    },
+    {
+      "slug": "register-landing",
+      "title": "Register — Impossible to Ignore",
+      "url": "/sites/register-landing.html",
+      "thumb": "/thumbs/register-landing.png",
+      "source": "sites"
+    },
+    {
+      "slug": "register",
+      "title": "Register — Websites that feel impossible to ignore",
+      "url": "/sites/register.html",
+      "thumb": "/thumbs/register.png",
+      "source": "sites"
+    },
+    {
+      "slug": "saas-landing-beurre",
+      "title": "Lumina — Workspace for your best work",
+      "url": "/sites/saas-landing-beurre.html",
+      "thumb": "/thumbs/saas-landing-beurre.png",
+      "source": "sites"
+    },
+    {
+      "slug": "si",
+      "title": "KAPITÄN — UNRELEASED TYPE SPECIMENS",
+      "url": "/sites/si.html",
+      "thumb": "/thumbs/si.png",
+      "source": "sites"
+    },
+    {
+      "slug": "son",
+      "title": "Hydra Riot Umbrellas",
+      "url": "/sites/son.html",
+      "thumb": "/thumbs/son.png",
+      "source": "sites"
+    },
+    {
+      "slug": "standalone-playground",
+      "title": "Puter.js AI Playground - Standalone Client Page",
+      "url": "/sites/standalone-playground.html",
+      "thumb": "/thumbs/standalone-playground.png",
+      "source": "sites"
+    },
+    {
+      "slug": "terms",
+      "title": "Terms &amp; Conditions - Logoipsum",
+      "url": "/sites/terms.html",
+      "thumb": "/thumbs/terms.png",
+      "source": "sites"
+    },
+    {
+      "slug": "test",
+      "title": "DumpPilot OS — The Smart-Toilet Brain for Your Behind",
+      "url": "/sites/test.html",
+      "thumb": "/thumbs/test.png",
+      "source": "sites"
+    },
+    {
+      "slug": "the-dukes-drop",
+      "title": "The Duke's Drop — Heritage Artisanal Compost Delivery",
+      "url": "/sites/the-dukes-drop.html",
+      "thumb": "/thumbs/the-dukes-drop.png",
+      "source": "sites"
+    },
+    {
+      "slug": "titanic-minecraftclone",
+      "title": "Voxel Craft",
+      "url": "/sites/titanic-minecraftclone.html",
+      "thumb": "/thumbs/titanic-minecraftclone.png",
+      "source": "sites"
+    },
+    {
+      "slug": "tmp-daddy",
+      "title": "Værk — Identity & Interactive Studio / Copenhagen",
+      "url": "/sites/tmp-daddy.html",
+      "thumb": "/thumbs/tmp-daddy.png",
+      "source": "sites"
+    },
+    {
+      "slug": "turd",
+      "title": "TURD-TRACKER PRO // The Smart Toilet Revolution",
+      "url": "/sites/turd.html",
+      "thumb": "/thumbs/turd.png",
+      "source": "sites"
+    },
+    {
+      "slug": "vs-code-test",
+      "title": "Haven Rentals | Find Your Next Home",
+      "url": "/sites/vs-code-test.html",
+      "thumb": "/thumbs/vs-code-test.png",
+      "source": "sites"
+    }
+  ],
+  "generatedAt": "2026-06-11T09:38:16.480Z"
+}

@@ -1,0 +1,820 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Obol Foundry - Bells for the Unquiet Dead</title>
+  <style>
+    :root {
+      --ink: #050505;
+      --paper: #f2eee4;
+      --bone: #fffaf0;
+      --acid: #d7ff00;
+      --rust: #9b2417;
+      --line: 2px solid var(--ink);
+      --max: 1480px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    body {
+      margin: 0;
+      font-family: "Arial Narrow", "Helvetica Neue Condensed", Impact, sans-serif;
+      line-height: 1;
+      letter-spacing: 0;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .09;
+      z-index: 20;
+      background-image:
+        linear-gradient(var(--paper) 1px, transparent 1px),
+        linear-gradient(90deg, var(--paper) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mix-blend-mode: difference;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    button {
+      font: inherit;
+      color: inherit;
+      background: none;
+      border: 0;
+      cursor: pointer;
+    }
+
+    .page {
+      min-height: 100vh;
+      background:
+        linear-gradient(90deg, transparent 0 24%, rgba(215,255,0,.08) 24% 25%, transparent 25% 100%),
+        var(--ink);
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: 1.2fr auto 1fr;
+      align-items: center;
+      border-bottom: var(--line);
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 58px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      border-right: var(--line);
+      padding: 0 20px;
+      font-family: Georgia, serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .nav strong {
+      display: inline-block;
+      background: var(--ink);
+      color: var(--acid);
+      padding: 8px 10px;
+      margin-right: 12px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0;
+      height: 100%;
+      border-right: var(--line);
+    }
+
+    .nav-links a {
+      display: grid;
+      place-items: center;
+      padding: 0 18px;
+      border-left: var(--line);
+      text-transform: uppercase;
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    .nav-note {
+      padding: 0 20px;
+      text-align: right;
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .hero {
+      max-width: var(--max);
+      margin: 0 auto;
+      min-height: calc(100vh - 58px);
+      display: grid;
+      grid-template-columns: 72px 1.1fr .9fr;
+      border-left: var(--line);
+      border-right: var(--line);
+    }
+
+    .spine {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      border-right: var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 0;
+      text-transform: uppercase;
+      font-weight: 900;
+      color: var(--acid);
+      background: var(--ink);
+    }
+
+    .hero-copy {
+      position: relative;
+      padding: clamp(28px, 5vw, 76px);
+      border-right: var(--line);
+      overflow: hidden;
+    }
+
+    .stamp {
+      display: inline-block;
+      border: var(--line);
+      background: var(--acid);
+      color: var(--ink);
+      padding: 9px 12px;
+      text-transform: uppercase;
+      font-weight: 900;
+      margin-bottom: 34px;
+      transform: rotate(-2deg);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(70px, 13vw, 210px);
+      line-height: .74;
+      text-transform: uppercase;
+      letter-spacing: -.02em;
+      max-width: 8ch;
+    }
+
+    .slash {
+      display: block;
+      color: var(--acid);
+      font-family: Georgia, serif;
+      font-style: italic;
+      text-transform: none;
+      transform: translateX(.08em);
+    }
+
+    .hero-deck {
+      margin-top: 34px;
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 20px;
+      align-items: end;
+    }
+
+    .deck-number {
+      font-size: clamp(48px, 8vw, 128px);
+      color: var(--rust);
+      font-family: Georgia, serif;
+      font-weight: 900;
+    }
+
+    .deck-copy {
+      font-family: Georgia, serif;
+      font-size: clamp(17px, 2vw, 26px);
+      line-height: 1.12;
+      color: var(--bone);
+      max-width: 420px;
+    }
+
+    .hero-art {
+      position: relative;
+      min-height: 620px;
+      background: var(--paper);
+      color: var(--ink);
+      overflow: hidden;
+    }
+
+    .bell {
+      position: absolute;
+      inset: 8% 7% auto;
+      width: 86%;
+      height: auto;
+      filter: contrast(130%);
+    }
+
+    .forge-block {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 72%;
+      height: 42%;
+      background:
+        repeating-linear-gradient(90deg, var(--ink) 0 18px, var(--acid) 18px 24px),
+        var(--acid);
+      clip-path: polygon(20% 0, 100% 0, 100% 100%, 0 100%);
+      mix-blend-mode: multiply;
+    }
+
+    .art-label {
+      position: absolute;
+      left: 22px;
+      bottom: 24px;
+      width: 190px;
+      font-family: Georgia, serif;
+      font-size: 15px;
+      line-height: 1.18;
+      border-top: var(--line);
+      padding-top: 12px;
+    }
+
+    section {
+      max-width: var(--max);
+      margin: 0 auto;
+      border-left: var(--line);
+      border-right: var(--line);
+    }
+
+    .ticker {
+      display: flex;
+      overflow: hidden;
+      border-top: var(--line);
+      border-bottom: var(--line);
+      background: var(--acid);
+      color: var(--ink);
+      white-space: nowrap;
+      text-transform: uppercase;
+      font-weight: 900;
+      font-size: clamp(28px, 5vw, 82px);
+    }
+
+    .ticker span {
+      display: inline-block;
+      padding: 14px 24px;
+      animation: crawl 22s linear infinite;
+    }
+
+    @keyframes crawl {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+
+    .catalog {
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .catalog h2 {
+      margin: 0;
+      padding: clamp(28px, 5vw, 70px);
+      border-right: var(--line);
+      font-size: clamp(46px, 8vw, 122px);
+      line-height: .82;
+      text-transform: uppercase;
+    }
+
+    .services { display: grid; }
+
+    .service {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 24px;
+      padding: clamp(24px, 4vw, 48px);
+      border-bottom: var(--line);
+    }
+
+    .service:last-child { border-bottom: 0; }
+
+    .service code {
+      font-family: Georgia, serif;
+      font-size: 42px;
+      color: var(--rust);
+      font-weight: 900;
+    }
+
+    .service h3 {
+      margin: 0 0 8px;
+      font-size: clamp(26px, 3vw, 44px);
+      text-transform: uppercase;
+    }
+
+    .service p {
+      margin: 0;
+      max-width: 650px;
+      font-family: Georgia, serif;
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    .tone-lab {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--ink);
+      color: var(--paper);
+      border-top: var(--line);
+    }
+
+    .tone-panel {
+      padding: clamp(28px, 5vw, 72px);
+      border-right: var(--line);
+    }
+
+    .tone-panel h2 {
+      margin: 0 0 28px;
+      font-size: clamp(48px, 9vw, 140px);
+      line-height: .78;
+      text-transform: uppercase;
+      color: var(--acid);
+    }
+
+    .tone-panel p {
+      margin: 0 0 26px;
+      font-family: Georgia, serif;
+      font-size: clamp(18px, 2vw, 28px);
+      line-height: 1.15;
+    }
+
+    .tone-buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: var(--line);
+      border-color: var(--paper);
+    }
+
+    .tone-buttons button {
+      min-height: 70px;
+      border-right: 2px solid var(--paper);
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    .tone-buttons button:last-child { border-right: 0; }
+
+    .tone-buttons button[aria-pressed="true"] {
+      background: var(--acid);
+      color: var(--ink);
+    }
+
+    .specimen {
+      min-height: 520px;
+      display: grid;
+      place-items: center;
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ring {
+      width: min(68vw, 560px);
+      aspect-ratio: 1;
+      border: 22px solid var(--paper);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      position: relative;
+      animation: pulse 3.2s ease-in-out infinite;
+    }
+
+    .ring::before,
+    .ring::after {
+      content: "";
+      position: absolute;
+      inset: 13%;
+      border: 4px solid var(--rust);
+      border-radius: 50%;
+    }
+
+    .ring::after {
+      inset: 31%;
+      border-color: var(--acid);
+    }
+
+    .ring span {
+      font-size: clamp(48px, 10vw, 130px);
+      font-weight: 900;
+      color: var(--acid);
+      text-transform: uppercase;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(.96); }
+      50% { transform: scale(1.02); }
+    }
+
+    .manifesto {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      background: var(--rust);
+      color: var(--bone);
+      border-top: var(--line);
+    }
+
+    .manifesto blockquote {
+      margin: 0;
+      padding: clamp(32px, 7vw, 92px);
+      font-size: clamp(46px, 7vw, 118px);
+      line-height: .86;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    .manifesto aside {
+      padding: clamp(28px, 5vw, 64px);
+      border-left: var(--line);
+      background: var(--bone);
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    .manifesto p {
+      margin: 0;
+      font-family: Georgia, serif;
+      font-size: clamp(18px, 2vw, 26px);
+      line-height: 1.18;
+    }
+
+    .manifesto button {
+      align-self: flex-start;
+      border: var(--line);
+      padding: 18px 22px;
+      background: var(--ink);
+      color: var(--acid);
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    .order {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      min-height: 480px;
+      background: var(--paper);
+      color: var(--ink);
+      border-top: var(--line);
+    }
+
+    .order-mark {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      display: grid;
+      place-items: center;
+      border-right: var(--line);
+      font-size: clamp(34px, 5vw, 76px);
+      text-transform: uppercase;
+      font-weight: 900;
+      background: var(--acid);
+    }
+
+    .order-main {
+      padding: clamp(32px, 6vw, 92px);
+      display: grid;
+      grid-template-columns: 1fr .85fr;
+      gap: 48px;
+      align-items: end;
+    }
+
+    .order h2 {
+      margin: 0;
+      font-size: clamp(54px, 9vw, 160px);
+      line-height: .78;
+      text-transform: uppercase;
+      max-width: 8ch;
+    }
+
+    .order p {
+      margin: 0 0 22px;
+      font-family: Georgia, serif;
+      font-size: 21px;
+      line-height: 1.18;
+    }
+
+    .order a {
+      display: inline-block;
+      border: var(--line);
+      background: var(--ink);
+      color: var(--bone);
+      padding: 18px 22px;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    footer {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border: var(--line);
+      border-top: 0;
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    footer span {
+      padding: 18px;
+      border-right: 2px solid var(--paper);
+      text-transform: uppercase;
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    footer span:last-child { border-right: 0; }
+
+    @media (max-width: 920px) {
+      .nav {
+        grid-template-columns: 1fr;
+        position: relative;
+      }
+
+      .brand,
+      .nav-links,
+      .nav-note {
+        border-right: 0;
+        border-bottom: var(--line);
+        min-height: 54px;
+      }
+
+      .nav-links { overflow-x: auto; }
+      .nav-note { display: grid; place-items: center; text-align: center; }
+
+      .hero {
+        grid-template-columns: 46px 1fr;
+        min-height: auto;
+      }
+
+      .hero-art {
+        grid-column: 1 / -1;
+        min-height: 480px;
+        border-top: var(--line);
+      }
+
+      .hero-copy { border-right: 0; }
+
+      .catalog,
+      .tone-lab,
+      .manifesto,
+      .order-main {
+        grid-template-columns: 1fr;
+      }
+
+      .catalog h2,
+      .tone-panel,
+      .manifesto aside {
+        border-right: 0;
+        border-left: 0;
+        border-bottom: var(--line);
+      }
+
+      .order { grid-template-columns: 70px 1fr; }
+
+      .service { grid-template-columns: 82px 1fr; }
+
+      footer { grid-template-columns: 1fr 1fr; }
+
+      footer span { border-bottom: 2px solid var(--paper); }
+    }
+
+    @media (max-width: 560px) {
+      .page { background: var(--ink); }
+
+      .hero {
+        grid-template-columns: 1fr;
+        border-left: 0;
+        border-right: 0;
+      }
+
+      .spine {
+        writing-mode: horizontal-tb;
+        transform: none;
+        flex-direction: row;
+        min-height: 44px;
+        padding: 0 16px;
+        border-right: 0;
+        border-bottom: var(--line);
+      }
+
+      .hero-deck,
+      .order-main { grid-template-columns: 1fr; }
+
+      .tone-buttons { grid-template-columns: 1fr; }
+
+      .tone-buttons button {
+        border-right: 0;
+        border-bottom: 2px solid var(--paper);
+      }
+
+      .tone-buttons button:last-child { border-bottom: 0; }
+
+      .service {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .order { grid-template-columns: 1fr; }
+
+      .order-mark {
+        writing-mode: horizontal-tb;
+        transform: none;
+        min-height: 70px;
+        border-right: 0;
+        border-bottom: var(--line);
+      }
+
+      footer { grid-template-columns: 1fr; }
+
+      footer span { border-right: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="nav" aria-label="Primary navigation">
+      <a class="brand" href="#"><strong>OBOL</strong> Foundry</a>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#catalog">Rites</a>
+        <a href="#tone">Tone</a>
+        <a href="#doctrine">Doctrine</a>
+        <a href="#order">Commission</a>
+      </nav>
+      <div class="nav-note">Bespoke funeral bells<br>poured in black bronze</div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="spine">
+          <span>Since 1888</span>
+          <span>No chapel stock</span>
+        </div>
+
+        <div class="hero-copy">
+          <span class="stamp">Private mourning instruments</span>
+          <h1 id="hero-title">Bells for the <span class="slash">unquiet</span> dead</h1>
+          <div class="hero-deck">
+            <div class="deck-number">07</div>
+            <p class="deck-copy">We cast one bell per name. No editions. No replicas. Each vessel is tuned to a room, a procession, a coastline, or a ruined family myth.</p>
+          </div>
+        </div>
+
+        <div class="hero-art" aria-label="Abstract black bronze funeral bell illustration">
+          <svg class="bell" viewBox="0 0 760 900" role="img" aria-hidden="true">
+            <rect width="760" height="900" fill="#f2eee4"/>
+            <path d="M382 60c48 0 85 33 91 78l11 86c89 35 145 117 157 224l35 304H84l35-304c12-107 68-189 157-224l11-86c6-45 47-78 95-78Z" fill="#050505"/>
+            <path d="M191 706h378l27 88H164l27-88Z" fill="#9b2417"/>
+            <path d="M301 188c-59 28-94 86-105 170l-26 230" fill="none" stroke="#d7ff00" stroke-width="22"/>
+            <path d="M438 188c59 28 94 86 105 170l26 230" fill="none" stroke="#d7ff00" stroke-width="22"/>
+            <circle cx="380" cy="796" r="56" fill="#050505"/>
+            <path d="M246 642h268" stroke="#f2eee4" stroke-width="18"/>
+            <path d="M326 118h108" stroke="#f2eee4" stroke-width="20"/>
+          </svg>
+          <div class="forge-block"></div>
+          <p class="art-label">The mouth is left unpolished so the first strike carries grit, smoke, and proof of heat.</p>
+        </div>
+      </section>
+
+      <section class="ticker" aria-label="Foundry motto">
+        <span>Names into metal / silence into weight / grief into architecture / </span>
+        <span>Names into metal / silence into weight / grief into architecture / </span>
+      </section>
+
+      <section class="catalog" id="catalog" aria-labelledby="catalog-title">
+        <h2 id="catalog-title">Rites we cast</h2>
+        <div class="services">
+          <article class="service">
+            <code>01</code>
+            <div>
+              <h3>Harbor departure bells</h3>
+              <p>Salt-resistant bronze tuned for fog, piers, ferries, and families who want the body to leave by water.</p>
+            </div>
+          </article>
+          <article class="service">
+            <code>02</code>
+            <div>
+              <h3>Apartment wake chimes</h3>
+              <p>Small, severe instruments for rooms where neighbors must hear exactly one honest note.</p>
+            </div>
+          </article>
+          <article class="service">
+            <code>03</code>
+            <div>
+              <h3>Mausoleum throat work</h3>
+              <p>Site-measured bells designed around concrete, marble, echo delay, and the temperature of stored flowers.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="tone-lab" id="tone" aria-labelledby="tone-title">
+        <div class="tone-panel">
+          <h2 id="tone-title">Choose the wound</h2>
+          <p id="tone-copy">Iron-black bronze. Low, dry, almost architectural. Built for stone corridors and weather that does not forgive.</p>
+          <div class="tone-buttons" role="group" aria-label="Tone selector">
+            <button type="button" aria-pressed="true" data-tone="black">Black</button>
+            <button type="button" aria-pressed="false" data-tone="salt">Salt</button>
+            <button type="button" aria-pressed="false" data-tone="ember">Ember</button>
+          </div>
+        </div>
+        <div class="specimen" aria-hidden="true">
+          <div class="ring"><span id="tone-word">B4</span></div>
+        </div>
+      </section>
+
+      <section class="manifesto" id="doctrine" aria-labelledby="doctrine-title">
+        <blockquote id="doctrine-title">No bell should sound clean at a funeral.</blockquote>
+        <aside>
+          <p id="manifesto-line">A polished note lies. We leave the seam visible, the strike irregular, the grief unrounded.</p>
+          <button type="button" id="manifesto-button">Strike again</button>
+        </aside>
+      </section>
+
+      <section class="order" id="order" aria-labelledby="order-title">
+        <div class="order-mark">Intake 4 per season</div>
+        <div class="order-main">
+          <h2 id="order-title">Bring a name. Leave with weather.</h2>
+          <div>
+            <p>Commissions begin with a room recording, a death date, and one object that belonged to the absent person.</p>
+            <a href="mailto:commissions@obolfoundry.example">Request the ledger</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Black bronze</span>
+      <span>Zurich / Antwerp</span>
+      <span>Hand tuned</span>
+      <span>No catalog repeats</span>
+    </footer>
+  </div>
+
+  <script>
+    const tones = {
+      black: {
+        copy: "Iron-black bronze. Low, dry, almost architectural. Built for stone corridors and weather that does not forgive.",
+        word: "B4",
+        color: "#d7ff00"
+      },
+      salt: {
+        copy: "A pale, corroded register for harbors, cliffs, winter gardens, and departures where the air already tastes final.",
+        word: "F2",
+        color: "#f2eee4"
+      },
+      ember: {
+        copy: "Hot, cracked, red at the edge. A bell for crematoria, furnace rooms, and last rites after midnight.",
+        word: "C3",
+        color: "#ff3b1f"
+      }
+    };
+
+    const toneCopy = document.querySelector("#tone-copy");
+    const toneWord = document.querySelector("#tone-word");
+    const ring = document.querySelector(".ring");
+
+    document.querySelectorAll("[data-tone]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const tone = tones[button.dataset.tone];
+        document.querySelectorAll("[data-tone]").forEach((item) => {
+          item.setAttribute("aria-pressed", String(item === button));
+        });
+        toneCopy.textContent = tone.copy;
+        toneWord.textContent = tone.word;
+        toneWord.style.color = tone.color;
+        ring.style.borderColor = tone.color;
+      });
+    });
+
+    const lines = [
+      "A polished note lies. We leave the seam visible, the strike irregular, the grief unrounded.",
+      "Every commission is destroyed on paper after casting. The bell remembers enough.",
+      "The clapper is named last. It must earn the violence.",
+      "Silence is not absence. Silence is material waiting for impact."
+    ];
+
+    let lineIndex = 0;
+    document.querySelector("#manifesto-button").addEventListener("click", () => {
+      lineIndex = (lineIndex + 1) % lines.length;
+      document.querySelector("#manifesto-line").textContent = lines[lineIndex];
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Clone</title>
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            image-rendering: pixelated;
+        }
+
+        body {
+            overflow: hidden;
+            background: #000;
+            font-family: 'Courier New', monospace;
+            user-select: none;
+            -webkit-user-select: none;
+            cursor: default;
+        }
+
+        #game-canvas {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* ===== HUD ===== */
+        #hud {
+            position: fixed;
+            inset: 0;
+            z-index: 10;
+            pointer-events: none;
+            display: none;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        /* Crosshair */
+        #crosshair {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 26px;
+            height: 26px;
+            pointer-events: none;
+        }
+
+        #crosshair::before,
+        #crosshair::after {
+            content: '';
+            position: absolute;
+            background: rgba(255,255,255,0.8);
+        }
+
+        #crosshair::before {
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            transform: translateY(-50%);
+        }
+
+        #crosshair::after {
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            transform: translateX(-50%);
+        }
+
+        /* Breaking loader ring */
+        #breaking-loader {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 3px solid rgba(0,0,0,0.5);
+            pointer-events: none;
+            z-index: 11;
+        }
+
+        /* Hotbar */
+        #hotbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2px;
+            padding: 8px 0 12px;
+            pointer-events: auto;
+        }
+
+        #hotbar-slots {
+            display: flex;
+            gap: 2px;
+        }
+
+        .slot {
+            width: 40px;
+            height: 40px;
+            background: rgba(0,0,0,0.5);
+            border: 2px solid rgba(255,255,255,0.15);
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slot:hover {
+            border-color: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .slot.active {
+            border-color: #fff;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .item-icon {
+            width: 32px;
+            height: 32px;
+            image-rendering: pixelated;
+            pointer-events: none;
+        }
+
+        .item-count {
+            position: absolute;
+            bottom: 0;
+            right: 2px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: 1px 1px 0 #000;
+            pointer-events: none;
+        }
+
+        /* Health & Hunger bars */
+        #status-bars {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            padding: 0 0 4px;
+            pointer-events: none;
+        }
+
+        #health-bar,
+        #hunger-bar {
+            display: flex;
+            gap: 1px;
+        }
+
+        .heart,
+        .shank {
+            width: 18px;
+            height: 18px;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .heart.full { background: #ff3333; clip-path: polygon(50% 15%, 61% 0, 78% 0, 94% 15%, 94% 35%, 78% 55%, 50% 80%, 22% 55%, 6% 35%, 6% 15%, 22% 0, 39% 0); }
+        .heart.half { background: linear-gradient(to right, #ff3333 50%, #444 50%); clip-path: polygon(50% 15%, 61% 0, 78% 0, 94% 15%, 94% 35%, 78% 55%, 50% 80%, 22% 55%, 6% 35%, 6% 15%, 22% 0, 39% 0); }
+        .heart.empty { background: #444; clip-path: polygon(50% 15%, 61% 0, 78% 0, 94% 15%, 94% 35%, 78% 55%, 50% 80%, 22% 55%, 6% 35%, 6% 15%, 22% 0, 39% 0); }
+
+        .shank.full { background: #c48b3a; clip-path: polygon(20% 5%, 80% 5%, 85% 50%, 70% 95%, 30% 95%, 15% 50%); }
+        .shank.half { background: linear-gradient(to right, #c48b3a 50%, #444 50%); clip-path: polygon(20% 5%, 80% 5%, 85% 50%, 70% 95%, 30% 95%, 15% 50%); }
+        .shank.empty { background: #444; clip-path: polygon(20% 5%, 80% 5%, 85% 50%, 70% 95%, 30% 95%, 15% 50%); }
+
+        /* Hurt flash */
+        #hurt-flash {
+            position: fixed;
+            inset: 0;
+            z-index: 9;
+            pointer-events: none;
+            background: rgba(255,0,0,0);
+            transition: background 0.1s;
+        }
+
+        #hurt-flash.hurt-active {
+            background: rgba(255,0,0,0.3);
+        }
+
+        /* ===== OVERLAY PANELS ===== */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.7);
+            pointer-events: auto;
+        }
+
+        .panel {
+            background: rgba(20,20,20,0.95);
+            border: 3px solid #555;
+            padding: 32px;
+            color: #fff;
+            text-align: center;
+            min-width: 360px;
+            max-width: 500px;
+            box-shadow: 0 0 60px rgba(0,0,0,0.8);
+        }
+
+        .panel h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .panel h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #aaa;
+            font-weight: normal;
+        }
+
+        .panel h3 {
+            font-size: 14px;
+            margin: 16px 0 8px;
+            color: #ccc;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px 20px;
+            margin: 6px 0;
+            font-family: inherit;
+            font-size: 15px;
+            color: #fff;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.15s;
+        }
+
+        .btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.6);
+        }
+
+        .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .btn-close {
+            background: rgba(255,80,80,0.15);
+            border-color: rgba(255,80,80,0.3);
+        }
+
+        .btn-close:hover {
+            background: rgba(255,80,80,0.3);
+        }
+
+        .btn-small {
+            width: auto;
+            display: inline-block;
+            padding: 6px 16px;
+            font-size: 12px;
+        }
+
+        .mode-toggle {
+            display: flex;
+            gap: 4px;
+            margin: 8px 0;
+        }
+
+        .mode-toggle .btn {
+            flex: 1;
+            font-size: 13px;
+            padding: 8px;
+        }
+
+        .mode-toggle .btn.active {
+            background: rgba(100,200,100,0.3);
+            border-color: rgba(100,200,100,0.6);
+        }
+
+        .seed-input {
+            width: 100%;
+            padding: 8px 12px;
+            margin: 8px 0;
+            font-family: inherit;
+            font-size: 14px;
+            background: rgba(0,0,0,0.5);
+            border: 2px solid rgba(255,255,255,0.2);
+            color: #fff;
+            text-align: center;
+        }
+
+        .seed-input:focus {
+            outline: none;
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        .settings-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 8px 0;
+            gap: 12px;
+        }
+
+        .settings-row label {
+            font-size: 13px;
+            color: #ccc;
+            min-width: 100px;
+            text-align: left;
+        }
+
+        .settings-row input[type="range"] {
+            flex: 1;
+            accent-color: #5a5;
+            cursor: pointer;
+        }
+
+        .settings-row .val {
+            font-size: 12px;
+            color: #aaa;
+            min-width: 70px;
+            text-align: right;
+        }
+
+        /* Inventory Overlay */
+        #inventory-overlay,
+        #craft3x3-overlay {
+            flex-direction: row;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .inv-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .inv-section h3 {
+            margin: 0 0 4px;
+            font-size: 11px;
+            color: #888;
+            letter-spacing: 2px;
+        }
+
+        .inv-grid {
+            display: grid;
+            grid-template-columns: repeat(9, 40px);
+            gap: 2px;
+        }
+
+        .inv-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 40px);
+            gap: 2px;
+        }
+
+        .inv-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 40px);
+            gap: 2px;
+        }
+
+        .craft-arrow {
+            font-size: 24px;
+            color: #888;
+            display: flex;
+            align-items: center;
+        }
+
+        .craft-output-slot {
+            width: 40px;
+            height: 40px;
+            background: rgba(100,200,100,0.1);
+            border: 2px solid rgba(100,200,100,0.3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .craft-output-slot:hover {
+            background: rgba(100,200,100,0.2);
+        }
+
+        /* Cursor item */
+        #cursor-item {
+            position: fixed;
+            z-index: 200;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        #cursor-item .slot {
+            background: rgba(0,0,0,0.6);
+            border-color: rgba(255,255,255,0.6);
+        }
+
+        /* Death Screen */
+        #death-screen {
+            display: none;
+            background: rgba(180,0,0,0.6);
+        }
+
+        #death-screen .panel h1 {
+            color: #ff4444;
+        }
+    </style>
+</head>
+<body>
+    <!-- Game Canvas -->
+    <canvas id="game-canvas"></canvas>
+
+    <!-- HUD -->
+    <div id="hud">
+        <!-- Crosshair -->
+        <div id="crosshair"></div>
+
+        <!-- Breaking Loader -->
+        <div id="breaking-loader"></div>
+
+        <!-- Hurt Flash -->
+        <div id="hurt-flash"></div>
+
+        <!-- Status Bars -->
+        <div id="status-bars">
+            <div id="health-bar"></div>
+            <div id="hunger-bar"></div>
+        </div>
+
+        <!-- Hotbar -->
+        <div id="hotbar">
+            <div id="hotbar-slots"></div>
+        </div>
+    </div>
+
+    <!-- ===== OVERLAYS ===== -->
+
+    <!-- Main Menu -->
+    <div id="main-menu" class="overlay">
+        <div class="panel">
+            <h1>🪓⛏️ CraftCraft</h1>
+            <h2>A Minecraft Classic Clone</h2>
+
+            <div style="margin: 16px 0;">
+                <h3>Game Mode</h3>
+                <div class="mode-toggle">
+                    <button id="mode-survival" class="btn active">Survival</button>
+                    <button id="mode-creative" class="btn">Creative</button>
+                </div>
+
+                <h3>World Seed</h3>
+                <input type="text" id="input-seed" class="seed-input" placeholder="Leave empty for random">
+            </div>
+
+            <button id="btn-play-new" class="btn">🆕 New World</button>
+            <button id="btn-load" class="btn">📂 Load Saved World</button>
+            <button id="btn-settings" class="btn">⚙️ Settings</button>
+
+            <p style="margin-top: 16px; font-size: 11px; color: #666;">
+                WASD = Move &bull; Space = Jump/Fly &bull; Shift = Sneak &bull; Ctrl = Sprint<br>
+                Left Click = Break &bull; Right Click = Place &bull; E = Inventory<br>
+                1-9 = Hotbar &bull; Esc = Pause
+            </p>
+        </div>
+    </div>
+
+    <!-- Pause Menu -->
+    <div id="pause-menu" class="overlay" style="display: none;">
+        <div class="panel">
+            <h1>⏸️ Paused</h1>
+            <button id="btn-resume" class="btn">▶️ Resume Game</button>
+            <button id="btn-save" class="btn">💾 Save World</button>
+            <button id="btn-quit" class="btn btn-close">🚪 Quit to Menu</button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="overlay" style="display: none;">
+        <div class="panel">
+            <h1>⚙️ Settings</h1>
+
+            <div class="settings-row">
+                <label>Volume</label>
+                <input type="range" id="slider-volume" min="0" max="1" step="0.05" value="0.5">
+                <span class="val" id="val-volume">50%</span>
+            </div>
+
+            <div class="settings-row">
+                <label>Sensitivity</label>
+                <input type="range" id="slider-sensitivity" min="0.0005" max="0.005" step="0.0001" value="0.002">
+                <span class="val" id="val-sensitivity">2.0</span>
+            </div>
+
+            <div class="settings-row">
+                <label>Render Dist</label>
+                <input type="range" id="slider-distance" min="2" max="8" step="1" value="4">
+                <span class="val" id="val-distance">4 chunks</span>
+            </div>
+
+            <button id="btn-close-settings" class="btn" style="margin-top: 16px;">✅ Close</button>
+        </div>
+    </div>
+
+    <!-- Death Screen -->
+    <div id="death-screen" class="overlay">
+        <div class="panel">
+            <h1>💀 You Died!</h1>
+            <button id="btn-respawn" class="btn">🔄 Respawn</button>
+        </div>
+    </div>
+
+    <!-- Inventory Overlay -->
+    <div id="inventory-overlay" class="overlay" style="display: none;">
+        <div class="panel" style="max-width: 600px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h1 style="margin: 0; font-size: 20px;">📦 Inventory</h1>
+                <button id="btn-close-inv" class="btn btn-small btn-close">✕ Close</button>
+            </div>
+
+            <div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; justify-content: center;">
+                <!-- Crafting 2x2 -->
+                <div class="inv-section">
+                    <h3>Crafting</h3>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div id="craft2x2-grid" class="inv-grid-2"></div>
+                        <div class="craft-arrow">→</div>
+                        <div id="craft2x2-output" class="craft-output-slot" data-type="craft_out" data-index="0"></div>
+                    </div>
+                </div>
+
+                <!-- Main Inventory Grid -->
+                <div class="inv-section">
+                    <h3>Inventory</h3>
+                    <div id="inventory-grid" class="inv-grid"></div>
+                </div>
+            </div>
+
+            <!-- Hotbar in inventory -->
+            <div class="inv-section" style="margin-top: 12px;">
+                <h3>Hotbar</h3>
+                <div id="inventory-hotbar" style="display: flex; gap: 2px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Crafting Table 3x3 Overlay -->
+    <div id="craft3x3-overlay" class="overlay" style="display: none;">
+        <div class="panel" style="max-width: 600px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h1 style="margin: 0; font-size: 20px;">🛠️ Crafting Table</h1>
+                <button id="btn-close-craft3x3" class="btn btn-small btn-close">✕ Close</button>
+            </div>
+
+            <div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; justify-content: center;">
+                <!-- Crafting 3x3 -->
+                <div class="inv-section">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div id="craft3x3-grid" class="inv-grid-3"></div>
+                        <div class="craft-arrow">→</div>
+                        <div id="craft3x3-output" class="craft-output-slot" data-type="craft_out" data-index="0"></div>
+                    </div>
+                </div>
+
+                <!-- Main Inventory Grid -->
+                <div class="inv-section">
+                    <h3>Inventory</h3>
+                    <div id="craft3x3-inventory-grid" class="inv-grid"></div>
+                </div>
+            </div>
+
+            <!-- Hotbar in inventory -->
+            <div class="inv-section" style="margin-top: 12px;">
+                <h3>Hotbar</h3>
+                <div id="craft3x3-inventory-hotbar" style="display: flex; gap: 2px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Cursor Item -->
+    <div id="cursor-item"></div>
+
+    <!-- Load the game -->
+    <script>
+// src/main.js
+import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+import { createTextureAtlas } from './Textures.js';
+import { World } from './World.js';
+import { Player } from './Player.js';
+import { InputHandler } from './Input.js';
+import { UI } from './UI.js';
+import { gameAudio } from './Audio.js';
+
+let scene, camera, renderer, clock;
+let world, player, input, ui;
+let sunLight, ambientLight, skyGroup, stars;
+
+// Day/Night cycle states
+let gameTime = 6000; // 0 to 24000 ticks. 6000 is midday.
+const DAY_DURATION_TICKS = 24000;
+const TICKS_PER_SEC = 250; // speed of the cycle (approx 1.6 mins per day)
+
+// Sky colors for interpolation
+const SKY_COLORS = {
+    day: new THREE.Color(0x7ec0ee),    // Light blue
+    sunrise: new THREE.Color(0xffa07a),// Orange/Pink
+    sunset: new THREE.Color(0xfd5e53), // Deep orange/magenta
+    night: new THREE.Color(0x0a0a1a)   // Deep dark indigo
+};
+
+function init() {
+    // 1. Initialize UI
+    ui = new UI();
+    window._uiInstance = ui; // expose for health/hunger updates from Player
+
+    // 2. Setup Three.js Scene
+    scene = new THREE.Scene();
+    clock = new THREE.Clock();
+
+    // 3. Setup Camera
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.rotation.order = 'YXZ'; // Required for FPS-style yaw+pitch composition
+
+    // 4. Setup WebGL Renderer
+    const canvas = document.getElementById('game-canvas');
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: false }); // Nearest-neighbor styling looks better without AA
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = false; // voxel grids are heavy; simple directional shading is faster
+
+    // 5. Generate Texture Atlas
+    const atlas = createTextureAtlas();
+    ui.setAtlasCanvas(atlas.canvas);
+
+    // 6. Instantiate World & Player
+    world = new World(scene, atlas.texture);
+    player = new Player(camera, world);
+
+    // 7. Instantiate Input Handler
+    input = new InputHandler(canvas, camera, player, world, scene, ui);
+
+    // 8. Connect components in UI
+    ui.setPlayerWorldInput(player, world, input);
+
+    // 9. Setup Environmental Lighting
+    ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambientLight);
+
+    sunLight = new THREE.DirectionalLight(0xfffdf2, 0.8);
+    scene.add(sunLight);
+
+    // 10. Build Skybox (Sun, Moon, Starfield)
+    setupSkybox();
+
+    // 11. Event Listeners
+    window.addEventListener('resize', onWindowResize);
+
+    // Don't load chunks yet — wait for the user to click Play in the main menu
+
+    // 12. Start Animation Loop
+    animate();
+}
+
+function setupSkybox() {
+    skyGroup = new THREE.Group();
+    scene.add(skyGroup);
+
+    // Sun (yellow box mesh)
+    const sunGeo = new THREE.BoxGeometry(15, 15, 15);
+    const sunMat = new THREE.MeshBasicMaterial({ color: 0xfff3a8 });
+    const sunMesh = new THREE.Mesh(sunGeo, sunMat);
+    sunMesh.position.set(0, 150, 0);
+    skyGroup.add(sunMesh);
+
+    // Moon (white/grey box mesh)
+    const moonGeo = new THREE.BoxGeometry(12, 12, 12);
+    const moonMat = new THREE.MeshBasicMaterial({ color: 0xeeeeee });
+    const moonMesh = new THREE.Mesh(moonGeo, moonMat);
+    moonMesh.position.set(0, -150, 0); // opposite of sun
+    skyGroup.add(moonMesh);
+
+    // Stars (random points cloud)
+    const starsGeo = new THREE.BufferGeometry();
+    const starsCount = 400;
+    const starsPos = new Float32Array(starsCount * 3);
+
+    for (let i = 0; i < starsCount * 3; i += 3) {
+        // Place stars randomly on a sphere of radius 140
+        const u = Math.random();
+        const v = Math.random();
+        const theta = u * 2.0 * Math.PI;
+        const phi = Math.acos(2.0 * v - 1.0);
+        const r = 140;
+
+        starsPos[i] = r * Math.sin(phi) * Math.cos(theta);
+        starsPos[i+1] = r * Math.sin(phi) * Math.sin(theta);
+        starsPos[i+2] = r * Math.cos(phi);
+    }
+
+    starsGeo.setAttribute('position', new THREE.BufferAttribute(starsPos, 3));
+    const starsMat = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 0.8,
+        transparent: true,
+        opacity: 0.0 // starts invisible (daytime)
+    });
+
+    stars = new THREE.Points(starsGeo, starsMat);
+    skyGroup.add(stars);
+}
+
+function updateDayNightCycle(dt) {
+    // 1. Advance tick time
+    gameTime = (gameTime + TICKS_PER_SEC * dt) % DAY_DURATION_TICKS;
+
+    // 2. Rotate sky elements (around Z axis so sun rises East/sets West)
+    const angle = (gameTime / DAY_DURATION_TICKS) * Math.PI * 2;
+    skyGroup.rotation.z = angle;
+
+    // Reposition Directional Light to align with Sun's rotating position
+    const sunDir = new THREE.Vector3(0, 1, 0).applyAxisAngle(new THREE.Vector3(0, 0, 1), angle);
+    sunLight.position.copy(sunDir).multiplyScalar(100);
+
+    // 3. Interpolate sky color and light intensities based on time of day
+    let skyColor = SKY_COLORS.day;
+    let ambientIntensity = 0.6;
+    let sunIntensity = 0.8;
+    let starOpacity = 0.0;
+
+    // Ticks mapping:
+    // 0 to 2000: Sunrise
+    // 2000 to 11000: Day
+    // 11000 to 13000: Sunset
+    // 13000 to 24000: Night
+
+    if (gameTime >= 0 && gameTime < 2000) {
+        // Sunrise transition
+        const t = gameTime / 2000;
+        skyColor = SKY_COLORS.night.clone().lerp(SKY_COLORS.sunrise, t);
+        ambientIntensity = THREE.MathUtils.lerp(0.25, 0.5, t);
+        sunIntensity = THREE.MathUtils.lerp(0.0, 0.6, t);
+        starOpacity = 1.0 - t;
+    } else if (gameTime >= 2000 && gameTime < 11000) {
+        // Broad Day
+        const t = (gameTime - 2000) / 9000;
+        // transition sunrise pink to bright light blue
+        const dayProgress = Math.min(1.0, t * 4.0); // complete transition fast
+        skyColor = SKY_COLORS.sunrise.clone().lerp(SKY_COLORS.day, dayProgress);
+        ambientIntensity = 0.6;
+        sunIntensity = 0.8;
+        starOpacity = 0.0;
+    } else if (gameTime >= 11000 && gameTime < 13000) {
+        // Sunset transition
+        const t = (gameTime - 11000) / 2000;
+        skyColor = SKY_COLORS.day.clone().lerp(SKY_COLORS.sunset, t);
+        ambientIntensity = THREE.MathUtils.lerp(0.6, 0.4, t);
+        sunIntensity = THREE.MathUtils.lerp(0.8, 0.2, t);
+        starOpacity = 0.0;
+    } else if (gameTime >= 13000 && gameTime < 14000) {
+        // Late sunset to night
+        const t = (gameTime - 13000) / 1000;
+        skyColor = SKY_COLORS.sunset.clone().lerp(SKY_COLORS.night, t);
+        ambientIntensity = THREE.MathUtils.lerp(0.4, 0.25, t);
+        sunIntensity = THREE.MathUtils.lerp(0.2, 0.0, t);
+        starOpacity = t;
+    } else {
+        // Deep Night (14000 to 24000)
+        skyColor = SKY_COLORS.night;
+        ambientIntensity = 0.25;
+        // Dim moonlight
+        sunIntensity = 0.12; 
+        starOpacity = 1.0;
+
+        // Point light source from moon direction instead of sun
+        const moonDir = new THREE.Vector3(0, -1, 0).applyAxisAngle(new THREE.Vector3(0, 0, 1), angle);
+        sunLight.position.copy(moonDir).multiplyScalar(100);
+        sunLight.color.setHex(0xb2c8f7); // cold blue moonlight
+    }
+
+    // Apply color and intensity transitions
+    renderer.setClearColor(skyColor);
+    scene.fog = new THREE.FogExp2(skyColor, 0.018); // Fog matches sky color for clipping chunks beautifully
+    
+    ambientLight.intensity = ambientIntensity;
+    sunLight.intensity = sunIntensity;
+    
+    if (gameTime < 14000) {
+        sunLight.color.setHex(0xfffdf2); // daytime warm yellow
+    }
+
+    stars.material.opacity = starOpacity;
+}
+
+function animate() {
+    requestAnimationFrame(animate);
+
+    const dt = clock.getDelta();
+
+    if (!ui.isMenuOpen()) {
+        // 1. Update player physics (WASD, collisions, gravity)
+        player.update(dt, input.keys);
+
+        // 2. Update interactive raycasting and block breaking timers
+        input.update(dt);
+
+        // 3. Keep skybox centered around player coordinates
+        skyGroup.position.copy(player.position);
+
+        // 4. Update Day/Night environmental timers
+        updateDayNightCycle(dt);
+
+        // 5. Update loaded chunks surrounding player
+        world.updateChunks(player.position.x, player.position.z);
+    }
+
+    // Render 3D Scene
+    renderer.render(scene, camera);
+}
+
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+// Expose global functions for the HTML buttons
+export { init };
+
+// Export initialization trigger
+window.addEventListener('DOMContentLoaded', init);
+
+</script></script>
+</body>
+</html>

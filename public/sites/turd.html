@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TURD-TRACKER PRO // The Smart Toilet Revolution</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Sniglet:wght@800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --mud-dark: #3a2215;
+      --mud-medium: #5c3a21;
+      --mud-light: #8b5a2b;
+      --fecal-beige: #e1c7a5;
+      --stained-white: #fcf6eb;
+      --corn-yellow: #f4d03f;
+      --swamp-green: #556b2f;
+      --fly-color: #1a110a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--stained-white);
+      color: var(--mud-dark);
+      font-family: 'Fredoka', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.4;
+    }
+
+    /* Custom Selection */
+    ::selection {
+      background-color: var(--corn-yellow);
+      color: var(--mud-dark);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 16px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--mud-dark);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--mud-light);
+      border: 4px solid var(--mud-dark);
+      border-radius: 20px;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Sniglet', sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+
+    /* Gloopy Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 36px;
+      font-family: 'Sniglet', sans-serif;
+      font-size: 18px;
+      color: var(--mud-dark);
+      background-color: var(--corn-yellow);
+      border: 4px solid var(--mud-dark);
+      border-radius: 50% 20% 40% 10% / 40% 30% 60% 20%;
+      box-shadow: 0 10px 20px rgba(58, 34, 21, 0.3);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .btn:hover {
+      transform: translateY(-4px) scale(1.05);
+      background-color: #ffd845;
+      box-shadow: 0 15px 25px rgba(58, 34, 21, 0.4);
+    }
+
+    .btn:active {
+      transform: translateY(2px) scale(0.98);
+    }
+
+    .btn-green {
+      background-color: var(--swamp-green);
+      color: var(--stained-white);
+      border-radius: 20% 50% 10% 40% / 30% 60% 20% 50%;
+    }
+    .btn-green:hover {
+      background-color: #627b37;
+    }
+
+    /* Sticky Gloopy Card Containers */
+    .gloop-card {
+      background-color: var(--fecal-beige);
+      border: 4px solid var(--mud-dark);
+      border-radius: 40% 60% 50% 50% / 50% 40% 60% 40%;
+      padding: 35px;
+      box-shadow: 
+        10px 10px 0px var(--mud-dark),
+        inset 4px 4px 10px rgba(255,255,255,0.4);
+      position: relative;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .gloop-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        14px 14px 0px var(--mud-dark),
+        inset 4px 4px 10px rgba(255,255,255,0.4);
+    }
+
+    /* Header Nav */
+    header {
+      background-color: var(--mud-dark);
+      color: var(--stained-white);
+      padding: 20px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 8px solid var(--mud-medium);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--stained-white);
+    }
+
+    .logo-container h1 {
+      font-size: 28px;
+    }
+
+    /* Hero Section */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      padding: 80px 6%;
+      gap: 50px;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero-info h2 {
+      font-size: clamp(36px, 5vw, 68px);
+      color: var(--mud-dark);
+      line-height: 1.0;
+      margin-bottom: 25px;
+    }
+
+    .hero-info p {
+      font-size: 20px;
+      color: var(--mud-medium);
+      margin-bottom: 40px;
+      font-weight: 600;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    /* Floating / Orbiting Flies Container */
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      height: 400px;
+    }
+
+    /* CSS Poop Blob */
+    .poop-blob {
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle at 35% 35%, var(--mud-light) 0%, var(--mud-medium) 60%, var(--mud-dark) 100%);
+      border: 6px solid var(--mud-dark);
+      border-radius: 50% 50% 45% 45% / 65% 65% 35% 35%;
+      position: relative;
+      box-shadow: 
+        0 20px 40px rgba(58, 34, 21, 0.4),
+        inset 10px 10px 20px rgba(255,255,255,0.15);
+      animation: wobble 5s ease-in-out infinite alternate;
+    }
+
+    .poop-blob::before {
+      content: '💩';
+      font-size: 96px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    @keyframes wobble {
+      0% { border-radius: 50% 50% 45% 45% / 65% 65% 35% 35%; transform: scale(1); }
+      100% { border-radius: 45% 45% 50% 50% / 55% 55% 45% 45%; transform: scale(1.05) rotate(3deg); }
+    }
+
+    /* Orbiting flies */
+    .fly-system {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      animation: spin 6s linear infinite;
+    }
+
+    .fly {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background-color: var(--fly-color);
+      border-radius: 50%;
+    }
+
+    .fly::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 4px;
+      background-color: rgba(255,255,255,0.7);
+      border-radius: 50%;
+      top: -3px;
+      left: 1px;
+    }
+
+    .fly-1 { top: 0; left: 50%; }
+    .fly-2 { bottom: 20%; right: 10%; }
+    .fly-3 { bottom: 10%; left: 15%; }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* SVG Dripping Divider */
+    .dripping-divider {
+      width: 100%;
+      display: block;
+      background-color: transparent;
+      fill: var(--mud-medium);
+      margin-top: -10px;
+    }
+
+    /* Features Section */
+    .features-section {
+      background-color: var(--mud-medium);
+      color: var(--stained-white);
+      padding: 100px 6%;
+      position: relative;
+    }
+
+    .section-title {
+      font-size: 42px;
+      text-align: center;
+      margin-bottom: 60px;
+      text-shadow: 4px 4px 0px var(--mud-dark);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      color: var(--mud-dark);
+    }
+
+    .feature-card .icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+      display: inline-block;
+    }
+
+    .feature-card h3 {
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .feature-card p {
+      font-weight: 500;
+    }
+
+    /* Interactive Turd Grading Simulator */
+    .simulator-section {
+      padding: 100px 6%;
+      background-color: var(--stained-white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .sim-container {
+      width: 100%;
+      max-width: 650px;
+      background: var(--fecal-beige);
+      border: 5px solid var(--mud-dark);
+      border-radius: 30px 50px 20px 40px;
+      padding: 40px;
+      box-shadow: 12px 12px 0 var(--mud-dark);
+    }
+
+    .sim-slider-group {
+      margin-bottom: 30px;
+    }
+
+    .sim-slider-group label {
+      display: block;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .sim-slider {
+      width: 100%;
+      -webkit-appearance: none;
+      height: 15px;
+      background: var(--mud-dark);
+      border-radius: 10px;
+      outline: none;
+    }
+
+    .sim-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 25px;
+      height: 25px;
+      background: var(--corn-yellow);
+      border: 3px solid var(--mud-dark);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    /* Visual Representation of Turd */
+    .interactive-log-box {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      border-top: 3px dashed var(--mud-dark);
+      padding-top: 30px;
+    }
+
+    .visual-log-blob {
+      width: 120px;
+      height: 120px;
+      background-color: var(--mud-dark);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+
+    .evaluation-result {
+      flex: 1;
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .grade-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      background-color: var(--swamp-green);
+      color: var(--stained-white);
+      border: 3px solid var(--mud-dark);
+      border-radius: 5px;
+      font-family: 'Sniglet', sans-serif;
+      font-size: 24px;
+      margin-top: 10px;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      background-color: var(--mud-dark);
+      color: var(--stained-white);
+      padding: 120px 6%;
+      text-align: center;
+      position: relative;
+    }
+
+    .cta-box {
+      max-width: 750px;
+      margin: 0 auto;
+    }
+
+    .cta-box h2 {
+      font-size: clamp(32px, 5vw, 56px);
+      margin-bottom: 20px;
+      color: var(--corn-yellow);
+      text-shadow: 3px 3px 0 var(--mud-medium);
+    }
+
+    .cta-box p {
+      font-size: 20px;
+      margin-bottom: 45px;
+      font-weight: 600;
+    }
+
+    .cta-form {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .cta-input {
+      flex: 1;
+      min-width: 260px;
+      padding: 18px 24px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      border: 4px solid var(--stained-white);
+      border-radius: 40% 30% 50% 20% / 30% 50% 20% 60%;
+      background-color: var(--mud-medium);
+      color: var(--stained-white);
+      outline: none;
+    }
+
+    .cta-input::placeholder {
+      color: var(--fecal-beige);
+    }
+
+    /* Footer */
+    footer {
+      background-color: #2b170c;
+      color: var(--fecal-beige);
+      padding: 60px 6% 30px 6%;
+      border-top: 8px solid var(--mud-dark);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 40px;
+      border-bottom: 2px dashed var(--mud-light);
+      padding-bottom: 40px;
+      margin-bottom: 30px;
+    }
+
+    .footer-logo {
+      font-family: 'Sniglet', sans-serif;
+      font-size: 28px;
+      color: var(--corn-yellow);
+    }
+
+    .footer-links ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      color: var(--fecal-beige);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--corn-yellow);
+      text-decoration: underline;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      font-size: 12px;
+      opacity: 0.6;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 968px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .hero-actions {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <a href="#" class="logo-container">
+      <h1>TURD-TRACKER 💩 PRO</h1>
+    </a>
+    <a href="#requisition" class="btn">DROP A LOG</a>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-info">
+      <h2>A SOLID MOVEMENT IN HEALTH TECH.</h2>
+      <p>Stop flushing vital health diagnostics down the drain. Turd-Tracker Pro weighs, scans, and chemically analyzes every deposit in real-time. Because the bottom line is: your stool doesn't lie.</p>
+      <div class="hero-actions">
+        <a href="#requisition" class="btn">INSTALL THE APP</a>
+        <a href="#specs" class="btn btn-green">EXPLORE SPECS</a>
+      </div>
+    </div>
+    
+    <div class="hero-visual">
+      <!-- Orbing flies visual effect -->
+      <div class="fly-system">
+        <div class="fly fly-1"></div>
+        <div class="fly fly-2"></div>
+        <div class="fly fly-3"></div>
+      </div>
+      <div class="poop-blob"></div>
+    </div>
+  </section>
+
+  <!-- Dripping Separator SVG -->
+  <svg class="dripping-divider" viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,32L120,42.7C240,53,480,75,720,74.7C960,75,1200,53,1320,42.7L1440,32L1440,120L1320,120C1200,120,960,120,720,120C480,120,240,120,120,120L0,120Z"></path>
+  </svg>
+
+  <!-- Features -->
+  <section class="features-section" id="specs">
+    <h2 class="section-title">BIOLOGICAL LOGGING SYSTEM</h2>
+    
+    <div class="features-grid">
+      <!-- Card 1 -->
+      <div class="gloop-card feature-card">
+        <span class="icon">🔍</span>
+        <h3>Bristol AI Analysis</h3>
+        <p>Our optical sensors classify logs instantly on the Bristol Stool scale. From Type 1 (rabbit pellets) to Type 7 (swamp soup), we log your structural performance.</p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="gloop-card feature-card">
+        <span class="icon">💨</span>
+        <h3>Gas Olfactory Monotors</h3>
+        <p>Built-in methane and hydrogen sulfide detectors log flatulence intensity and olfactory notes. Compare your stats on the global leaderboards!</p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="gloop-card feature-card">
+        <span class="icon">🚽</span>
+        <h3>Smart-Flusher Sync</h3>
+        <p>Automated water pressure modulation based on calculated mass and density. Prevent catastrophic clogs and conserve water like a biological champion.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dripping Separator SVG (Inverted Colors) -->
+  <svg class="dripping-divider" viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(180deg); fill: var(--mud-medium); background-color: var(--stained-white);">
+    <path d="M0,32L120,42.7C240,53,480,75,720,74.7C960,75,1200,53,1320,42.7L1440,32L1440,120L1320,120C1200,120,960,120,720,120C480,120,240,120,120,120L0,120Z"></path>
+  </svg>
+
+  <!-- Simulator Section -->
+  <section class="simulator-section">
+    <h2 class="section-title" style="color: var(--mud-dark); text-shadow: none;">PLOP SIMULATOR</h2>
+    <p style="margin-top:-40px; margin-bottom: 50px; font-size: 18px; font-weight: bold; color: var(--mud-medium);">Adjust values to simulate standard diagnostic reports.</p>
+
+    <div class="sim-container">
+      <div class="sim-slider-group">
+        <label for="density-slider">Consistency (Softness)</label>
+        <input type="range" id="density-slider" min="1" max="7" value="4" class="sim-slider">
+      </div>
+
+      <div class="sim-slider-group">
+        <label for="weight-slider">Log Weight (Lbs)</label>
+        <input type="range" id="weight-slider" min="1" max="100" value="15" class="sim-slider">
+      </div>
+
+      <div class="interactive-log-box">
+        <div class="visual-log-blob" id="visual-blob">💩</div>
+        <div class="evaluation-result">
+          <p id="eval-desc">Diagnosing stool consistency...</p>
+          <div class="grade-badge" id="grade-badge">Grade: A</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="requisition">
+    <div class="cta-box">
+      <h2>FLUSH YOUR WORRIES AWAY</h2>
+      <p>Are you ready to join the solid movement? Leave your comms email below to download the application and secure your seat. It's time to log it.</p>
+      
+      <form class="cta-form" onsubmit="event.preventDefault(); alert('YOUR COMM PROTOCOL IS INITIALIZED. STOOL DATABASE EXPANDING...');">
+        <input type="email" placeholder="ENTER YOUR EMAIL FOR PLOP LOGS" required class="cta-input">
+        <button type="submit" class="btn">SUBSCRIBE TO STOOL STATS</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">TURD-TRACKER CORP.</div>
+      <div class="footer-links">
+        <ul>
+          <li><a href="#specs">DIAGNOSTIC DATA</a></li>
+          <li><a href="#requisition">GET ACTIVE</a></li>
+          <li><a href="#">PRIVACY (WE SECURE YOUR PLOP DATA)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Turd-Tracker Systems. Flushed and validated under strict bowel protocol guidelines.</p>
+    </div>
+  </footer>
+
+  <script>
+    // --- 1. SIMULATOR LOGIC ---
+    const densitySlider = document.getElementById('density-slider');
+    const weightSlider = document.getElementById('weight-slider');
+    const visualBlob = document.getElementById('visual-blob');
+    const evalDesc = document.getElementById('eval-desc');
+    const gradeBadge = document.getElementById('grade-badge');
+
+    // Bristol Stool definitions
+    const bristolTypes = [
+      { type: 1, desc: "Separate hard lumps, like nuts. Hard to pass.", grade: "B-", radius: "50% 50% 50% 50% / 50% 50% 50% 50%", scale: 0.6 },
+      { type: 2, desc: "Sausage-shaped but lumpy. Indicates mild dehydration.", grade: "B", radius: "50% 50% 40% 40% / 60% 60% 40% 40%", scale: 0.8 },
+      { type: 3, desc: "Like a sausage but with cracks on surface. Normal.", grade: "A-", radius: "50% 50% 45% 45% / 65% 65% 35% 35%", scale: 0.95 },
+      { type: 4, desc: "Like a sausage or snake, smooth and soft. The Golden Standard.", grade: "A+", radius: "50% 50% 48% 48% / 70% 70% 30% 30%", scale: 1.1 },
+      { type: 5, desc: "Soft blobs with clear-cut edges. Lacks required fibers.", grade: "C+", radius: "40% 60% 50% 50% / 50% 40% 60% 40%", scale: 0.85 },
+      { type: 6, desc: "Fluffy pieces with ragged edges, a mushy stool. Borderline swamp.", grade: "D", radius: "30% 70% 40% 60% / 40% 50% 50% 60%", scale: 0.7 },
+      { type: 7, desc: "Watery, no solid pieces, entirely liquid. Swamp disaster.", grade: "F", radius: "20% 80% 30% 70% / 30% 40% 60% 70%", scale: 0.5 }
+    ];
+
+    function updateSimulation() {
+      const typeIndex = parseInt(densitySlider.value) - 1;
+      const weightVal = parseFloat(weightSlider.value) / 10; // scale weight 0.1Lbs to 10Lbs
+      
+      const config = bristolTypes[typeIndex];
+      
+      // Update visual blob shape and scale based on sliders
+      visualBlob.style.borderRadius = config.radius;
+      const scaleFactor = config.scale * (0.8 + (weightVal * 0.2));
+      visualBlob.style.transform = `scale(${scaleFactor})`;
+      
+      // Update text details
+      evalDesc.innerHTML = `<strong>Type ${config.type} (Bristol Scale):</strong> ${config.desc}<br><strong>Weight:</strong> ${weightVal.toFixed(1)} Lbs.`;
+      gradeBadge.innerText = `Grade: ${config.grade}`;
+      
+      // Dynamic swamp coloring
+      if (config.type === 7) {
+        visualBlob.style.backgroundColor = "var(--swamp-green)";
+      } else if (config.type === 1) {
+        visualBlob.style.backgroundColor = "#24150b";
+      } else {
+        visualBlob.style.backgroundColor = "var(--mud-dark)";
+      }
+    }
+
+    densitySlider.addEventListener('input', updateSimulation);
+    weightSlider.addEventListener('input', updateSimulation);
+
+    // Run initial update
+    updateSimulation();
+  </script>
+</body>
+</html>

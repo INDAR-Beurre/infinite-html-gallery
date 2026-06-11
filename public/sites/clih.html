@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Feral Cartography — Survey №47</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,900;1,9..144,300;1,9..144,900&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#ede8dc;
+    --paper-2:#e3ddcd;
+    --ink:#0c0b09;
+    --rust:#c8331f;
+    --ash:#5d574a;
+    --rule:rgba(12,11,9,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:"Inter",sans-serif;font-weight:400;-webkit-font-smoothing:antialiased;font-size:15px;line-height:1.45}
+  body{
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(0,0,0,.04) 0, transparent 60%),
+      radial-gradient(circle at 80% 80%, rgba(0,0,0,.05) 0, transparent 55%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence baseFrequency='.9' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--rust);color:var(--paper)}
+
+  .mono{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+  .serif{font-family:"Fraunces",serif}
+  .rule{height:1px;background:var(--ink);width:100%}
+  .thin-rule{height:1px;background:var(--rule);width:100%}
+
+  /* ───────── NAV / MASTHEAD ───────── */
+  .masthead{
+    display:grid;grid-template-columns:1fr auto 1fr;
+    align-items:center;padding:18px 28px;border-bottom:1px solid var(--ink);
+    position:sticky;top:0;background:var(--paper);z-index:50;
+  }
+  .masthead .left,.masthead .right{display:flex;gap:22px}
+  .masthead .right{justify-content:flex-end}
+  .brand{font-family:"Fraunces",serif;font-style:italic;font-weight:900;font-size:22px;letter-spacing:-.02em}
+  .brand b{font-style:normal;color:var(--rust)}
+  .nav-link{position:relative;cursor:pointer}
+  .nav-link:hover{color:var(--rust)}
+  .blink{display:inline-block;width:7px;height:7px;background:var(--rust);border-radius:50%;animation:blink 1.4s infinite;vertical-align:middle;margin-right:6px}
+  @keyframes blink{50%{opacity:.15}}
+
+  /* ───────── HERO ───────── */
+  .hero{
+    position:relative;
+    padding:60px 28px 40px;
+    border-bottom:1px solid var(--ink);
+    overflow:hidden;
+  }
+  .hero-meta{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:20px;
+    padding-bottom:48px;border-bottom:1px solid var(--rule);
+  }
+  .hero-meta div span{display:block;color:var(--ash);margin-bottom:6px}
+  .hero-meta div p{font-family:"Fraunces",serif;font-size:14px}
+  .hero-title{
+    margin-top:54px;
+    font-family:"Fraunces",serif;
+    font-weight:900;
+    font-size:clamp(72px,17vw,260px);
+    line-height:.82;
+    letter-spacing:-.05em;
+    position:relative;
+  }
+  .hero-title .row{display:block;position:relative}
+  .hero-title .ital{font-style:italic;font-weight:300}
+  .hero-title .outline{
+    -webkit-text-stroke:1.5px var(--ink);
+    color:transparent;
+  }
+  .hero-title .rust{color:var(--rust)}
+  .hero-title sup{
+    font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:400;
+    letter-spacing:.1em;vertical-align:super;color:var(--ash);
+    margin-left:8px;
+  }
+  .hero-row-2{padding-left:18vw}
+  .hero-row-3{padding-left:5vw}
+
+  .hero-bottom{
+    margin-top:64px;
+    display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:36px;
+    align-items:end;
+  }
+  .lede{
+    font-family:"Fraunces",serif;font-style:italic;font-weight:300;
+    font-size:clamp(20px,2vw,28px);line-height:1.25;max-width:48ch;
+  }
+  .lede em{font-style:normal;font-weight:900;color:var(--rust)}
+  .stamp{
+    border:1px solid var(--ink);padding:14px 16px;
+    transform:rotate(-2deg);
+    display:inline-block;align-self:start;justify-self:start;
+  }
+  .stamp .mono{display:block;margin-bottom:6px;color:var(--rust)}
+  .stamp .stamp-big{font-family:"Fraunces",serif;font-weight:900;font-size:32px;line-height:1;letter-spacing:-.02em}
+  .cta{
+    display:flex;flex-direction:column;align-items:flex-end;gap:10px;
+  }
+  .cta .ask{
+    font-family:"Fraunces",serif;font-style:italic;font-size:20px;color:var(--ash);
+  }
+  .cta a.btn{
+    display:inline-flex;align-items:baseline;gap:14px;
+    border-bottom:2px solid var(--ink);padding:6px 0;
+    font-family:"Fraunces",serif;font-weight:900;font-size:34px;letter-spacing:-.02em;
+    transition:color .2s, border-color .2s;
+  }
+  .cta a.btn:hover{color:var(--rust);border-color:var(--rust)}
+  .cta a.btn .arrow{display:inline-block;transition:transform .25s}
+  .cta a.btn:hover .arrow{transform:translate(6px,-2px)}
+
+  .ticker{
+    border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+    background:var(--ink);color:var(--paper);
+    overflow:hidden;white-space:nowrap;padding:10px 0;
+    font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+  }
+  .ticker-track{display:inline-block;padding-left:100%;animation:marq 38s linear infinite}
+  .ticker span{margin:0 28px}
+  .ticker .dot{color:var(--rust)}
+  @keyframes marq{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+
+  /* ───────── INDEX ───────── */
+  .section-head{
+    display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:end;
+    padding:64px 28px 22px;
+  }
+  .section-head h2{
+    font-family:"Fraunces",serif;font-weight:900;font-style:italic;
+    font-size:clamp(40px,6vw,82px);line-height:.95;letter-spacing:-.03em;
+  }
+  .section-head .num{font-family:"Fraunces",serif;font-weight:300;font-size:28px;color:var(--ash)}
+
+  .index{padding:0 28px;border-top:1px solid var(--ink)}
+  .index-row{
+    display:grid;grid-template-columns:60px 1.4fr 1fr 1fr 1fr 90px;
+    gap:20px;align-items:center;
+    padding:18px 0;border-bottom:1px solid var(--rule);
+    transition:background .25s, padding-left .25s;
+    cursor:pointer;
+  }
+  .index-row:hover{background:var(--ink);color:var(--paper);padding-left:14px}
+  .index-row:hover .ix-status{color:var(--rust)}
+  .index-row:hover .ix-title{font-style:italic}
+  .ix-num{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--ash)}
+  .index-row:hover .ix-num{color:var(--paper)}
+  .ix-title{font-family:"Fraunces",serif;font-weight:900;font-size:26px;letter-spacing:-.01em;line-height:1}
+  .ix-sub{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:14px;color:var(--ash);margin-top:4px}
+  .index-row:hover .ix-sub{color:var(--paper-2)}
+  .ix-coord{font-family:"JetBrains Mono",monospace;font-size:12px}
+  .ix-status{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ash)}
+  .ix-arrow{text-align:right;font-family:"Fraunces",serif;font-size:22px}
+
+  /* ───────── FEATURED PLATE ───────── */
+  .plate{
+    margin:80px 28px 0;
+    border:1px solid var(--ink);
+    display:grid;grid-template-columns:1.4fr 1fr;
+    background:var(--paper-2);
+    position:relative;
+  }
+  .plate-img{
+    position:relative;min-height:560px;overflow:hidden;
+    background:
+      linear-gradient(rgba(12,11,9,.25),rgba(12,11,9,.45)),
+      url("https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1600&q=80") center/cover;
+    border-right:1px solid var(--ink);
+  }
+  .plate-img::before{
+    content:"";position:absolute;inset:18px;
+    border:1px dashed rgba(237,232,220,.5);pointer-events:none;
+  }
+  .plate-img .caption{
+    position:absolute;left:32px;bottom:28px;color:var(--paper);
+    font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    max-width:60%;
+  }
+  .plate-img .crosshair{
+    position:absolute;top:50%;left:50%;width:120px;height:120px;
+    transform:translate(-50%,-50%);
+    border:1px solid var(--rust);border-radius:50%;
+    opacity:.85;
+  }
+  .plate-img .crosshair::before,.plate-img .crosshair::after{
+    content:"";position:absolute;background:var(--rust);
+  }
+  .plate-img .crosshair::before{left:50%;top:-30px;bottom:-30px;width:1px;transform:translateX(-50%)}
+  .plate-img .crosshair::after{top:50%;left:-30px;right:-30px;height:1px;transform:translateY(-50%)}
+  .plate-text{padding:40px 38px;display:flex;flex-direction:column;gap:24px;position:relative}
+  .plate-text .tag{display:flex;justify-content:space-between;color:var(--ash)}
+  .plate-text h3{
+    font-family:"Fraunces",serif;font-weight:900;font-style:italic;
+    font-size:clamp(34px,3.5vw,58px);line-height:.95;letter-spacing:-.02em;
+  }
+  .plate-text h3 span{font-style:normal;color:var(--rust)}
+  .plate-text .body{font-family:"Fraunces",serif;font-size:17px;line-height:1.55;color:#1a1813}
+  .plate-text .body p+p{margin-top:14px}
+  .plate-text .footnote{
+    margin-top:auto;padding-top:18px;border-top:1px solid var(--rule);
+    display:grid;grid-template-columns:1fr 1fr;gap:18px;
+  }
+  .plate-text .footnote div span{display:block;color:var(--ash);margin-bottom:4px}
+  .plate-text .footnote div p{font-family:"Fraunces",serif;font-weight:900;font-size:18px}
+
+  /* ───────── METHOD ───────── */
+  .method{
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;
+    margin-top:80px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+  }
+  .method article{
+    padding:36px 30px;border-right:1px solid var(--ink);
+    display:flex;flex-direction:column;gap:18px;
+    transition:background .3s;
+  }
+  .method article:last-child{border-right:none}
+  .method article:hover{background:var(--ink);color:var(--paper)}
+  .method article:hover .step{color:var(--rust)}
+  .method article:hover .m-title{font-style:italic}
+  .step{font-family:"Fraunces",serif;font-weight:300;font-size:80px;line-height:1;letter-spacing:-.05em;color:var(--ash)}
+  .m-title{font-family:"Fraunces",serif;font-weight:900;font-size:30px;line-height:1.05;letter-spacing:-.02em;max-width:14ch}
+  .m-body{font-family:"Fraunces",serif;font-size:15px;line-height:1.55;max-width:34ch}
+  .m-tag{margin-top:auto;color:var(--ash)}
+  .method article:hover .m-tag{color:var(--paper-2)}
+
+  /* ───────── EDITIONS ───────── */
+  .editions{padding:0 28px}
+  .ed-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+    border-top:1px solid var(--ink);
+  }
+  .ed{
+    border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    padding:28px 24px 30px;position:relative;
+    display:flex;flex-direction:column;gap:16px;
+    min-height:380px;
+  }
+  .ed:nth-child(3n){border-right:none}
+  .ed .ed-top{display:flex;justify-content:space-between;color:var(--ash)}
+  .ed .ed-top .sold{color:var(--rust)}
+  .ed h4{font-family:"Fraunces",serif;font-weight:900;font-size:28px;letter-spacing:-.02em;line-height:1}
+  .ed h4 em{font-style:italic;font-weight:300}
+  .ed .ed-meta{font-family:"Fraunces",serif;font-style:italic;font-size:14px;color:var(--ash);line-height:1.4}
+  .ed .price{
+    margin-top:auto;display:flex;justify-content:space-between;align-items:baseline;
+    border-top:1px solid var(--ink);padding-top:14px;
+  }
+  .ed .price .amt{font-family:"Fraunces",serif;font-weight:900;font-size:34px;letter-spacing:-.02em}
+  .ed .price .amt s{color:var(--ash);font-weight:300;font-size:18px;margin-right:8px;text-decoration-color:var(--rust)}
+  .ed .price a{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;border-bottom:1px solid var(--ink);padding-bottom:2px}
+  .ed .price a:hover{color:var(--rust);border-color:var(--rust)}
+  .ed.wash{background:var(--ink);color:var(--paper)}
+  .ed.wash .ed-top,.ed.wash .ed-meta{color:var(--paper-2)}
+  .ed.wash .price{border-top-color:var(--paper-2)}
+  .ed.wash .price a{border-color:var(--paper)}
+
+  /* ───────── DISPATCH / FOOTER ───────── */
+  .dispatch{
+    margin-top:90px;padding:70px 28px;
+    background:var(--ink);color:var(--paper);position:relative;overflow:hidden;
+  }
+  .dispatch::after{
+    content:"FERAL · CARTOGRAPHY ·";
+    position:absolute;bottom:-30px;left:-2vw;
+    font-family:"Fraunces",serif;font-weight:900;font-style:italic;
+    font-size:clamp(100px,18vw,280px);line-height:.8;letter-spacing:-.05em;
+    color:transparent;-webkit-text-stroke:1px rgba(237,232,220,.16);
+    white-space:nowrap;pointer-events:none;
+  }
+  .dispatch .grid{
+    display:grid;grid-template-columns:1.3fr 1fr;gap:60px;position:relative;z-index:2;
+  }
+  .dispatch h2{
+    font-family:"Fraunces",serif;font-weight:900;font-size:clamp(48px,7vw,110px);
+    line-height:.9;letter-spacing:-.04em;
+  }
+  .dispatch h2 em{font-style:italic;font-weight:300;color:var(--rust)}
+  .dispatch form{display:flex;border:1px solid var(--paper);margin-top:32px;max-width:520px}
+  .dispatch input{
+    flex:1;background:transparent;border:none;color:var(--paper);
+    padding:16px 18px;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;outline:none;
+  }
+  .dispatch input::placeholder{color:rgba(237,232,220,.4)}
+  .dispatch button{
+    background:var(--rust);color:var(--paper);border:none;cursor:pointer;
+    padding:0 22px;font-family:"Fraunces",serif;font-weight:900;font-style:italic;font-size:22px;
+    transition:background .2s;
+  }
+  .dispatch button:hover{background:var(--paper);color:var(--ink)}
+  .dispatch aside{display:flex;flex-direction:column;gap:24px;font-family:"Fraunces",serif;font-size:15px;line-height:1.55}
+  .dispatch aside b{display:block;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--rust);margin-bottom:6px;font-weight:400}
+
+  footer{
+    background:var(--ink);color:var(--paper-2);
+    padding:24px 28px;display:flex;justify-content:space-between;
+    border-top:1px solid rgba(237,232,220,.2);
+    font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    flex-wrap:wrap;gap:10px;
+  }
+  footer .right{color:var(--ash)}
+
+  /* ───────── RESPONSIVE ───────── */
+  @media(max-width:900px){
+    .hero-meta{grid-template-columns:repeat(2,1fr);gap:16px}
+    .hero-bottom{grid-template-columns:1fr;gap:28px;align-items:start}
+    .cta{align-items:flex-start}
+    .plate{grid-template-columns:1fr}
+    .plate-img{min-height:340px;border-right:none;border-bottom:1px solid var(--ink)}
+    .method{grid-template-columns:1fr}
+    .method article{border-right:none;border-bottom:1px solid var(--ink)}
+    .method article:last-child{border-bottom:none}
+    .ed-grid{grid-template-columns:1fr}
+    .ed{border-right:none}
+    .index-row{grid-template-columns:40px 1fr auto;gap:14px}
+    .ix-coord,.ix-status{display:none}
+    .dispatch .grid{grid-template-columns:1fr;gap:36px}
+    .section-head{grid-template-columns:1fr;gap:8px}
+    .hero-row-2,.hero-row-3{padding-left:0}
+    .masthead .left,.masthead .right{display:none}
+    .masthead{grid-template-columns:1fr auto}
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="left mono">
+    <span class="nav-link">Index</span>
+    <span class="nav-link">Method</span>
+    <span class="nav-link">Editions</span>
+  </div>
+  <div class="brand">Feral<b>·</b>Cartography</div>
+  <div class="right mono">
+    <span class="nav-link"><span class="blink"></span>Live · 51.5074°N</span>
+    <span class="nav-link">EN / DE / JP</span>
+    <span class="nav-link">Archive ↗</span>
+  </div>
+</header>
+
+<!-- ───────── HERO ───────── -->
+<section class="hero">
+  <div class="hero-meta mono">
+    <div><span>Volume / Issue</span><p>Vol. IX — Survey №47</p></div>
+    <div><span>Filed</span><p>07 June 2026, 04:11 GMT</p></div>
+    <div><span>Subject</span><p>Disappeared geography of the M25 belt</p></div>
+    <div><span>Status</span><p>Open. Returning Tuesday.</p></div>
+  </div>
+
+  <h1 class="hero-title">
+    <span class="row">We draw <span class="ital">what the</span></span>
+    <span class="row hero-row-2"><span class="outline">council forgot</span><sup>FC—047</sup></span>
+    <span class="row hero-row-3"><span class="ital">to&nbsp;</span><span class="rust">demolish.</span></span>
+  </h1>
+
+  <div class="hero-bottom">
+    <p class="lede">
+      A six-person studio mapping <em>abandoned places</em>, dissolved rave sites, demolished social housing & the negative space between motorway junctions. Hand-drawn. Numbered. Refused entry to most archives.
+    </p>
+    <div class="stamp">
+      <span class="mono">Field office</span>
+      <span class="stamp-big">Hackney Wick → Kent</span>
+    </div>
+    <div class="cta">
+      <span class="ask">Have somewhere worth losing?</span>
+      <a href="#dispatch" class="btn">Commission a survey <span class="arrow">↗</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── TICKER ───────── -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="dot">●</span><span>Currently surveying — Beckton Gasworks, perimeter 3 of 4</span>
+    <span class="dot">●</span><span>Edition №041 sold out in 14 hours</span>
+    <span class="dot">●</span><span>Open call: lost lidos of South London — submissions until 30/06</span>
+    <span class="dot">●</span><span>New plate — “The Carpetlands, 1998–2007” shipping Friday</span>
+    <span class="dot">●</span><span>Stockists: Donlon Books · Claire de Rouen · Pro qm Berlin · Utrecht Tokyo</span>
+  </div>
+</div>
+
+<!-- ───────── INDEX ───────── -->
+<div class="section-head">
+  <span class="mono">§ 01</span>
+  <h2>Recent surveys, <em>filed in pencil.</em></h2>
+  <span class="num">2024 → 26 / 31 plates</span>
+</div>
+<section class="index">
+  <div class="index-row">
+    <div class="ix-num">№047</div>
+    <div><div class="ix-title">The Carpetlands</div><div class="ix-sub">A reverse-cartography of the 1996 Cricklewood depot fire site</div></div>
+    <div class="ix-coord">51.5618 N · 0.2156 W</div>
+    <div class="ix-status">Drying · pigment</div>
+    <div class="ix-status">Ed. of 22</div>
+    <div class="ix-arrow">→</div>
+  </div>
+  <div class="index-row">
+    <div class="ix-num">№046</div>
+    <div><div class="ix-title">Tannenkrieg</div><div class="ix-sub">Forest paths walked by deserters, Bavaria 1944 — overlaid on 2025 lidar</div></div>
+    <div class="ix-coord">47.5811 N · 11.0997 E</div>
+    <div class="ix-status">Shipping</div>
+    <div class="ix-status">Ed. of 30</div>
+    <div class="ix-arrow">→</div>
+  </div>
+  <div class="index-row">
+    <div class="ix-num">№045</div>
+    <div><div class="ix-title">Sunday, Bagleys</div><div class="ix-sub">Floorplan reconstruction of a King’s Cross warehouse, drawn from 41 interviews</div></div>
+    <div class="ix-coord">51.5364 N · 0.1232 W</div>
+    <div class="ix-status">Sold out</div>
+    <div class="ix-status">Ed. of 18</div>
+    <div class="ix-arrow">→</div>
+  </div>
+  <div class="index-row">
+    <div class="ix-num">№044</div>
+    <div><div class="ix-title">Kowloon, in section</div><div class="ix-sub">Drawn from a single suitcase of photographs we were never meant to keep</div></div>
+    <div class="ix-coord">22.3322 N · 114.1900 E</div>
+    <div class="ix-status">2nd print</div>
+    <div class="ix-status">Ed. of 60</div>
+    <div class="ix-arrow">→</div>
+  </div>
+  <div class="index-row">
+    <div class="ix-num">№043</div>
+    <div><div class="ix-title">A small republic of pigeons</div><div class="ix-sub">Census of every rooftop coop within the Périphérique</div></div>
+    <div class="ix-coord">48.8566 N · 2.3522 E</div>
+    <div class="ix-status">In archive</div>
+    <div class="ix-status">Ed. of 12</div>
+    <div class="ix-arrow">→</div>
+  </div>
+</section>
+
+<!-- ───────── PLATE ───────── -->
+<div class="section-head">
+  <span class="mono">§ 02 — plate of the month</span>
+  <h2>What we found <em>under the carpet.</em></h2>
+  <span class="num">Survey №047</span>
+</div>
+<article class="plate">
+  <div class="plate-img">
+    <div class="crosshair"></div>
+    <div class="caption">Fig. 12 — substrate scan, layer 3 of 7. Subfloor printed with the dye of a discontinued Axminster pattern, c. 1981.</div>
+  </div>
+  <div class="plate-text">
+    <div class="tag mono"><span>Plate Nº047 / 22</span><span>Pigment on cotton, 84×118cm</span></div>
+    <h3>Eleven acres of <span>burnt wool</span>, drawn from below.</h3>
+    <div class="body">
+      <p>For four months we crawled the slab. The depot was levelled in 1998 and rebuilt as a logistics shed; nobody had ever drawn what the fire actually consumed. We did, in seven layers — the carpet, the carpet under the carpet, the kiln-cracked tile, the wartime rebar.</p>
+      <p>Printed in five passes on a Stanhope flatbed. Folded once. Posted in a cardboard tube nobody will throw away.</p>
+    </div>
+    <div class="footnote">
+      <div><span class="mono">Cartographer</span><p>R. Asare-Mensah</p></div>
+      <div><span class="mono">Filed</span><p>04 / VI / 2026</p></div>
+    </div>
+  </div>
+</article>
+
+<!-- ───────── METHOD ───────── -->
+<div class="section-head">
+  <span class="mono">§ 03</span>
+  <h2>How we work — <em>slowly, & by foot.</em></h2>
+  <span class="num">Three movements</span>
+</div>
+<section class="method">
+  <article>
+    <div class="step">01</div>
+    <div class="m-title">We trespass, politely.</div>
+    <div class="m-body">A site is walked between four and forty times. We talk to who is left. We photograph nothing of faces, everything of edges. No drones, no satellites — the sky has already been mapped.</div>
+    <div class="m-tag mono">Avg. duration · 9 weeks</div>
+  </article>
+  <article>
+    <div class="step">02</div>
+    <div class="m-title">We draw it three times wrong.</div>
+    <div class="m-body">First in pencil, on tracing paper laid over the official record. Then in ink, after the record is set aside. Then a third time — from memory, two days later, in another room. The third drawing is the one that survives.</div>
+    <div class="m-tag mono">Avg. duration · 5 weeks</div>
+  </article>
+  <article>
+    <div class="step">03</div>
+    <div class="m-title">We print, sign, & let it go.</div>
+    <div class="m-body">Editions are small, numbered, and never reprinted in identical form. Every plate is signed twice — once by the cartographer, once by a person who was there. If we cannot find the second signature, the plate is not released.</div>
+    <div class="m-tag mono">Avg. duration · 11 days</div>
+  </article>
+</section>
+
+<!-- ───────── EDITIONS ───────── -->
+<div class="section-head">
+  <span class="mono">§ 04 — Shop</span>
+  <h2>Editions <em>still in the flat-file.</em></h2>
+  <span class="num">06 / 47 remain</span>
+</div>
+<section class="editions">
+  <div class="ed-grid">
+    <div class="ed">
+      <div class="ed-top mono"><span>Plate №047</span><span>04 of 22</span></div>
+      <h4>The Carpetlands<br><em>(burnt wool, 1996)</em></h4>
+      <div class="ed-meta">Five-pass pigment on Somerset cotton, 84×118 cm. Posted folded in archival sleeve. Includes the original field notebook scan as appendix.</div>
+      <div class="price">
+        <div class="amt">£ 280</div>
+        <a href="#">Acquire →</a>
+      </div>
+    </div>
+    <div class="ed wash">
+      <div class="ed-top mono"><span>Plate №046</span><span class="sold">02 of 30</span></div>
+      <h4>Tannenkrieg<br><em>(deserters’ paths)</em></h4>
+      <div class="ed-meta">Three-colour intaglio, hand-coloured rust accent. 56×76 cm on Hahnemühle. Each plate accompanied by a translated fragment of a 1944 marching letter.</div>
+      <div class="price">
+        <div class="amt"><s>£ 340</s>£ 380</div>
+        <a href="#">Acquire →</a>
+      </div>
+    </div>
+    <div class="ed">
+      <div class="ed-top mono"><span>Plate №044</span><span>11 of 60</span></div>
+      <h4>Kowloon<br><em>in section</em></h4>
+      <div class="ed-meta">Vertical city, drawn floor by floor across nine joined sheets. Ships in a wooden box made by a retired Margate joiner who used to live there.</div>
+      <div class="price">
+        <div class="amt">£ 540</div>
+        <a href="#">Acquire →</a>
+      </div>
+    </div>
+    <div class="ed">
+      <div class="ed-top mono"><span>Plate №042</span><span>03 of 14</span></div>
+      <h4>The night buses,<br><em>after midnight.</em></h4>
+      <div class="ed-meta">A year of N-route diversions overlaid with the closure schedule of every 24-hour kebab shop within Zone 2. Risograph, three colours.</div>
+      <div class="price">
+        <div class="amt">£ 120</div>
+        <a href="#">Acquire →</a>
+      </div>
+    </div>
+    <div class="ed wash">
+      <div class="ed-top mono"><span>Bound vol.</span><span>Edition of 200</span></div>
+      <h4>Surveys 001–040<br><em>(brick · linen)</em></h4>
+      <div class="ed-meta">Hand-bound omnibus of our first four years. 412 pages, gatefolds throughout, kettle-stitched. Heavy. Two-person lift.</div>
+      <div class="price">
+        <div class="amt">£ 1 200</div>
+        <a href="#">Acquire →</a>
+      </div>
+    </div>
+    <div class="ed">
+      <div class="ed-top mono"><span>Subscription</span><span>Open intake</span></div>
+      <h4>One plate, posted<br><em>every solstice.</em></h4>
+      <div class="ed-meta">Four plates a year, chosen by us, never the ones on this page. Cancel by letter, never by email. We will write back.</div>
+      <div class="price">
+        <div class="amt">£ 95<span style="font-size:14px;color:var(--ash);font-weight:400">/quarter</span></div>
+        <a href="#">Subscribe →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── DISPATCH ───────── -->
+<section class="dispatch" id="dispatch">
+  <div class="grid">
+    <div>
+      <h2>Send us <em>somewhere</em><br>worth losing.</h2>
+      <p style="font-family:'Fraunces',serif;font-size:18px;line-height:1.5;margin-top:22px;max-width:46ch;color:var(--paper-2)">
+        Commission a private survey — a building before demolition, a route a parent once walked, the bedroom of a flat being sold. We take roughly four briefs a year. Tell us yours.
+      </p>
+      <form onsubmit="event.preventDefault();this.querySelector('button').textContent='Filed ✓';">
+        <input type="email" placeholder="your@address — no telephones" required>
+        <button type="submit">File brief</button>
+      </form>
+    </div>
+    <aside>
+      <div><b>Studio</b>Unit 14, Hertford Union Towpath<br>London E3 5BJ — knock twice</div>
+      <div><b>Correspondence</b>post@feralcartography.studio<br>Letters preferred. Replies in fountain pen.</div>
+      <div><b>Press / lectures</b>r.asare-mensah@feralcartography.studio</div>
+      <div><b>The archive</b>Open Thursdays, 11–4. By appointment & by accident.</div>
+    </aside>
+  </div>
+</section>
+
+<footer>
+  <div>© Feral Cartography Ltd. — Surveying since 02/2019</div>
+  <div class="right">No cookies · No tracking · One newsletter, four times a year, on paper.</div>
+</footer>
+
+<script>
+  const live = document.querySelector('.masthead .right .nav-link:first-child');
+  setInterval(()=>{
+    const d=new Date();
+    const t=d.toUTCString().slice(17,22);
+    live.innerHTML = '<span class="blink"></span>Live · '+t+' GMT';
+  },1000);
+</script>
+</body>
+</html>
